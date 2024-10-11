@@ -18,8 +18,20 @@
 			"type_name":"阿里"
 		},
 		{
+			"type_id":"quark",
+			"type_name":"夸克"
+		},
+		{
 			"type_id":"uc.cn",
 			"type_name":"UC"
+		},
+		{
+			"type_id":"pikpak",
+			"type_name":"PikPak"
+		},
+		{
+			"type_id":"xunlei",
+			"type_name":"迅雷"
 		},
 		{
 			"type_id":"mp4",

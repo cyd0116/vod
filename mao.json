@@ -67,7 +67,7 @@
 {"key":"小米网盘","name":"🍚小米|U夸网盘", "type": 3, "api": "csp_Wobg", "searchable": 1,"quickSearch":1, "changeable":1, "filterable": 1, "timeout": 60, "ext": "./pg/lib/tokenm.json$$$https://mihdr.top/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$XIAOMI" },
 {"key":"YunPan","name":"⛅️云盘资源|阿夸网盘","type":3,"api":"csp_YunPan","timeout":60, "ext":"./pg/lib/tokenm.json$$$null$$$noproxy$$$1"},
 //{"key":"土豆","name":"🥔土豆|阿U网盘","type": 3,"api": "csp_Wobg","searchable": 1,"quickSearch":1, "changeable":1,"filterable": 0,"changeable": 1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://tudou.lvdoui.top/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$TUDOU"}, 
-{"key":"Hdhive","name":"🏚影巢|阿115网盘","type":3,"api":"csp_Hdh","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://hdhive.online$$$noproxy$$$1$$$./lib/hdhive.txt"},
+{"key":"Hdhive","name":"🏚影巢|阿115网盘","type":3,"api":"csp_Hdh","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://hdhive.online$$$noproxy$$$1$$$./pg/lib/hdhive.txt"},
 
 {"key":"秒搜","name":"📀秒搜|阿U搜索","type":3,"api":"csp_MiaoSou","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1,"timeout":60, "ext":"./pg/lib/tokenm.json", "style": { "type": "list", "ratio": 1.1 } }, 
 //{"key":"易搜","name":"📀易搜|阿里搜索","type":3,"api":"csp_YiSo","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1,"timeout":60, "ext":"./pg/lib/tokenm.json$$$satoken=e0b5a908-3f32-40ab-947a-c9b74b191abc", "style": { "type": "list", "ratio": 1.1 } }, 
@@ -113,7 +113,7 @@
 				"keywords":"名称,片名,推荐",
 				"tgsearch_url":"http://tg.devopser.org",
 				"tgsearch_media_url":"http://127.0.0.1:10199",
-				"channellist":"alypzyhzq|1000,Mbox115|1000,shares_115|1000,Quark_Share_Channel|1000,Aliyundrive_Share_Channel|1000,wanwansubchat|1000",
+				"channellist":"alypzyhzq|1000,Mbox115|1000,shares_115|1000,Aliyundrive_Share_Channel|1000,wanwansubchat|1000",
 				"proxy":"noproxy"
 			},
 			"style": {

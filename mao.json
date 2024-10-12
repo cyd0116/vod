@@ -1,5 +1,5 @@
 {
-"spider":"./pg/pg.jar;md5;A80166FE6A55FFC2E426F0C17802196D",
+"spider":"./pg/pg.jar;md5;1B532856C9770B2753957C3E7EADB156",
 "lives": [
 {"name": "CYD线路","type": 0,"url": "./tv/tv.txt","playerType":1,"ua":"okhttp/3.15","epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}","catchup":{"days":"7","type":"append","regex":"/PLTV/","source":"?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"}},
 {"name": "FMM线路(IPV6)", "type":"0", "pass": true, "url": "https://live.fanmingming.com/tv/m3u/ipv6.m3u", "playerType":1,"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}","catchup":{"days":"7","type":"append","regex":"/PLTV/","source":"?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"}},
@@ -95,10 +95,12 @@
                {"token":"./pg/lib/tokenm.json",
 				"json":"./pg/lib/tgsearch.json",
 				"keywords":"名称,片名,推荐",
-				"tgsearch_url":"http://tg.seczh.com",
-				"tgsearch_media_url":"http://127.0.0.1:10199",
+				"tgsearch_url":"http://tg.devopser.org",
 				"channellist":"oneonefivewpfx,hao115,guaguale115,Channel_Shares_115,dianyingshare,shareAliyun,alyp_1,yunpanpan,zaihuayun,vip115hot,yunpanshare,ikiviyyp,quanziyuanshe",
-				"proxy":"noproxy"}
+				"proxy":"noproxy",
+				"style": {
+				"type": "rect",
+				"ratio": 1.77}
 },
 { "key":"Youtube", "name":"🅿Youtube", "type":3, "api": "csp_Youtube", "searchable": 1, "quickSearch": 0, "changeable": 0, "timeout": 120, "ext":{ "token":"./pg/lib/tokenm.json", "json":"./pg/lib/youtube.json", "type":"纪录片#电影#剧集#综艺#音乐#体育#动物#风光#直播#新闻#放松#4K#HDR#movie#music#documentary#bbc documentary#national geographic documentary", "keywords":"排行榜,HOT,TRENDS,热门话题,热门趋势,热门综艺,热门电影,热门电视剧,小姐姐", "codecs":"", "proxy":"proxy", "danmu":true }, "style": { "type": "rect", "ratio": 1.77 } }, 
 		

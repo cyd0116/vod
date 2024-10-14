@@ -36,7 +36,6 @@
 { "key": "hipy_js_8号影院", "name": "📺8号影院(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 1, "quickSearch": 1, "filterable": 1, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/8号影院.js" }, 
 { "key": "hipy_js_素白白[优]", "name": "📺素白白(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 1, "quickSearch": 1, "filterable": 1, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/素白白[优].js" }, 
 { "key": "hipy_js_北川影视", "name": "📺北川(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 1, "quickSearch": 1, "filterable": 1, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/北川影视.js" }, 
-{ "key": "hipy_js_饺子影院", "name": "📺饺子(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 1, "quickSearch": 1, "filterable": 1, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/饺子影院.js" }, 
 { "key": "hipy_js_子子影视", "name": "📺子子(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 1, "quickSearch": 1, "filterable": 1, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/子子影视.js" }, 
 {"key": "hipy_js_爱看机器人[虫]", "name": "📺爱看机器人(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 1, "quickSearch": 1, "filterable": 1, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/爱看机器人[虫].js" }, 
 
@@ -146,7 +145,7 @@
 { "key": "Iktv", "name": "🎵KTV", "type": 3, "api": "csp_Iktv","searchable":0,"quickSearch":0,"changeable": 0 }, 
 {"key": "drpy_A8音乐","name": "🎵A8音乐(JS)","type": 3,"api": "./drpy_dzlive/drpy_libs/drpy2.min.js","searchable":0,"quickSearch":0,"ext": "./drpy_dzlive/drpy_js/A8音乐.js","playerType":"2"},
 {"key": "drpy_蜻蜓FM","name": "🎧蜻蜓FM(JS)","type": 3,"api": "./drpy_dzlive/drpy_libs/drpy2.min.js","searchable": 0,"quickSearch": 0,"ext": "./drpy_dzlive/drpy_js/蜻蜓FM.js","playerType":"2"},
-{ "key": "hipy_js_广播迷FM[听]", "name": "🎧广播迷FM(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 1, "quickSearch": 1, "filterable": 1, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/广播迷FM[听].js" }, 
+{ "key": "hipy_js_广播迷FM[听]", "name": "🎧广播迷FM(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable":0, "quickSearch": 0, "filterable": 0, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/广播迷FM[听].js" }, 
 { "key": "hipy_js_酷我听书[听]", "name": "🎧酷我听书(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable":0,"quickSearch":0,"filterable": 1, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/酷我听书[听].js" }, 
 {"key":"hipy_js_博看听书","name":"🎧博看听书(JS)","type":3,"api":"./drpy_dzlive/drpy_libs/drpy2.min.js","searchable":0,"quickSearch":0,"ext":"./drpy_dzlive/drpy_js/博看听书[听].js","playerType":"2"},
 {"key":"hipy_js_六月听书","name":"🎧六月听书(JS)","type":3,"api":"./drpy_dzlive/drpy_libs/drpy2.min.js","searchable":0,"quickSearch":0,"ext":"./drpy_dzlive/drpy_js/六月听书[听].js","playerType":"2"},

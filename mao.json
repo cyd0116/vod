@@ -150,7 +150,6 @@
 {"key":"hipy_js_博看听书","name":"🎧博看听书(JS)","type":3,"api":"./drpy_dzlive/drpy_libs/drpy2.min.js","searchable":0,"quickSearch":0,"ext":"./drpy_dzlive/drpy_js/博看听书[听].js","playerType":"2"},
 {"key":"hipy_js_六月听书","name":"🎧六月听书(JS)","type":3,"api":"./drpy_dzlive/drpy_libs/drpy2.min.js","searchable":0,"quickSearch":0,"ext":"./drpy_dzlive/drpy_js/六月听书[听].js","playerType":"2"},
 {"key":"hipy_js_有声小说","name":"🎧有声小说(JS)","type":3,"api":"./drpy_dzlive/drpy_libs/drpy2.min.js","searchable":0,"quickSearch":0,"ext":"./drpy_dzlive/drpy_js/有声小说吧[听].js","playerType":"2"},
-{"key":"hipy_js_海洋听书","name":"🎧海洋听书(JS)","type":3,"api":"./drpy_dzlive/drpy_libs/drpy2.min.js","searchable":0,"quickSearch":0,"ext":"./drpy_dzlive/drpy_js/海洋听书[听].js","playerType":"2"},
 {"key":"hipy_js_相声随身听","name":"🎧相声随身听(JS)","type":3,"api":"./drpy_dzlive/drpy_libs/drpy2.min.js","searchable":0,"quickSearch":0,"ext":"./drpy_dzlive/drpy_js/相声随身听[听].js","playerType":"2"},
 
 {"key":"Local","name":"💻本地","type":3,"api":"csp_Local","searchable":0,"quickSearch":0}, 

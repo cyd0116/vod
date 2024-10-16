@@ -1,5 +1,5 @@
 {
-"spider":"./pg/pg.jar;md5;10475E37B38749A9BDFDDC1C6DAF5052",
+"spider":"./pg/pg.jar;md5;B153D5181295CA1EB28348A0CC4CFC90",
 "lives": [
 {"name": "CYD线路","type": 0,"url": "./tv/tv.txt","playerType":1,"ua":"okhttp/3.15","epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}","catchup":{"days":"7","type":"append","regex":"/PLTV/","source":"?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"}},
 {"name": "FMM线路(IPV6)", "type":"0", "pass": true, "url": "https://live.fanmingming.com/tv/m3u/ipv6.m3u", "playerType":1,"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}","catchup":{"days":"7","type":"append","regex":"/PLTV/","source":"?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"}},
@@ -28,7 +28,6 @@
 
 { "key": "巴士", "name": "🐞巴士(SP)", "type": 3, "api": "csp_Dm84", "searchable": 1, "quickSearch": 1, "changeable": 1 },
 { "key": "異界", "name": "🐞异界(SP)", "type": 3, "api": "csp_Ysj", "searchable": 1, "quickSearch": 1, "changeable": 1 },
-{ "key": "櫻花", "name": "🐞櫻花(SP)", "type": 3, "api": "csp_Ying", "searchable": 1, "quickSearch": 1, "changeable": 1 }, 
 
 //道长(JS)
 { "key": "hipy_js_auete", "name": "📺奥特(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 1, "quickSearch": 1, "filterable": 1, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/auete.js" },
@@ -56,12 +55,12 @@
 { "key": "hipy_js_优酷[官]", "name": "👑优酷(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 1, "quickSearch": 1, "filterable": 1, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/优酷[官].js","categories": [ "纪录片","电影", "电视剧","综艺", "动漫", "少儿","体育" ]},
 {"key":"hipy_js_百忙无果[官]", "name": "🍋芒果(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 1, "quickSearch": 1, "filterable": 1, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/百忙无果[官].js","categories": [ "纪录片","电影", "电视剧","综艺", "动漫", "少儿","体育" ]},
 
-{ "key": "hipy_js_88看球[球]", "name": "🏀88看球(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 0, "quickSearch": 0, "filterable": 1, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/88看球[球].js" }, 
+{ "key": "hipy_js_88看球[球]", "name": "🏀88看球(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 0, "quickSearch": 0, "filterable": 1,"changeable":0, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/88看球[球].js" }, 
 //{"key": "dr_88看球","name": "🏀88看球(JS)","type": 3,"api": "./drpy_dzlive/drpy_libs/drpy2.min.js","searchable": 0,"quickSearch": 0,"changeable":0,"ext": "./drpy_dzlive/drpy_js/88看球.js"},
 {"key": "dr_JRKAN直播","name": "🏀JRKAN直播(JS)","type": 3,"api": "./drpy_dzlive/drpy_libs/drpy2.min.js","searchable": 0,"quickSearch": 0,"changeable":0,"ext": "./drpy_dzlive/drpy_js/JRKAN直播.js"},
-{ "key": "hipy_js_310直播[球]", "name": "🏀310直播(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 0, "quickSearch": 0, "filterable": 1, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/310直播[球].js" }, 
-//{"key":"hipy_js_310直播[球]", "name": "🏀310直播(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 0, "quickSearch": 0, "filterable": 1, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/310直播[球].js" }, 
-{ "key": "hipy_js_926tv[球]", "name": "🏀926tv球(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 0, "quickSearch": 0, "filterable": 1, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/926tv[球].js" }, 
+{ "key": "hipy_js_310直播[球]", "name": "🏀310直播(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 0, "quickSearch": 0, "filterable": 1, "changeable":0,"order_num": 0, "ext": "./drpy_dzlive/drpy_js/310直播[球].js" }, 
+//{"key":"hipy_js_310直播[球]", "name": "🏀310直播(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 0, "quickSearch": 0, "filterable": 1,"changeable":0, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/310直播[球].js" }, 
+{ "key": "hipy_js_926tv[球]", "name": "🏀926tv球(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 0, "quickSearch": 0, "filterable": 1,"changeable":0, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/926tv[球].js" }, 
 
 
 
@@ -75,6 +74,10 @@
 {"key":"YunPan","name":"⛅️云盘资源|阿夸网盘","type":3,"api":"csp_YunPan","timeout":60, "ext":"./pg/lib/tokenm.json$$$null$$$noproxy$$$1"},
 //{"key":"土豆","name":"🥔土豆|阿U网盘","type": 3,"api": "csp_Wobg","searchable": 1,"quickSearch":1, "changeable":1,"filterable": 0,"changeable": 1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://tudou.lvdoui.top/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$TUDOU"}, 
 //{"key":"Hdhive","name":"🏚影巢|阿115网盘","type":3,"api":"csp_Hdh","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://hdhive.online$$$noproxy$$$1$$$./pg/lib/hdhive.txt"},
+{"key":"ddys","name":"🛣低端|U夸网盘","type":3,"api":"csp_Ddys","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://ddys.pro/$$$noproxy$$$1$$$"},
+{"key":"Moli","name":"🌺HDmoli|U夸网盘","type":3,"api":"csp_Moli","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://www.hdmoli.pro/$$$noproxy$$$1$$$./pg/lib/moli.json"},
+{"key":"美剧迷","name":"📽美剧迷|U夸网盘","type":3,"api":"csp_Meijumi", "searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":120,"ext":"./pg/lib/tokenm.json$$$https://www.meijumi.net/$$$noproxy$$$1"},
+{"key":"Ppxzy","name":"皮皮虾|阿夸网盘","type":3,"api":"csp_Ppxzy","searchable": 1, "quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://ppxzy.ink$$$noproxy$$$1"},
 
 {"key":"秒搜","name":"📀秒搜|阿U搜索","type":3,"api":"csp_MiaoSou","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1,"timeout":60, "ext":"./pg/lib/tokenm.json", "style": { "type": "list", "ratio": 1.1 } }, 
 //{"key":"易搜","name":"📀易搜|阿里搜索","type":3,"api":"csp_YiSo","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1,"timeout":60, "ext":"./pg/lib/tokenm.json$$$satoken=e0b5a908-3f32-40ab-947a-c9b74b191abc", "style": { "type": "list", "ratio": 1.1 } }, 
@@ -86,7 +89,6 @@
 
 //{"key":"Panta","name":"📀盘Ta|YD搜索","type":3,"api":"csp_Panta","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://www.91panta.cn/$$$null$$$1", "style": { "type": "list", "ratio": 1.1 } }, 
 //{"key":"校长影视","name":"👩校长影视|阿夸迅百","type":3,"api":"csp_XiaoZhang","searchable": 1, "quickSearch":1, "changeable":1, "filterable":1, "timeout":60,"ext":"./pg/lib/tokenm.json$$$https://xzyshd.com$$$noproxy$$$1"},
-//{"key":"Ppxzy","name":"📀皮皮虾|网盘","type":3,"api":"csp_Ppxzy", "searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://ppxzy.ink$$$proxy$$$1"}, 
 //{"key":"QuarkPanso","name":"📀夸克盘搜|夸克搜索","type":3,"api":"csp_QuarkPanso","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json", "style": { "type": "list", "ratio": 1.1 } }, 
 //{"key":"Funletu","name":"📀趣盘搜|夸克搜索","type":3,"api":"csp_Funletu","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json", "style": { "type": "list", "ratio": 1.1 } }, 
 
@@ -104,7 +106,7 @@
 				"json":"./lib/tgsearch.json",
 				"keywords":"名称,片名,推荐",
 				"tgsearch_url":"http://tg.fish2018.us.kg",
-				"tgsearch_media_url":"",
+				"tgsearch_media_url":"http://tg.fish2018.us.kg",
 				"channellist":"oneonefivewpfx,hao115,guaguale115,Channel_Shares_115,dianyingshare,yunpanpan,zaihuayun,vip115hot,yunpanshare,shareAliyun,ikiviyyp,alyp_1,quanziyuanshe",
 				"proxy":"noproxy"
 			},
@@ -119,7 +121,7 @@
 				"json":"./lib/tgsearch.json",
 				"keywords":"名称,片名,推荐",
 				"tgsearch_url":"http://tg.fish2018.us.kg",
-				"tgsearch_media_url":"",
+				"tgsearch_media_url":"http://tg.fish2018.us.kg",
 				"channellist":"alypzyhzq|1000,Mbox115|1000,shares_115|1000,Aliyundrive_Share_Channel|1000,wanwansubchat|1000",
 				"proxy":"noproxy"
 			},
@@ -142,15 +144,14 @@
 
 { "key": "酷狗", "name": "🎵酷狗音乐", "type": 3, "api": "csp_Kugou","searchable":0,"quickSearch":0, "changeable": 0 }, 
 { "key": "Yinyuetai", "name": "🎵音悦台", "type": 3, "api": "csp_Yinyuetai","searchable":0,"quickSearch":0,"changeable": 0 },
-{ "key": "Iktv", "name": "🎵KTV", "type": 3, "api": "csp_Iktv","searchable":0,"quickSearch":0,"changeable": 0 }, 
-{"key": "drpy_A8音乐","name": "🎵A8音乐(JS)","type": 3,"api": "./drpy_dzlive/drpy_libs/drpy2.min.js","searchable":0,"quickSearch":0,"ext": "./drpy_dzlive/drpy_js/A8音乐.js","playerType":"2"},
-{"key": "drpy_蜻蜓FM","name": "🎧蜻蜓FM(JS)","type": 3,"api": "./drpy_dzlive/drpy_libs/drpy2.min.js","searchable": 0,"quickSearch": 0,"ext": "./drpy_dzlive/drpy_js/蜻蜓FM.js","playerType":"2"},
-{ "key": "hipy_js_广播迷FM[听]", "name": "🎧广播迷FM(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable":0, "quickSearch": 0, "filterable": 0, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/广播迷FM[听].js" }, 
-{ "key": "hipy_js_酷我听书[听]", "name": "🎧酷我听书(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable":0,"quickSearch":0,"filterable": 1, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/酷我听书[听].js" }, 
-{"key":"hipy_js_博看听书","name":"🎧博看听书(JS)","type":3,"api":"./drpy_dzlive/drpy_libs/drpy2.min.js","searchable":0,"quickSearch":0,"ext":"./drpy_dzlive/drpy_js/博看听书[听].js","playerType":"2"},
-{"key":"hipy_js_六月听书","name":"🎧六月听书(JS)","type":3,"api":"./drpy_dzlive/drpy_libs/drpy2.min.js","searchable":0,"quickSearch":0,"ext":"./drpy_dzlive/drpy_js/六月听书[听].js","playerType":"2"},
-{"key":"hipy_js_有声小说","name":"🎧有声小说(JS)","type":3,"api":"./drpy_dzlive/drpy_libs/drpy2.min.js","searchable":0,"quickSearch":0,"ext":"./drpy_dzlive/drpy_js/有声小说吧[听].js","playerType":"2"},
-{"key":"hipy_js_相声随身听","name":"🎧相声随身听(JS)","type":3,"api":"./drpy_dzlive/drpy_libs/drpy2.min.js","searchable":0,"quickSearch":0,"ext":"./drpy_dzlive/drpy_js/相声随身听[听].js","playerType":"2"},
+{"key": "drpy_A8音乐","name": "🎵A8音乐(JS)","type": 3,"api": "./drpy_dzlive/drpy_libs/drpy2.min.js","searchable":0,"quickSearch":0,"changeable":0,"ext": "./drpy_dzlive/drpy_js/A8音乐.js","playerType":"2"},
+{"key": "drpy_蜻蜓FM","name": "🎧蜻蜓FM(JS)","type": 3,"api": "./drpy_dzlive/drpy_libs/drpy2.min.js","searchable": 0,"quickSearch": 0,"changeable":0,"ext": "./drpy_dzlive/drpy_js/蜻蜓FM.js","playerType":"2"},
+{ "key": "hipy_js_广播迷FM[听]", "name": "🎧广播迷FM(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable":0, "quickSearch": 0, "changeable":0,"filterable": 0, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/广播迷FM[听].js" }, 
+{ "key": "hipy_js_酷我听书[听]", "name": "🎧酷我听书(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable":0,"quickSearch":0,"changeable":0,"filterable": 1, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/酷我听书[听].js" }, 
+{"key":"hipy_js_博看听书","name":"🎧博看听书(JS)","type":3,"api":"./drpy_dzlive/drpy_libs/drpy2.min.js","searchable":0,"quickSearch":0,"changeable":0,"ext":"./drpy_dzlive/drpy_js/博看听书[听].js","playerType":"2"},
+{"key":"hipy_js_六月听书","name":"🎧六月听书(JS)","type":3,"api":"./drpy_dzlive/drpy_libs/drpy2.min.js","searchable":0,"quickSearch":0,"changeable":0,"ext":"./drpy_dzlive/drpy_js/六月听书[听].js","playerType":"2"},
+{"key":"hipy_js_有声小说","name":"🎧有声小说(JS)","type":3,"api":"./drpy_dzlive/drpy_libs/drpy2.min.js","searchable":0,"quickSearch":0,"changeable":0,"ext":"./drpy_dzlive/drpy_js/有声小说吧[听].js","playerType":"2"},
+{"key":"hipy_js_相声随身听","name":"🎧相声随身听(JS)","type":3,"api":"./drpy_dzlive/drpy_libs/drpy2.min.js","searchable":0,"quickSearch":0,"changeable":0,"ext":"./drpy_dzlive/drpy_js/相声随身听[听].js","playerType":"2"},
 
 {"key":"Local","name":"💻本地","type":3,"api":"csp_Local","searchable":0,"quickSearch":0}, 
 {"key": "push_agent","name": "🍭推送","type": 3,"api": "csp_Push","searchable":0,"quickSearch":0,"changeable":0, "timeout":30, "ext":"./pg/lib/tokenm.json"}],

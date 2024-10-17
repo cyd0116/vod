@@ -105,8 +105,8 @@
 				"token":"./lib/tokenm.json",
 				"json":"./lib/tgsearch.json",
 				"keywords":"名称,片名,推荐",
-				"tgsearch_url":"http://hl.cloudns.be:10199",
-				"tgsearch_media_url":"http://hl.cloudns.be:10199",
+				"tgsearch_url":"http://45.207.209.177:10199",
+				"tgsearch_media_url":"http://45.207.209.177:10199",
 				"channellist":"oneonefivewpfx,hao115,guaguale115,Channel_Shares_115,dianyingshare,shareAliyun,alyp_1,yunpanpan,zaihuayun,vip115hot,yunpanshare,ikiviyyp,quanziyuanshe",
 				"proxy":"noproxy"
 			},
@@ -120,8 +120,8 @@
 				"token":"./lib/tokenm.json",
 				"json":"./lib/tgsearch.json",
 				"keywords":"名称,片名,推荐",
-				"tgsearch_url":"http://hl.cloudns.be:10199",
-				"tgsearch_media_url":"http://hl.cloudns.be:10199",
+				"tgsearch_url":"http://45.207.209.177:10199",
+				"tgsearch_media_url":"http://45.207.209.177:10199",
 				"channellist":"Mbox115|1000,shares_115|1000,alypzyhzq|1000,Aliyundrive_Share_Channel|1000,wanwansubchat|1000",
 				"proxy":"noproxy"
 			},

@@ -67,11 +67,11 @@
 //pg网盘
 {"key":"Wogg","name":"👽玩偶|阿U网盘","type":3,"api":"csp_Wogg","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://www.wogg.bf/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$WOGG"},
 {"key":"Mogg","name":"👲木偶|UC网盘","type":3,"api":"csp_Wobg","searchable": 1,"quickSearch":1, "changeable":1,"filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$http://mogg.top/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$MOGG"}, 
-{"key":"Hdhive","name":"🏚影巢|阿115网盘","type":3,"api":"csp_Hdh","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://hdhive.online$$$noproxy$$$1$$$./pg/lib/hdhive.txt"},
-{"key":"yydsys","name":"🕵多多|阿U夸网盘","type":3,"api":"csp_Wobg","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://tv.yydsys.top/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$WNLG"},
 {"key":"小米网盘","name":"🍚小米|U夸网盘", "type": 3, "api": "csp_Wobg", "searchable": 1,"quickSearch":1, "changeable":1, "filterable": 1, "timeout": 60, "ext": "./pg/lib/tokenm.json$$$https://mihdr.top/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$XIAOMI" },
-{"key":"蜡笔网盘","name":"🖍蜡笔|阿U夸网盘","type":3,"api":"csp_Wobg","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://duopan.fun/$$$noproxy$$$1$$$./pg/lib/wogg.json"},
+{"key":"yydsys","name":"🕵多多|阿U夸网盘","type":3,"api":"csp_Wobg","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://tv.yydsys.top/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$WNLG"},
 {"key":"YunPan","name":"⛅️云盘资源|阿夸网盘","type":3,"api":"csp_YunPan","timeout":60, "ext":"./pg/lib/tokenm.json$$$null$$$noproxy$$$1"},
+{"key":"蜡笔网盘","name":"🖍蜡笔|阿U夸网盘","type":3,"api":"csp_Wobg","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://duopan.fun/$$$noproxy$$$1$$$./pg/lib/wogg.json"},
+{"key":"Hdhive","name":"🏚影巢|阿115网盘","type":3,"api":"csp_Hdh","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://hdhive.online$$$noproxy$$$1$$$./pg/lib/hdhive.txt"},
 
 {"key":"秒搜","name":"📀秒搜|阿U搜索","type":3,"api":"csp_MiaoSou","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1,"timeout":60, "ext":"./pg/lib/tokenm.json", "style": { "type": "list", "ratio": 1.1 } }, 
 {"key":"PanSearch","name":"📀盘搜索|阿夸搜索","type":3,"api":"csp_PanSearch","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$null$$$noproxy"}, 
@@ -107,7 +107,7 @@
 				"keywords":"名称,片名,推荐",
 				"tgsearch_url":"http://tg.fish2018.us.kg",
 				"tgsearch_media_url":"http://tg.fish2018.us.kg",
-				"channellist":"oneonefivewpfx,hao115,guaguale115,Channel_Shares_115,dianyingshare,shareAliyun,alyp_1,yunpanpan,zaihuayun,vip115hot,yunpanshare,ikiviyyp,quanziyuanshe",
+				"channellist":"oneonefivewpfx,hao115,guaguale115,Channel_Shares_115,shareAliyun,alyp_1,dianyingshare,yunpanpan,zaihuayun,vip115hot,yunpanshare,ikiviyyp,quanziyuanshe",
 				"proxy":"noproxy"
 			},
 			"style": {
@@ -122,7 +122,7 @@
 				"keywords":"名称,片名,推荐",
 				"tgsearch_url":"http://tg.fish2018.us.kg",
 				"tgsearch_media_url":"http://tg.fish2018.us.kg",
-				"channellist":"Mbox115|1000,shares_115|1000,alypzyhzq|1000,Aliyundrive_Share_Channel|1000,wanwansubchat|1000",
+				"channellist":"hao115|1000,Mbox115|1000,shares_115|1000,alypzyhzq|1000,Aliyundrive_Share_Channel|1000,Aliyun_4K_Movies|1000,alyp_4K_Movies|1000,yunpanshare|1000,wanwansubchat|1000",
 				"proxy":"noproxy"
 			},
 			"style": {

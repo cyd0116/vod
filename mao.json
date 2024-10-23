@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD
 "spider":"./pg/pg.jar;md5;9A596F19DF8C9DB9E7516D6EF6F12CCA",
-=======
-"spider":"./pg/pg.jar;md5;A2CAECF3CB7C9CDEE3106033668024AA",
->>>>>>> 908e18269ae66e90990fa61f65e464403296a96b
 "lives": [
 {"name": "CYD线路","type": 0,"url": "./tv/tv.txt","playerType":1,"ua":"okhttp/3.15","epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}","catchup":{"days":"7","type":"append","regex":"/PLTV/","source":"?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"}},
 {"name": "FMM线路(IPV6)", "type":"0", "pass": true, "url": "https://live.fanmingming.com/tv/m3u/ipv6.m3u", "playerType":1,"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}","catchup":{"days":"7","type":"append","regex":"/PLTV/","source":"?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"}},

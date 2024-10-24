@@ -369,8 +369,8 @@
 				"token":"./lib/tokenm.json",
 				"json":"./lib/tgsearch.json",
 				"keywords":"名称,片名,推荐",
-				"tgsearch_url":"http://tg.fish2018.us.kg",
-				"tgsearch_media_url":"http://tg.fish2018.us.kg",
+				"tgsearch_url":"http://127.0.0.1:10199",
+				"tgsearch_media_url":"http://127.0.0.1:10199",
 				"channellist":"oneonefivewpfx,hao115,guaguale115,Channel_Shares_115,shareAliyun,alyp_1,dianyingshare,yunpanpan,zaihuayun,vip115hot,ikiviyyp,quanziyuanshe",
 				"proxy":"noproxy"
 			},
@@ -384,8 +384,8 @@
 				"token":"./lib/tokenm.json",
 				"json":"./lib/tgsearch.json",
 				"keywords":"名称,片名,推荐",
-				"tgsearch_url":"http://tg.fish2018.us.kg",
-				"tgsearch_media_url":"http://tg.fish2018.us.kg",
+				"tgsearch_url":"http://127.0.0.1:10199",
+				"tgsearch_media_url":"http://127.0.0.1:10199",
 				"channellist":"hao115|1000,Mbox115|1000,shares_115|1000,alypzyhzq|1000,Aliyundrive_Share_Channel|1000,Aliyun_4K_Movies|1000,alyp_4K_Movies|1000,wanwansubchat|1000",
 				"proxy":"noproxy"
 			},

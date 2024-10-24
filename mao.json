@@ -267,7 +267,7 @@
 				"tgsearch_media_url":"http://127.0.0.1:10199",
 				"channellist":"Mbox115|1000,shares_115|1000,alypzyhzq|1000,Aliyundrive_Share_Channel|1000,wanwansubchat|1000",
 				"proxy":"noproxy",
-				"douban":"./lib/douban.json",
+				"douban":"./lib/douban.json"
 			},
 			"style": {
 				"type": "rect",

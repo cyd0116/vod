@@ -34,172 +34,6 @@
 				"catchup":{"days":"7","type":"append","regex":"/PLTV/","source":"?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"}
 			},
 			{
-				"name": "肥羊B站直播",
-				"type": 0,
-				"url": "http://127.0.0.1:10079/c/3600/null/http://127.0.0.1:35455/bililive.m3u",
-				"ua": "okhttp/3.15",
-				"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}",
-				"logo": "http://127.0.0.1:10079/p/0/proxy/https://epg.112114.xyz/logo/{name}.png",
-				"catchup":{"days":"7","type":"append","regex":"/PLTV/","source":"?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"}
-			},
-			{
-				"name": "肥羊虎牙直播",
-				"type": 0,
-				"url": "http://127.0.0.1:10079/c/3600/null/http://127.0.0.1:35455/huyayqk.m3u",
-				"ua": "okhttp/3.15",
-				"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}",
-				"logo": "http://127.0.0.1:10079/p/0/proxy/https://epg.112114.xyz/logo/{name}.png",
-				"catchup":{"days":"7","type":"append","regex":"/PLTV/","source":"?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"}
-			},
-			{
-				"name": "肥羊斗鱼一起看",
-				"type": 0,
-				"url": "http://127.0.0.1:10079/c/3600/null/http://127.0.0.1:35455/douyuyqk.m3u",
-				"ua": "okhttp/3.15",
-				"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}",
-				"logo": "http://127.0.0.1:10079/p/0/proxy/https://epg.112114.xyz/logo/{name}.png",
-				"catchup":{"days":"7","type":"append","regex":"/PLTV/","source":"?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"}
-			},
-			{
-				"name": "肥羊YY轮播",
-				"type": 0,
-				"url": "http://127.0.0.1:10079/c/3600/null/http://127.0.0.1:35455/yylunbo.m3u",
-				"ua": "okhttp/3.15",
-				"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}",
-				"logo": "http://127.0.0.1:10079/p/0/proxy/https://epg.112114.xyz/logo/{name}.png",
-				"catchup":{"days":"7","type":"append","regex":"/PLTV/","source":"?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"}
-			},
-			{
-				"name": "PixMan.4GTV",
-				"type": 0,
-				"url": "http://127.0.0.1:10079/p/0/proxy/http://192.168.101.2:5050/4gtv.m3u",
-				"ua": "okhttp/3.15",
-				"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}",
-				"logo": "http://127.0.0.1:10079/p/0/proxy/https://epg.112114.xyz/logo/{name}.png",
-				"catchup":{"days":"7","type":"append","regex":"/PLTV/","source":"?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"}
-			},
-			{
-				"name": "PixMan.ITV",
-				"type": 0,
-				"url": "http://127.0.0.1:10079/p/0/proxy/http://192.168.101.2:5050/itv_proxy.m3u",
-				"ua": "okhttp/3.15",
-				"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}",
-				"logo": "http://127.0.0.1:10079/p/0/proxy/https://epg.112114.xyz/logo/{name}.png",
-				"catchup":{"days":"7","type":"append","regex":"/PLTV/","source":"?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"}
-			},
-			{
-				"name": "PixMan.TPTV",
-				"type": 0,
-				"url": "http://127.0.0.1:10079/p/0/proxy/http://192.168.101.2:5050/tptv.m3u",
-				"ua": "okhttp/3.15",
-				"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}",
-				"logo": "http://127.0.0.1:10079/p/0/proxy/https://epg.112114.xyz/logo/{name}.png",
-				"catchup":{"days":"7","type":"append","regex":"/PLTV/","source":"?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"}
-			},
-			{
-				"name": "PixMan.MyTVSuper",
-				"type": 0,
-				"url": "http://127.0.0.1:10079/p/0/proxy/http://192.168.101.2:5050/mytvsuper.m3u",
-				"ua": "okhttp/3.15",
-				"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}",
-				"logo": "http://127.0.0.1:10079/p/0/proxy/https://epg.112114.xyz/logo/{name}.png",
-				"catchup":{"days":"7","type":"append","regex":"/PLTV/","source":"?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"}
-			},
-			{
-				"name": "PixMan.BeeSport",
-				"type": 0,
-				"url": "http://127.0.0.1:10079/p/0/proxy/http://192.168.101.2:5050/beesport.m3u",
-				"ua": "okhttp/3.15",
-				"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}",
-				"logo": "http://127.0.0.1:10079/p/0/proxy/https://epg.112114.xyz/logo/{name}.png",
-				"catchup":{"days":"7","type":"append","regex":"/PLTV/","source":"?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"}
-			},
-			{
-				"name": "PixMan.TheTV",
-				"type": 0,
-				"url": "http://127.0.0.1:10079/p/0/proxy/http://192.168.101.2:5050/thetv.m3u",
-				"ua": "okhttp/3.15",
-				"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}",
-				"logo": "http://127.0.0.1:10079/p/0/proxy/https://epg.112114.xyz/logo/{name}.png",
-				"catchup":{"days":"7","type":"append","regex":"/PLTV/","source":"?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"}
-			},
-			{
-				"name": "PixMan.Hami",
-				"type": 0,
-				"url": "http://127.0.0.1:10079/p/0/proxy/http://192.168.101.2:5050/hami.m3u",
-				"ua": "okhttp/3.15",
-				"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}",
-				"logo": "http://127.0.0.1:10079/p/0/proxy/https://epg.112114.xyz/logo/{name}.png",
-				"catchup":{"days":"7","type":"append","regex":"/PLTV/","source":"?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"}
-			},
-			{
-				"name": "PixMan.DLHD",
-				"type": 0,
-				"url": "http://127.0.0.1:10079/p/0/proxy/http://192.168.101.2:5050/dlhd.m3u",
-				"ua": "okhttp/3.15",
-				"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}",
-				"logo": "http://127.0.0.1:10079/p/0/proxy/https://epg.112114.xyz/logo/{name}.png",
-				"catchup":{"days":"7","type":"append","regex":"/PLTV/","source":"?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"}
-			},
-			{
-				"name": "PixMan.4GTV",
-				"type": 0,
-				"url": "http://127.0.0.1:10079/p/0/proxy/http://192.168.101.2:5050/4gtv.m3u",
-				"ua": "okhttp/3.15",
-				"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}",
-				"logo": "http://127.0.0.1:10079/p/0/proxy/https://epg.112114.xyz/logo/{name}.png",
-				"catchup":{"days":"7","type":"append","regex":"/PLTV/","source":"?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"}
-			},
-			{
-				"name": "zouming.ipv6",
-				"type": 0,
-				"url": "http://127.0.0.1:10079/c/3600/proxy/http://ww.zouming.com/ipv6.txt",
-				"ua": "okhttp/3.15",
-				"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}",
-				"logo": "http://127.0.0.1:10079/p/0/proxy/https://epg.112114.xyz/logo/{name}.png",
-				"catchup":{"days":"7","type":"append","regex":"/PLTV/","source":"?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"}
-			},
-			{
-				"name": "live.ipv6",
-				"type": 0,
-				"url": "http://127.0.0.1:10079/c/3600/proxy/https://fanmingming.com/txt?url=https://live.fanmingming.com/tv/m3u/ipv6.m3u",
-				
-				"ua": "okhttp/3.15",
-				"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}",
-				"logo": "http://127.0.0.1:10079/p/0/proxy/https://epg.112114.xyz/logo/{name}.png",
-				"catchup":{"days":"7","type":"append","regex":"/PLTV/","source":"?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"}
-			},
-			{
-				"name": "live.ipv6.m3u",
-				"type": 0,
-				"url": "http://127.0.0.1:10079/c/3600/proxy/https://live.fanmingming.com/tv/m3u/ipv6.m3u",
-				
-				"ua": "okhttp/3.15",
-				"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}",
-				"logo": "http://127.0.0.1:10079/p/0/proxy/https://epg.112114.xyz/logo/{name}.png",
-				"catchup":{"days":"7","type":"append","regex":"/PLTV/","source":"?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"}
-			},
-			{
-				"name": "live.ipv6.local",
-				"type": 0,
-				"url": "./lib/live.ipv6.txt",
-				
-				"ua": "okhttp/3.15",
-				"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}",
-				"logo": "http://127.0.0.1:10079/p/0/proxy/https://epg.112114.xyz/logo/{name}.png",
-				"catchup":{"days":"7","type":"append","regex":"/PLTV/","source":"?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"}
-			},
-			{
-				"name": "live.fan",
-				"type": 0,
-				"url": "http://127.0.0.1:10079/p/0/proxy/https://raw.githubusercontent.com/dxawi/0/main/tvlive.txt",
-				
-				"ua": "okhttp/3.15",
-				"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}",
-				"logo": "http://127.0.0.1:10079/p/0/proxy/https://epg.112114.xyz/logo/{name}.png",
-				"catchup":{"days":"7","type":"append","regex":"/PLTV/","source":"?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"}
-			},
-			{
 				"name": "YTLive",
 				"type": 0,
 				
@@ -329,7 +163,7 @@
 {"key":"PikaSo","name":"📀皮卡搜|阿夸搜索","type":3,"api":"csp_PikaSo","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://www.pikaso.top/$$$null", "style": { "type": "list", "ratio": 1.1 } }, 
 
 //{"key":"Wobg","name":"👽玩偶表哥|阿U网盘","type":3,"api":"csp_Wobg","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://wobge.run.goorm.io$$$noproxy$$$1$$$./pg/lib/wogg.json$$$WOBG"},
-//{"key":"土豆","name":"🥔土豆|阿U网盘","type": 3,"api": "csp_Wobg","searchable": 1,"quickSearch":1, "changeable":1,"filterable": 0,"changeable": 1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://tudou.lvdoui.top/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$TUDOU"}, 
+//{"key":"土豆","name":"🥔土豆|阿U网盘","type": 3,"api": "csp_Wobg","searchable": 1,"quickSearch":1, "changeable":1,"filterable": 0,"changeable": 1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://yunpan.yunpay.cc/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$TUDOU"}, 
 //{"key":"ddys","name":"🛣低端|U夸网盘","type":3,"api":"csp_Ddys","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://ddys.pro/$$$noproxy$$$1$$$"},
 //{"key":"Moli","name":"🌺HDmoli|U夸网盘","type":3,"api":"csp_Moli","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://www.hdmoli.pro/$$$noproxy$$$1$$$./pg/lib/moli.json"},
 //{"key":"美剧迷","name":"📽美剧迷|U夸网盘","type":3,"api":"csp_Meijumi", "searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":120,"ext":"./pg/lib/tokenm.json$$$https://www.meijumi.net/$$$noproxy$$$1"},
@@ -348,28 +182,13 @@
 //{"key":"YunSo","name":"📀小云搜索|网盘搜索","type":3,"api":"csp_YunSo","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://www.yunso.net$$$null$$$1", "style": { "type": "list", "ratio": 1.1 } }, 
 //{"key":"YunPanOne","name":"📀云盘One|网盘搜索","type":3,"api":"csp_YunPanOne","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$null$$$proxy$$$1"},		
 
-		{"key":"TGYunPanLocal","name":"🅿TG频道搜索","type":3,"api":"csp_TGYunPanLocal","timeout":120, 
-			"ext":{
-				"token":"./lib/tokenm.json",
-				"json":"./lib/tgsearch.json",
-				"keywords":"名称,片名,推荐",
-				"tgsearch_url":"http://127.0.0.1:10199",
-				"tgsearch_media_url":"http://127.0.0.1:10199",
-				"channellist":"oneonefivewpfx,hao115,guaguale115,Channel_Shares_115,shareAliyun,alyp_1,dianyingshare,yunpanpan,zaihuayun,vip115hot,ikiviyyp,quanziyuanshe",
-				"proxy":"noproxy"
-			},
-			"style": {
-				"type": "rect",
-				"ratio": 1.77
-			}
-		},
 		{"key":"TGYunPan","name":"🅿TG群组搜索","type":3,"api":"csp_TGYunPan","timeout":120, 
 			"ext":{
 				"token":"./lib/tokenm.json",
 				"json":"./lib/tgsearch.json",
 				"keywords":"名称,片名,推荐",
-				"tgsearch_url":"http://127.0.0.1:10199",
-				"tgsearch_media_url":"http://127.0.0.1:10199",
+				"tgsearch_url":"http://tg.fish2018.us.kg",
+				"tgsearch_media_url":"http://tg.fish2018.us.kg",
 				"channellist":"hao115|1000,Mbox115|1000,shares_115|1000,alypzyhzq|1000,Aliyundrive_Share_Channel|1000,Aliyun_4K_Movies|1000,alyp_4K_Movies|1000,wanwansubchat|1000",
 				"proxy":"noproxy"
 			},
@@ -378,8 +197,23 @@
 				"ratio": 1.77
 			}
 		},
+		{"key":"TGYunPanLocal","name":"🅿TG频道搜索","type":3,"api":"csp_TGYunPanLocal","timeout":120, 
+			"ext":{
+				"token":"./lib/tokenm.json",
+				"json":"./lib/tgsearch.json",
+				"keywords":"名称,片名,推荐",
+				"tgsearch_url":"http://tg.fish2018.us.kg",
+				"tgsearch_media_url":"http://tg.fish2018.us.kg",
+				"channellist":"oneonefivewpfx,hao115,guaguale115,Channel_Shares_115,shareAliyun,alyp_1,dianyingshare,yunpanpan,zaihuayun,vip115hot,ikiviyyp,quanziyuanshe",
+				"proxy":"noproxy"
+			},
+			"style": {
+				"type": "rect",
+				"ratio": 1.77
+			}
+		},
 
-{ "key":"Youtube", "name":"🅿Youtube", "type":3, "api": "csp_Youtube", "searchable": 1, "quickSearch": 1, "changeable": 1, "timeout": 120, "ext":{ "token":"./pg/lib/tokenm.json", "json":"./pg/lib/youtube.json", "type":"纪录片#电影#剧集#综艺#音乐#体育#动物#风光#直播#新闻#放松#4K#HDR#movie#music#documentary#bbc documentary#national geographic documentary", "keywords":"排行榜,HOT,TRENDS,热门话题,热门趋势,热门综艺,热门电影,热门电视剧,小姐姐", "codecs":"", "proxy":"proxy"}, "style": { "type": "rect", "ratio": 1.77 } }, 
+{ "key":"Youtube", "name":"🅿Youtube", "type":3, "api": "csp_Youtube", "searchable": 1, "quickSearch": 1, "changeable": 1, "timeout": 120, "ext":{ "token":"./pg/lib/tokenm.json", "json":"./pg/lib/youtube.json", "type":"纪录片#电影#剧集#综艺#音乐#体育#动物#风光#直播#新闻#放松#4K#HDR#movie#music#documentary#bbc documentary#national geographic documentary", "keywords":"排行榜,HOT,TRENDS,热门话题,热门趋势,热门综艺,热门电影,热门电视剧,小姐姐", "codecs":"", "proxy":"noproxy"}, "style": { "type": "rect", "ratio": 1.77 } }, 
 		
 {"key":"PushShare","name":"🅿我的资源分享","type":3, "api":"csp_PushShare","searchable":1,"quickSearch":1, "changeable":1, "filterable":0, "timeout":60, "ext":"./pg/lib/tokenm.json$$$./pg/lib/pushshare.txt$$$db$$$1", "style": { "type": "list", "ratio": 1.1 } }, 
 {"key":"AliShare","name":"🅿阿里云盘影视分享","type":3,"api":"csp_AliShare","searchable":1,"quickSearch":1, "changeable":1, "filterable":0, "timeout":60, "ext":"./pg/lib/tokenm.json$$$./pg/lib/alishare.txt$$$db$$$1", "style": { "type": "list", "ratio": 1.1 } }, 

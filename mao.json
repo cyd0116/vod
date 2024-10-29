@@ -7,7 +7,7 @@
 {"name":"南风线路(电信)","type":0,"url":"https://raw.github.com/yoursmile66/TVBox/main/live.txt","playerType":1,"ua":"okhttp/3.15","epg":"https://diyp9999.112114.xyz/?ch={name}&date={date}","catchup":{"days":"7","type":"append","regex":"/PLTV/","source":"?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"}},
 {"name": "自动线路", "type": 0, "url": "https://raw.github.com/ssili126/tv/main/itvlist.txt","playerType":1, "epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}","catchup":{"days":"7","type":"append","regex":"/PLTV/","source":"?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"}},
 			{
-				"name": "肥羊高码",
+				"name": "肥羊直播(高码)",
 				"type": 0,
 				"url": "./tv/tv-feiyang.m3u",
 				"ua": "okhttp/3.15",

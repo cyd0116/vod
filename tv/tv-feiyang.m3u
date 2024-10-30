@@ -56,7 +56,7 @@ http://127.0.0.1:35455/itv/3000000001000008176.m3u8?cdn=FifastbLive
 http://127.0.0.1:35455/itv/3000000001000008379.m3u8?cdn=FifastbLive
 #EXTINF:-1,tvg-id="咪咕4k" tvg-name="咪咕4k" tvg-logo="https://epg.v1.mk/logo/咪咕4k.png" group-title="咪咕体育",咪咕视频_8M1080_咪视通-7
 http://127.0.0.1:35455/itv/3000000001000010129.m3u8?cdn=FifastbLive
-#EXTINF:-1,tvg-id="咪咕4k" tvg-name="咪咕4k" tvg-logo="https://epg.v1.mk/logo/咪咕4k.png" group-title="咪咕体育",咪咕视频_8M1080_咪视通-8-NBA
+#EXTINF:-1,tvg-id="咪咕4k" tvg-name="咪咕4k" tvg-logo="https://epg.v1.mk/logo/咪咕4k.png" group-title="咪咕体育",咪咕视频_8M1080_咪视通-8(NBA)
 http://127.0.0.1:35455/itv/3000000001000010948.m3u8?cdn=FifastbLive
 #EXTINF:-1,tvg-id="咪咕4k" tvg-name="咪咕4k" tvg-logo="https://epg.v1.mk/logo/咪咕4k.png" group-title="咪咕体育",咪咕视频_8M1080_咪视通-9
 http://127.0.0.1:35455/itv/3000000001000028638.m3u8?cdn=FifastbLive

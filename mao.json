@@ -102,7 +102,7 @@
 ],
 	"sites":[
 { "key": "豆瓣", "name": "🔍豆瓣", "type": 3, "api": "csp_Douban", "searchable": 0, "changeable": 1, "indexs":1, "ext": "./pg/lib/douban.json" },
-//{"key":"TGDouban","name":"🔍TG豆瓣","type":3,"api":"csp_TGDouban","timeout":120, "ext":{ "token":"./lib/tokenm.json", "json":"./lib/tgsearch.json", "keywords":"名称,片名,推荐", "tgsearch_url":"http://127.0.0.1:10199", "tgsearch_media_url":"http://127.0.0.1:10199", "channellist":"Mbox115|1000,shares_115|1000,alypzyhzq|1000,Aliyundrive_Share_Channel|1000,wanwansubchat|1000", "proxy":"noproxy", "douban":"./lib/douban.json" }, "style": { "type": "rect", "ratio": 1.77 } },
+//{"key":"TGDouban","name":"🔍TG豆瓣","type":3,"api":"csp_TGDouban","timeout":120, "ext":{ "token":"./pg/lib/tokenm.json", "json":"./pg/lib/tgsearch.json", "keywords":"名称,片名,推荐", "tgsearch_url":"http://127.0.0.1:10199", "tgsearch_media_url":"http://127.0.0.1:10199", "channellist":"Mbox115|1000,shares_115|1000,alypzyhzq|1000,Aliyundrive_Share_Channel|1000,wanwansubchat|1000", "proxy":"noproxy", "douban":"./pg/lib/douban.json" }, "style": { "type": "rect", "ratio": 1.77 } },
 { "key": "网盘配置", "name": "🔨网盘配置", "type": 3, "api": "csp_Config", "searchable": 0, "quickSearch":0,"changeable": 0, "ext":"./pg/lib/tokenm.json", "style": { "type": "rect", "ratio": 1.5 } },
 
 { "key": "hipy_js_南瓜影视[优]", "name": "📺南瓜(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 1, "quickSearch": 1, "filterable": 1, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/南瓜影视[优].js" }, 
@@ -137,7 +137,6 @@
 {"key":"木耳","name":"🐝木耳","type":1,"api":"https://json02.heimuer.xyz/api.php/provide/vod","searchable":1,"filterable":1,"changeable":1,"timeout":20,"categories":["剧情片","动作片","冒险片","喜剧片","奇幻片","恐怖片","悬疑片","惊悚片","灾难片","爱情片","犯罪片","科幻片","歌舞片","战争片","经典片","动画电影","国产剧","港剧","韩剧","日剧","泰剧","台剧","欧美剧","国产综艺","港台综艺","韩国综艺","日本综艺","欧美综艺","欧美动漫","日本动漫","韩国动漫","国产动漫","港台动漫"],"header":{"user-agent":"Mozilla/5.0(WindowsNT10.0;Win64;x64)AppleWebKit/537.36(KHTML,likeGecko)Chrome/125.0.0.0Safari/537.36"}},
 
 { "key": "hipy_js_大全[央]", "name": "🔥央视(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 1, "quickSearch": 1, "filterable": 1, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/大全[央].js" }, 
-//{"key": "py_cctv","name":"🔥央视(py)","type":3,"api": "./drpy_dzlive/py/py_cctv_1.py","searchable": 1,"quickSearch":0,"filterable": 1}, 
 { "key": "hipy_js_我的哔哩[官]1", "name": "🅱️哔哩(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 1, "quickSearch": 1, "filterable": 1, "order_num": 1, "ext": "./drpy_dzlive/drpy_js/我的哔哩[官].js?type=url&params=../drpy_dzlive/json/哔哩大全.json" }, 
 
 {"key":"hipy_js_360影视[官]", "name": "📺360影视(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 1, "quickSearch": 1, "filterable": 1, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/360影视[官].js","categories": [ "纪录片","电影", "电视剧","综艺", "动漫", "少儿","体育" ]},
@@ -147,10 +146,8 @@
 {"key":"hipy_js_百忙无果[官]", "name": "🍋芒果(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 1, "quickSearch": 1, "filterable": 1, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/百忙无果[官].js","categories": [ "纪录片","电影", "电视剧","综艺", "动漫", "少儿","体育" ]},
 
 { "key": "hipy_js_88看球[球]", "name": "🏀88看球(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 0, "quickSearch": 0, "filterable": 1,"changeable":0, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/88看球[球].js" }, 
-//{"key": "dr_88看球","name": "🏀88看球(JS)","type": 3,"api": "./drpy_dzlive/drpy_libs/drpy2.min.js","searchable": 0,"quickSearch": 0,"changeable":0,"ext": "./drpy_dzlive/drpy_js/88看球.js"},
 {"key": "dr_JRKAN直播","name": "🏀JRKAN直播(JS)","type": 3,"api": "./drpy_dzlive/drpy_libs/drpy2.min.js","searchable": 0,"quickSearch": 0,"changeable":0,"ext": "./drpy_dzlive/drpy_js/JRKAN直播.js"},
 { "key": "hipy_js_310直播[球]", "name": "🏀310直播(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 0, "quickSearch": 0, "filterable": 1, "changeable":0,"order_num": 0, "ext": "./drpy_dzlive/drpy_js/310直播[球].js" }, 
-//{"key":"hipy_js_310直播[球]", "name": "🏀310直播(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 0, "quickSearch": 0, "filterable": 1,"changeable":0, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/310直播[球].js" }, 
 { "key": "hipy_js_926tv[球]", "name": "🏀926tv球(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 0, "quickSearch": 0, "filterable": 1,"changeable":0, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/926tv[球].js" }, 
 
 
@@ -193,8 +190,8 @@
 
 		{"key":"TGYunPan","name":"🅿TG群组搜索","type":3,"api":"csp_TGYunPan","timeout":120, 
 			"ext":{
-				"token":"./lib/tokenm.json",
-				"json":"./lib/tgsearch.json",
+				"token":"./pg/lib/tokenm.json",
+				"json":"./pg/lib/tgsearch.json",
 				"keywords":"名称,片名,推荐",
 				"tgsearch_url":"http://tg.fish2018.us.kg",
 				"tgsearch_media_url":"http://tg.fish2018.us.kg",
@@ -208,8 +205,8 @@
 		},
 		{"key":"TGYunPanLocal","name":"🅿TG频道搜索","type":3,"api":"csp_TGYunPanLocal","timeout":120, 
 			"ext":{
-				"token":"./lib/tokenm.json",
-				"json":"./lib/tgsearch.json",
+				"token":"./pg/lib/tokenm.json",
+				"json":"./pg/lib/tgsearch.json",
 				"keywords":"名称,片名,推荐",
 				"tgsearch_url":"http://tg.fish2018.us.kg",
 				"tgsearch_media_url":"http://tg.fish2018.us.kg",
@@ -222,7 +219,7 @@
 			}
 		},
 
-{ "key":"Youtube", "name":"🅿Youtube", "type":3, "api": "csp_Youtube", "searchable": 1, "quickSearch": 1, "changeable": 1, "timeout": 120, "ext":{ "token":"./pg/lib/tokenm.json", "json":"./pg/lib/youtube.json", "type":"纪录片#电影#剧集#综艺#音乐#体育#动物#风光#直播#新闻#放松#4K#HDR#movie#music#documentary#bbc documentary#national geographic documentary", "keywords":"排行榜,HOT,TRENDS,热门话题,热门趋势,热门综艺,热门电影,热门电视剧,小姐姐", "codecs":"", "proxy":"noproxy"}, "style": { "type": "rect", "ratio": 1.77 } }, 
+{ "key":"Youtube", "name":"🅿Youtube", "type":3, "api": "csp_Youtube", "searchable": 1, "quickSearch": 1, "changeable": 1, "timeout": 120, "ext":{ "token":"./pg/lib/tokenm.json", "json":"./pg/lib/youtube.json", "type":"纪录片#电影#剧集#综艺#音乐#体育#动物#风光#直播#新闻#放松#4K#HDR#movie#music#documentary#bbc documentary#national geographic documentary", "keywords":"排行榜,HOT,TRENDS,热门话题,热门趋势,热门综艺,热门电影,热门电视剧,小姐姐", "codecs":"", "proxy":"proxy"}, "style": { "type": "rect", "ratio": 1.77 } }, 
 		
 {"key":"PushShare","name":"🅿我的资源分享","type":3, "api":"csp_PushShare","searchable":1,"quickSearch":1, "changeable":1, "filterable":0, "timeout":60, "ext":"./pg/lib/tokenm.json$$$./pg/lib/pushshare.txt$$$db$$$1", "style": { "type": "list", "ratio": 1.1 } }, 
 {"key":"AliShare","name":"🅿阿里云盘影视分享","type":3,"api":"csp_AliShare","searchable":1,"quickSearch":1, "changeable":1, "filterable":0, "timeout":60, "ext":"./pg/lib/tokenm.json$$$./pg/lib/alishare.txt$$$db$$$1", "style": { "type": "list", "ratio": 1.1 } }, 

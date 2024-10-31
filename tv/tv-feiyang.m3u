@@ -129,7 +129,7 @@ http://127.0.0.1:35455/ysptp/cctv9.m3u8爸爸常看",CCTV10 科教
 http://127.0.0.1:35455/ysptp/cctv10.m3u8
 #EXTINF:-1,tvg-id="cctv12" tvg-name="cctv12" tvg-logo="https://epg.v1.mk/logo/cctv12.png" group-title="爸爸常看",CCTV12 社会与法
 http://127.0.0.1:35455/ysptp/cctv12.m3u8
-#EXTINF:-1,tvg-id="cctv13" tvg-name="cctv13" tvg-logo="https://epg.v1.mk/logo/cctv13.png" group-title="爸爸常看视",CCTV13 新闻
+#EXTINF:-1,tvg-id="cctv13" tvg-name="cctv13" tvg-logo="https://epg.v1.mk/logo/cctv13.png" group-title="爸爸常看",CCTV13 新闻
 http://127.0.0.1:35455/ysptp/cctv13.m3u8
 #EXTINF:-1,tvg-id="湖南" tvg-name="湖南" tvg-logo="https://epg.v1.mk/logo/湖南.png" group-title="爸爸常看",快乐垂钓
 http://127.0.0.1:35455/itv/5000000011000031206.m3u8?cdn=bestzb

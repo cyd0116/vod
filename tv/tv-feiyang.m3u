@@ -125,7 +125,8 @@ http://127.0.0.1:35455/ysptp/cctv5.m3u8
 #EXTINF:-1,tvg-id="cctv5+" tvg-name="cctv5+" tvg-logo="https://epg.v1.mk/logo/cctv5+.png" group-title="爸爸常看",CCTV5+ 体育赛事
 http://127.0.0.1:35455/ysptp/cctv5p.m3u8
 #EXTINF:-1,tvg-id="cctv9" tvg-name="cctv9" tvg-logo="https://epg.v1.mk/logo/cctv9.png" group-title="爸爸常看",CCTV9 纪录
-http://127.0.0.1:35455/ysptp/cctv9.m3u8爸爸常看",CCTV10 科教
+http://127.0.0.1:35455/ysptp/cctv9.m3u8
+#EXTINF:-1,tvg-id="cctv10" tvg-name="cctv10" tvg-logo="https://epg.v1.mk/logo/cctv10.png" group-title="爸爸常看",CCTV10 科教
 http://127.0.0.1:35455/ysptp/cctv10.m3u8
 #EXTINF:-1,tvg-id="cctv12" tvg-name="cctv12" tvg-logo="https://epg.v1.mk/logo/cctv12.png" group-title="爸爸常看",CCTV12 社会与法
 http://127.0.0.1:35455/ysptp/cctv12.m3u8

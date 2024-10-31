@@ -93,54 +93,58 @@ http://127.0.0.1:35455/itv/5000000004000006211.m3u8?cdn=bestzb
 #EXTINF:-1,tvg-id="青海卫视" tvg-name="青海卫视" tvg-logo="https://epg.v1.mk/logo/青海卫视.png" group-title="卫视",青海卫视
 http://127.0.0.1:35455/itv/1000000002000013359.m3u8?cdn=ystenlive
 
-#EXTINF:-1,tvg-id="凤凰卫视中文" tvg-name="凤凰卫视中文" tvg-logo="https://epg.v1.mk/logo/凤凰卫视中文.png" group-title="卫视",凤凰卫视中文
-http://127.0.0.1:35455/tptv/HD-10000k-1080P-fhchinese5s.m3u8
-#EXTINF:-1,tvg-id="凤凰卫视资讯" tvg-name="凤凰卫视资讯" tvg-logo="https://epg.v1.mk/logo/凤凰卫视资讯.png" group-title="卫视",凤凰卫视资讯
-http://127.0.0.1:35455/tptv/HD-10000k-1080P-fhzixun5s.m3u8
-#EXTINF:-1,tvg-id="凤凰卫视香港" tvg-name="凤凰卫视香港" tvg-logo="https://epg.v1.mk/logo/凤凰卫视香港.png" group-title="卫视",凤凰卫视香港
-http://127.0.0.1:35455/tptv/HD-10000k-1080P-fhhongkong5s.m3u8
-
-#EXTINF:-1,tvg-id="cctv9" tvg-name="cctv9" tvg-logo="https://epg.v1.mk/logo/cctv9.png" group-title="纪录",CCTV9 纪录
+#EXTINF:-1,tvg-id="cctv9" tvg-name="cctv9" tvg-logo="https://epg.v1.mk/logo/cctv9.png" group-title="妈妈常看",CCTV9 纪录
 http://127.0.0.1:35455/ysptp/cctv9.m3u8
-#EXTINF:-1,tvg-id="cctv10" tvg-name="cctv10" tvg-logo="https://epg.v1.mk/logo/cctv10.png" group-title="纪录",CCTV10 科教
+#EXTINF:-1,tvg-id="cctv10" tvg-name="cctv10" tvg-logo="https://epg.v1.mk/logo/cctv10.png" group-title="妈妈常看",CCTV10 科教
 http://127.0.0.1:35455/ysptp/cctv10.m3u8
-#EXTINF:-1,tvg-id="北京纪实科教" tvg-name="北京纪实科教" tvg-logo="https://epg.v1.mk/logo/北京纪实科教.png" group-title="纪录",北京纪实科教-HEVC
+#EXTINF:-1,tvg-id="北京纪实科教" tvg-name="北京纪实科教" tvg-logo="https://epg.v1.mk/logo/北京纪实科教.png" group-title="妈妈常看",北京纪实科教-HEVC
 http://127.0.0.1:35455/itv/1000000005000265020.m3u8?cdn=ystenlive
-#EXTINF:-1,tvg-id="湖南金鹰纪实" tvg-name="湖南金鹰纪实" tvg-logo="https://epg.v1.mk/logo/湖南金鹰纪实.png" group-title="纪录",湖南金鹰纪实
+#EXTINF:-1,tvg-id="湖南金鹰纪实" tvg-name="湖南金鹰纪实" tvg-logo="https://epg.v1.mk/logo/湖南金鹰纪实.png" group-title="妈妈常看",湖南金鹰纪实
 http://127.0.0.1:35455/itv/5000000011000031203.m3u8?cdn=bestzb
-#EXTINF:-1,tvg-id="纪实人文" tvg-name="纪实人文" tvg-logo="https://epg.v1.mk/logo/纪实人文.png" group-title="纪录",上海纪实人文-HEVC
+#EXTINF:-1,tvg-id="纪实人文" tvg-name="纪实人文" tvg-logo="https://epg.v1.mk/logo/纪实人文.png" group-title="妈妈常看",上海纪实人文-HEVC
 http://127.0.0.1:35455/itv/1000000005000265021.m3u8?cdn=ystenlive
-#EXTINF:-1,tvg-id="newtv精品纪录" tvg-name="newtv精品纪录" tvg-logo="https://epg.v1.mk/logo/newtv精品纪录.png" group-title="纪录",NewTV-精品纪录
+#EXTINF:-1,tvg-id="newtv精品纪录" tvg-name="newtv精品纪录" tvg-logo="https://epg.v1.mk/logo/newtv精品纪录.png" group-title="妈妈常看",NewTV-精品纪录
 http://127.0.0.1:35455/itv/1000000004000013730.m3u8?cdn=ystenlive
-#EXTINF:-1,tvg-id="求索动物" tvg-name="求索动物" tvg-logo="https://epg.v1.mk/logo/求索动物.png" group-title="纪录",求索动物
+#EXTINF:-1,tvg-id="求索动物" tvg-name="求索动物" tvg-logo="https://epg.v1.mk/logo/求索动物.png" group-title="妈妈常看",求索动物
 http://127.0.0.1:35455/itv/6000000002000010046.m3u8?cdn=wasusyt
-#EXTINF:-1,tvg-id="求索纪录" tvg-name="求索纪录" tvg-logo="https://epg.v1.mk/logo/求索纪录.png" group-title="纪录",求索纪录
+#EXTINF:-1,tvg-id="求索纪录" tvg-name="求索纪录" tvg-logo="https://epg.v1.mk/logo/求索纪录.png" group-title="妈妈常看",求索纪录
 http://127.0.0.1:35455/itv/6000000002000032052.m3u8?cdn=wasusyt
-#EXTINF:-1,tvg-id="求索科学" tvg-name="求索科学" tvg-logo="https://epg.v1.mk/logo/求索科学.png" group-title="纪录",求索科学
+#EXTINF:-1,tvg-id="求索科学" tvg-name="求索科学" tvg-logo="https://epg.v1.mk/logo/求索科学.png" group-title="妈妈常看",求索科学
 http://127.0.0.1:35455/itv/6000000002000032344.m3u8?cdn=wasusyt
-#EXTINF:-1,tvg-id="求索生活" tvg-name="求索生活" tvg-logo="https://epg.v1.mk/logo/求索生活.png" group-title="纪录",求索生活
+#EXTINF:-1,tvg-id="求索生活" tvg-name="求索生活" tvg-logo="https://epg.v1.mk/logo/求索生活.png" group-title="妈妈常看",求索生活
 http://127.0.0.1:35455/itv/6000000002000003382.m3u8?cdn=wasusyt
-#EXTINF:-1,tvg-id="IHOT爱科学" tvg-name="IHOT爱科学" tvg-logo="https://epg.v1.mk/logo/IHOT爱科学.png" group-title="纪录",iHOT-爱科学
+#EXTINF:-1,tvg-id="IHOT爱科学" tvg-name="IHOT爱科学" tvg-logo="https://epg.v1.mk/logo/IHOT爱科学.png" group-title="妈妈常看",iHOT-爱科学
 http://127.0.0.1:35455/itv/6000000006000160630.m3u8?cdn=wasusyt
 
-#EXTINF:-1,tvg-id="cctv5" tvg-name="cctv5" tvg-logo="https://epg.v1.mk/logo/cctv5.png" group-title="体育",CCTV5 体育
+#EXTINF:-1,tvg-id="cctv2" tvg-name="cctv2" tvg-logo="https://epg.v1.mk/logo/cctv2.png" group-title="爸爸常看",CCTV2 财经
+http://127.0.0.1:35455/ysptp/cctv2.m3u8
+#EXTINF:-1,tvg-id="cctv4" tvg-name="cctv4" tvg-logo="https://epg.v1.mk/logo/cctv4.png" group-title="爸爸常看",CCTV4 中文国际
+http://127.0.0.1:35455/ysptp/cctv4.m3u8
+#EXTINF:-1,tvg-id="cctv5" tvg-name="cctv5" tvg-logo="https://epg.v1.mk/logo/cctv5.png" group-title="爸爸常看",CCTV5 体育
 http://127.0.0.1:35455/ysptp/cctv5.m3u8
-#EXTINF:-1,tvg-id="cctv5+" tvg-name="cctv5+" tvg-logo="https://epg.v1.mk/logo/cctv5+.png" group-title="体育",CCTV5+ 体育赛事
+#EXTINF:-1,tvg-id="cctv5+" tvg-name="cctv5+" tvg-logo="https://epg.v1.mk/logo/cctv5+.png" group-title="爸爸常看",CCTV5+ 体育赛事
 http://127.0.0.1:35455/ysptp/cctv5p.m3u8
-#EXTINF:-1,tvg-id="五星体育" tvg-name="五星体育" tvg-logo="https://epg.v1.mk/logo/五星体育.png" group-title="体育",上海五星体育
-http://127.0.0.1:35455/itv/5000000010000017540.m3u8?cdn=bestzb
-#EXTINF:-1,tvg-id="newtv精品体育" tvg-name="newtv精品体育" tvg-logo="https://epg.v1.mk/logo/newtv精品体育.png" group-title="体育",NewTV-精品体育
-http://127.0.0.1:35455/itv/1000000004000014634.m3u8?cdn=ystenlive
-#EXTINF:-1,tvg-id="newtv超级体育" tvg-name="newtv超级体育" tvg-logo="https://epg.v1.mk/logo/newtv超级体育.png" group-title="体育",NewTV-超级体育
-http://127.0.0.1:35455/itv/1000000001000009601.m3u8?cdn=ystenlive
-#EXTINF:-1,tvg-id="SITV劲爆体育" tvg-name="SITV劲爆体育" tvg-logo="https://epg.v1.mk/logo/SITV劲爆体育.png" group-title="体育",SiTV-劲爆体育
-http://127.0.0.1:35455/itv/5000000002000029972.m3u8?cdn=bestzb
-#EXTINF:-1,tvg-id="IHOT爱体育" tvg-name="IHOT爱体育" tvg-logo="https://epg.v1.mk/logo/IHOT爱体育.png" group-title="体育",iHOT-爱体育
-http://127.0.0.1:35455/itv/6000000006000290630.m3u8?cdn=wasusyt
-#EXTINF:-1,tvg-id="SITV魅力足球" tvg-name="SITV魅力足球" tvg-logo="https://epg.v1.mk/logo/SITV.png" group-title="体育",SiTV-魅力足球
-http://127.0.0.1:35455/itv/5000000011000031207.m3u8?cdn=bestzb
-#EXTINF:-1,tvg-id="湖南" tvg-name="湖南" tvg-logo="https://epg.v1.mk/logo/湖南.png" group-title="体育",快乐垂钓
+#EXTINF:-1,tvg-id="cctv9" tvg-name="cctv9" tvg-logo="https://epg.v1.mk/logo/cctv9.png" group-title="爸爸常看",CCTV9 纪录
+http://127.0.0.1:35455/ysptp/cctv9.m3u8爸爸常看",CCTV10 科教
+http://127.0.0.1:35455/ysptp/cctv10.m3u8
+#EXTINF:-1,tvg-id="cctv12" tvg-name="cctv12" tvg-logo="https://epg.v1.mk/logo/cctv12.png" group-title="爸爸常看",CCTV12 社会与法
+http://127.0.0.1:35455/ysptp/cctv12.m3u8
+#EXTINF:-1,tvg-id="cctv13" tvg-name="cctv13" tvg-logo="https://epg.v1.mk/logo/cctv13.png" group-title="爸爸常看视",CCTV13 新闻
+http://127.0.0.1:35455/ysptp/cctv13.m3u8
+#EXTINF:-1,tvg-id="湖南" tvg-name="湖南" tvg-logo="https://epg.v1.mk/logo/湖南.png" group-title="爸爸常看",快乐垂钓
 http://127.0.0.1:35455/itv/5000000011000031206.m3u8?cdn=bestzb
+#EXTINF:-1,tvg-id="五星体育" tvg-name="五星体育" tvg-logo="https://epg.v1.mk/logo/五星体育.png" group-title="爸爸常看",上海五星体育
+http://127.0.0.1:35455/itv/5000000010000017540.m3u8?cdn=bestzb
+#EXTINF:-1,tvg-id="newtv精品体育" tvg-name="newtv精品体育" tvg-logo="https://epg.v1.mk/logo/newtv精品体育.png" group-title="爸爸常看",NewTV-精品体育
+http://127.0.0.1:35455/itv/1000000004000014634.m3u8?cdn=ystenlive
+#EXTINF:-1,tvg-id="newtv超级体育" tvg-name="newtv超级体育" tvg-logo="https://epg.v1.mk/logo/newtv超级体育.png" group-title="爸爸常看",NewTV-超级体育
+http://127.0.0.1:35455/itv/1000000001000009601.m3u8?cdn=ystenlive
+#EXTINF:-1,tvg-id="SITV劲爆体育" tvg-name="SITV劲爆体育" tvg-logo="https://epg.v1.mk/logo/SITV劲爆体育.png" group-title="爸爸常看",SiTV-劲爆体育
+http://127.0.0.1:35455/itv/5000000002000029972.m3u8?cdn=bestzb
+#EXTINF:-1,tvg-id="IHOT爱体育" tvg-name="IHOT爱体育" tvg-logo="https://epg.v1.mk/logo/IHOT爱体育.png" group-title="爸爸常看",iHOT-爱体育
+http://127.0.0.1:35455/itv/6000000006000290630.m3u8?cdn=wasusyt
+#EXTINF:-1,tvg-id="SITV魅力足球" tvg-name="SITV魅力足球" tvg-logo="https://epg.v1.mk/logo/SITV.png" group-title="爸爸常看",SiTV-魅力足球
+http://127.0.0.1:35455/itv/5000000011000031207.m3u8?cdn=bestzb
 
 #EXTINF:-1,tvg-id="北京卫视" tvg-name="北京卫视" tvg-logo="https://epg.v1.mk/logo/北京卫视.png" group-title="北京",北京卫视
 http://127.0.0.1:35455/itv/6000000001000020451.m3u8?cdn=wasusyt

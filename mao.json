@@ -101,7 +101,7 @@
 			}
 ],
 	"sites":[
-{ "key": "豆瓣", "name": "🔍豆瓣", "type": 3, "api": "csp_Douban", "searchable": 0, "changeable": 1, "indexs":1, "ext": "./pg/lib/douban.json" },
+{ "key": "豆瓣", "name": "🔍豆瓣", "type": 3, "api": "csp_Douban", "searchable": 0, "changeable": 1, "indexs":1, "ext": "./pg/lib/tokenm.json$$$./pg/lib/douban.json" },
 //{"key":"TGDouban","name":"🔍TG豆瓣","type":3,"api":"csp_TGDouban","timeout":120, "ext":{ "token":"./pg/lib/tokenm.json", "json":"./pg/lib/tgsearch.json", "keywords":"名称,片名,推荐", "tgsearch_url":"http://127.0.0.1:10199", "tgsearch_media_url":"http://127.0.0.1:10199", "channellist":"Mbox115|1000,shares_115|1000,alypzyhzq|1000,Aliyundrive_Share_Channel|1000,wanwansubchat|1000", "proxy":"noproxy", "douban":"./pg/lib/douban.json" }, "style": { "type": "rect", "ratio": 0.7 } },
 { "key": "网盘配置", "name": "🔨网盘配置", "type": 3, "api": "csp_Config", "searchable": 0, "quickSearch":0,"changeable": 0, "ext":"./pg/lib/tokenm.json", "style": { "type": "rect", "ratio": 1.5 } },
 

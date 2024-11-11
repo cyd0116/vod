@@ -194,6 +194,72 @@ CCTV-17农业农村,http://[2409:8087:1a01:df::4077]/ottrrs.hl.chinamobile.com/P
 陕西卫视,http://[2409:8087:1a01:df::7005]/ottrrs.hl.chinamobile.com/PLTV/88888888/224/3221225625/index.m3u8
 陕西卫视,http://[2409:8087:1a01:df::7005]/ottrrs.hl.chinamobile.com/PLTV/88888888/224/3221226457/index.m3u8
 
+央视频道(肥羊),#genre#
+CCTV1 综合,http://127.0.0.1:35455/ysptp/cctv1.m3u8
+CCTV2 财经,http://127.0.0.1:35455/ysptp/cctv2.m3u8
+CCTV3 综艺,http://127.0.0.1:35455/ysptp/cctv3.m3u8
+CCTV4 中文国际,http://127.0.0.1:35455/ysptp/cctv4.m3u8
+CCTV5 体育,http://127.0.0.1:35455/ysptp/cctv5.m3u8
+CCTV5+ 体育赛事,http://127.0.0.1:35455/ysptp/cctv5p.m3u8
+
+CCTV6 电影,http://127.0.0.1:35455/itv/6000000001000004574.m3u8?cdn=wasusyt
+CCTV6 电影,http://127.0.0.1:35455/itv/1000000001000001737.m3u8?cdn=ystenlive
+CCTV6 电影,http://127.0.0.1:35455/itv/1000000005000265006.m3u8?cdn=ystenlive
+
+CCTV7 国防军事,http://127.0.0.1:35455/ysptp/cctv7.m3u8
+CCTV8 电视剧,http://127.0.0.1:35455/ysptp/cctv8.m3u8
+CCTV9 纪录,http://127.0.0.1:35455/ysptp/cctv9.m3u8
+CCTV10 科教,http://127.0.0.1:35455/ysptp/cctv10.m3u8
+CCTV11 戏曲,http://127.0.0.1:35455/ysptp/cctv11.m3u8
+CCTV12 社会与法,http://127.0.0.1:35455/ysptp/cctv12.m3u8
+CCTV13 新闻,http://127.0.0.1:35455/ysptp/cctv13.m3u8
+CCTV14 少儿,http://127.0.0.1:35455/ysptp/cctv14.m3u8
+CCTV15 音乐,http://127.0.0.1:35455/ysptp/cctv15.m3u8
+CCTV16 奥林匹克,http://127.0.0.1:35455/ysptp/cctv16.m3u8
+CCTV17 农业农村,http://127.0.0.1:35455/ysptp/cctv17.m3u8
+
+卫视频道(肥羊),#genre#
+深圳卫视-50-FPS,http://127.0.0.1:35455/itv/6000000001000002116.m3u8?cdn=wasusyt
+广东卫视-50-FPS,http://127.0.0.1:35455/itv/6000000001000031076.m3u8?cdn=wasusyt
+湖南卫视-50-FPS,http://127.0.0.1:35455/itv/6000000001000018044.m3u8?cdn=wasusyt
+浙江卫视-50-FPS,http://127.0.0.1:35455/itv/5000000004000007275.m3u8?cdn=bestzb
+北京卫视-HEVC,http://127.0.0.1:35455/itv/1000000005000265027.m3u8?cdn=ystenlive
+天津卫视-50-FPS,http://127.0.0.1:35455/itv/6000000001000009186.m3u8?cdn=wasusyt
+东方卫视-50-FPS,http://127.0.0.1:35455/itv/5000000004000014098.m3u8?cdn=bestzb
+黑龙江卫视-50-FPS,http://127.0.0.1:35455/itv/6000000001000016510.m3u8?cdn=wasusyt
+辽宁卫视-HEVC,http://127.0.0.1:35455/itv/1000000005000265022.m3u8?cdn=ystenlive
+山东卫视-50-FPS,http://127.0.0.1:35455/itv/6000000001000004134.m3u8?cdn=wasusyt
+安徽卫视-50-FPS,http://127.0.0.1:35455/itv/6000000001000009954.m3u8?cdn=wasusyt
+江苏卫视-50-FPS,http://127.0.0.1:35455/itv/6000000001000014861.m3u8?cdn=wasusyt
+江西卫视-HEVC,http://127.0.0.1:35455/itv/1000000005000265032.m3u8?cdn=ystenlive
+湖北卫视-50-FPS,http://127.0.0.1:35455/itv/6000000001000015436.m3u8?cdn=wasusyt
+重庆卫视-HEVC,http://127.0.0.1:35455/itv/1000000005000265017.m3u8?cdn=ystenlive
+东南卫视-HEVC,http://127.0.0.1:35455/itv/1000000005000265033.m3u8?cdn=ystenlive
+吉林卫视,http://127.0.0.1:35455/itv/5000000011000031117.m3u8?cdn=bestzb
+河北卫视,http://127.0.0.1:35455/itv/5000000006000040016.m3u8?cdn=bestzb
+河南卫视,http://127.0.0.1:35455/itv/5000000011000031119.m3u8?cdn=bestzb
+云南卫视,http://127.0.0.1:35455/itv/5000000011000031120.m3u8?cdn=bestzb
+贵州卫视,http://127.0.0.1:35455/itv/5000000004000025843.m3u8?cdn=bestzb
+四川卫视,http://127.0.0.1:35455/itv/5000000004000006119.m3u8?cdn=bestzb
+广西卫视,http://127.0.0.1:35455/itv/5000000011000031118.m3u8?cdn=bestzb
+海南卫视,http://127.0.0.1:35455/itv/5000000004000006211.m3u8?cdn=bestzb
+青海卫视,http://127.0.0.1:35455/itv/1000000002000013359.m3u8?cdn=ystenlive
+
+
+纪录频道(肥羊),#genre#
+CCTV9 纪录,http://127.0.0.1:35455/ysptp/cctv9.m3u8
+CCTV10 科教,http://127.0.0.1:35455/ysptp/cctv10.m3u8
+北京纪实科教-HEVC,http://127.0.0.1:35455/itv/1000000005000265020.m3u8?cdn=ystenlive
+湖南金鹰纪实,http://127.0.0.1:35455/itv/5000000011000031203.m3u8?cdn=bestzb
+上海纪实人文-50-FPS,http://127.0.0.1:35455/itv/5000000004000010282.m3u8?cdn=bestzb
+NewTV-精品纪录,http://127.0.0.1:35455/itv/1000000004000013730.m3u8?cdn=ystenlive
+求索动物,http://127.0.0.1:35455/itv/6000000002000010046.m3u8?cdn=wasusyt
+求索纪录,http://127.0.0.1:35455/itv/6000000002000032052.m3u8?cdn=wasusyt
+求索科学,http://127.0.0.1:35455/itv/6000000002000032344.m3u8?cdn=wasusyt
+求索生活,http://127.0.0.1:35455/itv/6000000002000003382.m3u8?cdn=wasusyt
+iHOT-爱科学,http://127.0.0.1:35455/itv/6000000006000160630.m3u8?cdn=wasusyt
+快乐垂钓,http://127.0.0.1:35455/itv/5000000011000031206.m3u8?cdn=bestzb
+
 央视频道(移动多源),#genre#
 CCTV-1,http://39.134.65.173/PLTV/88888888/224/3221225816/1.m3u8
 CCTV-1,http://39.134.65.175/PLTV/88888888/224/3221225816/1.m3u8

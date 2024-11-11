@@ -165,8 +165,8 @@ CCTV16奥林匹克,http://127.0.0.1:35455/ysptp/cctv4k16.m3u8
 CCTV16奥林匹克,http://127.0.0.1:35455/itv/5000000008000023254.m3u8?cdn=bestzb
 CCTV16奥林匹克,http://127.0.0.1:35455/ysptp/cctv16.m3u8
 CCTV17农业农村,http://127.0.0.1:35455/ysptp/cctv17.m3u8
-CCTV4k超高清,http://127.0.0.1:35455/ysptp/cctv4k_10m.m3u8
-CCTV4k超高清,http://127.0.0.1:35455/ysptp/cctv4k.m3u8
+CCTV4K超高清,http://127.0.0.1:35455/ysptp/cctv4k_10m.m3u8
+CCTV4K超高清,http://127.0.0.1:35455/ysptp/cctv4k.m3u8
 
 
 卫视频道(肥羊),#genre#
@@ -207,7 +207,7 @@ NewTV精品纪录,http://127.0.0.1:35455/itv/1000000004000013730.m3u8?cdn=ystenl
 求索纪录,http://127.0.0.1:35455/itv/6000000002000032052.m3u8?cdn=wasusyt
 求索科学,http://127.0.0.1:35455/itv/6000000002000032344.m3u8?cdn=wasusyt
 求索生活,http://127.0.0.1:35455/itv/6000000002000003382.m3u8?cdn=wasusyt
-iHOT爱科学,http://127.0.0.1:35455/itv/6000000006000160630.m3u8?cdn=wasusyt
+IHOT爱科学,http://127.0.0.1:35455/itv/6000000006000160630.m3u8?cdn=wasusyt
 快乐垂钓,http://127.0.0.1:35455/itv/5000000011000031206.m3u8?cdn=bestzb
 
 央视频道(黑移动IPV6),#genre#

@@ -183,9 +183,9 @@ CCTV17农业农村,http://127.0.0.1:35455/ysptp/cctv17.m3u8
 纪录频道(肥羊),#genre#
 CCTV9纪录,http://127.0.0.1:35455/ysptp/cctv9.m3u8
 CCTV10科教,http://127.0.0.1:35455/ysptp/cctv10.m3u8
-北京纪实科教-HEVC,http://127.0.0.1:35455/itv/1000000005000265020.m3u8?cdn=ystenlive
+北京纪实科教,http://127.0.0.1:35455/itv/1000000005000265020.m3u8?cdn=ystenlive
 湖南金鹰纪实,http://127.0.0.1:35455/itv/5000000011000031203.m3u8?cdn=bestzb
-上海纪实人文-50-FPS,http://127.0.0.1:35455/itv/5000000004000010282.m3u8?cdn=bestzb
+上海纪实人文,http://127.0.0.1:35455/itv/5000000004000010282.m3u8?cdn=bestzb
 NewTV-精品纪录,http://127.0.0.1:35455/itv/1000000004000013730.m3u8?cdn=ystenlive
 求索动物,http://127.0.0.1:35455/itv/6000000002000010046.m3u8?cdn=wasusyt
 求索纪录,http://127.0.0.1:35455/itv/6000000002000032052.m3u8?cdn=wasusyt

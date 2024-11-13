@@ -1,4 +1,4 @@
-📡央视频道(黑移动),#genre#
+📡央视频道(移动回看),#genre#
 CCTV-1综合,http://ottrrs.hl.chinamobile.com/PLTV/88888888/224/3221226016/index.m3u8
 CCTV-2财经,http://ottrrs.hl.chinamobile.com/PLTV/88888888/8/3221225588/index.m3u8#http://ottrrs.hl.chinamobile.com/PLTV/88888888/224/3221226540/index.m3u8
 CCTV-3综艺,http://ottrrs.hl.chinamobile.com/PLTV/88888888/224/3221226021/index.m3u8
@@ -18,7 +18,7 @@ CCTV-15音乐,http://ottrrs.hl.chinamobile.com/PLTV/88888888/224/3221226476/inde
 CCTV-16奥林匹克,http://ottrrs.hl.chinamobile.com/PLTV/88888888/224/3221226100/index.m3u8
 CCTV-17农业农村,http://ottrrs.hl.chinamobile.com/PLTV/88888888/224/3221225765/index.m3u8
 
-📡卫视频道(黑移动),#genre#
+📡卫视频道(移动回看),#genre#
 深圳卫视,http://ottrrs.hl.chinamobile.com/PLTV/88888888/224/3221225739/index.m3u8
 广东卫视,http://ottrrs.hl.chinamobile.com/PLTV/88888888/224/3221226248/index.m3u8
 北京卫视,http://ottrrs.hl.chinamobile.com/PLTV/88888888/224/3221225728/index.m3u8
@@ -128,7 +128,7 @@ CCTV-17农业农村,http://ottrrs.hl.chinamobile.com/PLTV/88888888/224/322122576
 精品体育,http://ottrrs.hl.chinamobile.com/PLTV/88888888/224/3221225674/index.m3u8
 超级体育,http://ottrrs.hl.chinamobile.com/PLTV/88888888/224/3221225715/index.m3u8
 
-央视频道(肥羊),#genre#
+央视频道(肥羊高码),#genre#
 CCTV1综合,http://127.0.0.1:35455/ysptp/cctv1.m3u8
 CCTV1综合,http://127.0.0.1:35455/itv/5000000004000002226.m3u8?cdn=bestzb
 CCTV2财经,http://127.0.0.1:35455/ysptp/cctv2.m3u8
@@ -169,7 +169,7 @@ CCTV4K超高清,http://127.0.0.1:35455/ysptp/cctv4k_10m.m3u8
 CCTV4K超高清,http://127.0.0.1:35455/ysptp/cctv4k.m3u8
 
 
-卫视频道(肥羊),#genre#
+卫视频道(肥羊高码),#genre#
 深圳卫视,http://127.0.0.1:35455/itv/6000000001000002116.m3u8?cdn=wasusyt
 广东卫视,http://127.0.0.1:35455/itv/6000000001000031076.m3u8?cdn=wasusyt
 湖南卫视,http://127.0.0.1:35455/itv/6000000001000018044.m3u8?cdn=wasusyt
@@ -196,7 +196,7 @@ CCTV4K超高清,http://127.0.0.1:35455/ysptp/cctv4k.m3u8
 海南卫视,http://127.0.0.1:35455/itv/5000000004000006211.m3u8?cdn=bestzb
 青海卫视,http://127.0.0.1:35455/itv/1000000002000013359.m3u8?cdn=ystenlive
 
-纪录频道(肥羊),#genre#
+纪录频道(肥羊高码),#genre#
 CCTV9纪录,http://127.0.0.1:35455/ysptp/cctv9.m3u8
 CCTV10科教,http://127.0.0.1:35455/ysptp/cctv10.m3u8
 北京纪实科教,http://127.0.0.1:35455/itv/1000000005000265020.m3u8?cdn=ystenlive
@@ -210,7 +210,7 @@ NewTV精品纪录,http://127.0.0.1:35455/itv/1000000004000013730.m3u8?cdn=ystenl
 IHOT爱科学,http://127.0.0.1:35455/itv/6000000006000160630.m3u8?cdn=wasusyt
 快乐垂钓,http://127.0.0.1:35455/itv/5000000011000031206.m3u8?cdn=bestzb
 
-央视频道(黑移动IPV6),#genre#
+央视频道(移动IPV6),#genre#
 CCTV-1综合,http://[2409:8087:1a01:df::7005]:80/ottrrs.hl.chinamobile.com/PLTV/88888888/224/3221226559/index.m3u8
 CCTV-1综合,http://[2409:8087:1a01:df::4077]/ottrrs.hl.chinamobile.com/PLTV/88888888/8/3221226016/index.m3u8
 CCTV-2财经,http://[2409:8087:1a01:df::4077]/ottrrs.hl.chinamobile.com/PLTV/88888888/8/3221225588/index.m3u8
@@ -248,7 +248,7 @@ CCTV-16奥林匹克,http://[2409:8087:1a01:df::4077]/ottrrs.hl.chinamobile.com/P
 CCTV-17农业农村,http://[2409:8087:1a01:df::7005]:80/ottrrs.hl.chinamobile.com/PLTV/88888888/224/3221225765/index.m3u8
 CCTV-17农业农村,http://[2409:8087:1a01:df::4077]/ottrrs.hl.chinamobile.com/PLTV/88888888/8/3221225765/index.m3u8
 
-卫视频道(黑移动IPV6),#genre#
+卫视频道(移动IPV6),#genre#
 深圳卫视,http://[2409:8087:1a01:df::7005]/ottrrs.hl.chinamobile.com/PLTV/88888888/224/3221226313/index.m3u8
 广东卫视,http://[2409:8087:1a01:df::7005]/ottrrs.hl.chinamobile.com/PLTV/88888888/224/3221226248/index.m3u8
 北京卫视,http://[2409:8087:1a01:df::7005]/ottrrs.hl.chinamobile.com/PLTV/88888888/224/3221226450/index.m3u8
@@ -276,7 +276,7 @@ CCTV-17农业农村,http://[2409:8087:1a01:df::4077]/ottrrs.hl.chinamobile.com/P
 陕西卫视,http://[2409:8087:1a01:df::7005]/ottrrs.hl.chinamobile.com/PLTV/88888888/224/3221225625/index.m3u8
 陕西卫视,http://[2409:8087:1a01:df::7005]/ottrrs.hl.chinamobile.com/PLTV/88888888/224/3221226457/index.m3u8
 
-央视频道(移动多源),#genre#
+央视频道(移动多源回看),#genre#
 CCTV-1,http://39.134.65.173/PLTV/88888888/224/3221225816/1.m3u8
 CCTV-1,http://39.134.65.175/PLTV/88888888/224/3221225816/1.m3u8
 CCTV-1,http://39.134.65.179/PLTV/88888888/224/3221225816/1.m3u8
@@ -443,7 +443,7 @@ CCTV-17,http://39.134.65.181/PLTV/88888888/224/3221225708/1.m3u8
 CCTV-17,http://39.134.65.183/PLTV/88888888/224/3221225708/1.m3u8
 CCTV-17,http://39.134.66.110/PLTV/88888888/224/3221225708/index.m3u8
 
-卫视频道(移动多源),#genre#
+卫视频道(移动多源回看),#genre#
 深圳卫视,http://39.134.65.162/PLTV/88888888/224/3221225668/1.m3u8
 深圳卫视,http://39.134.65.164/PLTV/88888888/224/3221225668/1.m3u8
 深圳卫视,http://39.134.65.166/PLTV/88888888/224/3221225668/1.m3u8

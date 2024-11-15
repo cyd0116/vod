@@ -134,8 +134,8 @@ CCTV1综合,http://127.0.0.1:35455/itv/5000000004000002226.m3u8?cdn=bestzb
 CCTV2财经,http://127.0.0.1:35455/ysptp/cctv2.m3u8
 CCTV2财经,http://127.0.0.1:35455/itv/6000000001000014161.m3u8?cdn=wasusyt
 CCTV3综艺,http://127.0.0.1:35455/ysptp/cctv3.m3u8
-CCTV4中文国际,http://127.0.0.1:35455/ysptp/cctv4.m3u8
 CCTV4中文国际,http://127.0.0.1:35455/itv/5000000011000031102.m3u8?cdn=bestzb
+CCTV4中文国际,http://127.0.0.1:35455/ysptp/cctv4.m3u8
 CCTV5体育,http://127.0.0.1:35455/ysptp/cctv5.m3u8
 CCTV5+体育赛事,http://127.0.0.1:35455/ysptp/cctv5p.m3u8
 
@@ -160,10 +160,10 @@ CCTV14少儿,http://127.0.0.1:35455/ysptp/cctv14.m3u8
 CCTV14少儿,http://127.0.0.1:35455/itv/5000000004000006673.m3u8?cdn=bestzb
 CCTV15音乐,http://127.0.0.1:35455/ysptp/cctv15.m3u8
 CCTV15音乐,http://127.0.0.1:35455/itv/5000000011000031109.m3u8?cdn=bestzb
+CCTV16奥林匹克,http://127.0.0.1:35455/ysptp/cctv16.m3u8
 CCTV16奥林匹克,http://127.0.0.1:35455/ysptp/cctv4k16_10m.m3u8
 CCTV16奥林匹克,http://127.0.0.1:35455/ysptp/cctv4k16.m3u8
 CCTV16奥林匹克,http://127.0.0.1:35455/itv/5000000008000023254.m3u8?cdn=bestzb
-CCTV16奥林匹克,http://127.0.0.1:35455/ysptp/cctv16.m3u8
 CCTV17农业农村,http://127.0.0.1:35455/ysptp/cctv17.m3u8
 CCTV4K超高清,http://127.0.0.1:35455/ysptp/cctv4k_10m.m3u8
 CCTV4K超高清,http://127.0.0.1:35455/ysptp/cctv4k.m3u8

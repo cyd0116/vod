@@ -152,8 +152,9 @@
 
 //pg网盘
 {"key":"Wogg","name":"👽玩偶|阿U网盘","type":3,"api":"csp_Wogg","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://www.wogg.bf/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$WOGG"},
+{"key":"Wobg","name":"👽龙龙|阿U网盘","type":3,"api":"csp_Wobg","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$http://wanou.xn--yi7aa.top:3108/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$WOBG"},
 {"key":"Mogg","name":"👲木偶|UC网盘","type":3,"api":"csp_Wobg","searchable": 1,"quickSearch":1, "changeable":1,"filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$http://mogg.top/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$MOGG"}, 
-{"key":"小米网盘","name":"🍚小米|U夸网盘", "type": 3, "api": "csp_Wobg", "searchable": 1,"quickSearch":1, "changeable":1, "filterable": 1, "timeout": 60, "ext": "./pg/lib/tokenm.json$$$https://mihdr.top/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$XIAOMI" },
+{"key":"小米网盘","name":"🍚小米|U夸网盘", "type": 3, "api": "csp_Wobg", "searchable": 1,"quickSearch":1, "changeable":1, "filterable": 1, "timeout": 60, "ext": "./pg/lib/tokenm.json$$$http://www.mucpan.cc/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$XIAOMI" },
 {"key":"yydsys","name":"🕵多多|阿U夸网盘","type":3,"api":"csp_Wobg","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://tv.yydsys.top/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$WNLG"},
 {"key":"YunPan","name":"⛅️云盘资源|阿夸网盘","type":3,"api":"csp_YunPan","timeout":60, "ext":"./pg/lib/tokenm.json$$$null$$$noproxy$$$1"},
 {"key":"蜡笔网盘","name":"🖍蜡笔|阿U夸网盘","type":3,"api":"csp_Wobg","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://duopan.fun/$$$noproxy$$$1$$$./pg/lib/wogg.json"},
@@ -166,7 +167,6 @@
 {"key":"PikaSo","name":"📀皮卡搜|阿夸搜索","type":3,"api":"csp_PikaSo","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://www.pikaso.top/$$$null", "style": { "type": "list", "ratio": 1.1 } }, 
 
 //{"key":"Hdhive","name":"🏚影巢|阿115网盘","type":3,"api":"csp_Hdh","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://hdhive.online$$$noproxy$$$1$$$./pg/lib/hdhive.txt"},
-//{"key":"Wobg","name":"👽玩偶表哥|阿U网盘","type":3,"api":"csp_Wobg","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://wobge.run.goorm.io$$$noproxy$$$1$$$./pg/lib/wogg.json$$$WOBG"},
 //{"key":"土豆","name":"🥔土豆|阿U网盘","type": 3,"api": "csp_Wobg","searchable": 1,"quickSearch":1, "changeable":1,"filterable": 0,"changeable": 1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://yunpan.yunpay.cc/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$TUDOU"}, 
 //{"key":"ddys","name":"🛣低端|U夸网盘","type":3,"api":"csp_Ddys","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://ddys.pro/$$$noproxy$$$1$$$"},
 //{"key":"Moli","name":"🌺HDmoli|U夸网盘","type":3,"api":"csp_Moli","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://www.hdmoli.pro/$$$noproxy$$$1$$$./pg/lib/moli.json"},

@@ -167,9 +167,9 @@
 {"key":"混合盘","name":"📀混合盘|阿夸U搜索","type":3,"api":"csp_HunHePan","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1,"timeout":60, "ext":"./pg/lib/tokenm.json"},
 {"key":"PikaSo","name":"📀皮卡搜|阿夸搜索","type":3,"api":"csp_PikaSo","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://www.pikaso.top/$$$null", "style": { "type": "list", "ratio": 1.1 } }, 
 
-{"key":"Wobg","name":"玩偶表哥|网盘","type":3,"api":"csp_Wobg","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./lib/tokenm.json$$$https://wobge.run.goorm.io$$$127.0.0.1:10172$$$1$$$./lib/wogg.json$$$WOBG"},
-{"key":"Hdhive","name":"🏚影巢|阿115网盘","type":3,"api":"csp_Hdh","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://hdhive.online$$$127.0.0.1:10172$$$1$$$./pg/lib/hdhive.txt"},
-{"key":"土豆","name":"🥔土豆|阿U网盘","type": 3,"api": "csp_Wobg","searchable": 1,"quickSearch":1, "changeable":1,"filterable": 0,"changeable": 1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://tudou.lvdoui.top/$$$127.0.0.1:10172$$$1$$$./pg/lib/wogg.json$$$TUDOU"}, 
+{"key":"Wobg","name":"玩偶表哥|网盘","type":3,"api":"csp_Wobg","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://wobge.run.goorm.io$$$http://127.0.0.1:10172$$$1$$$./pg/lib/wogg.json$$$WOBG"},
+{"key":"Hdhive","name":"🏚影巢|阿115网盘","type":3,"api":"csp_Hdh","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://hdhive.online$$$noproxy$$$1$$$./pg/lib/hdhive.txt"},
+{"key":"土豆","name":"🥔土豆|阿U网盘","type": 3,"api": "csp_Wobg","searchable": 1,"quickSearch":1, "changeable":1,"filterable": 0,"changeable": 1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://tudou.lvdoui.top/$$$http://127.0.0.1:10172$$$1$$$./pg/lib/wogg.json$$$TUDOU"}, 
 //{"key":"ddys","name":"🛣低端|U夸网盘","type":3,"api":"csp_Ddys","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://ddys.pro/$$$noproxy$$$1$$$"},
 //{"key":"Moli","name":"🌺HDmoli|U夸网盘","type":3,"api":"csp_Moli","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://www.hdmoli.pro/$$$noproxy$$$1$$$./pg/lib/moli.json"},
 //{"key":"美剧迷","name":"📽美剧迷|U夸网盘","type":3,"api":"csp_Meijumi", "searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":120,"ext":"./pg/lib/tokenm.json$$$https://www.meijumi.net/$$$noproxy$$$1"},
@@ -211,7 +211,7 @@
 				"tgsearch_url":"http://tg.fish2018.us.kg",
 				"tgsearch_media_url":"http://tg.fish2018.us.kg",
 				"channellist":"oneonefivewpfx,hao115,guaguale115,Channel_Shares_115,shareAliyun,alyp_1,dianyingshare,yunpanpan,zaihuayun,vip115hot,ikiviyyp,quanziyuanshe",
-				"proxy":"127.0.0.1:10172"
+				"proxy":"http://127.0.0.1:10172"
 			},
 			"style": {
 				"type": "rect",

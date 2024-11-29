@@ -115,7 +115,9 @@ http://127.0.0.1:35455/itv/1000000002000013359.m3u8?cdn=ystenlive
 http://127.0.0.1:35455/ysptp/cctv2.m3u8
 #EXTINF:-1,tvg-id="cctv4" tvg-name="cctv4" tvg-logo="https://epg.v1.mk/logo/cctv4.png" group-title="常用频道",CCTV4 中文国际
 http://127.0.0.1:35455/ysptp/cctv4.m3u8
-#EXTINF:-1,tvg-id="cctv5" tvg-name="cctv5" tvg-logo="https://epg.v1.mk/logo/cctv5.png" group-title="常用频道",CCTV5 体育
+#EXTINF:-1,channel 1,tvg-id="cctv5" tvg-name="cctv5" tvg-logo="https://epg.v1.mk/logo/cctv5.png" group-title="常用频道",CCTV5 体育
+http://127.0.0.1:35455/tptv/G_CCTV-5-AVS-4K264.m3u8
+#EXTINF:-1,channel 2,tvg-id="cctv5" tvg-name="cctv5" tvg-logo="https://epg.v1.mk/logo/cctv5.png" group-title="常用频道",CCTV5 体育
 http://127.0.0.1:35455/ysptp/cctv5.m3u8
 #EXTINF:-1,tvg-id="cctv5+" tvg-name="cctv5+" tvg-logo="https://epg.v1.mk/logo/cctv5+.png" group-title="常用频道",CCTV5+ 体育赛事
 http://127.0.0.1:35455/ysptp/cctv5p.m3u8

@@ -1,5 +1,5 @@
 {
-"spider":"./pg/pg.jar;md5;577B3576E5F57E4333B7CCC4F7612C31",
+"spider":"./pg/pg.jar;md5;B05F39010F8BD46FD9C55E6E9C01BE9A",
 "lives": [
 {"name": "CYD线路","type": 0,"url": "./tv/tv.txt","playerType":1,"ua":"okhttp/3.15","epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}","logo":"https://diyp9999.112114.xyz/logo/{name}.png","catchup":{"days":"7","type":"append","regex":"/PLTV/","source":"?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"}},
 			{

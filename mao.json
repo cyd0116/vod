@@ -166,6 +166,7 @@
 {"key":"YingSo","name":"📀影搜|阿夸U搜索","type":3,"api":"csp_YingSo","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1,"timeout":60, "ext":"./pg/lib/tokenm.json"},
 {"key":"混合盘","name":"📀混合盘|阿夸U搜索","type":3,"api":"csp_HunHePan","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1,"timeout":60, "ext":"./pg/lib/tokenm.json"},
 {"key":"PikaSo","name":"📀皮卡搜|阿夸搜索","type":3,"api":"csp_PikaSo","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://www.pikaso.top/$$$null", "style": { "type": "list", "ratio": 1.1 } }, 
+{"key":"Panta","name":"📀盘Ta|移动搜索","type":3,"api":"csp_Panta","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://www.91panta.cn/$$$null$$$1", "style": { "type": "list", "ratio": 1.1 } }, 
 
 //{"key":"Hdhive","name":"🏚影巢|阿115网盘","type":3,"api":"csp_Hdh","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://hdhive.online$$$noproxy$$$1$$$./pg/lib/hdhive.txt"},
 //{"key":"土豆","name":"🥔土豆|阿U网盘","type": 3,"api": "csp_Wobg","searchable": 1,"quickSearch":1, "changeable":1,"filterable": 0,"changeable": 1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://tudou.lvdoui.top/$$$http://127.0.0.1:10172$$$1$$$./pg/lib/wogg.json$$$TUDOU"}, 
@@ -175,7 +176,6 @@
 //{"key":"Ppxzy","name":"皮皮虾|阿夸网盘","type":3,"api":"csp_Ppxzy","searchable": 1, "quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://ppxzy.ink$$$noproxy$$$1"},
 
 //{"key":"易搜","name":"📀易搜|阿里搜索","type":3,"api":"csp_YiSo","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1,"timeout":60, "ext":"./pg/lib/tokenm.json$$$satoken=e0b5a908-3f32-40ab-947a-c9b74b191abc", "style": { "type": "list", "ratio": 1.1 } }, 
-//{"key":"Panta","name":"📀盘Ta|YD搜索","type":3,"api":"csp_Panta","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://www.91panta.cn/$$$null$$$1", "style": { "type": "list", "ratio": 1.1 } }, 
 //{"key":"UP云搜","name":"📀UP云搜|阿里搜索","type":3,"api":"csp_UpYun","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1,"timeout":30, "ext":"./pg/lib/tokenm.json", "style": { "type": "list", "ratio": 1.1 } }, 
 //{"key":"校长影视","name":"👩校长影视|阿夸迅百","type":3,"api":"csp_XiaoZhang","searchable": 1, "quickSearch":1, "changeable":1, "filterable":1, "timeout":60,"ext":"./pg/lib/tokenm.json$$$https://xzyshd.com$$$noproxy$$$1"},
 //{"key":"QuarkPanso","name":"📀夸克盘搜|夸克搜索","type":3,"api":"csp_QuarkPanso","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json", "style": { "type": "list", "ratio": 1.1 } }, 

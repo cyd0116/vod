@@ -1,5 +1,5 @@
 {
-"spider":"./pg/pg.jar;md5;B05F39010F8BD46FD9C55E6E9C01BE9A",
+"spider":"./pg/pg.jar;md5;4E9891B1022FED996E5954631D5532D2",
 "lives": [
 {"name": "CYD线路","type": 0,"url": "./tv/tv.txt","playerType":1,"ua":"okhttp/3.15","epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}","logo":"https://diyp9999.112114.xyz/logo/{name}.png","catchup":{"days":"7","type":"append","regex":"/PLTV/","source":"?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"}},
 			{
@@ -12,19 +12,34 @@
 				"catchup":{"days":"7","type":"append","regex":"/PLTV/","source":"?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"}
 			},
 			{
+				"name": "肥羊咪咕电视直播",
+				"type": 0,
+				"url": "http://127.0.0.1:10079/c/1800/null/http://127.0.0.1:35456/migu.m3u",
+				"ua": "okhttp/3.15",
+				"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}",
+				"logo": "http://127.0.0.1:10079/p/0/proxy/https://epg.112114.xyz/logo/{name}.png"
+			},
+			{
+				"name": "肥羊咪咕赛事直播",
+				"type": 0,
+				"url": "http://127.0.0.1:10079/c/1800/null/http://127.0.0.1:35456/miguevent.m3u",
+				"ua": "okhttp/3.15",
+				"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}",
+				"logo": "http://127.0.0.1:10079/p/0/proxy/https://epg.112114.xyz/logo/{name}.png"
+			},
+			{
 				"name": "肥羊国内直播",
 				"type": 0,
-				"url": "http://127.0.0.1:10079/c/3600/null/http://127.0.0.1:35455/tv.m3u",
+				"url": "http://127.0.0.1:10079/c/3600/null/http://127.0.0.1:35456/tv.m3u",
 				"ua": "okhttp/3.15",
 				"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}",
 				"logo": "http://127.0.0.1:10079/p/0/proxy/https://epg.112114.xyz/logo/{name}.png",
 				"catchup":{"days":"7","type":"append","regex":"/PLTV/","source":"?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"}
 			},
-
 			{
 				"name": "肥羊TPTV",
 				"type": 0,
-				"url": "http://127.0.0.1:10079/c/3600/null/http://127.0.0.1:35455/tptv.m3u",
+				"url": "http://127.0.0.1:10079/c/3600/null/http://127.0.0.1:35456/tptv.m3u",
 				"ua": "okhttp/3.15",
 				"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}",
 				"logo": "http://127.0.0.1:10079/p/0/proxy/https://epg.112114.xyz/logo/{name}.png",
@@ -194,7 +209,7 @@
 				"keywords":"名称,片名,推荐",
 				"tgsearch_url":"http://tg.fish2018.us.kg",
 				"tgsearch_media_url":"http://tg.fish2018.us.kg",
-				"channellist":"hao115|1000,Mbox115|1000,shares_115|1000,alypzyhzq|1000,Aliyundrive_Share_Channel|1000,Aliyun_4K_Movies|1000,alyp_4K_Movies|1000,wanwansubchat|1000",
+				"channellist":"hao115|1000,Mbox115|1000,shares_115|1000,alypzyhzq|1000,Aliyundrive_Share_Channel|1000,Aliyun_4K_Movies|1000,alyp_4K_Movies|1000,wanwansubchat|1000,New_Sharing|1000",
 				"proxy":"noproxy"
 			},
 			"style": {
@@ -209,7 +224,7 @@
 				"keywords":"名称,片名,推荐",
 				"tgsearch_url":"http://tg.fish2018.us.kg",
 				"tgsearch_media_url":"http://tg.fish2018.us.kg",
-				"channellist":"oneonefivewpfx,hao115,guaguale115,Channel_Shares_115,shareAliyun,alyp_1,dianyingshare,yunpanpan,zaihuayun,vip115hot,ikiviyyp,quanziyuanshe",
+				"channellist":"oneonefivewpfx,hao115,guaguale115,Channel_Shares_115,shareAliyun,alyp_1,dianyingshare,yunpanpan,zaihuayun,vip115hot,ikiviyyp,quanziyuanshe,clouddriveresources,New_Sharing",
 				"proxy":"noproxy"
 			},
 			"style": {

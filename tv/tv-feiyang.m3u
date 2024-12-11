@@ -133,6 +133,8 @@ http://127.0.0.1:35456/ysptp/cctv12.m3u8
 http://127.0.0.1:35456/ysptp/cctv13.m3u8
 #EXTINF:-1,tvg-id="湖南" tvg-name="湖南" tvg-logo="https://epg.v1.mk/logo/湖南.png" group-title="常用频道",快乐垂钓
 http://127.0.0.1:35456/itv/5000000011000031206.m3u8?cdn=bestzb
+#EXTINF:-1,tvg-id="四海钓鱼" tvg-name="四海钓鱼" tvg-logo="https://epg.v1.mk/logo/四海钓鱼.png" group-title="常用频道",四海钓鱼
+http://159.75.85.63:36666/migu/895358641.m3u8?migutoken=545499f14d95e4cb416309d44db130ef763aa64bbb39dfdda4e2ff7a583fb1c2db328575bd2729c6be4a02818ec61a778a9235fedeec9fd5d0d2d395f84e67a92a8e2f711b523b5fb36c013815
 #EXTINF:-1,tvg-id="五星体育" tvg-name="五星体育" tvg-logo="https://epg.v1.mk/logo/五星体育.png" group-title="常用频道",上海五星体育
 http://127.0.0.1:35456/itv/5000000010000017540.m3u8?cdn=bestzb
 #EXTINF:-1,tvg-id="newtv精品体育" tvg-name="newtv精品体育" tvg-logo="https://epg.v1.mk/logo/newtv精品体育.png" group-title="常用频道",NewTV-精品体育

@@ -2,21 +2,21 @@
 #EXTINF:-1,channel 1,tvg-id="CCTV1" tvg-name="CCTV1" tvg-logo="https://epg.v1.mk/logo/CCTV1.png" group-title="央视频道",CCTV1 综合
 http://127.0.0.1:35456/tptv/G_CCTV-1-AVS-4K264.m3u8
 #EXTINF:-1,channel 2,tvg-id="CCTV1" tvg-name="CCTV1" tvg-logo="https://epg.v1.mk/logo/CCTV1.png" group-title="央视频道",CCTV1 综合
-http://127.0.0.1:35456/ysptp/cctv1.m3u8
+http://127.0.0.1:35456/gaoma/cctv1.m3u8
 #EXTINF:-1,tvg-id="cctv2" tvg-name="cctv2" tvg-logo="https://epg.v1.mk/logo/cctv2.png" group-title="央视频道",CCTV2 财经
-http://127.0.0.1:35456/ysptp/cctv2.m3u8
+http://127.0.0.1:35456/gaoma/cctv2.m3u8
 #EXTINF:-1,channel 1,tvg-id="cctv3" tvg-name="cctv3" tvg-logo="https://epg.v1.mk/logo/cctv3.png" group-title="央视频道",CCTV3 综艺
 http://127.0.0.1:35456/tptv/G_CCTV-3-AVS-4K264.m3u8
 #EXTINF:-1,channel 2,tvg-id="cctv3" tvg-name="cctv3" tvg-logo="https://epg.v1.mk/logo/cctv3.png" group-title="央视频道",CCTV3 综艺
-http://127.0.0.1:35456/ysptp/cctv3.m3u8
+http://127.0.0.1:35456/gaoma/cctv3.m3u8
 #EXTINF:-1,tvg-id="cctv4" tvg-name="cctv4" tvg-logo="https://epg.v1.mk/logo/cctv4.png" group-title="央视频道",CCTV4 中文国际
-http://127.0.0.1:35456/ysptp/cctv4.m3u8
+http://127.0.0.1:35456/gaoma/cctv4.m3u8
 #EXTINF:-1,channel 1,tvg-id="cctv5" tvg-name="cctv5" tvg-logo="https://epg.v1.mk/logo/cctv5.png" group-title="央视频道",CCTV5 体育
 http://127.0.0.1:35456/tptv/G_CCTV-5-AVS-4K264.m3u8
 #EXTINF:-1,channel 2,tvg-id="cctv5" tvg-name="cctv5" tvg-logo="https://epg.v1.mk/logo/cctv5.png" group-title="央视频道",CCTV5 体育
-http://127.0.0.1:35456/ysptp/cctv5.m3u8
+http://127.0.0.1:35456/gaoma/cctv5.m3u8
 #EXTINF:-1,tvg-id="cctv5+" tvg-name="cctv5+" tvg-logo="https://epg.v1.mk/logo/cctv5+.png" group-title="央视频道",CCTV5+ 体育赛事
-http://127.0.0.1:35456/ysptp/cctv5p.m3u8
+http://127.0.0.1:35456/gaoma/cctv5p.m3u8
 
 #EXTINF:-1,channel 1,tvg-id="cctv6" tvg-name="cctv6" tvg-logo="https://epg.v1.mk/logo/cctv6.png" group-title="央视频道",CCTV6 电影
 http://127.0.0.1:35456/itv/6000000001000004574.m3u8?cdn=wasusyt
@@ -26,33 +26,33 @@ http://127.0.0.1:35456/itv/1000000001000001737.m3u8?cdn=ystenlive
 http://127.0.0.1:35456/itv/1000000005000265006.m3u8?cdn=ystenlive
 
 #EXTINF:-1,tvg-id="CCTV7" tvg-name="CCTV7" tvg-logo="https://epg.v1.mk/logo/CCTV7.png" group-title="央视频道",CCTV7 国防军事
-http://127.0.0.1:35456/ysptp/cctv7.m3u8
+http://127.0.0.1:35456/gaoma/cctv7.m3u8
 #EXTINF:-1,tvg-id="cctv8" tvg-name="cctv8" tvg-logo="https://epg.v1.mk/logo/cctv8.png" group-title="央视频道",CCTV8 电视剧
-http://127.0.0.1:35456/ysptp/cctv8.m3u8
+http://127.0.0.1:35456/gaoma/cctv8.m3u8
 #EXTINF:-1,tvg-id="cctv9" tvg-name="cctv9" tvg-logo="https://epg.v1.mk/logo/cctv9.png" group-title="央视频道",CCTV9 纪录
-http://127.0.0.1:35456/ysptp/cctv9.m3u8
+http://127.0.0.1:35456/gaoma/cctv9.m3u8
 #EXTINF:-1,tvg-id="cctv10" tvg-name="cctv10" tvg-logo="https://epg.v1.mk/logo/cctv10.png" group-title="央视频道",CCTV10 科教
-http://127.0.0.1:35456/ysptp/cctv10.m3u8
+http://127.0.0.1:35456/gaoma/cctv10.m3u8
 #EXTINF:-1,tvg-id="cctv11" tvg-name="cctv11" tvg-logo="https://epg.v1.mk/logo/cctv11.png" group-title="央视频道",CCTV11 戏曲
-http://127.0.0.1:35456/ysptp/cctv11.m3u8
+http://127.0.0.1:35456/gaoma/cctv11.m3u8
 #EXTINF:-1,tvg-id="cctv12" tvg-name="cctv12" tvg-logo="https://epg.v1.mk/logo/cctv12.png" group-title="央视频道",CCTV12 社会与法
-http://127.0.0.1:35456/ysptp/cctv12.m3u8
+http://127.0.0.1:35456/gaoma/cctv12.m3u8
 #EXTINF:-1,tvg-id="cctv13" tvg-name="cctv13" tvg-logo="https://epg.v1.mk/logo/cctv13.png" group-title="央视频道",CCTV13 新闻
-http://127.0.0.1:35456/ysptp/cctv13.m3u8
+http://127.0.0.1:35456/gaoma/cctv13.m3u8
 #EXTINF:-1,tvg-id="cctv14" tvg-name="cctv14" tvg-logo="https://epg.v1.mk/logo/cctv14.png" group-title="央视频道",CCTV14 少儿
-http://127.0.0.1:35456/ysptp/cctv14.m3u8
+http://127.0.0.1:35456/gaoma/cctv14.m3u8
 #EXTINF:-1,tvg-id="cctv15" tvg-name="cctv15" tvg-logo="https://epg.v1.mk/logo/cctv15.png" group-title="央视频道",CCTV15 音乐
-http://127.0.0.1:35456/ysptp/cctv15.m3u8
+http://127.0.0.1:35456/gaoma/cctv15.m3u8
 #EXTINF:-1,tvg-id="cctv16" tvg-name="cctv16" tvg-logo="https://epg.v1.mk/logo/cctv16.png" group-title="央视频道",CCTV16 奥林匹克
-http://127.0.0.1:35456/ysptp/cctv16.m3u8
+http://127.0.0.1:35456/gaoma/cctv16.m3u8
 #EXTINF:-1,tvg-id="cctv17" tvg-name="cctv17" tvg-logo="https://epg.v1.mk/logo/cctv17.png" group-title="央视频道",CCTV17 农业农村
-http://127.0.0.1:35456/ysptp/cctv17.m3u8
+http://127.0.0.1:35456/gaoma/cctv17.m3u8
 #EXTINF:-1,channel 1,tvg-id="cctv4k" tvg-name="cctv4k" tvg-logo="https://epg.v1.mk/logo/cctv4k.png" group-title="央视频道",CCTV4K 超高清
 http://127.0.0.1:35456/tptv/G_CCTV-4K-HD.m3u8
 #EXTINF:-1,channel 2,tvg-id="cctv4k" tvg-name="cctv4k" tvg-logo="https://epg.v1.mk/logo/cctv4k.png" group-title="央视频道",CCTV4K 超高清
-http://127.0.0.1:10079/av3am3u/0/null/http://127.0.0.1:35456/ysptp/cctv4k.m3u8
+http://127.0.0.1:10079/av3am3u/0/null/http://127.0.0.1:35456/gaoma/cctv4k.m3u8
 #EXTINF:-1,channel 3,tvg-id="cctv4k" tvg-name="cctv4k" tvg-logo="https://epg.v1.mk/logo/cctv4k.png" group-title="央视频道",CCTV4K 超高清
-http://127.0.0.1:10079/av3am3u/0/null/http://127.0.0.1:35456/ysptp/cctv4k_10m.m3u8
+http://127.0.0.1:10079/av3am3u/0/null/http://127.0.0.1:35456/gaoma/cctv4k_10m.m3u8
 
 #EXTINF:-1,tvg-id="凤凰卫视中文" tvg-name="凤凰卫视中文" tvg-logo="https://epg.v1.mk/logo/凤凰卫视中文.png" group-title="卫视频道",凤凰卫视中文
 http://127.0.0.1:35456/tptv/HD-10000k-1080P-fhchinese5s.m3u8
@@ -112,25 +112,25 @@ http://127.0.0.1:35456/itv/5000000004000006211.m3u8?cdn=bestzb
 http://127.0.0.1:35456/itv/1000000002000013359.m3u8?cdn=ystenlive
 
 #EXTINF:-1,tvg-id="cctv2" tvg-name="cctv2" tvg-logo="https://epg.v1.mk/logo/cctv2.png" group-title="常用频道",CCTV2 财经
-http://127.0.0.1:35456/ysptp/cctv2.m3u8
+http://127.0.0.1:35456/gaoma/cctv2.m3u8
 #EXTINF:-1,tvg-id="cctv4" tvg-name="cctv4" tvg-logo="https://epg.v1.mk/logo/cctv4.png" group-title="常用频道",CCTV4 中文国际
-http://127.0.0.1:35456/ysptp/cctv4.m3u8
+http://127.0.0.1:35456/gaoma/cctv4.m3u8
 #EXTINF:-1,channel 1,tvg-id="cctv5" tvg-name="cctv5" tvg-logo="https://epg.v1.mk/logo/cctv5.png" group-title="常用频道",CCTV5 体育
 http://127.0.0.1:35456/tptv/G_CCTV-5-AVS-4K264.m3u8
 #EXTINF:-1,channel 2,tvg-id="cctv5" tvg-name="cctv5" tvg-logo="https://epg.v1.mk/logo/cctv5.png" group-title="常用频道",CCTV5 体育
-http://127.0.0.1:35456/ysptp/cctv5.m3u8
+http://127.0.0.1:35456/gaoma/cctv5.m3u8
 #EXTINF:-1,tvg-id="cctv5+" tvg-name="cctv5+" tvg-logo="https://epg.v1.mk/logo/cctv5+.png" group-title="常用频道",CCTV5+ 体育赛事
-http://127.0.0.1:35456/ysptp/cctv5p.m3u8
+http://127.0.0.1:35456/gaoma/cctv5p.m3u8
 #EXTINF:-1,tvg-id="cctv9" tvg-name="cctv9" tvg-logo="https://epg.v1.mk/logo/cctv9.png" group-title="常用频道",CCTV9 纪录
-http://127.0.0.1:35456/ysptp/cctv9.m3u8
+http://127.0.0.1:35456/gaoma/cctv9.m3u8
 #EXTINF:-1,tvg-id="cctv10" tvg-name="cctv10" tvg-logo="https://epg.v1.mk/logo/cctv10.png" group-title="常用频道",CCTV10 科教
-http://127.0.0.1:35456/ysptp/cctv10.m3u8
+http://127.0.0.1:35456/gaoma/cctv10.m3u8
 #EXTINF:-1,tvg-id="cctv11" tvg-name="cctv11" tvg-logo="https://epg.v1.mk/logo/cctv11.png" group-title="常用频道",CCTV11 戏曲
-http://127.0.0.1:35456/ysptp/cctv11.m3u8
+http://127.0.0.1:35456/gaoma/cctv11.m3u8
 #EXTINF:-1,tvg-id="cctv12" tvg-name="cctv12" tvg-logo="https://epg.v1.mk/logo/cctv12.png" group-title="常用频道",CCTV12 社会与法
-http://127.0.0.1:35456/ysptp/cctv12.m3u8
+http://127.0.0.1:35456/gaoma/cctv12.m3u8
 #EXTINF:-1,tvg-id="cctv13" tvg-name="cctv13" tvg-logo="https://epg.v1.mk/logo/cctv13.png" group-title="常用频道",CCTV13 新闻
-http://127.0.0.1:35456/ysptp/cctv13.m3u8
+http://127.0.0.1:35456/gaoma/cctv13.m3u8
 #EXTINF:-1,tvg-id="湖南" tvg-name="湖南" tvg-logo="https://epg.v1.mk/logo/湖南.png" group-title="常用频道",快乐垂钓
 http://127.0.0.1:35456/itv/5000000011000031206.m3u8?cdn=bestzb
 #EXTINF:-1,tvg-id="四海钓鱼" tvg-name="四海钓鱼" tvg-logo="https://epg.v1.mk/logo/四海钓鱼.png" group-title="常用频道",四海钓鱼
@@ -149,9 +149,9 @@ http://127.0.0.1:35456/itv/6000000006000290630.m3u8?cdn=wasusyt
 http://127.0.0.1:35456/itv/5000000011000031207.m3u8?cdn=bestzb
 
 #EXTINF:-1,tvg-id="cctv9" tvg-name="cctv9" tvg-logo="https://epg.v1.mk/logo/cctv9.png" group-title="纪录频道",CCTV9 纪录
-http://127.0.0.1:35456/ysptp/cctv9.m3u8
+http://127.0.0.1:35456/gaoma/cctv9.m3u8
 #EXTINF:-1,tvg-id="cctv10" tvg-name="cctv10" tvg-logo="https://epg.v1.mk/logo/cctv10.png" group-title="纪录频道",CCTV10 科教
-http://127.0.0.1:35456/ysptp/cctv10.m3u8
+http://127.0.0.1:35456/gaoma/cctv10.m3u8
 #EXTINF:-1,tvg-id="北京纪实科教" tvg-name="北京纪实科教" tvg-logo="https://epg.v1.mk/logo/北京纪实科教.png" group-title="纪录频道",北京纪实科教-HEVC
 http://127.0.0.1:35456/itv/1000000005000265020.m3u8?cdn=ystenlive
 #EXTINF:-1,tvg-id="湖南金鹰纪实" tvg-name="湖南金鹰纪实" tvg-logo="https://epg.v1.mk/logo/湖南金鹰纪实.png" group-title="纪录频道",湖南金鹰纪实

@@ -23,7 +23,6 @@
 			},
 //{ "name": "肥羊TPTV", "type": 0, "url": "http://127.0.0.1:10079/c/3600/null/http://127.0.0.1:35456/tptv.m3u", "ua": "okhttp/3.15", "epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}", "logo": "http://127.0.0.1:10079/p/0/proxy/https://epg.112114.xyz/logo/{name}.png", "catchup":{"days":"7","type":"append","regex":"/PLTV/","source":"?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"} }, 			
             {
-
 				"name": "Gather.电视直播",
 				"type": 0,
 				"url": "http://127.0.0.1:10079/c/3600/null/https://tv.iill.top/m3u/Gather",

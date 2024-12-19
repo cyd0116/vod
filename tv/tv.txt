@@ -1,5 +1,5 @@
 📡央视频道(肥羊高码),#genre#
-CCTV1综合,http://127.0.0.1:35456/tptv/G_CCTV-1-AVS-4K264.m3u8#http://127.0.0.1:35456/gaoma/cctv1.m3u8#http://127.0.0.1:35456/itv/5000000004000002226.m3u8?cdn=bestzb
+CCTV1综合,http://127.0.0.1:35455/tptv/G_CCTV-1-AVS-4K264.m3u8#http://127.0.0.1:35456/gaoma/cctv1.m3u8#http://127.0.0.1:35456/itv/5000000004000002226.m3u8?cdn=bestzb
 CCTV2财经,http://127.0.0.1:35456/gaoma/cctv2.m3u8#http://127.0.0.1:35456/itv/6000000001000014161.m3u8?cdn=wasusyt
 CCTV3综艺,http://127.0.0.1:35456/tptv/G_CCTV-3-AVS-4K264.m3u8#http://127.0.0.1:35456/gaoma/cctv3.m3u8
 CCTV4中文国际,http://127.0.0.1:35456/itv/5000000011000031102.m3u8?cdn=bestzb#http://127.0.0.1:35456/gaoma/cctv4.m3u8

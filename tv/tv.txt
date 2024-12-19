@@ -1,5 +1,5 @@
 📡央视频道(肥羊高码),#genre#
-CCTV1综合,http://127.0.0.1:35456/tptv/G_CCTV-1-AVS-4K264.m3u8#http://127.0.0.1:35456/gaoma/cctv1.m3u8#http://127.0.0.1:35456/itv/5000000004000002226.m3u8?cdn=bestzb
+CCTV1综合,http://127.0.0.1:35455/tptv/G_CCTV-1-AVS-4K264.m3u8#http://127.0.0.1:35456/gaoma/cctv1.m3u8#http://127.0.0.1:35456/itv/5000000004000002226.m3u8?cdn=bestzb
 CCTV2财经,http://127.0.0.1:35456/gaoma/cctv2.m3u8#http://127.0.0.1:35456/itv/6000000001000014161.m3u8?cdn=wasusyt
 CCTV3综艺,http://127.0.0.1:35456/tptv/G_CCTV-3-AVS-4K264.m3u8#http://127.0.0.1:35456/gaoma/cctv3.m3u8
 CCTV4中文国际,http://127.0.0.1:35456/itv/5000000011000031102.m3u8?cdn=bestzb#http://127.0.0.1:35456/gaoma/cctv4.m3u8
@@ -64,7 +64,7 @@ NewTV精品纪录,http://127.0.0.1:35456/itv/1000000004000013730.m3u8?cdn=ystenl
 求索生活,http://127.0.0.1:35456/itv/6000000002000003382.m3u8?cdn=wasusyt
 IHOT爱科学,http://127.0.0.1:35456/itv/6000000006000160630.m3u8?cdn=wasusyt
 快乐垂钓,http://127.0.0.1:35456/itv/5000000011000031206.m3u8?cdn=bestzb
-四海钓鱼,http://159.75.85.63:36666/migu/895358641.m3u8?migutoken=545499f14d95e4cb416309d44db130ef763aa64bbb39dfdda4e2ff7a583fb1c2db328575bd2729c6be4a02818ec61a778a9235fedeec9fd5d0d2d395f84e67a92a8e2f711b523b5fb36c013815
+四海钓鱼,https://migu.freetv.top/migu/895358641.m3u8?migutoken=ca342750dd19adefc5695feacfaf92475a9d2c648d543f6f7b716122b005cc852398d574029ce4443605e2d163e6f5b720e42d922e41a1120d0665887c3c1f47b999472b9e0b50e878e4987269
 
 📡4K频道(肥羊高码),#genre#
 华数4K,http://127.0.0.1:35456/itv/6000000003000004748.m3u8?cdn=wasusyt

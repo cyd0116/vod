@@ -1,5 +1,5 @@
 {
-"spider":"./pg/pg.jar;md5;9E939948ABBDC543F711098A3C2052B0",
+"spider":"./pg/pg.jar;md5;F74D5F45200B6451B8A8BECF491928D6",
 "lives": [
 {"name": "CYD线路","type": 0,"url": "./tv/tv.txt","playerType":1,"ua":"okhttp/3.15","epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}","logo":"https://diyp9999.112114.xyz/logo/{name}.png","catchup":{"days":"7","type":"append","regex":"/PLTV/","source":"?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"}},
 
@@ -8,14 +8,23 @@
 				"type": 0,
 				"url": "http://127.0.0.1:10079/c/3600/null/http://127.0.0.1:35456/tv.m3u",
 				"ua": "okhttp/3.15",
-				"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}",
+				"epg": "https://diyp9999.112114.xyz/?ch={name}&date=DATE1SUB",
 				"logo": "http://127.0.0.1:10079/p/0/proxy/https://epg.112114.xyz/logo/{name}.png",
-				"catchup":{"days":"7","type":"append","regex":"/PLTV/","source":"?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"}
+				"catchup": {"type": "append","source": "?livemode=4&starttime=${(b)yyyyMMdd'T'HHmm}00.00Z&endtime=${(e)yyyyMMdd'T'HHmm}00.00Z"}
 			},
 //{ "name": "肥羊直播(高码)", "type": 0, "url": "./tv/tv-feiyang.m3u", "ua": "okhttp/3.15", "epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}", "logo": "http://127.0.0.1:10079/p/0/proxy/https://epg.112114.xyz/logo/{name}.png", "catchup":{"days":"7","type":"append","regex":"/PLTV/","source":"?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"} },
 //{ "name": "肥羊咪咕电视直播", "type": 0, "url": "http://127.0.0.1:10079/c/1800/null/http://127.0.0.1:35456/migu.m3u", "ua": "okhttp/3.15", "epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}", "logo": "http://127.0.0.1:10079/p/0/proxy/https://epg.112114.xyz/logo/{name}.png" }, 
 //{ "name": "肥羊TPTV", "type": 0, "url": "http://127.0.0.1:10079/c/3600/null/http://127.0.0.1:35456/tptv.m3u", "ua": "okhttp/3.15", "epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}", "logo": "http://127.0.0.1:10079/p/0/proxy/https://epg.112114.xyz/logo/{name}.png", "catchup":{"days":"7","type":"append","regex":"/PLTV/","source":"?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"} }, 			
-            {
+			{
+				"name": "最强CIPTV(-6天回看)",
+				"type": 0,
+				"url": "http://127.0.0.1:10079/c/3600/null/http://127.0.0.1:35456/ciptv.m3u",
+				"ua": "okhttp/3.15",
+				"epg": "https://diyp9999.112114.xyz/?ch={name}&date=DATE6SUB",
+				"logo": "http://127.0.0.1:10079/p/0/proxy/https://epg.112114.xyz/logo/{name}.png",
+				"catchup": {"type": "append","source": "?playseek=${(b)yyyyMMddHHmm}00-${(e)yyyyMMddHHmm}00"}
+			},
+           {
 				"name": "Gather.电视直播",
 				"type": 0,
 				"url": "http://127.0.0.1:10079/c/3600/null/https://tv.iill.top/m3u/Gather",
@@ -138,7 +147,7 @@
 {"key":"YunPan","name":"⛅️云盘资源|阿夸网盘","type":3,"api":"csp_YunPan","timeout":60, "ext":"./pg/lib/tokenm.json$$$null$$$noproxy$$$1"},
 {"key":"yydsys","name":"🕵多多|阿U夸网盘","type":3,"api":"csp_Wobg","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://tv.yydsys.top/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$WNLG"},
 {"key":"蜡笔网盘","name":"🖍蜡笔|夸阿U网盘","type":3,"api":"csp_Wobg","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://duopan.fun/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$LABI"},
-{"key":"至臻网盘","name":"🖍至臻|夸阿U网盘","type":3,"api":"csp_Wobg","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://mihdr.top/$$$noproxy$$$1$$$./pg/lib/wogg.json"},
+{"key":"至臻网盘","name":"🖍至臻|夸阿U网盘","type":3,"api":"csp_Wobg","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://mihdr.top/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$ZHIZHEN"},
 
 {"key":"秒搜","name":"📀秒搜|阿U搜索","type":3,"api":"csp_MiaoSou","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1,"timeout":60, "ext":"./pg/lib/tokenm.json", "style": { "type": "list", "ratio": 1.1 } }, 
 {"key":"PanSearch","name":"📀盘搜索|阿夸搜索","type":3,"api":"csp_PanSearch","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$null$$$noproxy"}, 

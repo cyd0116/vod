@@ -44,6 +44,8 @@
 
 { "key": "快看", "name": "🐞快看(SP)", "type": 3, "api": "csp_Kuaikan", "searchable": 1, "quickSearch": 1, "changeable": 1, "filterable": 1 },
 { "key": "天天", "name": "🐞天天(SP)", "type": 3, "api": "csp_TTian", "searchable": 1, "quickSearch": 1, "changeable": 1, "ext": "http://op.ysdqjs.cn$$$null$$$1" }, 
+{"key":"Guazi","name":"🐞瓜子","type":3,"api":"csp_Guazi","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":""},
+{ "key": "追剧", "name": "🐞追剧", "type": 3, "api": "csp_TTian", "ext": "http://app.kzjtv.com$$$null$$$1" },
 
 {"key":"农民","name":"💢农民(XBPQ)","type":3,"api":"csp_XBPQ","jar":"./pg/lib/XBPQ.jar","searchable":1,"quickSearch":1,"filterable":1,"ext":{"数组":"<li>&&</li>","图片":"src=\"&&\"","分类url":"https://www.wwgz.cn/vod-list-id-{cateId}-pg-{catePg}-order--by--class-0-year-{year}-letter--area-{area}-lang-.html","分类":"短剧$26#电视剧$2#电影$1#动漫$4#综艺$3"}}, 
 

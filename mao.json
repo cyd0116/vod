@@ -48,8 +48,7 @@
 //{"key":"TGDouban","name":"🔍TG豆瓣","type":3,"api":"csp_TGDouban","timeout":120, "ext":{ "token":"./pg/lib/tokenm.json", "json":"./pg/lib/tgsearch.json", "keywords":"名称,片名,推荐", "tgsearch_url":"http://127.0.0.1:10199", "tgsearch_media_url":"http://127.0.0.1:10199", "channellist":"Mbox115|1000,shares_115|1000,alypzyhzq|1000,Aliyundrive_Share_Channel|1000,wanwansubchat|1000", "proxy":"noproxy", "douban":"./pg/lib/douban.json" }, "style": { "type": "rect", "ratio": 0.7 } },
 { "key": "网盘配置", "name": "🔨网盘配置", "type": 3, "api": "csp_Config", "searchable": 0, "quickSearch":0,"changeable": 0, "ext":"./pg/lib/tokenm.json", "style": { "type": "rect", "ratio": 1.5 } },
 
-//{ "key": "hipy_js_南瓜影视[优]", "name": "📺南瓜(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 1, "quickSearch": 1, "filterable": 1, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/南瓜影视[优].js" }, 
-{ "key": "南瓜", "name": "🐞南瓜(SP)", "type": 3, "api": "csp_NanGua", "jar": "https://4708.kstore.space/hollo/jar/spider.jar", "searchable": 1, "quickSearch": 1, "playerType": 2, "filterable": 1, "ext": "" },
+{ "key": "南瓜", "name": "🐞南瓜(SP)", "type": 3, "api": "csp_NanGua", "jar": "https://4708.kstore.space/hollo/jar/spider.jar;md5;8B8E23069A6C12567C1F1D5403A14AF9", "searchable": 1, "quickSearch": 1, "playerType": 2, "filterable": 1, "ext": "" },
 {"key":"Guazi","name":"🐞瓜子(SP)","type":3,"api":"csp_Guazi","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":""},
 { "key": "快看", "name": "🐞快看(SP)", "type": 3, "api": "csp_Kuaikan", "searchable": 1, "quickSearch": 1, "changeable": 1, "filterable": 1 },
 { "key": "天天", "name": "🐞天天(SP)", "type": 3, "api": "csp_TTian", "searchable": 1, "quickSearch": 1, "changeable": 1, "ext": "http://op.ysdqjs.cn$$$null$$$1" }, 

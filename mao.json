@@ -1,5 +1,5 @@
 {
-"spider":"./pg/pg.jar;md5;8E662969C66FC667C86FD35942EEEC9B",
+"spider":"./pg/pg.jar;md5;6E1B7C4D5F823EC66DD6518CBEB52EE7",
 "lives": [
 {"name": "CYD线路","type": 0,"url": "./tv/tv.txt","ua":"okhttp/3.15","epg": "https://diyp9999.112114.xyz/?ch={name}&date=DATE6SUB","logo":"https://diyp9999.112114.xyz/logo/{name}.png","catchup": {"type": "append","source": "?livemode=4&starttime=${(b)yyyyMMdd'T'HHmm}00.00Z&endtime=${(e)yyyyMMdd'T'HHmm}00.00Z"}},
 //{"name": "CYD线路","type": 0,"url": "./tv/tv.txt","playerType":1,"ua":"okhttp/3.15","epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}","logo":"https://diyp9999.112114.xyz/logo/{name}.png","catchup":{"days":"6","type":"append","regex":"/PLTV/","source":"?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"}},
@@ -12,14 +12,6 @@
 				"epg": "https://diyp9999.112114.xyz/?ch={name}&date=DATE6SUB",
 				"logo": "http://127.0.0.1:10079/p/0/proxy/https://epg.112114.xyz/logo/{name}.png",
 				"catchup": {"type": "append","source": "?livemode=4&starttime=${(b)yyyyMMdd'T'HHmm}00.00Z&endtime=${(e)yyyyMMdd'T'HHmm}00.00Z"}
-			},
-			{
-				"name": "肥羊咪咕电视直播",
-				"type": 0,
-				"url": "http://127.0.0.1:10079/c/1800/null/http://127.0.0.1:35456/migu.m3u",
-				"ua": "okhttp/3.15",
-				"epg": "https://diyp9999.112114.xyz/?ch={name}&date=DATE6SUB",
-				"logo": "https://diyp9999.112114.xyz/logo/{name}.png"
 			},
            {
 				"name": "Gather.电视直播",
@@ -100,10 +92,10 @@
 
 
 //pg网盘
-{"key":"YunPan","name":"⛅️云盘资源|阿夸网盘","type":3,"api":"csp_YunPan","timeout":60, "ext":"./pg/lib/tokenm.json$$$null$$$noproxy$$$1"},
 {"key":"Wogg","name":"👽玩偶|阿U网盘","type":3,"api":"csp_Wogg","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://wogg.xxooo.cf/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$WOGG"},
-{"key":"yydsys","name":"🕵多多|阿U夸网盘","type":3,"api":"csp_Wobg","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://tv.yydsys.top/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$WNLG"},
+{"key":"YunPan","name":"⛅️云盘资源|阿夸网盘","type":3,"api":"csp_YunPan","timeout":60, "ext":"./pg/lib/tokenm.json$$$null$$$noproxy$$$1"},
 {"key":"小米网盘","name":"🍚小米|UC网盘", "type": 3, "api": "csp_Wobg", "searchable": 1,"quickSearch":1, "changeable":1, "filterable": 1, "timeout": 60, "ext": "./pg/lib/tokenm.json$$$http://www.mucpan.cc/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$XIAOMI" },
+{"key":"yydsys","name":"🕵多多|阿U夸网盘","type":3,"api":"csp_Wobg","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://tv.yydsys.top/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$WNLG"},
 {"key":"Mogg","name":"👲木偶|UC网盘","type":3,"api":"csp_Wobg","searchable": 1,"quickSearch":1, "changeable":1,"filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$http://mo.muouso.fan/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$MOGG"}, 
 {"key":"FourKFM","name":"📽4K影库|网盘磁力","type":3,"api":"csp_FourKFM","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./lib/tokenm.json$$$http://4kfm.com/$$$noproxy$$$1$$$./lib/4kfm.txt$$$4KFM"},
 {"key":"蜡笔网盘","name":"🖍蜡笔|夸阿U网盘","type":3,"api":"csp_Wobg","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://feimaoai.site/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$LABI"},

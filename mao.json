@@ -7,7 +7,7 @@
             {
 				"name": "最强国内直播(合并)",
 				"type": 0,
-				"url": "http://127.0.0.1:10079/c/3600/null/http://127.0.0.1:35456/all.m3u",
+				"url": "http://127.0.0.1:35456/all.m3u",
 				"ua": "okhttp/3.15",
 				"epg": "https://diyp9999.112114.xyz/?ch={name}&date=DATE6SUB",
 				"logo": "https://diyp9999.112114.xyz/logo/{name}.png",
@@ -63,7 +63,19 @@
 
 {"key":"云播","name":"💢TVB云播(XBPQ)","type":3,"api":"csp_XBPQ","jar":"./pg/lib/XBPQ.jar","searchable":1,"quickSearch":1,"filterable":1,"changeable":1,"ext":{"影片类型":"分类：&&主演","导演":"导演：</span>&&</p>","主演":"主演：</span>&&</p>","简介":"class=\"sketch content\">&&</span>","数组":"myui-vodlist__thumb&&</a>","标题":"title=\"&&\"","副标题":"pic-tag pic-tag-top\">&&</span>","图片":"data-original=\"&&\"","链接":"href=\"&&\"","搜索模式":"1","搜索url":"http://www.hktvyun.com/index.php/ajax/suggest?mid=1&wd={wd}&limit=500","搜索二次截取":"\"list\":[&&]","搜索数组":"{&&}","搜索标题":"\"name\":\"&&\"","搜索图片":"\"pic\":\"&&\"","搜索链接":"http://www.hktvyun.com/vod/detail/id/+\"id\":&&,+html","嗅探词":".m3u8#mp4","线路数组":"</a><h3&&/h3>","线路标题":"title\">&&<","播放数组":"<ul class=\"myui-content__list scrollbar&&</ul>","播放标题":">&&<","播放列表":"<a&&/a>","分类url":"http://www.hktvyun.com/vod/show/area/{area}/by/{by}/class/{class}/id/{cateId}/lang/{lang}/page/{catePg}/year/{year}.html;;a","分类":"电影$1#电视剧$2#综艺$3#动漫$4"}}, 
 
-{"key":"奇优","name":"️💢奇优(XBPQ)","type":3,"api":"csp_XBPQ","jar":"./pg/lib/XBPQ.jar","searchable":1,"quickSearch":1,"filterable":1,"ext":{"站名":"奇优影院", "主页url":"http://www.qiyoudy1.com/", "数组":"<div class=\"stui-vodlist__box\">&&</div>", "图片":"data-original=\"&&\"", "标题":"title=\"&&\"", "链接":"href=\"&&\"", "副标题":"<span class=\"pic-text text-right\">&&</span>", "搜索url":"http://www.qiyoudy1.com/search.php;post;searchword={wd}", "搜索模式":"1", "搜索数组":"<a class=\"v-thumb stui-vodlist__thumb&&</a>", "搜索图片":"data-original=\"&&\"", "搜索标题":"title=\"&&\"", "搜索链接":"href=\"&&\"", "搜索副标题":"<span class=\"pic-text text-right\">&&</span>", "搜索后缀":"/view/", "线路数组":"<a data-toggle=\"tab\"&&/a>[排序:播放源2>播放源3>播放源4>播放源1]", "线路标题":">&&<", "播放数组":"<ul class=\"stui-content__playlist clearfix&&</ul>", "影片年代":"年份：&&</p>", "影片地区":"地区：&&<span", "影片类型":"类型：&&</a>", "导演":"导演：&&</p>", "主演":"主演：&&</p>", "简介":"简介：&&</a>", "播放列表":"<a&&/a>", "播放标题":">&&<", "播放链接":"href=\"&&\"", "播放链接前缀":"http://www.qiyoudy1.com/", "嗅探词":".m3u8#.mp4#.flv#.mp3#.m4a", "分类url":"http://www.qiyoudy1.com/list/{cateId}_{catePg}.html?order={by}", "分类":"电影$1#电视剧$2#动漫$3#综艺$4"}},
+{
+      "key": "奇优",
+      "name": "💢奇优(XBPQ)",
+      "type": 3,
+      "api": "csp_XBPQ",
+      "jar":"./pg/lib/XBPQ.jar",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1,
+      "ext": {"播放数组":"play&&</div>","播放线路":"<div id=\"info-r\">&&</div>","请求头": "User-Agent$MOBILE_UA","编码": "UTF-8","搜索url":"/search/?wd={wd}",       
+        "分类url": "https://www.qiyoutv.net/view/{cateId}?catid=0&type={class}&area={area}&year={year}&page={catePg}",
+        "分类": "电影$1#连续剧$2#综艺$4#动漫$3"
+      }},
 
 {"key":"骚火","name":"💢骚火(XBPQ)","type":3,"api":"csp_XBPQ","jar":"./pg/lib/XBPQ.jar","playerType":"2","searchable":1,"quickSearch":1,"filterable":1,"ext":{"嗅探词":".m3u8#.mp4#.m3u8?#freeok.mp4","分类url":"https://shdy2.com/list/{cateId}-{catePg}.html;;vr1au0","分类":"电影$1#电视剧$2#韩剧$22#美剧$23#动漫$4","数组二次截取":"class=\"v_list\">&&</ul>","数组":"\"v_img\"&&/div>","标题":"title=\"&&\"","副标题":"v_note\"&&</div","跳转播放链接":"<iframe*src=\"&&\"","二次跳转播放链接":"https://hhjx.hhplayer.com/api.php;post;url=+var url*\"&&\"+&t=+var t*\"&&\"+&key=+var key*\"&&\"+&act=0+&play=1","三次跳转播放链接":"\"url\"*\"&&\""}},
 
@@ -89,9 +101,9 @@
 
 {"key":"量子","name":"🐝量子(🏀NBA回看)","type": 1,"api": "https://cj.lziapi.com/api.php/provide/vod/from/lzm3u8", "searchable": 1, "quickSearch":1,"changeable": 1,"categories": ["篮球","记录片", "足球", "动作片", "喜剧片", "科幻片", "恐怖片", "大陆综艺" ] },
 {"key":"暴风","name":"🐝暴风(🏀NBA回看)","type": 1,"api": "https://bfzyapi.com/api.php/provide/vod/?","searchable": 1,"quickSearch":1,"categories": [ "篮球","纪录片","足球", "动作片", "喜剧片", "科幻片", "恐怖片", "大陆综艺"] },
+{"key":"木耳","name":"🐝木耳","type":1,"api":"https://json02.heimuer.xyz/api.php/provide/vod","searchable":1,"filterable":1,"changeable":1,"timeout":20,"categories":["剧情片","动作片","冒险片","喜剧片","奇幻片","恐怖片","悬疑片","惊悚片","灾难片","爱情片","犯罪片","科幻片","歌舞片","战争片","经典片","动画电影","国产剧","港剧","韩剧","日剧","泰剧","台剧","欧美剧","国产综艺","港台综艺","韩国综艺","日本综艺","欧美综艺","欧美动漫","日本动漫","韩国动漫","国产动漫","港台动漫"],"header":{"user-agent":"Mozilla/5.0(WindowsNT10.0;Win64;x64)AppleWebKit/537.36(KHTML,likeGecko)Chrome/125.0.0.0Safari/537.36"}},
 {"key":"非凡","name":"🐝非凡","type": 1,"api": "http://cj.ffzyapi.com/api.php/provide/vod/from/ffm3u8", "searchable": 1,"quickSearch":1, "changeable": 1,"categories": [ "记录片", "足球","体育","体育赛事", "动作片", "喜剧片", "科幻片", "恐怖片", "大陆综艺" ] },
 {"key":"Ikun资源","name":"🐝Ikun","type":1,"api":"https://ikunzyapi.com/api.php/provide/vod/?","searchable":1,"quickSearch":1, "changeable": 1,"categories": ["记录片", "动作片", "喜剧片", "科幻片", "恐怖片", "大陆综艺" ]},
-{"key":"木耳","name":"🐝木耳","type":1,"api":"https://json02.heimuer.xyz/api.php/provide/vod","searchable":1,"filterable":1,"changeable":1,"timeout":20,"categories":["剧情片","动作片","冒险片","喜剧片","奇幻片","恐怖片","悬疑片","惊悚片","灾难片","爱情片","犯罪片","科幻片","歌舞片","战争片","经典片","动画电影","国产剧","港剧","韩剧","日剧","泰剧","台剧","欧美剧","国产综艺","港台综艺","韩国综艺","日本综艺","欧美综艺","欧美动漫","日本动漫","韩国动漫","国产动漫","港台动漫"],"header":{"user-agent":"Mozilla/5.0(WindowsNT10.0;Win64;x64)AppleWebKit/537.36(KHTML,likeGecko)Chrome/125.0.0.0Safari/537.36"}},
 
 { "key": "hipy_js_大全[央]", "name": "🔥央视(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 1, "quickSearch": 1, "filterable": 1, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/大全[央].js" }, 
 { "key": "hipy_js_我的哔哩[官]1", "name": "🅱️哔哩(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 1, "quickSearch": 1, "filterable": 1, "order_num": 1, "ext": "./drpy_dzlive/drpy_js/我的哔哩[官].js?type=url&params=../drpy_dzlive/json/哔哩大全.json" }, 
@@ -110,10 +122,10 @@
 {"key":"小米网盘","name":"🍚小米|UC网盘", "type": 3, "api": "csp_Wobg", "searchable": 1,"quickSearch":1, "changeable":1, "filterable": 1, "timeout": 60, "ext": "./pg/lib/tokenm.json$$$http://www.mucpan.cc/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$XIAOMI" },
 {"key":"yydsys","name":"🕵多多|阿U夸网盘","type":3,"api":"csp_Wobg","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://tv.yydsys.top/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$WNLG"},
 {"key":"YunPan","name":"⛅️云盘资源|阿夸网盘","type":3,"api":"csp_YunPan","timeout":60, "ext":"./pg/lib/tokenm.json$$$null$$$noproxy$$$1"},
-{"key":"FourKFM","name":"📽4K影库|网盘磁力","type":3,"api":"csp_FourKFM","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./lib/tokenm.json$$$http://4kfm.com/$$$noproxy$$$1$$$./lib/4kfm.txt$$$4KFM"},
 //{"key":"蜡笔网盘","name":"🖍蜡笔|夸阿U网盘","type":3,"api":"csp_Wobg","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://duopan.fun/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$LABI"},
 //{"key":"至臻网盘","name":"💯至臻|夸阿U网盘","type":3,"api":"csp_Wobg","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://mihdr.top/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$ZHIZHEN"},
-//{"key":"Mogg","name":"👲木偶|UC网盘","type":3,"api":"csp_Wobg","searchable": 1,"quickSearch":1, "changeable":1,"filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$http://tv.91muou.icu/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$MOGG"}, 
+//{"key":"Mogg","name":"👲木偶|UC网盘","type":3,"api":"csp_Wobg","searchable": 1,"quickSearch":1, "changeable":1,"filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$noproxy$$$1$$$./pg/lib/wogg.json$$$MOGG"}, 
+{"key":"FourKFM","name":"📽4K影库|网盘磁力","type":3,"api":"csp_FourKFM","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./lib/tokenm.json$$$http://4kfm.com/$$$noproxy$$$1$$$./lib/4kfm.txt$$$4KFM"},
 //{"key":"Guanying","name":"👀观影|网盘磁力","type":3,"api":"csp_Guanying","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./lib/tokenm.json$$$https://www.gying.net$$$noproxy$$$1$$$./lib/guanying.txt$$$GUANYING"},
 
 {"key":"秒搜","name":"📀秒搜|阿U搜索","type":3,"api":"csp_MiaoSou","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1,"timeout":60, "ext":"./pg/lib/tokenm.json", "style": { "type": "list", "ratio": 1.1 } }, 
@@ -143,21 +155,6 @@
 //{"key":"YunSo","name":"📀小云搜索|网盘搜索","type":3,"api":"csp_YunSo","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://www.yunso.net$$$null$$$1", "style": { "type": "list", "ratio": 1.1 } }, 
 //{"key":"YunPanOne","name":"📀云盘One|网盘搜索","type":3,"api":"csp_YunPanOne","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$null$$$proxy$$$1"},		
 
-		{"key":"TGYunPanLocal","name":"🅿TG频道搜索","type":3,"api":"csp_TGYunPanLocal","timeout":120, 
-			"ext":{
-				"token":"./pg/lib/tokenm.json",
-				"json":"./pg/lib/tgsearch.json",
-				"keywords":"名称,片名,推荐",
-				"tgsearch_url":"http://tg.fish2018.ip-ddns.com",
-				"tgsearch_media_url":"http://tg.fish2018.ip-ddns.com",				
-				"channellist": "hao115,guaguale115,oneonefivewpfx,Channel_Shares_115,alyp_1,shareAliyun,Aliyun_4K_Movies,ucpanpan",	//"channellist":"oneonefivewpfx,hao115,guaguale115,Channel_Shares_115,shareAliyun,alyp_1,Aliyun_4K_Movies,ucpanpan,tgsearchers,dianyingshare,yunpanpan,zaihuayun,vip115hot,ikiviyyp,quanziyuanshe,clouddriveresources,New_Sharing",
-				"proxy":"noproxy"
-			},
-			"style": {
-				"type": "rect",
-				"ratio": 1.77
-			}
-		},
 		{"key":"TGYunPan","name":"🅿TG群组搜索","type":3,"api":"csp_TGYunPan","timeout":120, 
 			"ext":{
 				"token":"./pg/lib/tokenm.json",
@@ -167,6 +164,21 @@
 				"tgsearch_media_url":"http://tg.fish2018.ip-ddns.com",
 				"channellist": "Mbox115|1000,shares_115|1000,alyp_4K_Movies|1000,alypzyhzq|1000,Aliyundrive_Share_Channel|1000",
 				//"channellist":"hao115|1000,Mbox115|1000,shares_115|1000,alypzyhzq|1000,Aliyundrive_Share_Channel|1000,Aliyun_4K_Movies|1000,alyp_4K_Movies|1000,wanwansubchat|1000,New_Sharing|1000",
+				"proxy":"noproxy"
+			},
+			"style": {
+				"type": "rect",
+				"ratio": 1.77
+			}
+		},
+		{"key":"TGYunPanLocal","name":"🅿TG频道搜索","type":3,"api":"csp_TGYunPanLocal","timeout":120, 
+			"ext":{
+				"token":"./pg/lib/tokenm.json",
+				"json":"./pg/lib/tgsearch.json",
+				"keywords":"名称,片名,推荐",
+				"tgsearch_url":"http://tg.fish2018.ip-ddns.com",
+				"tgsearch_media_url":"http://tg.fish2018.ip-ddns.com",				
+				"channellist": "hao115,guaguale115,oneonefivewpfx,Channel_Shares_115,alyp_1,shareAliyun,Aliyun_4K_Movies,ucpanpan",	//"channellist":"oneonefivewpfx,hao115,guaguale115,Channel_Shares_115,shareAliyun,alyp_1,Aliyun_4K_Movies,ucpanpan,tgsearchers,dianyingshare,yunpanpan,zaihuayun,vip115hot,ikiviyyp,quanziyuanshe,clouddriveresources,New_Sharing",
 				"proxy":"noproxy"
 			},
 			"style": {

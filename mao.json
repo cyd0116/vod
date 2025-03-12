@@ -13,6 +13,7 @@
 				"logo": "https://diyp9999.112114.xyz/logo/{name}.png",
 				"catchup": {"type": "append","source": "?livemode=4&starttime=${(b)yyyyMMdd'T'HHmm}00.00Z&endtime=${(e)yyyyMMdd'T'HHmm}00.00Z"}
 			},
+{"name":"feiyang.allinone","type":0,"url":"http://127.0.0.1:35457/tv.m3u","ua":"okhttp/3.15","epg":"https://diyp9999.112114.xyz/?ch={name}&date=DATE6SUB","logo":"https://diyp9999.112114.xyz/logo/{name}.png",	"catchup": {"type": "append","source": "?livemode=4&starttime=${(b)yyyyMMdd'T'HHmm}00.00Z&endtime=${(e)yyyyMMdd'T'HHmm}00.00Z"}},
            {
 				"name": "Gather.电视直播",
 				"type": 0,

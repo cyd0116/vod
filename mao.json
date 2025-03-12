@@ -7,7 +7,7 @@
             {
 				"name": "最强国内直播(合并)",
 				"type": 0,
-				"url": "http://127.0.0.1:35457/all.m3u",
+				"url": "http://127.0.0.1:35456/all.m3u",
 				"ua": "okhttp/3.15",
 				"epg": "https://diyp9999.112114.xyz/?ch={name}&date=DATE6SUB",
 				"logo": "https://diyp9999.112114.xyz/logo/{name}.png",

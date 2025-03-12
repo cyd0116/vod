@@ -13,7 +13,6 @@
 				"logo": "https://diyp9999.112114.xyz/logo/{name}.png",
 				"catchup": {"type": "append","source": "?livemode=4&starttime=${(b)yyyyMMdd'T'HHmm}00.00Z&endtime=${(e)yyyyMMdd'T'HHmm}00.00Z"}
 			},
-{"name":"feiyang.allinone","type":0,"url":"http://127.0.0.1:35457/tv.m3u","ua":"okhttp/3.15","epg":"https://diyp9999.112114.xyz/?ch={name}&date=DATE6SUB","logo":"https://diyp9999.112114.xyz/logo/{name}.png",	"catchup": {"type": "append","source": "?livemode=4&starttime=${(b)yyyyMMdd'T'HHmm}00.00Z&endtime=${(e)yyyyMMdd'T'HHmm}00.00Z"}},
            {
 				"name": "Gather.电视直播",
 				"type": 0,
@@ -103,16 +102,16 @@
 {"key":"至臻网盘","name":"💯至臻|阿U夸网盘","type":3,"api":"csp_Wobg","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://mihdr.top/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$ZHIZHEN"},
 {"key":"蜡笔网盘","name":"🖍蜡笔|阿U夸网盘","type":3,"api":"csp_Wobg","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://feimaoai.site/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$LABI"},
 {"key":"FourKFM","name":"📽4K影库|网盘磁力","type":3,"api":"csp_FourKFM","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./lib/tokenm.json$$$http://4kfm.com/$$$noproxy$$$1$$$./lib/4kfm.txt$$$4KFM"},
-//{"key":"Guanying","name":"👀观影|网盘磁力","type":3,"api":"csp_Guanying","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./lib/tokenm.json$$$https://www.gying.net$$$noproxy$$$1$$$./lib/guanying.txt$$$GUANYING"},
 
 {"key":"秒搜","name":"📀秒搜|阿U搜索","type":3,"api":"csp_MiaoSou","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1,"timeout":60, "ext":"./pg/lib/tokenm.json", "style": { "type": "list", "ratio": 1.1 } }, 
 {"key":"PanSearch","name":"📀盘搜索|阿夸搜索","type":3,"api":"csp_PanSearch","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$null$$$noproxy"}, 
 {"key":"DaPanSo","name":"📀大盘搜|阿夸搜索","type":3,"api":"csp_DaPanSo","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://dapanso.com$$$noproxy$$$1"},
-{"key":"YingSo","name":"📀影搜|阿夸U搜索","type":3,"api":"csp_YingSo","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1,"timeout":60, "ext":"./pg/lib/tokenm.json"},
 {"key":"混合盘","name":"📀混合盘|阿夸U搜索","type":3,"api":"csp_HunHePan","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1,"timeout":60, "ext":"./pg/lib/tokenm.json"},
 //{"key":"PikaSo","name":"📀皮卡搜|阿夸搜索","type":3,"api":"csp_PikaSo","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://www.pikaso.top/$$$null", "style": { "type": "list", "ratio": 1.1 } }, 
 //{"key":"Panta","name":"📀盘Ta|移动搜索","type":3,"api":"csp_Panta","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://www.91panta.cn/$$$null$$$1", "style": { "type": "list", "ratio": 1.1 } }, 
 
+//{"key":"YingSo","name":"📀影搜|阿夸U搜索","type":3,"api":"csp_YingSo","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1,"timeout":60, "ext":"./pg/lib/tokenm.json"},
+//{"key":"Guanying","name":"👀观影|网盘磁力","type":3,"api":"csp_Guanying","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./lib/tokenm.json$$$https://www.gying.net$$$noproxy$$$1$$$./lib/guanying.txt$$$GUANYING"},
 //{"key":"Hdhive","name":"🏚影巢|阿115网盘","type":3,"api":"csp_Hdh","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://hdhive.online$$$noproxy$$$1$$$./pg/lib/hdhive.txt"},
 //{"key":"土豆","name":"🥔土豆|阿U网盘","type": 3,"api": "csp_Wobg","searchable": 1,"quickSearch":1, "changeable":1,"filterable": 0,"changeable": 1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://tudou.lvdoui.top/$$$http://127.0.0.1:10172$$$1$$$./pg/lib/wogg.json$$$TUDOU"}, 
 //{"key":"ddys","name":"🛣低端|U夸网盘","type":3,"api":"csp_Ddys","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://ddys.pro/$$$noproxy$$$1$$$"},
@@ -139,7 +138,7 @@
 				"keywords":"名称,片名,推荐",
 				"tgsearch_url":"http://tg.fish2018.ip-ddns.com",
 				"tgsearch_media_url":"http://tg.fish2018.ip-ddns.com",
-				"channellist": "hao115|1000,Mbox115|1000,shares_115|1000,alyp_4K_Movies|1000,Aliyun_4K_Movies|1000,alypzyhzq|1000,Aliyundrive_Share_Channel|1000",
+				"channellist": "hao115|1000,Mbox115|1000,shares_115|1000,guaguale115,Channel_Shares_115,oneonefivewpfx,alyp_4K_Movies|1000,Aliyun_4K_Movies|1000,alypzyhzq|1000,Aliyundrive_Share_Channel|1000,alyp_1,shareAliyun,ucpanpan",
 				//"channellist":"hao115|1000,Mbox115|1000,shares_115|1000,alypzyhzq|1000,Aliyundrive_Share_Channel|1000,Aliyun_4K_Movies|1000,alyp_4K_Movies|1000,wanwansubchat|1000,New_Sharing|1000",
 				"proxy":"noproxy"
 			},

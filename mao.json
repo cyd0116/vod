@@ -109,8 +109,8 @@
 {"key":"混合盘","name":"📀混合盘|阿夸U搜索","type":3,"api":"csp_HunHePan","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1,"timeout":60, "ext":"./pg/lib/tokenm.json"},
 //{"key":"PikaSo","name":"📀皮卡搜|阿夸搜索","type":3,"api":"csp_PikaSo","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://www.pikaso.top/$$$null", "style": { "type": "list", "ratio": 1.1 } }, 
 
-{"key":"Leijing","name":"雷鲸|网盘","type":3,"api":"csp_Panta","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://leijing.xyz/$$$noproxy$$$1$$$LEIJING", "style": { "type": "list", "ratio": 1.1 } },
-{"key":"TianYiSou","name":"天逸搜|网盘搜索","type":3,"api":"csp_TianYiSou","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$null$$$proxy"},
+{"key":"Leijing","name":"📀雷鲸|网盘","type":3,"api":"csp_Panta","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://leijing.xyz/$$$noproxy$$$1$$$LEIJING", "style": { "type": "list", "ratio": 1.1 } },
+{"key":"TianYiSou","name":"📀天逸搜|网盘搜索","type":3,"api":"csp_TianYiSou","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$null$$$proxy"},
 //{"key":"Panta","name":"📀盘Ta|移动搜索","type":3,"api":"csp_Panta","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://www.91panta.cn/$$$null$$$1", "style": { "type": "list", "ratio": 1.1 } }, 
 
 //{"key":"YingSo","name":"📀影搜|阿夸U搜索","type":3,"api":"csp_YingSo","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1,"timeout":60, "ext":"./pg/lib/tokenm.json"},

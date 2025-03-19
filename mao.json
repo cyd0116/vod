@@ -1,5 +1,5 @@
 {
-"spider":"./pg/pg.jar;md5;1721517BAE5CADE1E3E68E3275C1E07A",
+"spider":"./pg/pg.jar;md5;F1549346971F42E5380A75E0F00144F3",
 "lives": [
 {"name": "CYD线路","type": 0,"url": "./tv/tv.txt","ua":"okhttp/3.15","epg": "https://diyp9999.112114.xyz/?ch={name}&date=DATE6SUB","logo":"https://diyp9999.112114.xyz/logo/{name}.png","catchup": {"type": "append","source": "?livemode=4&starttime=${(b)yyyyMMdd'T'HHmm}00.00Z&endtime=${(e)yyyyMMdd'T'HHmm}00.00Z"}},
 //{"name": "CYD线路","type": 0,"url": "./tv/tv.txt","playerType":1,"ua":"okhttp/3.15","epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}","logo":"https://diyp9999.112114.xyz/logo/{name}.png","catchup":{"days":"6","type":"append","regex":"/PLTV/","source":"?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"}},
@@ -109,7 +109,7 @@
 {"key":"混合盘","name":"📀混合盘|阿夸U搜索","type":3,"api":"csp_HunHePan","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1,"timeout":60, "ext":"./pg/lib/tokenm.json"},
 //{"key":"PikaSo","name":"📀皮卡搜|阿夸搜索","type":3,"api":"csp_PikaSo","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://www.pikaso.top/$$$null", "style": { "type": "list", "ratio": 1.1 } }, 
 
-{"key":"Leijing","name":"📀雷鲸|123天翼","type":3,"api":"csp_Panta","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://leijing.xyz/$$$noproxy$$$1$$$LEIJING", "style": { "type": "list", "ratio": 1.1 } },
+{"key":"Leijing","name":"📀雷鲸|天翼搜索","type":3,"api":"csp_Panta","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://leijing.xyz/$$$noproxy$$$1$$$LEIJING", "style": { "type": "list", "ratio": 1.1 } },
 {"key":"TianYiSou","name":"📀天逸|天翼搜索","type":3,"api":"csp_TianYiSou","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$null$$$proxy"},
 //{"key":"Panta","name":"📀盘Ta|移动搜索","type":3,"api":"csp_Panta","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://www.91panta.cn/$$$null$$$1", "style": { "type": "list", "ratio": 1.1 } }, 
 

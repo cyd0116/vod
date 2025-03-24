@@ -95,15 +95,15 @@
 
 //pg网盘
 {"key":"Wogg","name":"👽玩偶|阿U网盘","type":3,"api":"csp_Wogg","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://wogg.xxooo.cf/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$WOGG"},
+{"key":"DAWO","name":"👽大玩偶|阿U123网盘","type":3,"api":"csp_Wobg","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./lib/tokenm.json$$$http://149.88.87.18:6688$$$noproxy$$$1$$$./lib/wogg.json$$$DAWO"},
+//{"key":"WOSS","name":"👽玩偶叔叔|网盘","type":3,"api":"csp_Wobg","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./lib/tokenm.json$$$https://woss.fenwe.eu.org/$$$noproxy$$$1$$$./lib/wogg.json$$$WOSS"},
+{"key":"Mogg","name":"👲木偶|UC123网盘","type":3,"api":"csp_Wobg","searchable": 1,"quickSearch":1, "changeable":1,"filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://mo.666291.xyz/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$MOGG"}, 
+{"key":"BAIJIA","name":"👽百家|阿U123网盘","type":3,"api":"csp_Wobg","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./lib/tokenm.json$$$http://cj.jiexi.news$$$noproxy$$$1$$$./lib/wogg.json$$$BAIJIA"},
 {"key":"小米网盘","name":"🍚小米|UC网盘", "type": 3, "api": "csp_Wobg", "searchable": 1,"quickSearch":1, "changeable":1, "filterable": 1, "timeout": 60, "ext": "./pg/lib/tokenm.json$$$http://www.mucpan.cc/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$XIAOMI" },
 {"key":"yydsys","name":"🕵多多|阿U夸网盘","type":3,"api":"csp_Wobg","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://tv.yydsys.top/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$WNLG"},
-{"key":"YunPan","name":"⛅️云盘资源|阿夸网盘","type":3,"api":"csp_YunPan","timeout":60, "ext":"./pg/lib/tokenm.json$$$null$$$noproxy$$$1"},
-{"key":"Mogg","name":"👲木偶|UC网盘","type":3,"api":"csp_Wobg","searchable": 1,"quickSearch":1, "changeable":1,"filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://mo.666291.xyz/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$MOGG"}, 
-{"key":"至臻网盘","name":"💯至臻|阿U夸网盘","type":3,"api":"csp_Wobg","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://mihdr.top/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$ZHIZHEN"},
 {"key":"蜡笔网盘","name":"🖍蜡笔|阿U夸网盘","type":3,"api":"csp_Wobg","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://www.goimg.asia/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$LABI"},
-{"key":"WOSS","name":"👽玩偶叔叔|网盘","type":3,"api":"csp_Wobg","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./lib/tokenm.json$$$https://woss.fenwe.eu.org/$$$noproxy$$$1$$$./lib/wogg.json$$$WOSS"},
-{"key":"DAWO","name":"👽大玩偶|UC网盘","type":3,"api":"csp_Wobg","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./lib/tokenm.json$$$http://149.88.87.18:6688$$$noproxy$$$1$$$./lib/wogg.json$$$DAWO"},
-{"key":"BAIJIA","name":"👽百家|UC123网盘","type":3,"api":"csp_Wobg","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./lib/tokenm.json$$$http://cj.jiexi.news$$$noproxy$$$1$$$./lib/wogg.json$$$BAIJIA"},
+{"key":"至臻网盘","name":"💯至臻|阿U夸网盘","type":3,"api":"csp_Wobg","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://mihdr.top/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$ZHIZHEN"},
+{"key":"YunPan","name":"⛅️云盘资源|阿夸网盘","type":3,"api":"csp_YunPan","timeout":60, "ext":"./pg/lib/tokenm.json$$$null$$$noproxy$$$1"},
 {"key":"FourKFM","name":"📽4K影库|网盘磁力","type":3,"api":"csp_FourKFM","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./lib/tokenm.json$$$http://4kfm.com/$$$noproxy$$$1$$$./lib/4kfm.txt$$$4KFM"},
 
 {"key":"秒搜","name":"📀秒搜|阿U搜索","type":3,"api":"csp_MiaoSou","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1,"timeout":60, "ext":"./pg/lib/tokenm.json", "style": { "type": "list", "ratio": 1.1 } }, 
@@ -112,8 +112,8 @@
 {"key":"混合盘","name":"📀混合盘|阿夸U搜索","type":3,"api":"csp_HunHePan","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1,"timeout":60, "ext":"./pg/lib/tokenm.json"},
 //{"key":"PikaSo","name":"📀皮卡搜|阿夸搜索","type":3,"api":"csp_PikaSo","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://www.pikaso.top/$$$null", "style": { "type": "list", "ratio": 1.1 } }, 
 
-{"key":"Leijing","name":"📀雷鲸|天翼搜索","type":3,"api":"csp_Panta","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://leijing.xyz/$$$noproxy$$$1$$$LEIJING", "style": { "type": "list", "ratio": 1.1 } },
-{"key":"TianYiSou","name":"📀天逸|天翼搜索","type":3,"api":"csp_TianYiSou","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$null$$$proxy"},
+//{"key":"Leijing","name":"📀雷鲸|天翼搜索","type":3,"api":"csp_Panta","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://leijing.xyz/$$$noproxy$$$1$$$LEIJING", "style": { "type": "list", "ratio": 1.1 } },
+//{"key":"TianYiSou","name":"📀天逸|天翼搜索","type":3,"api":"csp_TianYiSou","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$null$$$proxy"},
 //{"key":"Panta","name":"📀盘Ta|移动搜索","type":3,"api":"csp_Panta","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://www.91panta.cn/$$$null$$$1", "style": { "type": "list", "ratio": 1.1 } }, 
 
 //{"key":"YingSo","name":"📀影搜|阿夸U搜索","type":3,"api":"csp_YingSo","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1,"timeout":60, "ext":"./pg/lib/tokenm.json"},

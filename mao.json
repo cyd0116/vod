@@ -47,16 +47,17 @@
 //{"key":"TGDouban","name":"🔍TG豆瓣","type":3,"api":"csp_TGDouban","timeout":120, "ext":{ "token":"./pg/lib/tokenm.json", "json":"./pg/lib/tgsearch.json", "keywords":"名称,片名,推荐", "tgsearch_url":"http://127.0.0.1:10199", "tgsearch_media_url":"http://127.0.0.1:10199", "channellist":"Mbox115|1000,shares_115|1000,alypzyhzq|1000,Aliyundrive_Share_Channel|1000,wanwansubchat|1000", "proxy":"noproxy", "douban":"./pg/lib/douban.json" }, "style": { "type": "rect", "ratio": 0.7 } },
 { "key": "网盘配置", "name": "🔨网盘配置", "type": 3, "api": "csp_Config", "searchable": 0, "quickSearch":0,"changeable": 0, "ext":"./pg/lib/tokenm.json", "style": { "type": "rect", "ratio": 1.5 } },
 
-{"key":"Guazi","name":"🐞瓜子(SP)","type":3,"api":"csp_Guazi","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":""},
-{ "key": "快看", "name": "🐞快看(SP)", "type": 3, "api": "csp_Kuaikan", "searchable": 1, "quickSearch": 1, "changeable": 1, "filterable": 1 },
-{ "key": "巴士", "name": "🐞巴士(SP)", "type": 3, "api": "csp_Dm84", "searchable": 1, "quickSearch": 1, "changeable": 1 },
-{ "key": "異界", "name": "🐞异界(SP)", "type": 3, "api": "csp_Ysj", "searchable": 1, "quickSearch": 1, "changeable": 1 },
 
 {"key":"csp_Wwys","name":"🐞农民(SP)","type":3,"api":"csp_Wwys","jar":"./Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","searchable":1,"quickSearch":1,"filterable":1,"ext":"https://wwgz.cn"},
 {"key":"csp_Qiyou","name":"🐞奇优(SP)","type":3,"api":"csp_Qiyou","jar":"./Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","searchable":1,"quickSearch":1,"filterable":1},
 {"key":"csp_LiteApple","name":"🐞苹果(SP)","type":3,"api":"csp_LiteApple","jar":"./Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","searchable":1,"quickSearch":1,"filterable":1},
 {"key":"csp_ReBo","name":"🐞热播(SP)","type":3,"api":"csp_ReBo","jar":"./Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","searchable":1,"quickSearch":1,"filterable":1},
 {"key":"csp_Siren","name":"🐞私人(SP)","type":3,"api":"csp_Siren","jar":"./Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","searchable":1,"quickSearch":1,"filterable":1},
+
+{ "key": "快看", "name": "🐞快看(SP)", "type": 3, "api": "csp_Kuaikan", "searchable": 1, "quickSearch": 1, "changeable": 1, "filterable": 1 },
+{"key":"Guazi","name":"🐞瓜子(SP)","type":3,"api":"csp_Guazi","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":""},
+{ "key": "巴士", "name": "🐞巴士(SP)", "type": 3, "api": "csp_Dm84", "searchable": 1, "quickSearch": 1, "changeable": 1 },
+{ "key": "異界", "name": "🐞异界(SP)", "type": 3, "api": "csp_Ysj", "searchable": 1, "quickSearch": 1, "changeable": 1 },
 
 //{ "key": "云播", "name": "💢TVB云播(XBPQ)", "type": 3, "api": "csp_XBPQ", "jar":"./pg/lib/XBPQ.jar", "searchable": 1, "quickSearch": 1, "filterable": 1, "ext": {"播放数组":"play&&</div>","播放线路":"<div id=\"info-r\">&&</div>","请求头": "User-Agent$MOBILE_UA","编码": "UTF-8","搜索url":"/search/?wd={wd}", "分类url": "http://www.tvyun08.com/view/{cateId}?catid=0&type={class}&area={area}&year={year}&page={catePg}", "分类": "电影$1#电视剧$2#综艺$3#动漫$4" }},
 //{"key":"云播","name":"💢TVB云播(XBPQ)","type":3,"api":"csp_XBPQ","jar":"./pg/lib/XBPQ.jar","searchable":1,"quickSearch":1,"filterable":1,"changeable":1,"ext":{"影片类型":"分类：&&主演","导演":"导演：</span>&&</p>","主演":"主演：</span>&&</p>","简介":"class=\"sketch content\">&&</span>","数组":"myui-vodlist__thumb&&</a>","标题":"title=\"&&\"","副标题":"pic-tag pic-tag-top\">&&</span>","图片":"data-original=\"&&\"","链接":"href=\"&&\"","搜索模式":"1","搜索url":"http://www.tvyun08.com/index.php/ajax/suggest?mid=1&wd={wd}&limit=500","搜索二次截取":"\"list\":[&&]","搜索数组":"{&&}","搜索标题":"\"name\":\"&&\"","搜索图片":"\"pic\":\"&&\"","搜索链接":"http://www.tvyun08.com/vod/detail/id/+\"id\":&&,+html","嗅探词":".m3u8#mp4","线路数组":"</a><h3&&/h3>","线路标题":"title\">&&<","播放数组":"<ul class=\"myui-content__list scrollbar&&</ul>","播放标题":">&&<","播放列表":"<a&&/a>","分类url":"http://www.tvyun08.com/vod/show/area/{area}/by/{by}/class/{class}/id/{cateId}/lang/{lang}/page/{catePg}/year/{year}.html;;a","分类":"电影$1#电视剧$2#综艺$3#动漫$4"}}, 

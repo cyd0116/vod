@@ -48,7 +48,6 @@
 { "key": "网盘配置", "name": "🔨网盘配置", "type": 3, "api": "csp_Config", "searchable": 0, "quickSearch":0,"changeable": 0, "ext":"./pg/lib/tokenm.json", "style": { "type": "rect", "ratio": 1.5 } },
 
 {"key":"csp_Wwys","name":"🐞农民(SP)","type":3,"api":"csp_Wwys","jar":"./Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","searchable":1,"quickSearch":1,"filterable":1,"ext":"https://wwgz.cn"},
-{"key":"csp_Qiyou","name":"🐞奇优(SP)","type":3,"api":"csp_Qiyou","jar":"./Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","searchable":1,"quickSearch":1,"filterable":1},
 {"key":"csp_LiteApple","name":"🐞苹果(SP)","type":3,"api":"csp_LiteApple","jar":"./Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","searchable":1,"quickSearch":1,"filterable":1},
 {"key":"csp_ReBo","name":"🐞热播(SP)","type":3,"api":"csp_ReBo","jar":"./Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","searchable":1,"quickSearch":1,"filterable":1},
 {"key":"csp_Siren","name":"🐞私人(SP)","type":3,"api":"csp_Siren","jar":"./Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","searchable":1,"quickSearch":1,"filterable":1},

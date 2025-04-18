@@ -47,9 +47,8 @@
 //{"key":"TGDouban","name":"🔍TG豆瓣","type":3,"api":"csp_TGDouban","timeout":120, "ext":{ "token":"./pg/lib/tokenm.json", "json":"./pg/lib/tgsearch.json", "keywords":"名称,片名,推荐", "tgsearch_url":"http://127.0.0.1:10199", "tgsearch_media_url":"http://127.0.0.1:10199", "channellist":"Mbox115|1000,shares_115|1000,alypzyhzq|1000,Aliyundrive_Share_Channel|1000,wanwansubchat|1000", "proxy":"noproxy", "douban":"./pg/lib/douban.json" }, "style": { "type": "rect", "ratio": 0.7 } },
 { "key": "网盘配置", "name": "🔨网盘配置", "type": 3, "api": "csp_Config", "searchable": 0, "quickSearch":0,"changeable": 0, "ext":"./pg/lib/tokenm.json", "style": { "type": "rect", "ratio": 1.5 } },
 
-
 {"key":"csp_Wwys","name":"🐞农民(SP)","type":3,"api":"csp_Wwys","jar":"./Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","searchable":1,"quickSearch":1,"filterable":1,"ext":"https://wwgz.cn"},
-{"key":"csp_Qiyou","name":"🐞奇优(SP)","type":3,"api":"csp_Qiyou","jar":"./Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","searchable":1,"quickSearch":1,"filterable":1},
+{"key":"csp_Qiyou","name":"🐞奇优(SP)","type":3,"api":"csp_Qiyou","jar":"./Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","searchable":1,"quickSearch":1,"filterable":1,"ext":"https://www.qiyoutv.net"},
 {"key":"csp_LiteApple","name":"🐞苹果(SP)","type":3,"api":"csp_LiteApple","jar":"./Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","searchable":1,"quickSearch":1,"filterable":1},
 {"key":"csp_ReBo","name":"🐞热播(SP)","type":3,"api":"csp_ReBo","jar":"./Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","searchable":1,"quickSearch":1,"filterable":1},
 {"key":"csp_Siren","name":"🐞私人(SP)","type":3,"api":"csp_Siren","jar":"./Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","searchable":1,"quickSearch":1,"filterable":1},
@@ -58,6 +57,8 @@
 {"key":"Guazi","name":"🐞瓜子(SP)","type":3,"api":"csp_Guazi","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":""},
 { "key": "巴士", "name": "🐞巴士(SP)", "type": 3, "api": "csp_Dm84", "searchable": 1, "quickSearch": 1, "changeable": 1 },
 { "key": "異界", "name": "🐞异界(SP)", "type": 3, "api": "csp_Ysj", "searchable": 1, "quickSearch": 1, "changeable": 1 },
+
+{"key":"樱花","name":"🐞樱花","type":3,"api":"csp_XYQHiker","jar":"./Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","searchable":1,"quickSearch":1,"filterable":1,"ext":"https://gh-proxy.com/raw.githubusercontent.com/yoursmile66/TVBox/refs/heads/main/json/樱花动漫.json"},
 
 //{ "key": "云播", "name": "💢TVB云播(XBPQ)", "type": 3, "api": "csp_XBPQ", "jar":"./pg/lib/XBPQ.jar", "searchable": 1, "quickSearch": 1, "filterable": 1, "ext": {"播放数组":"play&&</div>","播放线路":"<div id=\"info-r\">&&</div>","请求头": "User-Agent$MOBILE_UA","编码": "UTF-8","搜索url":"/search/?wd={wd}", "分类url": "http://www.tvyun08.com/view/{cateId}?catid=0&type={class}&area={area}&year={year}&page={catePg}", "分类": "电影$1#电视剧$2#综艺$3#动漫$4" }},
 //{"key":"云播","name":"💢TVB云播(XBPQ)","type":3,"api":"csp_XBPQ","jar":"./pg/lib/XBPQ.jar","searchable":1,"quickSearch":1,"filterable":1,"changeable":1,"ext":{"影片类型":"分类：&&主演","导演":"导演：</span>&&</p>","主演":"主演：</span>&&</p>","简介":"class=\"sketch content\">&&</span>","数组":"myui-vodlist__thumb&&</a>","标题":"title=\"&&\"","副标题":"pic-tag pic-tag-top\">&&</span>","图片":"data-original=\"&&\"","链接":"href=\"&&\"","搜索模式":"1","搜索url":"http://www.tvyun08.com/index.php/ajax/suggest?mid=1&wd={wd}&limit=500","搜索二次截取":"\"list\":[&&]","搜索数组":"{&&}","搜索标题":"\"name\":\"&&\"","搜索图片":"\"pic\":\"&&\"","搜索链接":"http://www.tvyun08.com/vod/detail/id/+\"id\":&&,+html","嗅探词":".m3u8#mp4","线路数组":"</a><h3&&/h3>","线路标题":"title\">&&<","播放数组":"<ul class=\"myui-content__list scrollbar&&</ul>","播放标题":">&&<","播放列表":"<a&&/a>","分类url":"http://www.tvyun08.com/vod/show/area/{area}/by/{by}/class/{class}/id/{cateId}/lang/{lang}/page/{catePg}/year/{year}.html;;a","分类":"电影$1#电视剧$2#综艺$3#动漫$4"}}, 
@@ -78,6 +79,8 @@
 //{ "key": "hipy_js_饺子影院", "name": "📺饺子(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 1, "quickSearch": 1, "filterable": 1, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/饺子影院.js" }, 
 //{ "key": "hipy_js_神马影院", "name": "📺神马(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 1, "quickSearch": 1, "filterable": 1, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/神马影院[自动].js" }, 
 {"key": "hipy_js_爱看机器人[虫]", "name": "📺爱看机器人(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 1, "quickSearch": 1, "filterable": 1, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/爱看机器人[虫].js" }, 
+
+{"key":"csp_Kanqiu","name":"🏀看球","type":3,"api":"csp_Kanqiu","jar":"./Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","searchable":0,"quickSearch":0,"changeable":0,"gridview":3,"style":{"type":"list"}},
 
 { "key": "hipy_js_88看球[球]", "name": "🏀88看球(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 0, "quickSearch": 0, "filterable": 1,"changeable":0, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/88看球[球].js" }, 
 {"key": "dr_JRKAN直播","name": "🏀JRKAN直播(JS)","type": 3,"api": "./drpy_dzlive/drpy_libs/drpy2.min.js","searchable": 0,"quickSearch": 0,"changeable":0,"ext": "./drpy_dzlive/drpy_js/JRKAN直播.js"},
@@ -126,34 +129,13 @@
 {"key":"混合盘","name":"📀混合盘|阿夸U搜索","type":3,"api":"csp_HunHePan","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1,"timeout":60, "ext":"./pg/lib/tokenm.json"},
 //{"key":"PikaSo","name":"📀皮卡搜|阿夸搜索","type":3,"api":"csp_PikaSo","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://www.pikaso.top/$$$null", "style": { "type": "list", "ratio": 1.1 } }, 
 
-
-//{"key":"YingSo","name":"📀影搜|阿夸U搜索","type":3,"api":"csp_YingSo","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1,"timeout":60, "ext":"./pg/lib/tokenm.json"},
-//{"key":"Hdhive","name":"🏚影巢|阿115网盘","type":3,"api":"csp_Hdh","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://hdhive.online$$$noproxy$$$1$$$./pg/lib/hdhive.txt"},
-//{"key":"土豆","name":"🥔土豆|阿U网盘","type": 3,"api": "csp_Wobg","searchable": 1,"quickSearch":1, "changeable":1,"filterable": 0,"changeable": 1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://tudou.lvdoui.top/$$$http://127.0.0.1:10172$$$1$$$./pg/lib/wogg.json$$$TUDOU"}, 
-//{"key":"ddys","name":"🛣低端|U夸网盘","type":3,"api":"csp_Ddys","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://ddys.pro/$$$noproxy$$$1$$$"},
-//{"key":"Moli","name":"🌺HDmoli|U夸网盘","type":3,"api":"csp_Moli","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://www.hdmoli.pro/$$$noproxy$$$1$$$./pg/lib/moli.json"},
-//{"key":"美剧迷","name":"📽美剧迷|U夸网盘","type":3,"api":"csp_Meijumi", "searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":120,"ext":"./pg/lib/tokenm.json$$$https://www.meijumi.net/$$$noproxy$$$1"},
-//{"key":"Ppxzy","name":"皮皮虾|阿夸网盘","type":3,"api":"csp_Ppxzy","searchable": 1, "quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://ppxzy.ink$$$noproxy$$$1"},
-
-//{"key":"易搜","name":"📀易搜|阿里搜索","type":3,"api":"csp_YiSo","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1,"timeout":60, "ext":"./pg/lib/tokenm.json$$$satoken=e0b5a908-3f32-40ab-947a-c9b74b191abc", "style": { "type": "list", "ratio": 1.1 } }, 
-//{"key":"UP云搜","name":"📀UP云搜|阿里搜索","type":3,"api":"csp_UpYun","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1,"timeout":30, "ext":"./pg/lib/tokenm.json", "style": { "type": "list", "ratio": 1.1 } }, 
-//{"key":"校长影视","name":"👩校长影视|阿夸迅百","type":3,"api":"csp_XiaoZhang","searchable": 1, "quickSearch":1, "changeable":1, "filterable":1, "timeout":60,"ext":"./pg/lib/tokenm.json$$$https://xzyshd.com$$$noproxy$$$1"},
-//{"key":"QuarkPanso","name":"📀夸克盘搜|夸克搜索","type":3,"api":"csp_QuarkPanso","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json", "style": { "type": "list", "ratio": 1.1 } }, 
-//{"key":"Funletu","name":"📀趣盘搜|夸克搜索","type":3,"api":"csp_Funletu","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json", "style": { "type": "list", "ratio": 1.1 } }, 
-//{"key":"88Pan","name":"📀88网盘|网盘搜索","type":3,"api":"csp_EightEight","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1,"timeout":60, "ext":"./pg/lib/tokenm.json$$$https://662688.xyz$$$", "style": { "type": "list", "ratio": 1.1 } }, 
-//{"key":"盘友圈","name":"📀盘友圈|网盘搜索","type":3,"api":"csp_Panyq","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1,"timeout":60, "ext":"./pg/lib/tokenm.json$$$site$$$proxy"}, 
-//{"key":"Xpanpan","name":"📀小盘盘|网盘","type":3,"api":"csp_Xpanpan","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://xpanpan.site$$$noproxy$$$1", "style": { "type": "list", "ratio": 1.1 } }, 
-//{"key":"Qianfan","name":"📀千帆|网盘搜索","type":3,"api":"csp_Qianfan","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://pan.qianfan.app$$$null$$$./pg/lib/qianfan.txt$$$1"}, 
-//{"key":"YunSo","name":"📀小云搜索|网盘搜索","type":3,"api":"csp_YunSo","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://www.yunso.net$$$null$$$1", "style": { "type": "list", "ratio": 1.1 } }, 
-//{"key":"YunPanOne","name":"📀云盘One|网盘搜索","type":3,"api":"csp_YunPanOne","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$null$$$proxy$$$1"},		
-
 		{"key":"TGYunPan","name":"🅿TG群组搜索","type":3,"api":"csp_TGYunPan","timeout":120, 
 			"ext":{
 				"token":"./pg/lib/tokenm.json",
 				"json":"./pg/lib/tgsearch.json",
 				"keywords":"名称,片名,推荐",
-				"tgsearch_url":"http://tg3.fish2018.ip-ddns.com",
-				"tgsearch_media_url":"http://tg3.fish2018.ip-ddns.com",
+				"tgsearch_url":"https://tg.252035.xyz",
+				"tgsearch_media_url":"https://tg.252035.xyz",
 				//"channellist": "tgsearchers",
 				"channellist": "pan123pan,zyfb123,zyzhpd123,xx123pan,tianyi_pd2,tianyirigeng,tyypzhpd,cloudtianyi,ydypzyfx,alyp_4K_Movies|1000,Aliyun_4K_Movies|1000,alypzyhzq|1000,Aliyundrive_Share_Channel|1000,alyp_1,shareAliyun,hao115|1000,Mbox115|1000,shares_115|1000,guaguale115,Channel_Shares_115,oneonefivewpfx",
 				"proxy":"noproxy"
@@ -168,8 +150,8 @@
 				"token":"./pg/lib/tokenm.json",
 				"json":"./pg/lib/tgsearch.json",
 				"keywords":"名称,片名,推荐",
-				"tgsearch_url":"http://tg3.fish2018.ip-ddns.com",
-				"tgsearch_media_url":"http://tg3.fish2018.ip-ddns.com",				
+				"tgsearch_url":"https://tg.252035.xyz",
+				"tgsearch_media_url":"https://tg.252035.xyz",				
 				//"channellist": "tgsearchers",
 				"channellist": "pan123pan,zyfb123,zyzhpd123,xx123pan,tianyi_pd2,tianyirigeng,tyypzhpd,cloudtianyi,ydypzyfx,alyp_4K_Movies|1000,Aliyun_4K_Movies|1000,alypzyhzq|1000,Aliyundrive_Share_Channel|1000,alyp_1,shareAliyun,hao115|1000,Mbox115|1000,shares_115|1000,guaguale115,Channel_Shares_115,oneonefivewpfx",	
 				"proxy":"noproxy"

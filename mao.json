@@ -1,7 +1,8 @@
 {
 "spider":"./pg/pg.jar;md5;7840D0B61F9641A47728E3A92020F35A",
 "lives": [
-{"name": "CYD线路","type": 0,"url": "./tv/tv.txt","ua":"okhttp/3.15","timeout":10,"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}","logo":"https://diyp9999.112114.xyz/logo/{name}.png","catchup":{"days":"6","type":"append","regex":"/PLTV/","source":"?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"}},
+{"name": "CYD线路","type": 0,"url": "./tv/tv.txt","ua":"okhttp/3.15","timeout":10,"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}","logo":"https://diyp9999.112114.xyz/logo/{name}.png","catchup":{"type":"append","regex":"/PLTV/","source":"&starttime=${(b)yyyyMMdd'T'HHmm}00.00Z&endtime=${(e)yyyyMMdd'T'HHmm}00.00Z"}},
+//{"name": "CYD线路","type": 0,"url": "./tv/tv.txt","ua":"okhttp/3.15","timeout":10,"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}","logo":"https://diyp9999.112114.xyz/logo/{name}.png","catchup":{"days":"6","type":"append","regex":"/PLTV/","source":"?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"}},
 //{"name": "CYD线路","type": 0,"url": "./tv/tv.txt","ua":"okhttp/3.15","timeout":10,"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}","logo":"https://diyp9999.112114.xyz/logo/{name}.png","catchup":{"type":"append","source":"&starttime=${(b)yyyyMMdd'T'HHmm}00.00Z&endtime=${(e)yyyyMMdd'T'HHmm}00.00Z"}},
 
            {

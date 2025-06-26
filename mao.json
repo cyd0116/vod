@@ -49,7 +49,6 @@
 
 { "key": "快看", "name": "🐞快看(SP)", "type": 3, "api": "csp_Kuaikan", "searchable": 1, "quickSearch": 1, "changeable": 1, "filterable": 1 },
 {"key":"Guazi","name":"🐞瓜子(SP)","type":3,"api":"csp_Guazi","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":""},
-{ "key": "巴士", "name": "🐞巴士(SP)", "type": 3, "api": "csp_Dm84", "searchable": 1, "quickSearch": 1,"changeable": 1 }, 
 { "key": "異界", "name": "🐞异世界(SP)", "type": 3, "api": "csp_Ysj", "searchable": 1, "quickSearch": 1, "changeable": 1 },
 
 //Yoursmile(SP)
@@ -61,13 +60,10 @@
 {"key":"趣看","name":"🐞趣看","type":3,"api":"csp_Muou","jar":"./Yoursmile.jar;md5;3EEC5EEA7ECB349A5ED07C8CADBCB907","playerType":2,"searchable":1,"quickSearch":1,"filterable":1,"ext":"7lj763gg402i7942463j9j9jg1499j87l9g9i413il8gqiaoji20g7g4919j3g019296lk9351hh3k5gg38lj0754il3jg"},
 {"key":"公共","name":"🐞公共","type":3,"api":"csp_Muou","jar":"./Yoursmile.jar;md5;3EEC5EEA7ECB349A5ED07C8CADBCB907","playerType":2,"searchable":1,"quickSearch":1,"filterable":1,"ext":"7lj763gg402i7942463ji4qiaojijjh456889il6k6i35kj995h4j18li7kl2870klhg8hi647j5707k4ki7ig6953kj"},
 {"key":"雨滴","name":"🐞雨滴","type":3,"api":"csp_Shark","jar":"./Yoursmile.jar;md5;3EEC5EEA7ECB349A5ED07C8CADBCB907","playerType":2,"searchable":1,"quickSearch":1,"filterable":1,"ext":"7lj763gg402i794247239g9jk10kjl82l3g6845ki2i66j7906194lg6g8460h5k548i51l8824hjj902309g182l7kl0hk3l4776346lihki7kl3kj425kl3jk31j0kggkhj0g7l5632376984k395496k449626gh0k66l26k7j6h49j9331h9701k106i"},
-{"key":"kafeiys","name":"🐞狂风","type":3,"api":"csp_Qiji","jar":"./Yoursmile.jar;md5;3EEC5EEA7ECB349A5ED07C8CADBCB907","playerType":2,"searchable":1,"quickSearch":1,"filterable":1,"ext":"7lj763gg402i7942522k849kg4499i9hl1k5ik48i38l292l1l4l1klgl41255091i8313k2ik478h8j751kh28kh9gk56l3k874684ll3h7j9k83l9034li7lhi5g45k8k3j6hkk760276g8h5h295i9jk7597177g3kk7g3hh79ili"},
-{"key":"巧技二","name":"🐞聚搜","type":3,"api":"csp_qiao2","jar":"./Yoursmile.jar;md5;3EEC5EEA7ECB349A5ED07C8CADBCB907","playerType":2,"searchable":1,"quickSearch":1,"filterable":1,"ext":"7lj763gg402i79425739i7jghj118797l4hj840gi18633331l4708g2h7145403549g44l8ii56i187681hkjj3hhgh1ih3l32j250lk1k786lj20j468hk3hli4l46gig4i3g7g2722328j0136h01i7g5183k22k7gg3i72hk81gl8k9839kl7i0707"},
 
 {"key":"csp_LiteApple","name":"🐞苹果(SP)","type":3,"api":"csp_LiteApple","jar":"./Yoursmile.jar;md5;3EEC5EEA7ECB349A5ED07C8CADBCB907","searchable":1,"quickSearch":1,"filterable":1},
 {"key":"csp_Qiyou","name":"🐞奇优(SP)","type":3,"api":"csp_Qiyou","jar":"./Yoursmile.jar;md5;3EEC5EEA7ECB349A5ED07C8CADBCB907","searchable":1,"quickSearch":1,"filterable":1},
 {"key":"csp_Ddys","name":"🐞低端(SP)","type":3,"api":"csp_Ddys","jar":"./Yoursmile.jar;md5;3EEC5EEA7ECB349A5ED07C8CADBCB907","searchable":1,"quickSearch":1,"filterable":1},
-{"key":"csp_ReBo","name":"🐞热播(SP)","type":3,"api":"csp_ReBo","jar":"./Yoursmile.jar;md5;3EEC5EEA7ECB349A5ED07C8CADBCB907","searchable":1,"quickSearch":1,"filterable":1},
 
 {"key":"农民","name":"🐞农民(XYQH)","type":3,"api":"csp_XYQHiker","jar":"./Yoursmile.jar;md5;3EEC5EEA7ECB349A5ED07C8CADBCB907","searchable":1,"quickSearch":1,"filterable":1,"ext":"https://cdn.gh-proxy.com/raw.githubusercontent.com/yoursmile66/TVBox/refs/heads/main/json/农民影视.json"},
 {"key":"剧圈圈","name":"🐞剧圈圈(XYQH)","type":3,"api":"csp_XYQHiker","jar":"./Yoursmile.jar;md5;3EEC5EEA7ECB349A5ED07C8CADBCB907","searchable":1,"quickSearch":1,"filterable":1,"ext":"https://gh-proxy.com/raw.githubusercontent.com/yoursmile66/TVBox/refs/heads/main/json/剧圈圈.json","click":"document.getElementById('playleft').children[0].contentWindow.document.getElementById('start').click()"},

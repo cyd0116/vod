@@ -193,7 +193,7 @@
     },
    {
       "key": "Tg | 豆瓣",
-      "name": "🔍Tg|ZX",
+      "name": "🔍Tg豆瓣|ZX",
       "type": 3,
       "api": "csp_TgYunDouBanPan",
 	  "jar":"./zx/custom_spider.jar;md5;43989964965deab2a4b6b48251043412",

@@ -202,7 +202,7 @@
       "ext": {
         "siteUrl": "https://tgsou.252035.xyz",
         "count": 4,
-        "channelUsername": "xiangxiunb,leoziyuan,ResourceUniverse,BaiduCloudDisk,SharePanBaidu,bdwpzhpd,bdwpzhpd,alyp_TV,ucquark,wp123zy,oneonefivewpfx,tyypzhpd,cloudtianyi,yunpanchat,ydypzyfx,yunpan139,guaguale115,Mbox115,shares_115,zaihuayun,PanjClub,NewQuark,yunpanpan,kuakeyun,Quark_Movies,qixingzhenren,alyp_4K_Movies,alyp_TV,yunpanshare,shareAliyun,Lsp115,alyp_1",
+        "channelUsername": "xiangxiunb,leoziyuan,ResourceUniverse,NewQuark,Quark_Movies,ucquark,yunpanpan,kuakeyun,yunpanshare,alyp_TV,alyp_4K_Movies,alyp_TV,shareAliyun,alyp_1,wp123zy,tyypzhpd,cloudtianyi,yunpanchat,ydypzyfx,yunpan139,BaiduCloudDisk,SharePanBaidu,bdwpzhpd,bdwpzhpd,guaguale115,Mbox115,shares_115,zaihuayun,PanjClub,qixingzhenren,Lsp115,oneonefivewpfx",
         "commonConfig": "./zx/json/peizhi.json",
         "filter": "./zx/json/douban.json"
       }
@@ -222,8 +222,8 @@
       }
     },
     {
-      "key": "玩偶 | 多多",
-      "name": "🕵多多|ZX",
+      "key": "玩偶 | 木偶",
+      "name": "👲木偶|ZX",
       "type": 3,
       "api": "csp_kongbai",
       "jar":"./zx/custom_spider.jar;md5;43989964965deab2a4b6b48251043412",
@@ -231,7 +231,7 @@
       "changeable": 0,
       "ext": {
         "commonConfig": "./zx/json/peizhi.json",
-        "siteUrl": "http://tv.yydsys.top/",
+        "siteUrl": "http://123.666291.xyz/",
         "filter": "./zx/json/wogg.json"
       }
     },
@@ -250,17 +250,17 @@
       }
     },
     {
-      "key": "网盘 | 片库",
-      "name": "🍥片库|ZX",
+      "key": "玩偶 | 多多",
+      "name": "🕵多多|ZX",
       "type": 3,
-      "api": "csp_Qiwei",
+      "api": "csp_kongbai",
       "jar":"./zx/custom_spider.jar;md5;43989964965deab2a4b6b48251043412",
 	  "searchable": 1,
-      "filterable": 0,
-      "switchable": 0,
+      "changeable": 0,
       "ext": {
-        "siteUrl": "https://www.qwnull.com",
-        "commonConfig": "./zx/json/peizhi.json"
+        "commonConfig": "./zx/json/peizhi.json",
+        "siteUrl": "http://tv.yydsys.top/",
+        "filter": "./zx/json/wogg.json"
       }
     },
 	    {
@@ -275,6 +275,20 @@
         "commonConfig": "./zx/json/peizhi.json",
         "siteUrl": "http://1.95.79.193/",
         "filter": "./zx/json/wogg.json"
+      }
+    },
+    {
+      "key": "网盘 | 片库",
+      "name": "🍥片库|ZX",
+      "type": 3,
+      "api": "csp_Qiwei",
+      "jar":"./zx/custom_spider.jar;md5;43989964965deab2a4b6b48251043412",
+	  "searchable": 1,
+      "filterable": 0,
+      "switchable": 0,
+      "ext": {
+        "siteUrl": "https://www.qwnull.com",
+        "commonConfig": "./zx/json/peizhi.json"
       }
     },
     {

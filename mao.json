@@ -203,7 +203,7 @@
       "ext": {
         "siteUrl": "https://tgsou.252035.xyz",
         "count": 4,
-        "channelUsername": "NewQuark,Quark_Movies,kuakeyun,ucquark,ucpanpan,alyp_TV,alyp_4K_Movies,alyp_TV,shareAliyun,alyp_1,wp123zy,pan123pan,zyfb123,zyzhpd123,xx123pan,tyypzhpd,cloudtianyi,ydypzyfx,yunpan139,xiangxiunb,leoziyuan,ResourceUniverse,yunpanpan,yunpanshare,zaihuayun,yunpanchat,PanjClub,qixingzhenren,BaiduCloudDisk,SharePanBaidu,bdwpzhpd,bdwpzhpd,guaguale115,Mbox115,shares_115,Lsp115,oneonefivewpfx",
+        "channelUsername": "NewQuark,Quark_Movies,kuakeyun,ucquark,ucpanpan,alyp_TV,alyp_4K_Movies,alyp_TV,shareAliyun,alyp_1,wp123zy,pan123pan,zyfb123,zyzhpd123,xx123pan,tyypzhpd,cloudtianyi,ydypzyfx,yunpan139,xiangxiunb,leoziyuan,ResourceUniverse,yunpanpan,yunpanshare,zaihuayun,yunpanchat,PanjClub,qixingzhenren",
         "commonConfig": "./zx/json/peizhi.json",
         "filter": "./zx/json/douban.json"
       }

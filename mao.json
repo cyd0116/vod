@@ -138,7 +138,7 @@
 				"tgsearch_url":"https://tg.252035.xyz",
 				"tgsearch_media_url":"https://tg.252035.xyz",
 				//"channellist": "ResourceUniverse",
-				"channellist": "pan123pan,zyfb123,zyzhpd123,xx123pan,tianyi_pd2,tianyirigeng,tyypzhpd,cloudtianyi,ydypzyfx,alyp_4K_Movies|1000,Aliyun_4K_Movies|1000,alypzyhzq|1000,Aliyundrive_Share_Channel|1000,alyp_1,shareAliyun,ucpanpan,hao115|1000,Mbox115|1000,shares_115|1000,guaguale115,Channel_Shares_115,oneonefivewpfx",
+				"channellist": "pan123pan,zyfb123,zyzhpd123,xx123pan,wp123zy,tianyi_pd2,tianyirigeng,tyypzhpd,cloudtianyi,ydypzyfx,alyp_4K_Movies|1000,Aliyun_4K_Movies|1000,alypzyhzq|1000,Aliyundrive_Share_Channel|1000,alyp_1,shareAliyun,ucpanpan,hao115|1000,Mbox115|1000,shares_115|1000,guaguale115,Channel_Shares_115,oneonefivewpfx",
 				"proxy":"noproxy"
 			},
 			"style": {
@@ -202,7 +202,7 @@
       "ext": {
         "siteUrl": "https://tgsou.252035.xyz",
         "count": 4,
-        "channelUsername": "xiangxiunb,leoziyuan,ResourceUniverse,NewQuark,Quark_Movies,ucquark,yunpanpan,kuakeyun,yunpanshare,alyp_TV,alyp_4K_Movies,alyp_TV,shareAliyun,alyp_1,wp123zy,tyypzhpd,cloudtianyi,yunpanchat,ydypzyfx,yunpan139,BaiduCloudDisk,SharePanBaidu,bdwpzhpd,bdwpzhpd,guaguale115,Mbox115,shares_115,zaihuayun,PanjClub,qixingzhenren,Lsp115,oneonefivewpfx",
+        "channelUsername": "NewQuark,Quark_Movies,kuakeyun,ucquark,ucpanpan,alyp_TV,alyp_4K_Movies,alyp_TV,shareAliyun,alyp_1,wp123zy,pan123pan,zyfb123,zyzhpd123,xx123pan,tyypzhpd,cloudtianyi,ydypzyfx,yunpan139,xiangxiunb,leoziyuan,ResourceUniverse,yunpanpan,yunpanshare,zaihuayun,yunpanchat,PanjClub,qixingzhenren,BaiduCloudDisk,SharePanBaidu,bdwpzhpd,bdwpzhpd,guaguale115,Mbox115,shares_115,Lsp115,oneonefivewpfx",
         "commonConfig": "./zx/json/peizhi.json",
         "filter": "./zx/json/douban.json"
       }

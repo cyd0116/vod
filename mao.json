@@ -136,8 +136,8 @@
 				"token":"./pg/lib/tokenm.json",
 				"json":"./pg/lib/tgsearch.json",
 				"keywords":"名称,片名,推荐",
-				"tgsearch_url":"https://tgsou.252035.xyz",
-				"tgsearch_media_url":"https://tgsou.252035.xyz",
+				"tgsearch_url":"https://tg.252035.xyz",
+				"tgsearch_media_url":"https://tg.252035.xyz",
 				//"channellist": "ResourceUniverse",
 				"channellist": "pan123pan,zyfb123,zyzhpd123,xx123pan,wp123zy,tianyi_pd2,tianyirigeng,tyypzhpd,cloudtianyi,ydypzyfx,alyp_4K_Movies|1000,Aliyun_4K_Movies|1000,alypzyhzq|1000,Aliyundrive_Share_Channel|1000,alyp_1,shareAliyun,ucpanpan,hao115|1000,Mbox115|1000,shares_115|1000,guaguale115,Channel_Shares_115,oneonefivewpfx",
 				"proxy":"noproxy"
@@ -152,8 +152,8 @@
 				"token":"./pg/lib/tokenm.json",
 				"json":"./pg/lib/tgsearch.json",
 				"keywords":"名称,片名,推荐",
-				"tgsearch_url":"https://tgsou.252035.xyz",
-				"tgsearch_media_url":"https://tgsou.252035.xyz",				
+				"tgsearch_url":"https://tg.252035.xyz",
+				"tgsearch_media_url":"https://tg.252035.xyz",				
 				"channellist": "tgsearchers2",
 				//"channellist": "pan123pan,zyfb123,zyzhpd123,xx123pan,tianyi_pd2,tianyirigeng,tyypzhpd,cloudtianyi,ydypzyfx,alyp_4K_Movies|1000,Aliyun_4K_Movies|1000,alypzyhzq|1000,Aliyundrive_Share_Channel|1000,alyp_1,shareAliyun,ucpanpan,hao115|1000,Mbox115|1000,shares_115|1000,guaguale115,Channel_Shares_115,oneonefivewpfx",	
 				"proxy":"noproxy"

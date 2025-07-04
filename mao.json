@@ -92,7 +92,7 @@
 { "key": "hipy_js_310直播[球]", "name": "🏀310直播(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 0, "quickSearch": 0, "filterable": 1, "changeable":0,"order_num": 0, "ext": "./drpy_dzlive/drpy_js/310直播[球].js" }, 
 { "key": "hipy_js_926tv[球]", "name": "🏀926tv球(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 0, "quickSearch": 0, "filterable": 1,"changeable":0, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/926tv[球].js" }, 
 
-{"key": "360资源","name": "🐝360资源","type": 1,"api": "https://360zy.com/api.php/seaxml/vod/","searchable": 1,"changeable": 1,"categories": ["记录片","国产动漫","日韩动漫","国产剧","韩国剧","日本剧","电影片","连续剧","综艺片","动漫片","动作片","喜剧片","爱情片","科幻片","恐怖片","剧情片","战争片","香港剧","欧美剧","台湾剧","海外剧","泰国剧","大陆综艺","港台综艺","日韩综艺","欧美综艺","欧美动漫","港台动漫","海外动漫"]},
+//{"key": "360资源","name": "🐝360资源","type": 1,"api": "https://360zy.com/api.php/seaxml/vod/","searchable": 1,"changeable": 1,"categories": ["记录片","国产动漫","日韩动漫","国产剧","韩国剧","日本剧","电影片","连续剧","综艺片","动漫片","动作片","喜剧片","爱情片","科幻片","恐怖片","剧情片","战争片","香港剧","欧美剧","台湾剧","海外剧","泰国剧","大陆综艺","港台综艺","日韩综艺","欧美综艺","欧美动漫","港台动漫","海外动漫"]},
 {"key":"量子","name":"🐝量子(🏀NBA回看)","type": 1,"api": "https://cj.lziapi.com/api.php/provide/vod/from/lzm3u8", "searchable": 1, "quickSearch":1,"changeable": 1,"categories": ["篮球","记录片", "足球", "动作片", "喜剧片", "科幻片", "恐怖片", "大陆综艺" ] },
 {"key":"暴风","name":"🐝暴风(🏀NBA回看)","type": 1,"api": "https://bfzyapi.com/api.php/provide/vod/?","searchable": 1,"quickSearch":1,"categories": [ "篮球","纪录片","足球", "动作片", "喜剧片", "科幻片", "恐怖片", "大陆综艺"] },
 {"key":"木耳","name":"🐝木耳","type":1,"api":"https://json02.heimuer.xyz/api.php/provide/vod","searchable":1,"filterable":1,"changeable":1,"timeout":20,"categories":["剧情片","动作片","冒险片","喜剧片","奇幻片","恐怖片","悬疑片","惊悚片","灾难片","爱情片","犯罪片","科幻片","歌舞片","战争片","经典片","动画电影","国产剧","港剧","韩剧","日剧","泰剧","台剧","欧美剧","国产综艺","港台综艺","韩国综艺","日本综艺","欧美综艺","欧美动漫","日本动漫","韩国动漫","国产动漫","港台动漫"],"header":{"user-agent":"Mozilla/5.0(WindowsNT10.0;Win64;x64)AppleWebKit/537.36(KHTML,likeGecko)Chrome/125.0.0.0Safari/537.36"}},
@@ -136,8 +136,8 @@
 				"token":"./pg/lib/tokenm.json",
 				"json":"./pg/lib/tgsearch.json",
 				"keywords":"名称,片名,推荐",
-				"tgsearch_url":"https://tg.252035.xyz",
-				"tgsearch_media_url":"https://tg.252035.xyz",
+				"tgsearch_url":"https://tgsou.252035.xyz",
+				"tgsearch_media_url":"https://tgsou.252035.xyz",
 				//"channellist": "ResourceUniverse",
 				"channellist": "pan123pan,zyfb123,zyzhpd123,xx123pan,wp123zy,tianyi_pd2,tianyirigeng,tyypzhpd,cloudtianyi,ydypzyfx,alyp_4K_Movies|1000,Aliyun_4K_Movies|1000,alypzyhzq|1000,Aliyundrive_Share_Channel|1000,alyp_1,shareAliyun,ucpanpan,hao115|1000,Mbox115|1000,shares_115|1000,guaguale115,Channel_Shares_115,oneonefivewpfx",
 				"proxy":"noproxy"
@@ -152,8 +152,8 @@
 				"token":"./pg/lib/tokenm.json",
 				"json":"./pg/lib/tgsearch.json",
 				"keywords":"名称,片名,推荐",
-				"tgsearch_url":"https://tg.252035.xyz",
-				"tgsearch_media_url":"https://tg.252035.xyz",				
+				"tgsearch_url":"https://tgsou.252035.xyz",
+				"tgsearch_media_url":"https://tgsou.252035.xyz",				
 				"channellist": "tgsearchers2",
 				//"channellist": "pan123pan,zyfb123,zyzhpd123,xx123pan,tianyi_pd2,tianyirigeng,tyypzhpd,cloudtianyi,ydypzyfx,alyp_4K_Movies|1000,Aliyun_4K_Movies|1000,alypzyhzq|1000,Aliyundrive_Share_Channel|1000,alyp_1,shareAliyun,ucpanpan,hao115|1000,Mbox115|1000,shares_115|1000,guaguale115,Channel_Shares_115,oneonefivewpfx",	
 				"proxy":"noproxy"
@@ -203,7 +203,7 @@
       "ext": {
         "siteUrl": "https://tgsou.252035.xyz",
         "count": 4,
-        "channelUsername": "ResourceUniverse,guaguale115,ydypzyfx,shareAliyun,ucpanpan,ucquark,alyp_1,hao115",
+        "channelUsername": "NewQuark,Quark_Movies,kuakeyun,ucquark,ucpanpan,alyp_TV,alyp_4K_Movies,alyp_TV,shareAliyun,alyp_1,wp123zy,pan123pan,zyfb123,zyzhpd123,xx123pan,tyypzhpd,cloudtianyi,ydypzyfx,yunpan139,xiangxiunb,leoziyuan,ResourceUniverse,yunpanpan,yunpanshare,zaihuayun,yunpanchat,PanjClub,qixingzhenren",
         "commonConfig": "./zx/json/peizhi.json",
         "filter": "./zx/json/douban.json"
       }

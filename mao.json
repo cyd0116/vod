@@ -47,8 +47,8 @@
 			}
 ],
 	"sites":[
-{"key":"Douban","name":"🐮豆瓣┃二小🐮","type":3,"api":"csp_DoubanGuard","searchable":0,"quickSearch":0,"filterable":0,"ext":"./wex/douban.json"},
-{"key":"Wexokconfig","name":"🐮配置┃二小🐮","type":3,"api":"csp_WexokconfigGuard","searchable":0,"changeable":0,"indexs":0},
+{"key":"Douban","name":"🐮豆瓣🐮","type":3,"api":"csp_DoubanGuard","searchable":0,"quickSearch":0,"filterable":0,"ext":"./wex/douban.json"},
+{"key":"Wexokconfig","name":"🐮配置🐮","type":3,"api":"csp_WexokconfigGuard","searchable":0,"changeable":0,"indexs":0},
 
 //Yoursmile
 { "key": "快看", "name": "🐞快看(SP)", "type": 3, "api": "csp_Kuaikan","jar":"./ys/Yoursmile.jar;md5;3EEC5EEA7ECB349A5ED07C8CADBCB907", "searchable": 1, "quickSearch": 1, "changeable": 1, "filterable": 1 },

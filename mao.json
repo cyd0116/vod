@@ -1,6 +1,6 @@
 
 {
-"spider":"./wex/wex.png;md5;2EC9736C412884A87906C6F263F9D4E2",
+"spider":"./wex/wex.png;md5;2ec9736c412884a87906c6f263f9d4e2",
 "wallpaper": "https://深色壁纸.xxooo.cf/",
 
 "lives": [
@@ -57,7 +57,7 @@
 {"key":"csp_Wwys","name":"🐞农民(SP)","type":3,"api":"csp_Wwys","jar":"./ys/Yoursmile.jar;md5;92E705F2B85E7E55C660F13BD53F4F69","searchable":1,"quickSearch":1,"filterable":1,"ext":"https://www.wwgz.cn"},
 {"key":"csp_Tvyb","name":"🐞TVB云播(SP)","type":3,"api":"csp_Tvyb","jar":"./ys/Yoursmile.jar;md5;92E705F2B85E7E55C660F13BD53F4F69","playerType":2,"searchable":1,"quickSearch":1,"filterable":1},
 {"key":"csp_baibai","name":"🐞素白白","type":3,"api":"csp_SuBaiBai","jar":"./ys/Yoursmile.jar;md5;92E705F2B85E7E55C660F13BD53F4F69","searchable":1,"quickSearch":1, "ext":"https://www.subaibai.com"},
-{"key":"南瓜","name":"🐞南瓜","type":3,"api":"csp_NanGua","jar":"./ys/Yoursmile.jar;md5;92E705F2B85E7E55C660F13BD53F4F69", "searchable":1,"quickSearch":1,"filterable":1,"ext":"7lj763gg0939795i017ii486k512jkihhilg9g0h96j865740113"},
+//{"key":"南瓜","name":"🐞南瓜","type":3,"api":"csp_NanGua","jar":"./ys/Yoursmile.jar;md5;92E705F2B85E7E55C660F13BD53F4F69", "searchable":1,"quickSearch":1,"filterable":1,"ext":"7lj763gg0939795i017ii486k512jkihhilg9g0h96j865740113"},
 //{"key":"csp_Qiyou","name":"🐞奇优(SP)","type":3,"api":"csp_Qiyou","jar":"./ys/Yoursmile.jar;md5;92E705F2B85E7E55C660F13BD53F4F69","searchable":1,"quickSearch":1,"filterable":1},
 {"key":"天天","name":"🐞天天(SP)","type":3,"api":"csp_TTian","jar":"./ys/Yoursmile.jar;md5;92E705F2B85E7E55C660F13BD53F4F69","playerType":1,"searchable":1,"quickSearch":1,"filterable":1,"ext":"7lj763gg09397919456493i0h44j8681highi4"},
 {"key":"热播","name":"🐞热播(SP)","type":3,"api":"csp_TTian","jar":"./ys/Yoursmile.jar;md5;92E705F2B85E7E55C660F13BD53F4F69","playerType":1,"searchable":1,"quickSearch":1,"filterable":1,"ext":"7lj763gg0939791h1l3888jig44gi291li"},
@@ -185,6 +185,7 @@
 {"key":"yydsys","name":"🕵多多|PG","type":3,"api":"csp_Wobg","jar":"./pg/pg.jar;md5;7840D0B61F9641A47728E3A92020F35A","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://tv.yydsys.top/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$WNLG"},
 {"key":"蜡笔网盘","name":"🖍蜡笔|PG","type":3,"api":"csp_Wobg","jar":"./pg/pg.jar;md5;7840D0B61F9641A47728E3A92020F35A","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://feimao666.fun/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$LABI"},
 {"key":"Mogg","name":"👲木偶|PG","type":3,"api":"csp_Wobg","jar":"./pg/pg.jar;md5;7840D0B61F9641A47728E3A92020F35A","searchable": 1,"quickSearch":1, "changeable":1,"filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$http://123.666291.xyz/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$MOGG"}, 
+{"key": "YunPan", "name": "☁云盘资源|PG","type": 3, "api": "csp_YunPan","jar":"./pg/pg.jar;md5;7840D0B61F9641A47728E3A92020F35A","searchable": 1,"quickSearch":1, "changeable":1,"timeout": 60,"ext": "./pg/lib/tokenm.json$$$null$$$noproxy$$$1"},
 { "key": "Leijing", "name": "📀雷鲸|PG", "type": 3, "api": "csp_Panta","jar":"./pg/pg.jar;md5;7840D0B61F9641A47728E3A92020F35A", "quickSearch": 1, "changeable": 1, "filterable": 1, "timeout": 60, "ext": "./pg/lib/tokenm.json$$$https://leijing.xyz/$$$noproxy$$$1$$$./pg/lib/leijing.txt$$$LEIJING", "style": { "type": "list", "ratio": 1.1 } },
 {"key":"TianYiSou","name":"📀天逸搜|PG","type":3,"api":"csp_TianYiSou","jar":"./pg/pg.jar;md5;7840D0B61F9641A47728E3A92020F35A","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$null$$$noproxy"},
 { "key": "Panta", "name": "📀盘Ta|PG", "type": 3, "api": "csp_Panta","jar":"./pg/pg.jar;md5;7840D0B61F9641A47728E3A92020F35A", "quickSearch": 1, "changeable": 1, "filterable": 1, "timeout": 60, "ext": "./pg/lib/tokenm.json$$$https://www.91panta.cn/$$$null$$$1$$$./pg/lib/panta.txt$$$PANTA", "style": { "type": "list", "ratio": 1.1 } },

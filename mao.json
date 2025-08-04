@@ -10,7 +10,7 @@
            {
 				"name": "Gather.电视直播",
 				"type": 0,
-				"url": "https://tv.iill.top/m3u/Gather",
+				"url": "https://tv-1.iill.top/m3u/Gather",
 				"ua": "okhttp/3.15",
 				"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}",
 				"logo": "https://diyp9999.112114.xyz/logo/{name}.png",

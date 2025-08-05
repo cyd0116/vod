@@ -11,6 +11,7 @@
 				"name": "Gather.电视直播",
 				"type": 0,
 				"url": "https://tv-1.iill.top/m3u/Gather",
+				"playerType":1,
 				"ua": "okhttp/3.15",
 				"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}",
 				"logo": "https://diyp9999.112114.xyz/logo/{name}.png",
@@ -145,9 +146,9 @@
 {"key":"WexfeimaoziyuanGuard","name":"💓肥猫┃uc💓","type":3,"api":"csp_WexfeimaoziyuanGuard","searchable":1,"changeable":1},
 {"key":"WexTuanZhangGuard","name":"💓团长┃百度夸克💓","type":3,"api":"csp_WexTuanZhangGuard","searchable":1,"changeable":1,"timeout":120},
 {"key":"WexxzysGuard","name":"💓校长┃百度夸克💓","type":3,"api":"csp_WexxzysGuard","searchable":1,"changeable":1},
+{"key":"WexTJso","name":"💓TG┃聚合💓","type":3,"api":"csp_WexTJsoGuard","searchable":1,"changeable":1},
 {"key":"WexXuexi","name":"💓综合┃夸克迅雷💓","type":3,"api":"csp_WexXuexiGuard","searchable":1,"changeable":1},
 {"key":"WexXuexi","name":"💓原盘┃4K💓","type":3,"api":"csp_WexXuexiGuard","searchable":1,"changeable":1},
-{"key":"WexTJso","name":"💓TG┃聚合💓","type":3,"api":"csp_WexTJsoGuard","searchable":1,"changeable":1},
 
 {"key":"WexHaiYinsoGuard","name":"🎠海音┃综合🎠","type":3,"api":"csp_WexHaiYinsoGuard","searchable":1,"changeable":1},
 {"key":"WexZhaoPansoGuard","name":"🎠找盘┃综合🎠","type":3,"api":"csp_WexZhaoPansoGuard","searchable":1,"changeable":1},

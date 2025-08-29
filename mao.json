@@ -4,14 +4,14 @@
 "wallpaper": "https://深色壁纸.xxooo.cf/",
 
 "lives": [
-{"name": "CYD线路","type": 0,"url": "./tv/tv.txt","ua":"okhttp/3.15","timeout":10,"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}","logo":"https://diyp9999.112114.xyz/logo/{name}.png","catchup": {"type": "append",	"source": "?livemode=4&starttime=${(b)yyyyMMdd'T'HHmm}00.00Z&endtime=${(e)yyyyMMdd'T'HHmm}00.00Z"}},
+{"name": "CYD线路","type": 0,"url": "./tv/tv.txt","ua":"okhttp/3.15","timeout":10,"epg": "https://diyp9999.112114.xyz/?ch={name}&date=DATE1SUB","logo":"https://diyp9999.112114.xyz/logo/{name}.png","catchup": {"type": "append",	"source": "?livemode=4&starttime=${(b)yyyyMMdd'T'HHmm}00.00Z&endtime=${(e)yyyyMMdd'T'HHmm}00.00Z"}},
 
             {
 				"name": "最强国内直播",
 				"type": 0,
 				"url": "http://127.0.0.1:10079/c/3600/null/http://127.0.0.1:35456/tv.m3u",
 				"ua": "okhttp/3.15",
-				"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}",
+				"epg": "https://diyp9999.112114.xyz/?ch={name}&date=DATE1SUB",
 				"logo": "https://diyp9999.112114.xyz/logo/{name}.png",
 				"catchup": {"type": "append","source": "?livemode=4&starttime=${(b)yyyyMMdd'T'HHmm}00.00Z&endtime=${(e)yyyyMMdd'T'HHmm}00.00Z"}
 			},
@@ -20,7 +20,7 @@
 				"type": 0,
 				"url": "http://sub.ottiptv.cc/iptv.m3u",
 				"ua": "okHttp/Mod-1.1.0",
-				"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}",
+				"epg": "https://diyp9999.112114.xyz/?ch={name}&date=DATE1SUB",
 				"logo": "https://diyp9999.112114.xyz/logo/{name}.png",
 				"catchup": {
 					"type": "append",
@@ -154,6 +154,7 @@
 {"key":"Wexseedhub","name":"💓种子┃聚合💓","type":3,"api":"csp_WexseedhubGuard","searchable":1,"changeable":1,"timeout":120},
 {"key":"Wexnullname","name":"💓无名┃聚合💓","type":3,"api":"csp_WexnullnameGuard","searchable":1,"changeable":1,"timeout":120},
 {"key":"Wexmuougg","name":"💓木偶┃uc夸克💓","type":3,"api":"csp_WexmuouggGuard","searchable":1,"changeable":1},
+{"key":"WexduoduoziyuanGuard","name":"💓多多┃uc💓","type":3,"api":"csp_WexduoduoziyuanGuard","searchable":1,"changeable":1,"timeout":120},
 {"key":"WexfeimaoziyuanGuard","name":"💓肥猫┃uc💓","type":3,"api":"csp_WexfeimaoziyuanGuard","searchable":1,"changeable":1},
 {"key":"WexTuanZhangGuard","name":"💓团长┃百度夸克💓","type":3,"api":"csp_WexTuanZhangGuard","searchable":1,"changeable":1,"timeout":120},
 {"key":"WexxzysGuard","name":"💓校长┃百度夸克💓","type":3,"api":"csp_WexxzysGuard","searchable":1,"changeable":1},

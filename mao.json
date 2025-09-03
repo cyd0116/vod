@@ -1,6 +1,6 @@
 
 {
-"spider":"./wex/wex.png;md5;2f5d7db247630a9d041d14ef060f9ec4",
+"spider":"./wex/wex.png;md5;99743de23a68441612a8d0abdb9160c6",
 "wallpaper": "https://深色壁纸.xxooo.cf/",
 
 "lives": [
@@ -19,7 +19,7 @@
 				"name": "FeiYang牧场",
 				"type": 0,
 				"url": "http://sub.ottiptv.cc/iptv.m3u",
-				"ua": "okHttp/Mod-1.1.0",
+				"ua": "okHttp/Mod-1.2.0",
 				"epg": "https://diyp9999.112114.xyz/?ch={name}&date=DATE1SUB",
 				"logo": "https://diyp9999.112114.xyz/logo/{name}.png",
 				"catchup": {

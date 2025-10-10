@@ -9,7 +9,7 @@
            {
 				"name": "饭太硬直播V4",
 				"type": 0,
-				"url": "https://raw.githubusercontent.com/develop202/migu_video/refs/heads/main/interface.txt",
+				"url": "https://raw.yzuu.cf/develop202/migu_video/refs/heads/main/interface.txt",
 				"playerType":2,
 				"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}",
 				"logo": "https://diyp9999.112114.xyz/logo/{name}.png",

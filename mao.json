@@ -7,18 +7,11 @@
 {"name": "CYD线路","type": 0,"url": "./tv/tv.txt","ua":"okhttp/3.15","timeout":10,"epg": "https://diyp9999.112114.xyz/?ch={name}&date=DATE1SUB","logo":"https://diyp9999.112114.xyz/logo/{name}.png","catchup": {"type": "append",	"source": "?livemode=4&starttime=${(b)yyyyMMdd'T'HHmm}00.00Z&endtime=${(e)yyyyMMdd'T'HHmm}00.00Z"}},
 
            {
-				"name": "饭太硬直播V4",
+				"name": "develop202直播",
 				"type": 0,
 				"url": "https://raw.yzuu.cf/develop202/migu_video/refs/heads/main/interface.txt",
-				"playerType":2,
-				"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}",
-				"logo": "https://diyp9999.112114.xyz/logo/{name}.png",
-				"catchup": {"type": "append","source": "?livemode=4&starttime=${(b)yyyyMMdd'T'HHmm}00.00Z&endtime=${(e)yyyyMMdd'T'HHmm}00.00Z"}
-			},
-           {
-				"name": "饭太硬直播V6",
-				"type": 0,
-				"url": "https://nos.netease.com/ysf/3d75a78a0fc7ede372c03598d6d10367.m3u",
+				//"url": "https://develop202.github.io/migu_video/interface.txt",
+				//"url": "https://raw.githubusercontent.com/develop202/migu_video/refs/heads/main/interface.txt",
 				"playerType":2,
 				"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}",
 				"logo": "https://diyp9999.112114.xyz/logo/{name}.png",
@@ -28,6 +21,15 @@
 				"name": "肥猫直播",
 				"type": 0,
 				"url": "https://6296.kstore.vip/25.txt",
+				"playerType":2,
+				"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}",
+				"logo": "https://diyp9999.112114.xyz/logo/{name}.png",
+				"catchup": {"type": "append","source": "?livemode=4&starttime=${(b)yyyyMMdd'T'HHmm}00.00Z&endtime=${(e)yyyyMMdd'T'HHmm}00.00Z"}
+			},
+           {
+				"name": "FMM直播(V6)",
+				"type": 0,
+				"url": "https://nos.netease.com/ysf/3d75a78a0fc7ede372c03598d6d10367.m3u",
 				"playerType":2,
 				"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}",
 				"logo": "https://diyp9999.112114.xyz/logo/{name}.png",

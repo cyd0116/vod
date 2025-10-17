@@ -109,8 +109,8 @@
 //道长(JS)
 {"key": "hipy_js_爱看机器人[虫]", "name": "📺爱看机器人(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 1, "quickSearch": 1, "filterable": 1, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/爱看机器人[虫].js" }, 
 
-{ "key": "hipy_js_88看球[球]", "name": "🏀88看球(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 0, "quickSearch": 0, "filterable": 1,"changeable":0, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/88看球[球].js" }, 
 {"key": "dr_JRKAN直播","name": "🏀JRKAN直播(JS)","type": 3,"api": "./drpy_dzlive/drpy_libs/drpy2.min.js","searchable": 0,"quickSearch": 0,"changeable":0,"ext": "./drpy_dzlive/drpy_js/JRKAN直播.js"},
+{ "key": "hipy_js_88看球[球]", "name": "🏀88看球(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 0, "quickSearch": 0, "filterable": 1,"changeable":0, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/88看球[球].js" }, 
 
 {"key":"量子","name":"🐝量子(🏀NBA回看)","type": 1,"api": "https://cj.lziapi.com/api.php/provide/vod/from/lzm3u8", "searchable": 1, "quickSearch":1,"changeable": 1,"categories": ["篮球","记录片", "足球", "动作片", "喜剧片", "科幻片", "恐怖片", "大陆综艺" ] },
 {"key":"暴风","name":"🐝暴风(🏀NBA回看)","type": 1,"api": "https://bfzyapi.com/api.php/provide/vod/?","searchable": 1,"quickSearch":1,"categories": [ "篮球","纪录片","足球", "动作片", "喜剧片", "科幻片", "恐怖片", "大陆综艺"] },
@@ -128,9 +128,9 @@
 
 
 //王二小
+{"key":"瓜子看球","name":"🌐瓜子┃体育🌐","type":3,"api":"csp_WexGZsportGuard","searchable":0,"changeable":0,"style":{"type":"list"}},
 {"key":"看球","name":"🌐88┃体育🌐","type":3,"api":
 "csp_KanqiuGuard","searchable":0,"changeable":0,"style":{"type":"list"}},
-{"key":"瓜子看球","name":"🌐瓜子┃体育🌐","type":3,"api":"csp_WexGZsportGuard","searchable":0,"changeable":0,"style":{"type":"list"}},
 //{"key":"Wexxpgtv","name":"🌺苹果┃秒播🌺","type":3,"api":"csp_WexxpgtvGuard","searchable":1,"changeable":1},
 {"key":"Wexwencai","name":"🌺文才┃秒播🌺","type":3,"api":"csp_WexwencaiGuard","searchable":1,"changeable":1},
 {"key":"Wexshandian","name":"🌺闪电┃秒播🌺","type":3,"api":"csp_WexshandianGuard","searchable":1,"changeable":1},

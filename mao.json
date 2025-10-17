@@ -88,7 +88,6 @@
 {"key":"csp_Ddys","name":"🐞低端(SP)","type":3,"api":"csp_Ddys","jar":"./ys/Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","searchable":1,"quickSearch":1,"filterable":1},
 { "key": "異界", "name": "🐞异世界(SP)", "type": 3, "api": "csp_Ysj", "jar":"./ys/Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","searchable": 1, "quickSearch": 1, "changeable": 1 },
 
-//{"key":"农民","name":"🐞农民(XYQH)","type":3,"api":"csp_XYQHiker","jar":"./ys/Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","searchable":1,"quickSearch":1,"filterable":1,"ext":"https://cdn.gh-proxy.com/raw.githubusercontent.com/yoursmile66/TVBox/refs/heads/main/json/农民影视.json"},
 {"key":"剧圈圈","name":"🐞剧圈圈(XYQH)","type":3,"api":"csp_XYQHiker","jar":"./ys/Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","searchable":1,"quickSearch":1,"filterable":1,"ext":"https://gh-proxy.com/raw.githubusercontent.com/yoursmile66/TVBox/refs/heads/main/json/剧圈圈.json","click":"document.getElementById('playleft').children[0].contentWindow.document.getElementById('start').click()"},
 {"key":"樱花","name":"🐞樱花(XYQH)","type":3,"api":"csp_XYQHiker","jar":"./ys/Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","searchable":1,"quickSearch":1,"filterable":1,"ext":"https://gh-proxy.com/raw.githubusercontent.com/yoursmile66/TVBox/refs/heads/main/json/樱花动漫.json"},
 
@@ -243,8 +242,6 @@
 {"key":"115Share","name":"🅿115云盘分享|PG","type":3,"api":"csp_P115Share","searchable":1,"jar":"./pg/pg.jar;md5;011DE7C2E5F40AA54E85939CE6162F7F","quickSearch":1,"changeable":1,"filterable":0,"timeout":120,"ext":"./pg/lib/tokenm.json$$$./pg/lib/115share.txt$$$db$$$1","style":{"type":"list","ratio":1.1}},
 
 //道长(JS)
-{ "key": "酷狗", "name": "🎵酷狗音乐", "type": 3, "api": "csp_Kugou","searchable":0,"quickSearch":0, "changeable": 0 }, 
-{ "key": "Yinyuetai", "name": "🎵音悦台", "type": 3, "api": "csp_Yinyuetai","searchable":0,"quickSearch":0,"changeable": 0 },
 {"key": "drpy_A8音乐","name": "🎵A8音乐(JS)","type": 3,"api": "./drpy_dzlive/drpy_libs/drpy2.min.js","searchable":0,"quickSearch":0,"changeable":0,"ext": "./drpy_dzlive/drpy_js/A8音乐.js","playerType":"2"},
 {"key": "drpy_蜻蜓FM","name": "🎧蜻蜓FM(JS)","type": 3,"api": "./drpy_dzlive/drpy_libs/drpy2.min.js","searchable": 0,"quickSearch": 0,"changeable":0,"ext": "./drpy_dzlive/drpy_js/蜻蜓FM.js","playerType":"2"},
 { "key": "hipy_js_广播迷FM[听]", "name": "🎧广播迷FM(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable":0, "quickSearch": 0, "changeable":0,"filterable": 0, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/广播迷FM[听].js" }, 

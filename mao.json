@@ -6,7 +6,7 @@
 "lives": [
 {"name": "CYD线路","type": 0,"url": "./tv/tv.txt","ua":"okhttp/3.15","timeout":10,"epg": "https://diyp9999.112114.xyz/?ch={name}&date=DATE1SUB","logo":"https://diyp9999.112114.xyz/logo/{name}.png","catchup": {"type": "append",	"source": "?livemode=4&starttime=${(b)yyyyMMdd'T'HHmm}00.00Z&endtime=${(e)yyyyMMdd'T'HHmm}00.00Z"}},
 
-{"name":"MIGU直播","type":0,"url":"https%3A%2F%2Ffy.188766.xyz%2F%3Fip%3D%26mishitong%3Dtrue%26mima%3Dmianfeidehaimaiqian%26json%3Dtrue","playerType":2,"timeout":10,"ua":"bingcha/1.1","epg": "https://diyp9999.112114.xyz/?ch={name}&date=DATE1SUB","logo":"https://diyp9999.112114.xyz/logo/{name}.png","catchup": {"type": "append",	"source": "?livemode=4&starttime=${(b)yyyyMMdd'T'HHmm}00.00Z&endtime=${(e)yyyyMMdd'T'HHmm}00.00Z"}},
+{"name":"MIGU直播","type":0,"url":"http://127.0.0.1:9978/proxy?do=live&url=https%3A%2F%2Ffy.188766.xyz%2F%3Fip%3D%26mishitong%3Dtrue%26mima%3Dmianfeidehaimaiqian%26json%3Dtrue","playerType":2,"timeout":10,"ua":"bingcha/1.1","epg": "https://diyp9999.112114.xyz/?ch={name}&date=DATE1SUB","logo":"https://diyp9999.112114.xyz/logo/{name}.png","catchup": {"type": "append",	"source": "?livemode=4&starttime=${(b)yyyyMMdd'T'HHmm}00.00Z&endtime=${(e)yyyyMMdd'T'HHmm}00.00Z"}},
            {
 				"name": "develop202直播",
 				"type": 0,

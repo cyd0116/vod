@@ -6,7 +6,7 @@
 "lives": [
 {"name": "CYD线路","type": 0,"url": "./tv/tv.txt","ua":"okhttp/3.15","timeout":10,"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}","logo":"https://diyp9999.112114.xyz/logo/{name}.png","catchup": {"type": "append",	"source": "?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"}},
 
-{"name":"MIGU线路","type":0,"url":"https://fy.188766.xyz/?ip=&mishitong=true&mima=mianfeidehaimaiqian&json=true","playerType":2,"timeout":10,"ua":"bingcha/1.1","epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}","logo":"https://diyp9999.112114.xyz/logo/{name}.png","catchup": {"type": "append",	"source": "?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"}},
+{"name":"MIGU线路","type":0,"url":"https://fy.188766.xyz/?ip=&mishitong=true&mima=mianfeidehaimaiqian&json=true","playerType":2,"timeout":10,"ua":"bingcha/1.1","epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}","logo":"https://diyp9999.112114.xyz/logo/{name}.png","catchup": {"type": "append","source": "?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"}},
            {
 				"name": "develop202线路",
 				"type": 0,
@@ -22,15 +22,6 @@
 				"name": "FMM线路(V6)",
 				"type": 0,
 				"url": "https://nos.netease.com/ysf/3d75a78a0fc7ede372c03598d6d10367.m3u",
-				"playerType":2,
-				"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}",
-				"logo": "https://diyp9999.112114.xyz/logo/{name}.png",
-				"catchup": {"type": "append","source": "?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"}
-			},
-           {
-				"name": "肥猫线路",
-				"type": 0,
-				"url": "https://6296.kstore.vip/25.txt",
 				"playerType":2,
 				"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}",
 				"logo": "https://diyp9999.112114.xyz/logo/{name}.png",

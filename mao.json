@@ -6,9 +6,9 @@
 "lives": [
 {"name": "CYD线路","type": 0,"url": "./tv/tv.txt","ua":"okhttp/3.15","timeout":10,"epg": "https://diyp9999.112114.xyz/?ch={name}&date=DATE1SUB","logo":"https://diyp9999.112114.xyz/logo/{name}.png","catchup": {"type": "append",	"source": "?livemode=4&starttime=${(b)yyyyMMdd'T'HHmm}00.00Z&endtime=${(e)yyyyMMdd'T'HHmm}00.00Z"}},
 
-{"name":"MIGU直播","type":0,"url":"https://fy.188766.xyz/?ip=&mishitong=true&mima=mianfeidehaimaiqian&json=true","playerType":2,"timeout":10,"ua":"bingcha/1.1","epg": "https://diyp9999.112114.xyz/?ch={name}&date=DATE1SUB","logo":"https://diyp9999.112114.xyz/logo/{name}.png","catchup": {"type": "append",	"source": "?livemode=4&starttime=${(b)yyyyMMdd'T'HHmm}00.00Z&endtime=${(e)yyyyMMdd'T'HHmm}00.00Z"}},
+{"name":"MIGU线路","type":0,"url":"https://fy.188766.xyz/?ip=&mishitong=true&mima=mianfeidehaimaiqian&json=true","playerType":2,"timeout":10,"ua":"bingcha/1.1","epg": "https://diyp9999.112114.xyz/?ch={name}&date=DATE1SUB","logo":"https://diyp9999.112114.xyz/logo/{name}.png","catchup": {"type": "append",	"source": "?livemode=4&starttime=${(b)yyyyMMdd'T'HHmm}00.00Z&endtime=${(e)yyyyMMdd'T'HHmm}00.00Z"}},
            {
-				"name": "develop202直播",
+				"name": "develop202线路",
 				"type": 0,
 				"url": "https://raw.yzuu.cf/develop202/migu_video/refs/heads/main/interface.txt",
 				//"url": "https://develop202.github.io/migu_video/interface.txt",
@@ -19,7 +19,7 @@
 				"catchup": {"type": "append","source": "?livemode=4&starttime=${(b)yyyyMMdd'T'HHmm}00.00Z&endtime=${(e)yyyyMMdd'T'HHmm}00.00Z"}
 			},
            {
-				"name": "FMM直播(V6)",
+				"name": "FMM线路(V6)",
 				"type": 0,
 				"url": "https://nos.netease.com/ysf/3d75a78a0fc7ede372c03598d6d10367.m3u",
 				"playerType":2,
@@ -28,7 +28,7 @@
 				"catchup": {"type": "append","source": "?livemode=4&starttime=${(b)yyyyMMdd'T'HHmm}00.00Z&endtime=${(e)yyyyMMdd'T'HHmm}00.00Z"}
 			},
            {
-				"name": "肥猫直播",
+				"name": "肥猫线路",
 				"type": 0,
 				"url": "https://6296.kstore.vip/25.txt",
 				"playerType":2,
@@ -36,45 +36,6 @@
 				"logo": "https://diyp9999.112114.xyz/logo/{name}.png",
 				"catchup": {"type": "append","source": "?livemode=4&starttime=${(b)yyyyMMdd'T'HHmm}00.00Z&endtime=${(e)yyyyMMdd'T'HHmm}00.00Z"}
 			},
-           {
-				"name": "cuikaipeng直播BJ-v6",
-				"type": 0,
-				"url": "https://raw.yzuu.cf/cuikaipeng/IPTV/refs/heads/main/IPTV.m3u",
-				"playerType":2,
-				"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}",
-				"logo": "https://diyp9999.112114.xyz/logo/{name}.png",
-				"catchup": {"type": "append","source": "?livemode=4&starttime=${(b)yyyyMMdd'T'HHmm}00.00Z&endtime=${(e)yyyyMMdd'T'HHmm}00.00Z"}
-			},
-           {
-				"name": "cuikaipeng直播DP-v6",
-				"type": 0,
-				"url": "https://raw.yzuu.cf/cuikaipeng/IPTV/refs/heads/main/TVChannels.m3u",
-				"playerType":2,
-				"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}",
-				"logo": "https://diyp9999.112114.xyz/logo/{name}.png",
-				"catchup": {"type": "append","source": "?livemode=4&starttime=${(b)yyyyMMdd'T'HHmm}00.00Z&endtime=${(e)yyyyMMdd'T'HHmm}00.00Z"}
-			},
-{
-				"name": "最强国内直播",
-				"type": 0,
-				"url": "http://127.0.0.1:10079/c/3600/null/http://127.0.0.1:35456/tv.m3u",
-				"ua": "okhttp/3.15",
-				"epg": "https://diyp9999.112114.xyz/?ch={name}&date=DATE1SUB",
-				"logo": "https://diyp9999.112114.xyz/logo/{name}.png",
-				"catchup": {"type": "append","source": "?livemode=4&starttime=${(b)yyyyMMdd'T'HHmm}00.00Z&endtime=${(e)yyyyMMdd'T'HHmm}00.00Z"}
-			},
-           {
-				"name": "Gather.电视直播",
-				"type": 0,
-				"url": "https://tv.iill.top/m3u/Gather",
-				//"playerType":1,
-				"ua": "okhttp/3.15",
-				"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}",
-				"logo": "https://diyp9999.112114.xyz/logo/{name}.png",
-				"catchup": {"type": "append","source": "?livemode=4&starttime=${(b)yyyyMMdd'T'HHmm}00.00Z&endtime=${(e)yyyyMMdd'T'HHmm}00.00Z"}
-			},
-
-           {"name":"南风直播","type":0,"url":"https://raw.githubusercontent.com/yoursmile66/TVBox/refs/heads/main/live.txt","playerType":1,"ua":"okhttp/3.15","epg":"https://diyp9999.112114.xyz/?ch={name}&date={date}","logo":"https://diyp9999.112114.xyz/logo/{name}.png"},
 			{
 				"group":"redirect",
 				"channels":[

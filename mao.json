@@ -4,7 +4,8 @@
 "wallpaper": "https://深色壁纸.xxooo.cf/",
 
 "lives": [
-{"name": "CYD线路","type": 0,"url": "./tv/tv.txt","ua":"okhttp/3.15","timeout":10,"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}","logo":"https://diyp9999.112114.xyz/logo/{name}.png","catchup": {"type": "append",	"source": "?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"}},
+//{"name": "CYD线路","type": 0,"url": "./tv/tv.txt","ua":"okhttp/3.15","timeout":10,"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}","logo":"https://diyp9999.112114.xyz/logo/{name}.png","catchup": {"type": "append",	"source": "?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"}},
+{"name": "CYD线路","type": 0,"url": "./tv/tv.txt","ua":"okhttp/3.15","timeout":10,"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}","logo":"https://diyp9999.112114.xyz/logo/{name}.png","catchup": {"type": "append",	"source": "playseek={start|yyyyMMddHHmmss}-{end|yyyyMMddHHmmss}"}},
 
 {"name":"MIGU线路","type":0,"url":"https://fy.188766.xyz/?ip=&mishitong=true&mima=mianfeidehaimaiqian&json=true","playerType":2,"timeout":10,"ua":"bingcha/1.1","epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}","logo":"https://diyp9999.112114.xyz/logo/{name}.png","catchup": {"type": "append","source": "?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"}},
            {

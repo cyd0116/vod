@@ -127,8 +127,7 @@
 {"key":"WexhubanGuard","name":"💓虎斑┃聚合💓","type":3,"api":"csp_WexhubanGuard","searchable":1,"changeable":1},
 {"key":"WexFox4KGuard","name":"💓极狐┃聚合💓","type":3,"api":"csp_WexFox4KGuard","searchable":1,"changeable":1,"timeout":120},
 {"key":"Wexseedhub","name":"💓种子┃聚合💓","type":3,"api":"csp_WexseedhubGuard","searchable":1,"changeable":1,"timeout":120},
-{"key":"Wexnullname","name":"💓无名┃聚合💓","type":3
-api":"csp_WexnullnameGuard","searchable":1,"changeable":1,"timeout":120},
+{"key":"Wexnullname","name":"💓无名┃聚合💓","type":3,"api":"csp_WexnullnameGuard","searchable":1,"changeable":1,"timeout":120},
 {"key":"Wexsayangziyuan","name":"💓撒仰┃聚合💓","type":3,"api":"csp_Wexsayangziyuan","searchable":1,"changeable":1},
 {"key":"玩偶","name":"💓玩偶┃聚合💓","type":3,"api":"csp_WoggGuard","searchable":1,"changeable":1},
 {"key":"Wexerxiaoziyuan","name":"💓二小┃聚合💓","type":3,"api":"csp_WexerxiaoziyuanGuard","searchable":1,"changeable":1},

@@ -89,7 +89,7 @@
 {"key":"非凡","name":"🐝非凡","type": 1,"api": "http://cj.ffzyapi.com/api.php/provide/vod/from/ffm3u8", "searchable": 1,"quickSearch":1, "changeable": 1,"categories": [ "记录片", "足球","体育","体育赛事", "动作片", "喜剧片", "科幻片", "恐怖片", "大陆综艺" ] },
 
 { "key": "hipy_js_大全[央]", "name": "🔥央视(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 0, "quickSearch": 0, "filterable": 1, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/央视大全[官].js" }, 
-//{ "key": "hipy_js_我的哔哩[官]1", "name": "🅱️哔哩(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 0, "quickSearch":0, "filterable": 1, "order_num": 1, "ext": "./drpy_dzlive/drpy_js/我的哔哩[官].js?type=url&params=../json/哔哩大全.json" }, 
+{ "key": "hipy_js_我的哔哩[官]1", "name": "🅱️哔哩(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 0, "quickSearch":0, "filterable": 1, "order_num": 1, "ext": "./drpy_dzlive/drpy_js/我的哔哩[官].js?type=url&params=../json/哔哩大全.json" }, 
 
 //{"key":"hipy_js_360影视[官]", "name": "📺360影视(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 1, "quickSearch": 1, "filterable": 1, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/360影视[官].js","categories": [ "纪录片","电影", "电视剧","综艺", "动漫", "少儿","体育" ]},
 //{"key":"hipy_js_腾云驾雾[官]", "name": "🐧腾讯(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 0, "quickSearch": 0, "filterable": 1, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/腾云驾雾[官].js","categories": [ "纪录片","电影", "电视剧","综艺", "动漫", "少儿","体育" ]},
@@ -120,14 +120,15 @@
 //{"key":"WexikanbotGuard","name":"🎇爱看机器人┃采集🎇","type":3,"api":"csp_WexikanbotGuard","searchable":1,"changeable":1},
 //{"key":"Wexbiliys","name":"🅱哔哩┃影视","type":3,"api":"csp_WexbiliysGuard","searchable":0,"changeable":0},
 {"key":"bili","name":"🅱哔哩┃合集","type":3,"api":"csp_BiliGuard","searchable":0,"quickSearch":0,"filterable":1,"style":{"type":"rect","ratio":1.433},"ext":{"json":"./wex/bili001.txt"}},
-{"key":"Iktv","name":"🎤KTV┃音乐🎤","type":3,"api":"csp_WexIktvGuard","searchable":1,"changeable":0},
+{"key":"Iktv","name":"🎤KTV┃音乐🎤","type":3,"api":"csp_WexIktvGuard","searchable":0,"changeable":0},
 
 {"key":"Wexmuougg","name":"💓木偶┃聚合💓","type":3,"api":"csp_WexmuouggGuard","searchable":1,"changeable":1},
 {"key":"Wexzhizhen","name":"💓至臻┃聚合💓","type":3,"api":"csp_WexzhizhenGuard","searchable":1,"changeable":1},
 {"key":"WexhubanGuard","name":"💓虎斑┃聚合💓","type":3,"api":"csp_WexhubanGuard","searchable":1,"changeable":1},
 {"key":"WexFox4KGuard","name":"💓极狐┃聚合💓","type":3,"api":"csp_WexFox4KGuard","searchable":1,"changeable":1,"timeout":120},
 {"key":"Wexseedhub","name":"💓种子┃聚合💓","type":3,"api":"csp_WexseedhubGuard","searchable":1,"changeable":1,"timeout":120},
-{"key":"Wexnullname","name":"💓无名┃聚合💓","type":3,"api":"csp_WexnullnameGuard","searchable":1,"changeable":1,"timeout":120},
+{"key":"Wexnullname","name":"💓无名┃聚合💓","type":3
+api":"csp_WexnullnameGuard","searchable":1,"changeable":1,"timeout":120},
 {"key":"Wexsayangziyuan","name":"💓撒仰┃聚合💓","type":3,"api":"csp_Wexsayangziyuan","searchable":1,"changeable":1},
 {"key":"玩偶","name":"💓玩偶┃聚合💓","type":3,"api":"csp_WoggGuard","searchable":1,"changeable":1},
 {"key":"Wexerxiaoziyuan","name":"💓二小┃聚合💓","type":3,"api":"csp_WexerxiaoziyuanGuard","searchable":1,"changeable":1},
@@ -138,7 +139,8 @@
 {"key":"WexXuexi","name":"💓综合┃夸克迅雷💓","type":3,"api":"csp_WexXuexiGuard","searchable":1,"changeable":1},
 {"key":"WexTJso","name":"💓TG┃聚合💓","type":3,"api":"csp_WexTJsoGuard","searchable":1,"changeable":1},
 
-{"key":"WexHaiYinsoGuard","name":"🎠海音┃综合123🎠","type":3,"api":"csp_WexHaiYinsoGuard","searchable":1,"changeable":1},
+
+{"key":"WexHaiYinsoGuard","name":"🎠海音┃大综合🎠","type":3,"api":"csp_WexHaiYinsoGuard","searchable":1,"changeable":1},
 {"key":"WexAiPanGuard","name":"🎠给力┃综合🎠","type":3,"api":"csp_WexAiPanGuard","searchable":1,"changeable":1},
 {"key":"WexZhaoPansoGuard","name":"🎠找盘┃综合🎠","type":3,"api":"csp_WexZhaoPansoGuard","searchable":1,"changeable":1},
 //{"key":"Wexpan123ziyuanGuard","name":"🎠123┃123🎠","type":3,"api":"csp_Wexpan123ziyuanGuard","searchable":1,"changeable":1},

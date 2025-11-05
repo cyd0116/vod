@@ -173,15 +173,30 @@
 { "key": "豆瓣", "name": "🔍豆瓣|PG", "type": 3, "api": "csp_Douban","jar":"./pg/pg.jar;md5;011DE7C2E5F40AA54E85939CE6162F7F", "searchable": 0, "changeable": 1, "indexs":1, "ext": "./pg/lib/tokenm.json$$$./pg/lib/douban.json" },
 { "key": "网盘配置", "name": "🔨配置|PG", "type": 3, "api": "csp_Config","jar":"./pg/pg.jar;md5;011DE7C2E5F40AA54E85939CE6162F7F", "searchable": 0, "quickSearch":0,"changeable": 0, "ext":"./pg/lib/tokenm.json", "style": { "type": "rect", "ratio": 1.5 } },
 {"key":"Wogg","name":"👽玩偶|PG","type":3,"api":"csp_Wogg","jar":"./pg/pg.jar;md5;011DE7C2E5F40AA54E85939CE6162F7F","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://wogg.xxooo.cf/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$WOGG"},
-{"key":"Guanying","name":"🎥观影|PG","type":3,"api":"csp_Guanying","jar":"./pg/pg.jar;md5;011DE7C2E5F40AA54E85939CE6162F7F","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://www.gying.net$$$noproxy$$$1$$$./pg/lib/guanying.txt$$$GUANYING"},
+{"key":"Guanying","name":"🎥观影|PG","type":3,"api":"csp_Guanying","jar":"./pg/pg.jar;md5;011DE7C2E5F40AA54E85939CE6162F7F","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://www.gying.net$$$noproxy$$$1$$$./pg/lib/guanying.txt$$$GUANYING"},
 {"key":"yydsys","name":"🕵多多|PG","type":3,"api":"csp_Wobg","jar":"./pg/pg.jar;md5;011DE7C2E5F40AA54E85939CE6162F7F","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://tv.yydsys.top/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$WNLG"},
 {"key":"蜡笔网盘","name":"🖍蜡笔|PG","type":3,"api":"csp_Wobg","jar":"./pg/pg.jar;md5;011DE7C2E5F40AA54E85939CE6162F7F","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://feimao666.fun/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$LABI"},
 {"key":"Mogg","name":"👲木偶|PG","type":3,"api":"csp_Wobg","jar":"./pg/pg.jar;md5;011DE7C2E5F40AA54E85939CE6162F7F","searchable": 1,"quickSearch":1, "changeable":1,"filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$http://123.666291.xyz/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$MOGG"}, 
 {"key": "YunPan", "name": "☁云盘资源|PG","type": 3, "api": "csp_YunPan","jar":"./pg/pg.jar;md5;011DE7C2E5F40AA54E85939CE6162F7F","searchable": 1,"quickSearch":1, "changeable":1,"timeout": 60,"ext": "./pg/lib/tokenm.json$$$null$$$noproxy$$$1"},
-{ "key": "Leijing", "name": "📀雷鲸|PG", "type": 3, "api": "csp_Panta","jar":"./pg/pg.jar;md5;011DE7C2E5F40AA54E85939CE6162F7F", "quickSearch": 1, "changeable": 1, "filterable": 1, "timeout": 60, "ext": "./pg/lib/tokenm.json$$$https://leijing.xyz/$$$noproxy$$$1$$$./pg/lib/leijing.txt$$$LEIJING", "style": { "type": "list", "ratio": 1.1 } },
-{"key":"Hmxz","name":"📀海绵|PG","type":3,"api":"csp_Hmxz","jar":"./pg/pg.jar;md5;011DE7C2E5F40AA54E85939CE6162F7F","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://haimian.eu.org/$$$noproxy$$$1$$$./pg/lib/hmxz.txt$$$HMXZ","style": {"type": "list","ratio": 1.1}},
-{"key":"TianYiSou","name":"📀天逸搜|PG","type":3,"api":"csp_TianYiSou","jar":"./pg/pg.jar;md5;011DE7C2E5F40AA54E85939CE6162F7F","quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$null$$$noproxy"},
-{ "key": "Panta", "name": "📀盘Ta|PG", "type": 3, "api": "csp_Panta","jar":"./pg/pg.jar;md5;011DE7C2E5F40AA54E85939CE6162F7F", "quickSearch": 1, "changeable": 1, "filterable": 1, "timeout": 60, "ext": "./pg/lib/tokenm.json$$$https://www.91panta.cn/$$$null$$$1$$$./pg/lib/panta.txt$$$PANTA", "style": { "type": "list", "ratio": 1.1 } },
+//{ "key": "Leijing", "name": "📀雷鲸|PG", "type": 3, "api": "csp_Panta","jar":"./pg/pg.jar;md5;011DE7C2E5F40AA54E85939CE6162F7F","searchable": 1,"quickSearch": 1, "changeable": 1, "filterable": 1, "timeout": 60, "ext": "./pg/lib/tokenm.json$$$https://leijing.xyz/$$$noproxy$$$1$$$./pg/lib/leijing.txt$$$LEIJING", "style": { "type": "list", "ratio": 1.1 } },
+{
+            "key": "Leijing",
+            "name": "📀雷鲸|PG",
+            "type": 3,
+            "api": "csp_Panta",
+            "jar":"./pg/pg.jar;md5;011DE7C2E5F40AA54E85939CE6162F7F",
+			"searchable": 1,
+            "filterable": 0,
+            "changeable": 1,
+            "ext": {
+                "siteUrl": "https://www.leijing1.com/",
+                "cookie": "JSESSIONID=B24E6992236274BD6A636FE8EAA2FDA; cms_token=25968d70e1c64c3fa475c5bb15946443; cms_accessToken=8c67340ebecb46b88f9c85492bfe1cf1; cms_refreshToken=0af0ab743ae243be99b29c2af5b449a",
+                "commonConfig": "./pg/lib/tokenm.json"
+            }
+        },
+{"key":"Hmxz","name":"📀海绵|PG","type":3,"api":"csp_Hmxz","jar":"./pg/pg.jar;md5;011DE7C2E5F40AA54E85939CE6162F7F","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://haimian.eu.org/$$$noproxy$$$1$$$./pg/lib/hmxz.txt$$$HMXZ","style": {"type": "list","ratio": 1.1}},
+{"key":"TianYiSou","name":"📀天逸搜|PG","type":3,"api":"csp_TianYiSou","jar":"./pg/pg.jar;md5;011DE7C2E5F40AA54E85939CE6162F7F","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$null$$$noproxy"},
+{ "key": "Panta", "name": "📀盘Ta|PG", "type": 3, "api": "csp_Panta","jar":"./pg/pg.jar;md5;011DE7C2E5F40AA54E85939CE6162F7F","searchable": 1, "quickSearch": 1, "changeable": 1, "filterable": 1, "timeout": 60, "ext": "./pg/lib/tokenm.json$$$https://www.91panta.cn/$$$null$$$1$$$./pg/lib/panta.txt$$$PANTA", "style": { "type": "list", "ratio": 1.1 } },
 
 		{"key":"TGYunPan","name":"🅿TG群组|PG","type":3,"api":"csp_TGYunPan","jar":"./pg/pg.jar;md5;011DE7C2E5F40AA54E85939CE6162F7F","timeout":120, 
 			"ext":{

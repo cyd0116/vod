@@ -138,7 +138,7 @@
 {"key":"WexTJso","name":"💓TG┃聚合💓","type":3,"api":"csp_WexTJsoGuard","searchable":1,"changeable":1},
 
 
-{"key":"WexHaiYinsoGuard","name":"🎠海音┃大综合🎠","type":3,"api":"csp_WexHaiYinsoGuard","searchable":1,"changeable":1},
+{"key":"WexHaiYinsoGuard","name":"🎠海音┃综合🎠","type":3,"api":"csp_WexHaiYinsoGuard","searchable":1,"changeable":1},
 {"key":"WexAiPanGuard","name":"🎠给力┃综合🎠","type":3,"api":"csp_WexAiPanGuard","searchable":1,"changeable":1},
 {"key":"WexZhaoPansoGuard","name":"🎠找盘┃综合🎠","type":3,"api":"csp_WexZhaoPansoGuard","searchable":1,"changeable":1},
 //{"key":"Wexpan123ziyuanGuard","name":"🎠123┃123🎠","type":3,"api":"csp_Wexpan123ziyuanGuard","searchable":1,"changeable":1},
@@ -206,7 +206,7 @@
 				"keywords":"名称,片名,推荐",
 				"tgsearch_url":"https://tg.252035.xyz",
 				"tgsearch_media_url":"https://tg.252035.xyz",				
-				"channellist": "tgsearchers3,pan123pan,zyfb123,zyzhpd123,xx123pan,wp123zy,tianyi_pd2,tianyirigeng,tyypzhpd,cloudtianyi,alyp_4K_Movies|1000,Aliyun_4K_Movies|1000,alypzyhzq|1000,Aliyundrive_Share_Channel|1000,alyp_1,shareAliyun,alyp_TV",
+				"channellist": "tianyi_pd2,tianyirigeng,tyypzhpd,cloudtianyi,pan123pan,zyfb123,zyzhpd123,xx123pan,wp123zy,alyp_4K_Movies|1000,Aliyun_4K_Movies|1000,alypzyhzq|1000,Aliyundrive_Share_Channel|1000,alyp_1,shareAliyun,alyp_TV,tgsearchers3",
 				//"channellist": "pan123pan,zyfb123,zyzhpd123,xx123pan,tianyi_pd2,tianyirigeng,tyypzhpd,cloudtianyi,ydypzyfx,alyp_4K_Movies|1000,Aliyun_4K_Movies|1000,alypzyhzq|1000,Aliyundrive_Share_Channel|1000,alyp_1,shareAliyun,ucpanpan,hao115|1000,Mbox115|1000,shares_115|1000,guaguale115,Channel_Shares_115,oneonefivewpfx",	
 				"proxy":"noproxy"
 			},

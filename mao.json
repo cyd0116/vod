@@ -1,6 +1,6 @@
 
 {
-"spider":"./wex/wex.png;md5;e8d96bd7bc4e580289c3b8d97d05a52a",
+"spider":"./wex/wex.png;md5;21FAD746AA98E223EC978B8E347C7D65",
 "wallpaper": "https://深色壁纸.xxooo.cf/",
 
 "lives": [
@@ -69,7 +69,6 @@
 {"key":"csp_SaoHuo","name":"🐞骚火(SP)","type":3,"api":"csp_SaoHuo","jar":"./ys/Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","playerType":2,"searchable":1,"quickSearch":1,"filterable":1,"ext":"https://shdy5.com"},
 {"key":"csp_FourK","name":"🐞绝对(SP)","type":3,"api":"csp_FourK","jar":"./ys/Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","playerType":"2","searchable":1,"quickSearch":1,"filterable":1,"ext":"https://www.4kvm.tv"},
 {"key":"主角","name":"🐞主角(SP)","type":3,"api":"csp_Muou","jar":"./ys/Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","playerType":2,"searchable":1,"quickSearch":1,"filterable":1,"ext":"7lj763gg402i794247258k9jh6598585l3g6ij13il8g20g9qiaoji8j9i9k1g3k90h7i507i213k5j602"},
-{"key":"csp_Ddys","name":"🐞低端(SP)","type":3,"api":"csp_Ddys","jar":"./ys/Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","searchable":1,"quickSearch":1,"filterable":1},
 { "key": "異界", "name": "🐞异世界(SP)", "type": 3, "api": "csp_Ysj", "jar":"./ys/Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","searchable": 1, "quickSearch": 1, "changeable": 1 },
 
 {"key":"剧圈圈","name":"🐞剧圈圈(XYQH)","type":3,"api":"csp_XYQHiker","jar":"./ys/Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","searchable":1,"quickSearch":1,"filterable":1,"ext":"https://gh-proxy.com/raw.githubusercontent.com/yoursmile66/TVBox/refs/heads/main/json/剧圈圈.json","click":"document.getElementById('playleft').children[0].contentWindow.document.getElementById('start').click()"},
@@ -183,6 +182,22 @@
 {"key":"TianYiSou","name":"📀天逸搜|PG","type":3,"api":"csp_TianYiSou","jar":"./pg/pg.jar;md5;30B3B8D941F1DE8BA73661B3EE6C04F0","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$null$$$noproxy"},
 { "key": "Panta", "name": "📀盘Ta|PG", "type": 3, "api": "csp_Panta","jar":"./pg/pg.jar;md5;30B3B8D941F1DE8BA73661B3EE6C04F0","searchable": 1, "quickSearch": 1, "changeable": 1, "filterable": 1, "timeout": 60, "ext": "./pg/lib/tokenm.json$$$https://www.91panta.cn/$$$null$$$1$$$./pg/lib/panta.txt$$$PANTA", "style": { "type": "list", "ratio": 1.1 } },
 
+		{"key":"TGYunPanLocal","name":"🅿TG频道|PG","type":3,"api":"csp_TGYunPanLocal","jar":"./pg/pg.jar;md5;30B3B8D941F1DE8BA73661B3EE6C04F0","timeout":120, 
+			"ext":{
+				"token":"./pg/lib/tokenm.json",
+				"json":"./pg/lib/tgsearch.json",
+				"keywords":"名称,片名,推荐",
+				"tgsearch_url":"https://tg.252035.xyz",
+				"tgsearch_media_url":"https://tg.252035.xyz",				
+				"channellist": "pan123pan,zyfb123,zyzhpd123,xx123pan,wp123zy,tianyi_pd2,tianyirigeng,tyypzhpd,cloudtianyi,alyp_4K_Movies|1000,Aliyun_4K_Movies|1000,alypzyhzq|1000,Aliyundrive_Share_Channel|1000,alyp_1,shareAliyun,alyp_TV,tgsearchers3",
+				//"channellist": "pan123pan,zyfb123,zyzhpd123,xx123pan,tianyi_pd2,tianyirigeng,tyypzhpd,cloudtianyi,ydypzyfx,alyp_4K_Movies|1000,Aliyun_4K_Movies|1000,alypzyhzq|1000,Aliyundrive_Share_Channel|1000,alyp_1,shareAliyun,ucpanpan,hao115|1000,Mbox115|1000,shares_115|1000,guaguale115,Channel_Shares_115,oneonefivewpfx",	
+				"proxy":"noproxy"
+			},
+			"style": {
+				"type": "rect",
+				"ratio": 1.77
+			}
+		},
 		{"key":"TGYunPan","name":"🅿TG群组|PG","type":3,"api":"csp_TGYunPan","jar":"./pg/pg.jar;md5;30B3B8D941F1DE8BA73661B3EE6C04F0","timeout":120, 
 			"ext":{
 				"token":"./pg/lib/tokenm.json",
@@ -192,22 +207,6 @@
 				"tgsearch_media_url":"https://tg.252035.xyz",
 				//"channellist": "ResourceUniverse",
 				"channellist": "alyp_4K_Movies|1000,Aliyun_4K_Movies|1000,alypzyhzq|1000,Aliyundrive_Share_Channel|1000,alyp_1,shareAliyun,pan123pan,zyfb123,zyzhpd123,xx123pan,wp123zy,tianyi_pd2,tianyirigeng,tyypzhpd,cloudtianyi,ydypzyfx,ucpanpan",
-				"proxy":"noproxy"
-			},
-			"style": {
-				"type": "rect",
-				"ratio": 1.77
-			}
-		},
-		{"key":"TGYunPanLocal","name":"🅿TG频道|PG","type":3,"api":"csp_TGYunPanLocal","jar":"./pg/pg.jar;md5;30B3B8D941F1DE8BA73661B3EE6C04F0","timeout":120, 
-			"ext":{
-				"token":"./pg/lib/tokenm.json",
-				"json":"./pg/lib/tgsearch.json",
-				"keywords":"名称,片名,推荐",
-				"tgsearch_url":"https://tg.252035.xyz",
-				"tgsearch_media_url":"https://tg.252035.xyz",				
-				"channellist": "tianyi_pd2,tianyirigeng,tyypzhpd,cloudtianyi,pan123pan,zyfb123,zyzhpd123,xx123pan,wp123zy,alyp_4K_Movies|1000,Aliyun_4K_Movies|1000,alypzyhzq|1000,Aliyundrive_Share_Channel|1000,alyp_1,shareAliyun,alyp_TV,tgsearchers3",
-				//"channellist": "pan123pan,zyfb123,zyzhpd123,xx123pan,tianyi_pd2,tianyirigeng,tyypzhpd,cloudtianyi,ydypzyfx,alyp_4K_Movies|1000,Aliyun_4K_Movies|1000,alypzyhzq|1000,Aliyundrive_Share_Channel|1000,alyp_1,shareAliyun,ucpanpan,hao115|1000,Mbox115|1000,shares_115|1000,guaguale115,Channel_Shares_115,oneonefivewpfx",	
 				"proxy":"noproxy"
 			},
 			"style": {

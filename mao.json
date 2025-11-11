@@ -69,7 +69,7 @@
 {"key":"csp_SaoHuo","name":"🐞骚火(SP)","type":3,"api":"csp_SaoHuo","jar":"./ys/Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","playerType":2,"searchable":1,"quickSearch":1,"filterable":1,"ext":"https://shdy5.com"},
 {"key":"csp_FourK","name":"🐞绝对(SP)","type":3,"api":"csp_FourK","jar":"./ys/Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","playerType":"2","searchable":1,"quickSearch":1,"filterable":1,"ext":"https://www.4kvm.tv"},
 {"key":"主角","name":"🐞主角(SP)","type":3,"api":"csp_Muou","jar":"./ys/Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","playerType":2,"searchable":1,"quickSearch":1,"filterable":1,"ext":"7lj763gg402i794247258k9jh6598585l3g6ij13il8g20g9qiaoji8j9i9k1g3k90h7i507i213k5j602"},
-{"key":"csp_Dm84","name":"🐞巴士","type":3,"api":"csp_Dm84","jar":"./ys/Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","searchable":1,"quickSearch":1,"filterable":1,"ext":"https://dm84.net"},
+{"key":"csp_Dm84","name":"🐞巴士(SP)","type":3,"api":"csp_Dm84","jar":"./ys/Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","searchable":1,"quickSearch":1,"filterable":1,"ext":"https://dm84.net"},
 {"key": "異界", "name": "🐞异世界(SP)", "type": 3, "api": "csp_Ysj", "jar":"./ys/Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","searchable": 1, "quickSearch": 1, "changeable": 1 },
 
 {"key":"剧圈圈","name":"🐞剧圈圈(XYQH)","type":3,"api":"csp_XYQHiker","jar":"./ys/Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","searchable":1,"quickSearch":1,"filterable":1,"ext":"https://gh-proxy.com/raw.githubusercontent.com/yoursmile66/TVBox/refs/heads/main/json/剧圈圈.json","click":"document.getElementById('playleft').children[0].contentWindow.document.getElementById('start').click()"},

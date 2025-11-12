@@ -1,6 +1,6 @@
 
 {
-"spider":"./wex/wex.png;md5;21FAD746AA98E223EC978B8E347C7D65",
+"spider":"./wex/wex.png;md5;1fcca766ea99e0b6b76d9932befdf956",
 "wallpaper": "https://深色壁纸.xxooo.cf/",
 
 "lives": [
@@ -70,13 +70,13 @@
 {"key":"csp_FourK","name":"🐞绝对(SP)","type":3,"api":"csp_FourK","jar":"./ys/Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","playerType":"2","searchable":1,"quickSearch":1,"filterable":1,"ext":"https://www.4kvm.tv"},
 {"key":"主角","name":"🐞主角(SP)","type":3,"api":"csp_Muou","jar":"./ys/Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","playerType":2,"searchable":1,"quickSearch":1,"filterable":1,"ext":"7lj763gg402i794247258k9jh6598585l3g6ij13il8g20g9qiaoji8j9i9k1g3k90h7i507i213k5j602"},
 {"key":"csp_Dm84","name":"🐞巴士(SP)","type":3,"api":"csp_Dm84","jar":"./ys/Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","searchable":1,"quickSearch":1,"filterable":1,"ext":"https://dm84.net"},
-{"key": "異界", "name": "🐞异世界(SP)", "type": 3, "api": "csp_Ysj", "jar":"./ys/Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","searchable": 1, "quickSearch": 1, "changeable": 1 },
+//{"key": "異界", "name": "🐞异世界(SP)", "type": 3, "api": "csp_Ysj", "jar":"./ys/Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","searchable": 1, "quickSearch": 1, "changeable": 1 },
 
 {"key":"剧圈圈","name":"🐞剧圈圈(XYQH)","type":3,"api":"csp_XYQHiker","jar":"./ys/Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","searchable":1,"quickSearch":1,"filterable":1,"ext":"https://gh-proxy.com/raw.githubusercontent.com/yoursmile66/TVBox/refs/heads/main/json/剧圈圈.json","click":"document.getElementById('playleft').children[0].contentWindow.document.getElementById('start').click()"},
 {"key":"樱花","name":"🐞樱花(XYQH)","type":3,"api":"csp_XYQHiker","jar":"./ys/Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","searchable":1,"quickSearch":1,"filterable":1,"ext":"https://gh-proxy.com/raw.githubusercontent.com/yoursmile66/TVBox/refs/heads/main/json/樱花动漫.json"},
 
-{"key":"永乐","name":"💢永乐(XBPQ)","type":3,"api":"csp_XBPQ","jar":"./ys/Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","searchable":1,"quickSearch":1,"filterable":1,"ext":{"请求头":"User-Agent$MOBILE_UA","编码":"UTF-8","分类":"电影$1#电视剧$2#综艺$3#动漫$4","类型":"动作片$6#喜剧片$7#爱情片$8#科幻片$9#奇幻片$10#恐怖片$11#剧情片$12#战争片$20#动画片$26#悬疑片$22#冒险片$23#犯罪片$24#惊悚片$45#歌舞片$46#灾难片$47#网络片$48||国产剧$13#港台剧$14#日剧$15#韩剧$33#欧美剧$16#泰剧$34#新马剧$35#其他剧$25||内地综艺$27#港台综艺$28#日本综艺$29#韩国综艺$36#欧美综艺$30#新马泰综艺$37#其他综艺$38||国产动漫$31#日本动漫$32#韩国动漫$39#港台动漫$40#新马泰动漫$41#欧美动漫$42#其他动漫$43","分类url":"https://www.ylys.tv/vodshow/{cateId}-{area}-{by}-{class}-{lang}-{letter}---{catePg}---{year}.html"}},
-{"key":"影视大全","name":"💢影视大全(XBPQ)","type":3,"api":"csp_XBPQ","jar":"./ys/Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","ext":{"分类url":"https://www.iysdq.cc/vodshow/{cateId}-{area}-------{catePg}---.html","分类":"电影$1#电视剧$2#综艺$3#动漫$4#短剧$5"}},
+//{"key":"永乐","name":"💢永乐(XBPQ)","type":3,"api":"csp_XBPQ","jar":"./ys/Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","searchable":1,"quickSearch":1,"filterable":1,"ext":{"请求头":"User-Agent$MOBILE_UA","编码":"UTF-8","分类":"电影$1#电视剧$2#综艺$3#动漫$4","类型":"动作片$6#喜剧片$7#爱情片$8#科幻片$9#奇幻片$10#恐怖片$11#剧情片$12#战争片$20#动画片$26#悬疑片$22#冒险片$23#犯罪片$24#惊悚片$45#歌舞片$46#灾难片$47#网络片$48||国产剧$13#港台剧$14#日剧$15#韩剧$33#欧美剧$16#泰剧$34#新马剧$35#其他剧$25||内地综艺$27#港台综艺$28#日本综艺$29#韩国综艺$36#欧美综艺$30#新马泰综艺$37#其他综艺$38||国产动漫$31#日本动漫$32#韩国动漫$39#港台动漫$40#新马泰动漫$41#欧美动漫$42#其他动漫$43","分类url":"https://www.ylys.tv/vodshow/{cateId}-{area}-{by}-{class}-{lang}-{letter}---{catePg}---{year}.html"}},
+//{"key":"影视大全","name":"💢影视大全(XBPQ)","type":3,"api":"csp_XBPQ","jar":"./ys/Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","ext":{"分类url":"https://www.iysdq.cc/vodshow/{cateId}-{area}-------{catePg}---.html","分类":"电影$1#电视剧$2#综艺$3#动漫$4#短剧$5"}},
 
 //道长(JS)
 {"key": "hipy_js_爱看机器人[虫]", "name": "📺爱看机器人(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 1, "quickSearch": 1, "filterable": 1, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/爱看机器人[虫].js" }, 
@@ -101,6 +101,8 @@
 {"key":"瓜子看球","name":"🌐瓜子┃体育🌐","type":3,"api":"csp_WexGZsportGuard","searchable":0,"changeable":0,"style":{"type":"list"}},
 {"key":"看球","name":"🌐88┃体育🌐","type":3,"api":"csp_KanqiuGuard","searchable":0,"changeable":0,"style":{"type":"list"}},
 {"key":"WexbttwoGuard","name":"🎇两个BT🎇","type":3,"api":"csp_WexbttwoGuard","searchable":1,"quickSearch": 1, "changeable":1},
+//{"key":"賤賤","name":"💥賤片┃p2p💥","type":3,"api":"csp_WexJianpianGuard","searchable":1,"changeable":1},
+//{"key":"新6V","name":"🛩️新6V┃P2P🛩","type":3,"api":"csp_WexXb6vGuard","searchable":1,"changeable":0},
 //{"key":"Wexxpgtv","name":"🌺苹果┃秒播🌺","type":3,"api":"csp_WexxpgtvGuard","searchable":1,"changeable":1},
 //{"key":"csp_Nmys","name":"🎇伯伯(农民)┃秒播🎇","type":3,"api":"csp_WexNmysGuard","searchable":1,"changeable":1},
 //{"key":"WexDm84","name":"🤡巴士┃动漫🤡","type":3,"api":"csp_WexDm84Guard","searchable":1,"changeable":1},
@@ -110,39 +112,27 @@
 {"key":"bili","name":"🅱哔哩┃合集","type":3,"api":"csp_BiliGuard","searchable":0,"quickSearch":0,"filterable":1,"style":{"type":"rect","ratio":1.433},"ext":{"json":"./wex/bili001.txt"}},
 
 {"key":"Wexmuougg","name":"💓木偶┃聚合💓","type":3,"api":"csp_WexmuouggGuard","searchable":1,"changeable":1},
-{"key":"Wexzhizhen","name":"💓至臻┃聚合💓","type":3,"api":"csp_WexzhizhenGuard","searchable":1,"changeable":1},
-{"key":"WexhubanGuard","name":"💓虎斑┃聚合💓","type":3,"api":"csp_WexhubanGuard","searchable":1,"changeable":1},
-{"key":"WexFox4KGuard","name":"💓极狐┃聚合💓","type":3,"api":"csp_WexFox4KGuard","searchable":1,"changeable":1,"timeout":120},
-{"key":"Wexseedhub","name":"💓种子┃聚合💓","type":3,"api":"csp_WexseedhubGuard","searchable":1,"changeable":1,"timeout":120},
 {"key":"Wexnullname","name":"💓无名┃聚合💓","type":3,"api":"csp_WexnullnameGuard","searchable":1,"changeable":1,"timeout":120},
+{"key":"WexhubanGuard","name":"💓虎斑┃聚合💓","type":3,"api":"csp_WexhubanGuard","searchable":1,"changeable":1},
+{"key":"Wexzhizhen","name":"💓至臻┃聚合💓","type":3,"api":"csp_WexzhizhenGuard","searchable":1,"changeable":1},
 {"key":"Wexsayangziyuan","name":"💓撒仰┃聚合💓","type":3,"api":"csp_Wexsayangziyuan","searchable":1,"changeable":1},
 {"key":"玩偶","name":"💓玩偶┃聚合💓","type":3,"api":"csp_WoggGuard","searchable":1,"changeable":1},
 {"key":"Wexerxiaoziyuan","name":"💓二小┃聚合💓","type":3,"api":"csp_WexerxiaoziyuanGuard","searchable":1,"changeable":1},
 {"key":"WexduoduoziyuanGuard","name":"💓多多┃uc💓","type":3,"api":"csp_WexduoduoziyuanGuard","searchable":1,"changeable":1,"timeout":120},
-{"key":"WexfeimaoziyuanGuard","name":"💓肥猫┃uc💓","type":3,"api":"csp_WexfeimaoziyuanGuard","searchable":1,"changeable":1},
-{"key":"WexTuanZhangGuard","name":"💓团长┃百度夸克💓","type":3,"api":"csp_WexTuanZhangGuard","searchable":1,"changeable":1,"timeout":120},
-{"key":"WexxzysGuard","name":"💓校长┃百度夸克💓","type":3,"api":"csp_WexxzysGuard","searchable":1,"changeable":1},
 {"key":"WexXuexi","name":"💓综合┃夸克迅雷💓","type":3,"api":"csp_WexXuexiGuard","searchable":1,"changeable":1},
 {"key":"WexTJso","name":"💓TG┃聚合💓","type":3,"api":"csp_WexTJsoGuard","searchable":1,"changeable":1},
 
-
-{"key":"WexHaiYinsoGuard","name":"🎠海音┃综合🎠","type":3,"api":"csp_WexHaiYinsoGuard","searchable":1,"changeable":1},
-{"key":"WexAiPanGuard","name":"🎠给力┃综合🎠","type":3,"api":"csp_WexAiPanGuard","searchable":1,"changeable":1},
-{"key":"WexZhaoPansoGuard","name":"🎠找盘┃综合🎠","type":3,"api":"csp_WexZhaoPansoGuard","searchable":1,"changeable":1},
-//{"key":"Wexpan123ziyuanGuard","name":"🎠123┃123🎠","type":3,"api":"csp_Wexpan123ziyuanGuard","searchable":1,"changeable":1},
-{"key":"雷鲸","name":"🎠雷鲸┃天翼","type":3,"api":"csp_WexleijingGuard","searchable":1,"changeable":1},
-{"key":"Wextyso","name":"🎠给力┃天翼🎠","type":3,"api":"csp_WextysoGuard","searchable":1,"changeable":1},
-{"key":"WexshuangzixingGuard","name":"🎠双星┃百度夸克🎠","type":3,"api":"csp_WexshuangzixingGuard","searchable":1,"changeable":1},
-{"key":"WexbaidusoGuard","name":"🎠给力┃百度🎠","type":3,"api":"csp_WexbaidusoGuard","searchable":1,"changeable":1},
-{"key":"趣盘","name":"🎠趣盘┃百度","type":3,"api":"csp_WexbdqupanGuard","searchable":1,"changeable":1,"style":{"type":"list"}},
-{"key":"夸父","name":"🎠夸父┃夸克","type":3,"api":"csp_WexQKkuafuGuard","searchable":1,"changeable":1},
+{"key":"雷鲸","name":"🎠雷鲸┃天翼🎠","type":3,"api":"csp_WexleijingGuard","searchable":1,"changeable":1},
+{"key":"Wexpan123ziyuanGuard","name":"🎠123┃123🎠","type":3,"api":"csp_Wexpan123ziyuanGuard","searchable":1,"changeable":1},
 {"key":"盘他","name":"🎠盘他┃YD","type":3,"api":"csp_WexYDpantaGuard","searchable":1,"changeable":1},
-{"key":"WexydbixinGuard","name":"🎠比心┃YD🎠","type":3,"api":"csp_WexydbixinGuard","searchable":1,"changeable":1},
 
-//{"key":"WexXuexi","name":"💓原盘┃4K💓","type":3,"api":"csp_WexXuexiGuard","searchable":1,"changeable":1},
-//{"key":"海绵","name":"💓海绵┃4K💓‍","type":3,"api":"csp_WexTYhaimianGuard","searchable":1,"changeable":1},
-//{"key":"WexZHyunchao","name":"💓云巢┃4K💓","type":3,"api":"csp_WexZHyunchaoGuard","searchable":1,"changeable":1,"timeout":120},
-//{"key":"Wexyingchao","name":"💓鸟巢┃4K💓","type":3,"api":"csp_WexyingchaoGuard","searchable":1,"changeable":1},
+{"key":"WexshuangzixingGuard","name":"🎠双星┃百度夸克🎠","type":3,"api":"csp_WexshuangzixingGuard","searchable":1,"changeable":1},
+{"key":"WexHaiYinsoGuard","name":"🎠海音┃综合🎠","type":3,"api":"csp_WexHaiYinsoGuard","searchable":1,"changeable":1},
+{"key":"WexZhaoPansoGuard","name":"🎠找盘┃综合🎠","type":3,"api":"csp_WexZhaoPansoGuard","searchable":1,"changeable":1},
+{"key":"WexAiPanGuard","name":"🎠给力┃综合🎠","type":3,"api":"csp_WexAiPanGuard","searchable":1,"changeable":1},
+{"key":"WexbaidusoGuard","name":"🎠给力┃百度🎠","type":3,"api":"csp_WexbaidusoGuard","searchable":1,"changeable":1},
+{"key":"Wextyso","name":"🎠给力┃天翼🎠","type":3,"api":"csp_WextysoGuard","searchable":1,"changeable":1},
+{"key":"趣盘","name":"🎠趣盘┃百度","type":3,"api":"csp_WexbdqupanGuard","searchable":1,"changeable":1,"style":{"type":"list"}},
 
 //{"key":"WexWo123panGuard","name":"💓我的┃123💓‍","type":3,"api":"csp_WexWo123panGuard","searchable":0,"changeable":1,"timeout":50,"style":{"type":"list"}},
 //{"key":"优熙","name":"💓我的┃UC💓‍","type":3,"api":"csp_WexWoucpanGuard","searchable":0,"changeable":1,"timeout":50,"style":{"type":"list"}},

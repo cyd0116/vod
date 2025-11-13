@@ -60,6 +60,7 @@
 {"key":"csp_Gz360","name":"🐞瓜子(SP)","type":3,"api":"csp_Gz360","jar":"./ys/Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","searchable":1,"quickSearch":1,"filterable":1},
 {"key":"csp_LiteApple","name":"🐞苹果(SP)","type":3,"api":"csp_LiteApple","jar":"./ys/Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","searchable":1,"quickSearch":1,"filterable":1},
 {"key":"csp_Wwys","name":"🐞农民(SP)","type":3,"api":"csp_Wwys","jar":"./ys/Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","searchable":1,"quickSearch":1,"filterable":1,"ext":"https://www.wwgz.cn"},
+{"key":"金牌","name":"🐞金牌(SP)","type":3,"api":"csp_Jpys","jar":"./ys/Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","searchable":1,"quickSearch":1,"filterable":1,"ext":"7lj763gg402i7942463j9j9jh8579590k3hjii5gi4i73l2k5l"},
 {"key":"csp_Tvyb","name":"🐞TVB云播(SP)","type":3,"api":"csp_Tvyb","jar":"./ys/Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8","playerType":2,"searchable":1,"quickSearch":1,"filterable":1},
 //{ "key": "快看", "name": "🐞快看(SP)", "type": 3, "api": "csp_Kuaikan","jar":"./ys/Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8", "searchable": 1, "quickSearch": 1, "changeable": 1, "filterable": 1 },
 //{"key":"南瓜","name":"🐞南瓜","type":3,"api":"csp_NanGua","jar":"./ys/Yoursmile.jar;md5;c6aaf6a9498e1e1d07126779c687bdd8", "searchable":1,"quickSearch":1,"filterable":1,"ext":"7lj763gg0939795i017ii486k512jkihhilg9g0h96j865740113"},
@@ -168,7 +169,7 @@
 				"keywords":"名称,片名,推荐",
 				"tgsearch_url":"https://tg.252035.xyz",
 				"tgsearch_media_url":"https://tg.252035.xyz",				
-				"channellist": "tianyi_pd2,tianyirigeng,tyypzhpd,cloudtianyi,alyp_4K_Movies|1000,Aliyun_4K_Movies|1000,alypzyhzq|1000,Aliyundrive_Share_Channel|1000,alyp_1,shareAliyun,alyp_TV,clouddriveresources,pan123pan,zyfb123,zyzhpd123,xx123pan,wp123zy,ydypzyfx,tgsearchers3",
+				"channellist": "tianyi_pd2,tianyirigeng,tyypzhpd,cloudtianyi,alyp_4K_Movies|1000,Aliyun_4K_Movies|1000,alypzyhzq|1000,Aliyundrive_Share_Channel|1000,alyp_1,shareAliyun,alyp_TV,pan123pan,zyfb123,zyzhpd123,xx123pan,wp123zy,ydypzyfx,clouddriveresources,tgsearchers3",
 				//"channellist": "pan123pan,zyfb123,zyzhpd123,xx123pan,tianyi_pd2,tianyirigeng,tyypzhpd,cloudtianyi,ydypzyfx,alyp_4K_Movies|1000,Aliyun_4K_Movies|1000,alypzyhzq|1000,Aliyundrive_Share_Channel|1000,alyp_1,shareAliyun,ucpanpan,hao115|1000,Mbox115|1000,shares_115|1000,guaguale115,Channel_Shares_115,oneonefivewpfx",	
 				"proxy":"noproxy"
 			},

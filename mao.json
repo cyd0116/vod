@@ -1,13 +1,13 @@
 
 {
-"spider":"./wex/wex.png;md5;1fcca766ea99e0b6b76d9932befdf956",
+"spider":"./wex/wex.png;md5;96b3222e24cfb3d9a43a007b3e52f1c1",
 "wallpaper": "https://深色壁纸.xxooo.cf/",
 
 "lives": [
 {
 "name": "冰茶线路",
 "type": 0,
-"url": "https://fy.188766.xyz/?ip=",
+"url": "https://fy.188766.xyz/?ip=&mishitong=true&mima=mianfeibuhuaqian&json=true",
 "playerType": 2,
 "timeout": 10,
 "ua": "bingcha/1.1",
@@ -18,7 +18,7 @@
 "source": "?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"
 }
 },
-{"name": "DL线路",
+{"name": "develop线路",
 "type": 0,
 "url": "https://raw.yzuu.cf/develop202/migu_video/refs/heads/main/interface.txt",
 //"url": "https://raw.githubusercontent.com/develop202/migu_video/refs/heads/main/interface.txt",

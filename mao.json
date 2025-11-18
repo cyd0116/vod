@@ -31,8 +31,8 @@
 
 {"name": "广东移动线路",
 "type": 0,
-"url": "https://raw.githubusercontent.com/melody0709/cmcc_iptv_auto_py/refs/heads/main/ku9.m3u",
-//"url": "https://raw.yzuu.cf/melody0709/cmcc_iptv_auto_py/refs/heads/main/ku9.m3u",
+"url": "https://raw.githubusercontent.com/melody0709/cmcc_iptv_auto_py/refs/heads/main/tv2.m3u",
+//"url": "https://raw.yzuu.cf/melody0709/cmcc_iptv_auto_py/refs/heads/main/tv2.m3u",
 "epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}",
 "logo": "https://diyp9999.112114.xyz/logo/{name}.png",
 "catchup": {"type": "append","source": "?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"}

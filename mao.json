@@ -29,15 +29,6 @@
 "catchup": {"type": "append","source": "?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"}
 },
 {
-"name": "FMM(V6)线路",
-"type": 0,
-"url": "https://nos.netease.com/ysf/3d75a78a0fc7ede372c03598d6d10367.m3u",
-"playerType":2,
-"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}",
-"logo": "https://diyp9999.112114.xyz/logo/{name}.png",
-"catchup": {"type": "append","source": "?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"}
-},
-{
 "name": "CYD线路",
 "type": 0,
 "url": "./tv/tv.txt",
@@ -47,8 +38,17 @@
 "logo": "https://diyp9999.112114.xyz/logo/{name}.png",
 "catchup": {
 "type": "append",
-"source": "?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"
-}
+"regex":"/PLTV/",
+"source": "?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"}
+},
+{
+"name": "FMM(V6)线路",
+"type": 0,
+"url": "https://nos.netease.com/ysf/3d75a78a0fc7ede372c03598d6d10367.m3u",
+"playerType":2,
+"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}",
+"logo": "https://diyp9999.112114.xyz/logo/{name}.png",
+"catchup": {"type": "append","source": "?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"}
 }
 ],
 
@@ -127,9 +127,9 @@
 {"key":"雷鲸","name":"🎠雷鲸┃天翼🎠","type":3,"api":"csp_WexleijingGuard","searchable":1,"changeable":1},
 {"key":"盘他","name":"🎠盘他┃YD🎠","type":3,"api":"csp_WexYDpantaGuard","searchable":1,"changeable":1},
 
-{"key":"WexshuangzixingGuard","name":"🎠双星┃百度夸克🎠","type":3,"api":"csp_WexshuangzixingGuard","searchable":1,"changeable":1},
 {"key":"WexHaiYinsoGuard","name":"🎠海音┃综合🎠","type":3,"api":"csp_WexHaiYinsoGuard","searchable":1,"changeable":1},
 {"key":"WexZhaoPansoGuard","name":"🎠找盘┃综合🎠","type":3,"api":"csp_WexZhaoPansoGuard","searchable":1,"changeable":1},
+{"key":"WexshuangzixingGuard","name":"🎠双星┃百度夸克🎠","type":3,"api":"csp_WexshuangzixingGuard","searchable":1,"changeable":1},
 {"key":"WexAiPanGuard","name":"🎠给力┃综合🎠","type":3,"api":"csp_WexAiPanGuard","searchable":1,"changeable":1},
 {"key":"WexbaidusoGuard","name":"🎠给力┃百度🎠","type":3,"api":"csp_WexbaidusoGuard","searchable":1,"changeable":1},
 {"key":"Wextyso","name":"🎠给力┃天翼🎠","type":3,"api":"csp_WextysoGuard","searchable":1,"changeable":1},

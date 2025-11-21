@@ -53,7 +53,7 @@ CCTV-4K 超高清,webview://https://yangshipin.cn/tv/home?pid=600002264
 内蒙古卫视,webview://https://yangshipin.cn/tv/home?pid=600190401#webview://https://www.nmtv.cn/liveTv
 西藏卫视,webview://https://yangshipin.cn/tv/home?pid=600190403
 
-央视|IPV4,#genre#
+央视|备用,#genre#
 CCTV1,https://zby.130519.xyz/PLTV/11/224/3221225673/index.m3u8
 CCTV1,https://zby.130519.xyz/PLTV/11/224/3221225723/index.m3u8
 CCTV1,https://zby.130519.xyz/PLTV/11/224/3221225770/index.m3u8
@@ -84,7 +84,7 @@ CCTV15,https://zby.130519.xyz/PLTV/11/224/3221226147/index.m3u8
 CCTV16,https://zby.130519.xyz/PLTV/11/224/3221226120/index.m3u8
 CCTV17,https://zby.130519.xyz/PLTV/11/224/3221225765/index.m3u8
 
-卫视|IPV4,#genre#
+卫视|备用,#genre#
 深圳卫视,https://zby.130519.xyz/PLTV/11/224/3221225728/index.m3u8
 江苏卫视,https://zby.130519.xyz/PLTV/11/224/3221225720/index.m3u8
 黑龙江卫视,https://zby.130519.xyz/PLTV/11/224/3221225722/index.m3u8
@@ -113,7 +113,7 @@ CCTV17,https://zby.130519.xyz/PLTV/11/224/3221225765/index.m3u8
 重庆卫视,https://zby.130519.xyz/PLTV/11/224/3221226149/index.m3u8
 贵州卫视,https://zby.130519.xyz/PLTV/11/224/3221226151/index.m3u8
 
-央视|IPV6,#genre#
+央视|HN,#genre#
 CCTV1,http://iptv.huuc.edu.cn/hls/cctv1hd.m3u8
 CCTV2,http://iptv.huuc.edu.cn/hls/cctv2hd.m3u8
 CCTV3,http://iptv.huuc.edu.cn/hls/cctv3hd.m3u8
@@ -129,7 +129,7 @@ CCTV12,http://iptv.huuc.edu.cn/hls/cctv12hd.m3u8
 CCTV13,http://iptv.huuc.edu.cn/hls/cctv13hd.m3u8
 CCTV14,http://iptv.huuc.edu.cn/hls/cctv14hd.m3u8
 
-卫视|IPV6,#genre#
+卫视|HN,#genre#
 北京卫视,http://iptv.huuc.edu.cn/hls/btv1hd.m3u8
 北京纪实,http://iptv.huuc.edu.cn/hls/btv11hd.m3u8
 湖南卫视,http://iptv.huuc.edu.cn/hls/hunanhd.m3u8

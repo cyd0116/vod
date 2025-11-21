@@ -1,0 +1,156 @@
+官源,#group#
+央视,#genre#
+CCTV-1 综合,webview://https://yangshipin.cn/tv/home?pid=600001859#webview://https://tv.cctv.com/live/cctv1/
+CCTV-2 财经,webview://https://yangshipin.cn/tv/home?pid=600001800#webview://https://tv.cctv.com/live/cctv2/
+CCTV-3 综艺,webview://https://yangshipin.cn/tv/home?pid=600001801#webview://https://tv.cctv.com/live/cctv3/
+CCTV-4 中文国际,webview://https://yangshipin.cn/tv/home?pid=600001814#webview://https://tv.cctv.com/live/cctv4/
+CCTV-5 体育,webview://https://yangshipin.cn/tv/home?pid=600001818#webview://https://tv.cctv.com/live/cctv5/
+CCTV-5+ 体育赛事,webview://https://yangshipin.cn/tv/home?pid=600001817#webview://https://tv.cctv.com/live/cctv5plus/
+CCTV-6 电影,webview://https://yangshipin.cn/tv/home?pid=600108442#webview://https://tv.cctv.com/live/cctv6/$cctv
+CCTV-7 国防军事,webview://https://yangshipin.cn/tv/home?pid=600004092#webview://https://tv.cctv.com/live/cctv7/
+CCTV-8 电视剧,webview://https://yangshipin.cn/tv/home?pid=600001803#webview://https://tv.cctv.com/live/cctv8/
+CCTV-9 纪录,webview://https://yangshipin.cn/tv/home?pid=600004078#webview://https://tv.cctv.com/live/cctvjilu/
+CCTV-10 科教,webview://https://yangshipin.cn/tv/home?pid=600001805#webview://https://tv.cctv.com/live/cctv10/
+CCTV-11 戏曲,webview://https://yangshipin.cn/tv/home?pid=600001806#webview://https://tv.cctv.com/live/cctv11/
+CCTV-12 社会与法,webview://https://yangshipin.cn/tv/home?pid=600001807#webview://https://tv.cctv.com/live/cctv12/
+CCTV-13 新闻,webview://https://yangshipin.cn/tv/home?pid=600001811#webview://https://tv.cctv.com/live/cctv13/
+CCTV-14 少儿,webview://https://yangshipin.cn/tv/home?pid=600001809#webview://https://tv.cctv.com/live/cctvchild/
+CCTV-15 音乐,webview://https://yangshipin.cn/tv/home?pid=600001815#webview://https://tv.cctv.com/live/cctv15/
+CCTV-16 奥林匹克,webview://https://yangshipin.cn/tv/home?pid=600098637#webview://https://yangshipin.cn/tv/home?pid=600099502#webview://https://tv.cctv.com/live/cctv16/
+CCTV-17 农业农村,webview://https://yangshipin.cn/tv/home?pid=600001810#webview://https://tv.cctv.com/live/cctv17/
+CCTV-4K 超高清,webview://https://yangshipin.cn/tv/home?pid=600002264
+
+卫视,#genre#
+深圳卫视,webview://https://yangshipin.cn/tv/home?pid=600002481
+广东卫视,webview://https://yangshipin.cn/tv/home?pid=600002485
+北京卫视,webview://https://yangshipin.cn/tv/home?pid=600002309
+浙江卫视,webview://https://yangshipin.cn/tv/home?pid=600002520
+湖南卫视,webview://https://yangshipin.cn/tv/home?pid=600002475
+东方卫视,webview://https://yangshipin.cn/tv/home?pid=600002483
+黑龙江卫视,webview://https://yangshipin.cn/tv/home?pid=600002498
+吉林卫视,webview://https://yangshipin.cn/tv/home?pid=600190405#webview://https://www.jlntv.cn/tv?id=104
+辽宁卫视,webview://https://yangshipin.cn/tv/home?pid=600002505
+安徽卫视,webview://https://yangshipin.cn/tv/home?pid=600002532#webview://https://www.ahtv.cn/folder9000/folder20193?channelIndex=0
+广西卫视,webview://https://yangshipin.cn/tv/home?pid=600002509
+云南卫视,webview://https://yangshipin.cn/tv/home?pid=600190402#webview://https://www.yntv.cn/live.html
+东南卫视,webview://https://yangshipin.cn/tv/home?pid=600002484
+贵州卫视,webview://https://yangshipin.cn/tv/home?pid=600002490
+海南卫视,webview://https://yangshipin.cn/tv/home?pid=600002506
+河北卫视,webview://https://yangshipin.cn/tv/home?pid=600002493
+河南卫视,webview://https://yangshipin.cn/tv/home?pid=600002525
+湖北卫视,webview://https://yangshipin.cn/tv/home?pid=600002508
+江苏卫视,webview://https://yangshipin.cn/tv/home?pid=600002521
+江西卫视,webview://https://yangshipin.cn/tv/home?pid=600002503
+山东卫视,webview://https://yangshipin.cn/tv/home?pid=600002513
+山西卫视,webview://https://yangshipin.cn/tv/home?pid=600190407#webview://https://www.sxrtv.com/tv/
+四川卫视,webview://https://yangshipin.cn/tv/home?pid=600002516
+重庆卫视,webview://https://yangshipin.cn/tv/home?pid=600002531
+天津卫视,webview://https://yangshipin.cn/tv/home?pid=600152137
+陕西卫视,webview://https://yangshipin.cn/tv/home?pid=600190400
+甘肃卫视,webview://https://yangshipin.cn/tv/home?pid=600190408
+宁夏卫视,webview://https://yangshipin.cn/tv/home?pid=600190737
+青海卫视,webview://https://yangshipin.cn/tv/home?pid=600190406#webview://https://www.qhbtv.com/new_index/live/folder2646/
+新疆卫视,webview://https://yangshipin.cn/tv/home?pid=600152138#webview://https://www.xjtvs.com.cn/column/tv/434
+内蒙古卫视,webview://https://yangshipin.cn/tv/home?pid=600190401#webview://https://www.nmtv.cn/liveTv
+西藏卫视,webview://https://yangshipin.cn/tv/home?pid=600190403
+
+备用,#group#
+央视,#genre#
+CCTV1,https://zby.130519.xyz/PLTV/11/224/3221225673/index.m3u8
+CCTV1,https://zby.130519.xyz/PLTV/11/224/3221225723/index.m3u8
+CCTV1,https://zby.130519.xyz/PLTV/11/224/3221225770/index.m3u8
+CCTV1,https://zby.130519.xyz/PLTV/11/224/3221226163/index.m3u8
+CCTV2,https://zby.130519.xyz/PLTV/11/224/3221226122/index.m3u8
+CCTV3,https://zby.130519.xyz/PLTV/11/224/3221225766/index.m3u8
+CCTV3,https://zby.130519.xyz/PLTV/11/224/3221226165/index.m3u8
+CCTV4,https://zby.130519.xyz/PLTV/11/224/3221226124/index.m3u8
+CCTV5,https://zby.130519.xyz/PLTV/11/224/3221225734/index.m3u8
+CCTV5,https://zby.130519.xyz/PLTV/11/224/3221226146/index.m3u8
+CCTV6,https://zby.130519.xyz/PLTV/11/224/3221225741/index.m3u8
+CCTV6,https://zby.130519.xyz/PLTV/11/224/3221226148/index.m3u8
+CCTV7,https://zby.130519.xyz/PLTV/11/224/3221225701/index.m3u8
+CCTV7,https://zby.130519.xyz/PLTV/11/224/3221226143/index.m3u8
+CCTV7,https://zby.130519.xyz/PLTV/11/224/3221226137/index.m3u8
+CCTV8,https://zby.130519.xyz/PLTV/11/224/3221225736/index.m3u8
+CCTV8,https://zby.130519.xyz/PLTV/11/224/3221226167/index.m3u8
+CCTV10,https://zby.130519.xyz/PLTV/11/224/3221225743/index.m3u8
+CCTV10,https://zby.130519.xyz/PLTV/11/224/3221226169/index.m3u8
+CCTV11,https://zby.130519.xyz/PLTV/11/224/3221226101/index.m3u8
+CCTV11,https://zby.130519.xyz/PLTV/11/224/3221226145/index.m3u8
+CCTV12,https://zby.130519.xyz/PLTV/11/224/3221226103/index.m3u8
+CCTV12,https://zby.130519.xyz/PLTV/11/224/3221226126/index.m3u8
+CCTV13,https://zby.130519.xyz/PLTV/11/224/3221226128/index.m3u8
+CCTV14,https://zby.130519.xyz/PLTV/11/224/3221225738/index.m3u8
+CCTV14,https://zby.130519.xyz/PLTV/11/224/3221226150/index.m3u8
+CCTV15,https://zby.130519.xyz/PLTV/11/224/3221226147/index.m3u8
+CCTV16,https://zby.130519.xyz/PLTV/11/224/3221226120/index.m3u8
+CCTV17,https://zby.130519.xyz/PLTV/11/224/3221225765/index.m3u8
+
+卫视,#genre#
+深圳卫视,https://zby.130519.xyz/PLTV/11/224/3221225728/index.m3u8
+江苏卫视,https://zby.130519.xyz/PLTV/11/224/3221225720/index.m3u8
+黑龙江卫视,https://zby.130519.xyz/PLTV/11/224/3221225722/index.m3u8
+东方卫视,https://zby.130519.xyz/PLTV/11/224/3221225725/index.m3u8
+北京卫视,https://zby.130519.xyz/PLTV/11/224/3221225724/index.m3u8
+湖南卫视,https://zby.130519.xyz/PLTV/11/224/3221225726/index.m3u8
+浙江卫视,https://zby.130519.xyz/PLTV/11/224/3221225727/index.m3u8
+湖北卫视,https://zby.130519.xyz/PLTV/11/224/3221225729/index.m3u8
+安徽卫视,https://zby.130519.xyz/PLTV/11/224/3221225739/index.m3u8
+江西卫视,https://zby.130519.xyz/PLTV/11/224/3221225740/index.m3u8
+天津卫视,https://zby.130519.xyz/PLTV/11/224/3221225742/index.m3u8
+广东卫视,https://zby.130519.xyz/PLTV/11/224/3221225731/index.m3u8
+山东卫视,https://zby.130519.xyz/PLTV/11/224/3221225733/index.m3u8
+东南卫视,https://zby.130519.xyz/PLTV/11/224/3221225745/index.m3u8
+辽宁卫视,https://zby.130519.xyz/PLTV/11/224/3221225747/index.m3u8
+吉林卫视,https://zby.130519.xyz/PLTV/11/224/3221226082/index.m3u8
+广西卫视,https://zby.130519.xyz/PLTV/11/224/3221226084/index.m3u8
+甘肃卫视,https://zby.130519.xyz/PLTV/11/224/3221226090/index.m3u8
+河北卫视,https://zby.130519.xyz/PLTV/11/224/3221226107/index.m3u8
+青海卫视,https://zby.130519.xyz/PLTV/11/224/3221226105/index.m3u8
+云南卫视,https://zby.130519.xyz/PLTV/11/224/3221226106/index.m3u8
+山西卫视,https://zby.130519.xyz/PLTV/11/224/3221226109/index.m3u8
+河南卫视,https://zby.130519.xyz/PLTV/11/224/3221226113/index.m3u8
+四川卫视,https://zby.130519.xyz/PLTV/11/224/3221226130/index.m3u8
+海南卫视,https://zby.130519.xyz/PLTV/11/224/3221226132/index.m3u8
+重庆卫视,https://zby.130519.xyz/PLTV/11/224/3221226149/index.m3u8
+贵州卫视,https://zby.130519.xyz/PLTV/11/224/3221226151/index.m3u8
+
+央视|HN,#genre#
+CCTV1,http://iptv.huuc.edu.cn/hls/cctv1hd.m3u8
+CCTV2,http://iptv.huuc.edu.cn/hls/cctv2hd.m3u8
+CCTV3,http://iptv.huuc.edu.cn/hls/cctv3hd.m3u8
+CCTV4,http://iptv.huuc.edu.cn/hls/cctv4hd.m3u8
+CCTV5,http://iptv.huuc.edu.cn/hls/cctv5hd.m3u8
+CCTV6,http://iptv.huuc.edu.cn/hls/cctv6hd.m3u8
+CCTV7,http://iptv.huuc.edu.cn/hls/cctv7hd.m3u8
+CCTV8,http://iptv.huuc.edu.cn/hls/cctv8hd.m3u8
+CCTV9,http://iptv.huuc.edu.cn/hls/cctv9hd.m3u8
+CCTV10,http://iptv.huuc.edu.cn/hls/cctv10hd.m3u8
+CCTV11,http://iptv.huuc.edu.cn/hls/cctv11hd.m3u8
+CCTV12,http://iptv.huuc.edu.cn/hls/cctv12hd.m3u8
+CCTV13,http://iptv.huuc.edu.cn/hls/cctv13hd.m3u8
+CCTV14,http://iptv.huuc.edu.cn/hls/cctv14hd.m3u8
+
+卫视|HN,#genre#
+北京卫视,http://iptv.huuc.edu.cn/hls/btv1hd.m3u8
+北京纪实,http://iptv.huuc.edu.cn/hls/btv11hd.m3u8
+湖南卫视,http://iptv.huuc.edu.cn/hls/hunanhd.m3u8
+浙江卫视,http://iptv.huuc.edu.cn/hls/zjhd.m3u8
+江苏卫视,http://iptv.huuc.edu.cn/hls/jshd.m3u8
+东方卫视,http://iptv.huuc.edu.cn/hls/dfhd.m3u8
+安徽卫视,http://iptv.huuc.edu.cn/hls/ahhd.m3u8
+黑龙江卫视,http://iptv.huuc.edu.cn/hls/hljhd.m3u8
+辽宁卫视,http://iptv.huuc.edu.cn/hls/lnhd.m3u8
+深圳卫视,http://iptv.huuc.edu.cn/hls/szhd.m3u8
+广东卫视,http://iptv.huuc.edu.cn/hls/gdhd.m3u8
+天津卫视,http://iptv.huuc.edu.cn/hls/tjhd.m3u8
+湖北卫视,http://iptv.huuc.edu.cn/hls/hbhd.m3u8
+山东卫视,http://iptv.huuc.edu.cn/hls/sdhd.m3u8
+重庆卫视,http://iptv.huuc.edu.cn/hls/cqhd.m3u8
+上海纪实,http://iptv.huuc.edu.cn/hls/docuchina.m3u8
+四川卫视,http://iptv.huuc.edu.cn/hls/schd.m3u8
+金鹰纪实,http://iptv.huuc.edu.cn/hls/gedocu.m3u8
+东南卫视,http://iptv.huuc.edu.cn/hls/dnhd.m3u8
+河北卫视,http://iptv.huuc.edu.cn/hls/hebhd.m3u8
+江西卫视,http://iptv.huuc.edu.cn/hls/jxhd.m3u8
+

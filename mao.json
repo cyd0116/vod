@@ -37,8 +37,10 @@
 "epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}",
 "logo": "https://diyp9999.112114.xyz/logo/{name}.png",
 "catchup": {
+"days":"7",
 "type": "default",
-"source":"?starttime=${utc:yyyyMMddHHmmss}&endtime=${utcend:yyyyMMddHHmmss}"
+"regex":"/PLTV/",
+"source": "?starttime=${utc:yyyyMMddHHmmss}&endtime=${utcend:yyyyMMddHHmmss}"}
 }
 ],
 

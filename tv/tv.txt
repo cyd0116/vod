@@ -113,7 +113,7 @@ CCTV-17 农业农村,https://zby.130519.xyz/PLTV/11/224/3221225765/index.m3u8
 重庆卫视,https://zby.130519.xyz/PLTV/11/224/3221226149/index.m3u8
 贵州卫视,https://zby.130519.xyz/PLTV/11/224/3221226151/index.m3u8
 
-央视|V6,#genre#
+央视|HN,#genre#
 CCTV-1 综合,http://iptv.huuc.edu.cn/hls/cctv1hd.m3u8
 CCTV-2 财经,http://iptv.huuc.edu.cn/hls/cctv2hd.m3u8
 CCTV-3 综艺,http://iptv.huuc.edu.cn/hls/cctv3hd.m3u8
@@ -129,7 +129,7 @@ CCTV-12 社会与法,http://iptv.huuc.edu.cn/hls/cctv12hd.m3u8
 CCTV-13 新闻,http://iptv.huuc.edu.cn/hls/cctv13hd.m3u8
 CCTV-14 少儿,http://iptv.huuc.edu.cn/hls/cctv14hd.m3u8
 
-卫视|V6,#genre#
+卫视|HN,#genre#
 北京卫视,http://iptv.huuc.edu.cn/hls/btv1hd.m3u8
 北京纪实,http://iptv.huuc.edu.cn/hls/btv11hd.m3u8
 湖南卫视,http://iptv.huuc.edu.cn/hls/hunanhd.m3u8

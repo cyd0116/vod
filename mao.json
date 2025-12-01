@@ -32,7 +32,7 @@
 "regex":"/PLTV/",
 "source": "?starttime=${utc:yyyyMMddHHmmss}&endtime=${utcend:yyyyMMddHHmmss}"}
 },
-{"name":"FMM线路（IPV6）","type":0,"url":"https://nos.netease.com/ysf/3d75a78a0fc7ede372c03598d6d10367.m3u","playerType":2,"catchup": {"type": "default","source": "?starttime=${utc:yyyyMMddHHmmss}&endtime=${utcend:yyyyMMddHHmmss}"},
+{"name":"FMM线路（IPV6）","type":0,"url":"https://nos.netease.com/ysf/3d75a78a0fc7ede372c03598d6d10367.m3u","playerType":2,"catchup": {"type": "default","source": "?starttime=${utc:yyyyMMddHHmmss}&endtime=${utcend:yyyyMMddHHmmss}"}},
 {"name": "develop线路",
 "type": 0,
 "url": "https://raw.yzuu.cf/develop202/migu_video/refs/heads/main/interface.txt",

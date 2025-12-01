@@ -1,6 +1,6 @@
 #EXTM3U x-tvg-url="https://static.188766.xyz/e.xml" catchup="default" catchup-source="?starttime=${(b)yyyyMMdd'T'HHmmss.'00Z'}&endtime=${(e)yyyyMMdd'T'HHmmss'.00Z'}"
 
 #EXTINF:-1 tvg-id="CCTV1" tvg-name="CCTV1" tvg-logo="https://static.188766.xyz/logo/fanmingming/live/tv/CCTV1.png" group-title="央视频道",CCTV-1 综合
-https://zby.130519.xyz/PLTV/11/224/3221225673/index.m3u8
+catchup="default" catchup-source="https://zby.130519.xyz/PLTV/11/224/3221225673/index.m3u8?starttime=${(b)yyyyMMdd'T'HHmmss.'00Z'}&endtime=${(e)yyyyMMdd'T'HHmmss'.00Z'}"
 #EXTINF:-1 tvg-id="CCTV2" tvg-name="CCTV2" tvg-logo="https://static.188766.xyz/logo/fanmingming/live/tv/CCTV2.png" group-title="央视频道",CCTV-2 财经
 https://zby.130519.xyz/PLTV/11/224/3221226122/index.m3u8

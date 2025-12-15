@@ -38,8 +38,7 @@
 
 "sites":[
 {"key":"Douban","name":"🐮豆瓣🐮","type":3,"api":"csp_DoubanGuard","searchable":0,"quickSearch":0,"filterable":0,"ext":"./wex/douban.json"},
-//{"key":"Wexokconfig","name":"🐮配置(网络备份)🐮","type":3,"api":"csp_WexokconfigGuard","searchable":0,"changeable":0,"indexs":0},
-{"key":"Wexokconfig","name":"🐮配置(本地备份)🐮","type":3,"api":"csp_WexokconfigGuard","jar":"./wex/wex-本地备份.png;md5;21FAD746AA98E223EC978B8E347C7D65","searchable":0,"changeable":0,"indexs":0},
+{"key":"Wexokconfig","name":"🐮配置🐮","type":3,"api":"csp_WexokconfigGuard","searchable":0,"changeable":0,"indexs":0},
 
 //Yoursmile
 {"key":"csp_Gz360","name":"🐞瓜子(SP)","type":3,"api":"csp_Gz360","jar":"./ys/Yoursmile.jar;md5;310C68CFD6F15BF792C08464BC3F4D67","searchable":1,"quickSearch":1,"filterable":1},

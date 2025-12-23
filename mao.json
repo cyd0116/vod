@@ -1,6 +1,6 @@
 
 {
-"spider":"./wex/wex.png;md5;172c5b6351ce1531deb3821c41a7d9a4",
+"spider":"./wex/wex.txt;md5;CA6D7BE5C03091001488CBF33969F75D",
 "wallpaper": "https://深色壁纸.xxooo.cf/",
 
 "lives": [
@@ -39,8 +39,8 @@
 "sites":[
 {"key":"Douban","name":"🐮豆瓣🐮","type":3,"api":"csp_DoubanGuard","searchable":0,"quickSearch":0,"filterable":0,"ext":"./wex/douban.json"},
 {"key":"Wexokconfig","name":"🐮配置🐮","type":3,"api":"csp_WexokconfigGuard","searchable":0,"changeable":0,"indexs":0},
-{"key":"WexWo123panGuard","name":"🐮我的┃123🐮","type":3,"api":"csp_WexWo123panGuard","searchable":1,"changeable":1,"timeout":50,"style":{"type":"list"}},
-{"key":"tianyi","name":"🐮我的┃天逸🐮","type":3,"api":"csp_WexWo189Guard","searchable":1,"changeable":1,"timeout":50,"style":{"type":"list"}},
+{"key":"WexWo123panGuard","name":"🐮我的┃123🐮","type":3,"api":"csp_WexWo123panGuard","searchable":0,"changeable":0,"timeout":50,"style":{"type":"list"}},
+{"key":"tianyi","name":"🐮我的┃天逸🐮","type":3,"api":"csp_WexWo189Guard","searchable":0,"changeable":0,"timeout":50,"style":{"type":"list"}},
 
 //Yoursmile
 {"key":"农民","name":"🐞农民(XYQH)","type":3,"api":"csp_XYQHiker","jar":"./ys/Yoursmile.jar;md5;310C68CFD6F15BF792C08464BC3F4D67","searchable":1,"quickSearch":1,"filterable":1,"ext":"https://raw.githubusercontent.com/yoursmile66/TVBox/main/json/农民影视.json"},
@@ -100,8 +100,8 @@
 
 {"key":"玩偶","name":"💓玩偶┃聚合💓","type":3,"api":"csp_WoggGuard","searchable":1,"changeable":1},
 {"key":"Wexmuougg","name":"💓木偶┃聚合💓","type":3,"api":"csp_WexmuouggGuard","searchable":1,"changeable":1},
-{"key":"Wexzhizhen","name":"💓至臻┃聚合💓","type":3,"api":"csp_WexzhizhenGuard","searchable":1,"changeable":1},
 {"key":"WexhubanGuard","name":"💓虎斑┃聚合💓","type":3,"api":"csp_WexhubanGuard","searchable":1,"changeable":1},
+{"key":"Wexzhizhen","name":"💓至臻┃聚合💓","type":3,"api":"csp_WexzhizhenGuard","searchable":1,"changeable":1},
 {"key":"Wexnullname","name":"💓无名┃聚合💓","type":3,"api":"csp_WexnullnameGuard","searchable":1,"changeable":1,"timeout":120},
 {"key":"Wexsayangziyuan","name":"💓撒仰┃聚合💓","type":3,"api":"csp_Wexsayangziyuan","searchable":1,"changeable":1},
 {"key":"Wexerxiaoziyuan","name":"💓二小┃聚合💓","type":3,"api":"csp_WexerxiaoziyuanGuard","searchable":1,"changeable":1},
@@ -122,13 +122,6 @@
 {"key":"Wextyso","name":"🎠给力┃天翼🎠","type":3,"api":"csp_WextysoGuard","searchable":1,"changeable":1},
 {"key":"趣盘","name":"🎠趣盘┃百度🎠","type":3,"api":"csp_WexbdqupanGuard","searchable":1,"changeable":1,"style":{"type":"list"}},
 
-//{"key":"WexWo123panGuard","name":"💓我的┃123💓‍","type":3,"api":"csp_WexWo123panGuard","searchable":0,"changeable":1,"timeout":50,"style":{"type":"list"}},
-//{"key":"优熙","name":"💓我的┃UC💓‍","type":3,"api":"csp_WexWoucpanGuard","searchable":0,"changeable":1,"timeout":50,"style":{"type":"list"}},
-//{"key":"tianyi","name":"💓我的┃天翼💓‍","type":3,"api":"csp_WexWo189Guard","searchable":0,"changeable":1,"timeout":50,"style":{"type":"list"}},
-//{"key":"异动","name":"💓我的┃YD💓‍","type":3,"api":"csp_WexWoydpanGuard","searchable":0,"changeable":1,"timeout":50,"style":{"type":"list"}},
-//{"key":"夸克","name":"💓我的┃夸克💓‍","type":3,"api":"csp_WexWoquarkpanGuard","searchable":0,"changeable":1,"timeout":50,"style":{"type":"list"}},
-//{"key":"115","name":"💓我的┃115💓‍","type":3,"api":"csp_Wex115shareGuard","searchable":0,"changeable":1,"timeout":50,"style":{"type":"list"}},
-
 {"key":"Wexlaobaitingshu","name":"🎃‍白兔┃听书🎃","type":3,"api":"csp_WexlaobaitingshuGuard","searchable":0,"changeable":1},
 {"key":"Wex275tingshu","name":"🎃‍极品┃听书🎃","type":3,"api":"csp_Wex275tingshuGuard","searchable":0,"changeable":1},
 {"key":"Wexliyuan","name":"🎎戏曲┃秒播🎎","type":3,"api":"csp_WexliyuanGuard","searchable":0,"changeable":0,"style":{"type":"rect","ratio":2}},
@@ -138,6 +131,7 @@
 //pg网盘
 { "key": "豆瓣", "name": "🔍豆瓣|PG", "type": 3, "api": "csp_Douban","jar":"./pg/pg.jar;md5;C10464A367E55BEF8B5C1AB58995144A", "searchable": 0, "changeable": 1, "indexs":1, "ext": "./pg/lib/tokenm.json$$$./pg/lib/douban.json" },
 { "key": "网盘配置", "name": "🔨配置|PG", "type": 3, "api": "csp_Config","jar":"./pg/pg.jar;md5;C10464A367E55BEF8B5C1AB58995144A", "searchable": 0, "quickSearch":0,"changeable": 0, "ext":"./pg/lib/tokenm.json", "style": { "type": "rect", "ratio": 1.5 } },
+{"key":"PushShare","name":"🅿我的资源|PG","type":3, "api":"csp_PushShare","jar":"./pg/pg.jar;md5;C10464A367E55BEF8B5C1AB58995144A","searchable":1,"quickSearch":1, "changeable":1, "filterable":0, "timeout":60, "ext":"./pg/lib/tokenm.json$$$./pg/lib/pushshare.txt$$$db$$$1", "style": { "type": "list", "ratio": 1.1 } }, 
 {"key":"Wogg","name":"👽玩偶|PG","type":3,"api":"csp_Wogg","jar":"./pg/pg.jar;md5;C10464A367E55BEF8B5C1AB58995144A","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://wogg.xxooo.cf/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$WOGG"},
 {"key":"Guanying","name":"🎥观影|PG","type":3,"api":"csp_Guanying","jar":"./pg/pg.jar;md5;C10464A367E55BEF8B5C1AB58995144A","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://www.gying.net$$$noproxy$$$1$$$./pg/lib/guanying.txt$$$GUANYING"},
 //{"key":"yydsys","name":"🕵多多|PG","type":3,"api":"csp_Wobg","jar":"./pg/pg.jar;md5;C10464A367E55BEF8B5C1AB58995144A","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://tv.yydsys.top/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$WNLG"},
@@ -156,7 +150,7 @@
 				"keywords":"名称,片名,推荐",
 				"tgsearch_url":"https://tg.252035.xyz",
 				"tgsearch_media_url":"https://tg.252035.xyz",				
-				"channellist": "tianyi_pd2,tianyirigeng,tyypzhpd,cloudtianyi,alyp_4K_Movies|1000,Aliyun_4K_Movies|1000,alypzyhzq|1000,Aliyundrive_Share_Channel|1000,alyp_1,shareAliyun,alyp_TV,ydypzyfx,clouddriveresources,tgsearchers3",
+				"channellist": "alyp_4K_Movies|1000,Aliyun_4K_Movies|1000,alypzyhzq|1000,Aliyundrive_Share_Channel|1000,alyp_1,shareAliyun,alyp_TV,tianyi_pd2,tianyirigeng,tyypzhpd,cloudtianyi,clouddriveresources,tgsearchers3",
 				//"channellist": "pan123pan,zyfb123,zyzhpd123,xx123pan,tianyi_pd2,tianyirigeng,tyypzhpd,cloudtianyi,ydypzyfx,alyp_4K_Movies|1000,Aliyun_4K_Movies|1000,alypzyhzq|1000,Aliyundrive_Share_Channel|1000,alyp_1,shareAliyun,ucpanpan,hao115|1000,Mbox115|1000,shares_115|1000,guaguale115,Channel_Shares_115,oneonefivewpfx",	
 				"proxy":"noproxy"
 			},
@@ -167,7 +161,6 @@
 		},
 //{"key":"TGYunPan","name":"🅿TG群组|PG","type":3,"api":"csp_TGYunPan","jar":"./pg/pg.jar;md5;C10464A367E55BEF8B5C1AB58995144A","timeout":120, "ext":{ "token":"./pg/lib/tokenm.json", "json":"./pg/lib/tgsearch.json", "keywords":"名称,片名,推荐", "tgsearch_url":"https://tg.252035.xyz", "tgsearch_media_url":"https://tg.252035.xyz", //"channellist": "ResourceUniverse", "channellist": "tianyi_pd2,tianyirigeng,tyypzhpd,cloudtianyi,alyp_4K_Movies|1000,Aliyun_4K_Movies|1000,alypzyhzq|1000,Aliyundrive_Share_Channel|1000,alyp_1,shareAliyun,alyp_TV,pan123pan,zyfb123,zyzhpd123,xx123pan,wp123zy,ydypzyfx,clouddriveresources,tgsearchers3", "proxy":"noproxy" }, "style": { "type": "rect", "ratio": 1.77 } },
 
-{"key":"PushShare","name":"🅿我的资源分享|PG","type":3, "api":"csp_PushShare","jar":"./pg/pg.jar;md5;C10464A367E55BEF8B5C1AB58995144A","searchable":1,"quickSearch":1, "changeable":1, "filterable":0, "timeout":60, "ext":"./pg/lib/tokenm.json$$$./pg/lib/pushshare.txt$$$db$$$1", "style": { "type": "list", "ratio": 1.1 } }, 
 {"key":"AlistShare","name":"🅿网盘分享合集|PG","type":3,"api":"csp_AlistShare","jar":"./pg/pg.jar;md5;C10464A367E55BEF8B5C1AB58995144A","searchable":1,"quickSearch":1, "changeable":1, "filterable":0, "timeout":120, "ext":"./pg/lib/tokenm.json$$$null$$$proxy$$$1", "style": { "type": "list", "ratio": 1.1 } }, 
 {"key":"AliShare","name":"🅿阿里云盘影视分享|PG","type":3,"api":"csp_AliShare","jar":"./pg/pg.jar;md5;C10464A367E55BEF8B5C1AB58995144A","searchable":1,"quickSearch":1, "changeable":1, "filterable":0, "timeout":60, "ext":"./pg/lib/tokenm.json$$$./pg/lib/alishare.txt$$$db$$$1", "style": { "type": "list", "ratio": 1.1 } }, 
 {"key":"AliShareEBook","name":"🅿阿里云盘书籍分享|PG","type":3,"api":"csp_AliShare","jar":"./pg/pg.jar;md5;C10464A367E55BEF8B5C1AB58995144A","searchable":0,"quickSearch":0, "changeable":0, "filterable":0, "timeout":60, "ext":"./pg/lib/tokenm.json$$$./pg/lib/alishare.ebook.txt$$$db$$$1", "style": { "type": "list", "ratio": 1.1 } }, 

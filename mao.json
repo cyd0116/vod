@@ -7,7 +7,7 @@
 {
 "name": "冰茶线路",
 "type": 0,
-"url": "https://fy.188766.xyz/?ip=&mishitong=true&mima=mianfeibuhuaqian&json=true",
+"url": "https://bc.188766.xyz/?ip=&mishitong=true&mima=bingcha1130&json=true",
 "playerType": 2,
 "timeout": 10,
 "ua": "bingcha/1.1",
@@ -50,7 +50,7 @@
 //{ "key": "快看", "name": "🐞快看(SP)", "type": 3, "api": "csp_Kuaikan","jar":"./ys/Yoursmile.jar;md5;310C68CFD6F15BF792C08464BC3F4D67", "searchable": 1, "quickSearch": 1, "changeable": 1, "filterable": 1 },
 //{"key":"csp_Qiyou","name":"🐞奇优(SP)","type":3,"api":"csp_Qiyou","jar":"./ys/Yoursmile.jar;md5;310C68CFD6F15BF792C08464BC3F4D67","searchable":1,"quickSearch":1,"filterable":1},
 {"key":"巧技二","name":"🐞聚搜(SP)","type":3,"api":"csp_qiao2","jar":"./ys/Yoursmile.jar;md5;310C68CFD6F15BF792C08464BC3F4D67","searchable":1,"quickSearch":1,"filterable":1,"ext":"7lj763gg402i7942412h849jg1558j9jl8g19213il86316k465719lik158491h179312h4934183ig2l05g9"},
-{"key":"巧技五","name":"🐞聚搜2(SP)","type":3,"api":"csp_qiao2","jar":"./ys/Yoursmile.jar;md5;310C68CFD6F15BF792C08464BC3F4D67","searchable":1,"quickSearch":1,"filterable":1,"ext":"7lj763gg402i7942412h849jg1558j9jl8g19213il86316k465719lik158491h179312hk935886ig2l05g9"},
+{"key":"巧技五","name":"🐞搜搜(SP)","type":3,"api":"csp_qiao2","jar":"./ys/Yoursmile.jar;md5;310C68CFD6F15BF792C08464BC3F4D67","searchable":1,"quickSearch":1,"filterable":1,"ext":"7lj763gg402i7942412h849jg1558j9jl8g19213il86316k465719lik158491h179312hk935886ig2l05g9"},
 {"key":"狂风","name":"🐞狂风(SP)","type":3,"api":"csp_Xdai","jar":"./ys/Yoursmile.jar;md5;310C68CFD6F15BF792C08464BC3F4D67","playerType":2,"searchable":1,"quickSearch":1,"filterable":1,"ext":"7lj763gg0939791k452h98j2hk55i283l1g9i454i18i72394h5h07g2gh440l5h4ji105kkgh4692961g13h49lg7gk4hh3g5362306hj81jllj34g433lg73lk1j12"},
 {"key":"永夜","name":"🐞永夜(SP)","type":3,"api":"csp_Xdai","jar":"./ys/Yoursmile.jar;md5;310C68CFD6F15BF792C08464BC3F4D67","playerType":2,"searchable":1,"quickSearch":1,"filterable":1,"ext":"7lj763gg0939790i413gjh9kk011jijiggll990k9li73l224k770ik0j10l502j2j9l798lhj778hh33g018h94k5j400kij3567j7gji97kkk4118421g03lll"},
 {"key":"csp_Gz360","name":"🐞瓜子(SP)","type":3,"api":"csp_Gz360","jar":"./ys/Yoursmile.jar;md5;310C68CFD6F15BF792C08464BC3F4D67","searchable":1,"quickSearch":1,"filterable":1},

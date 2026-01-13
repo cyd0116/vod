@@ -117,7 +117,7 @@
 { "key": "SoTySo", "name": "🎠给力┃天翼🎠", "type": 3, "api": "csp_SoTySoGuard", "searchable": 1, "changeable": 1 }, 
 { "key": "雷鲸", "name": "🎠雷鲸┃天翼🎠", "type": 3, "api": "csp_NewLeiJingGuard", "searchable": 1, "changeable": 1 }, 
 { "key": "盘他", "name": "🎠盘他┃移动🎠", "type": 3, "api": "csp_NewPanTaGuard", "searchable": 1, "changeable": 1 }, 
-//{ "key": "NewPanMe123", "name": "🎠123社区┃123🎠", "type": 3, "api": "csp_NewPanMe123Guard", "searchable": 1, "changeable": 1 }, 
+{ "key": "NewPanMe123", "name": "🎠123社区┃123🎠", "type": 3, "api": "csp_NewPanMe123Guard", "searchable": 1, "changeable": 1 }, 
 
 //{ "key": "AnimeYHDM", "name": "🤡巴士┃动漫🤡", "type": 3, "api": "csp_AnimeYHDMGuard", "searchable": 1, "changeable": 1 }, 
 { "key": "AnimeNeko", "name": "🤡耐克┃动漫🤡", "type": 3, "api": "csp_AnimeNekoGuard", "searchable": 1, "changeable":1 }, 

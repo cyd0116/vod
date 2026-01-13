@@ -96,7 +96,7 @@
 { "key": "WexBtTwo", "name": "🎇BtTwo┃秒播🎇", "type": 3, "api": "csp_WexBtTwoGuard", "searchable": 1, "changeable": 1 }, 
 //{ "key": "WexBoBo", "name": "🎇伯伯┃秒播🎇", "type": 3, "api": "csp_WexBoBoGuard", "searchable": 1, "changeable": 1 }, 
 //{ "key": "WexIkanBot", "name": "🎇爱看Bot┃采集🎇", "type": 3, "api": "csp_WexIkanBotGuard", "searchable": 1, "changeable": 1 },
-{"key":"bili","name":"🅱哔哩┃合集🅱","type":3,"api":"csp_NewBiLiGuard","searchable":0,"quickSearch":0,"filterable":1,"style":{"type":"rect","ratio":1.433},"ext":{"json":"./wex/bili001.txt"}},
+{"key":"bili","name":"🅱哔哩┃合集🅱","type":3,"api":"csp_NewBiLiGuard","searchable":0,"quickSearch":0,"filterable":1,"style":{"type":"rect","ratio":1.433},"ext":{"./wex/bili001.txt"}},
 
 { "key": "玩偶", "name": "💓玩偶┃臻彩", "type": 3, "api": "csp_NewWoggGuard", "searchable": 1, "changeable": 1 }, 
 { "key": "NewHuBan", "name": "💓虎斑┃臻彩💓", "type": 3, "api": "csp_NewHuBanGuard", "searchable": 1, "changeable": 1 }, 

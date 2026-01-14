@@ -38,8 +38,7 @@
 "sites":[
 {"key":"Douban","name":"🐮豆瓣🐮","type":3,"api":"csp_NewDouBanGuard","searchable":0,"quickSearch":0,"filterable":0,"ext":"./wex/douban.txt"},
 {"key":"Wexokconfig","name":"🐮配置🐮","type":3,"api":"csp_WexConfigGuard","searchable":0,"changeable":0,"indexs":0},
-//{"key":"MyPan123","name":"🐮我的┃123🐮","type":3,"api":"csp_MyPan123Guard","searchable":0,"changeable":0,"timeout":50,"style":{"type":"list"}},
-//{"key":"MyPan189","name":"🐮我的┃天翼🐮","type":3,"api":"csp_MyPan189Guard","searchable":0,"changeable":0,"timeout":50,"style":{"type":"list"}},
+{"key": "MyQuark", "name": "🐮我的资源┃夸克🐮", "type": 3, "api": "csp_MyQuarkGuard", "searchable":0, "changeable":0, "timeout": 50, "style": { "type": "list" } },
 
 //Yoursmile
 {"key":"农民","name":"🐞农民(XYQH)","type":3,"api":"csp_XYQHiker","jar":"./ys/Yoursmile.jar;md5;310C68CFD6F15BF792C08464BC3F4D67","searchable":1,"quickSearch":1,"filterable":1,"ext":"https://raw.githubusercontent.com/yoursmile66/TVBox/main/json/农民影视.json"},
@@ -128,7 +127,7 @@
 //pg网盘
 { "key": "豆瓣", "name": "🔍豆瓣|PG", "type": 3, "api": "csp_Douban","jar":"./pg/pg.jar;md5;C161E02038EFEAFC5EBD2CD365BA1F05", "searchable": 0, "changeable": 1, "indexs":1, "ext": "./pg/lib/tokenm.json$$$./pg/lib/douban.json" },
 { "key": "网盘配置", "name": "🔨配置|PG", "type": 3, "api": "csp_Config","jar":"./pg/pg.jar;md5;C161E02038EFEAFC5EBD2CD365BA1F05", "searchable": 0, "quickSearch":0,"changeable": 0, "ext":"./pg/lib/tokenm.json", "style": { "type": "rect", "ratio": 1.5 } },
-{"key":"PushShare","name":"🅿我的资源|PG","type":3, "api":"csp_PushShare","jar":"./pg/pg.jar;md5;C161E02038EFEAFC5EBD2CD365BA1F05","searchable":1,"quickSearch":1, "changeable":1, "filterable":0, "timeout":60, "ext":"./pg/lib/tokenm.json$$$./pg/lib/pushshare.txt$$$db$$$1", "style": { "type": "list", "ratio": 1.1 } }, 
+{"key":"PushShare","name":"🅿我的资源|PG","type":3, "api":"csp_PushShare","jar":"./pg/pg.jar;md5;C161E02038EFEAFC5EBD2CD365BA1F05","searchable":0,"quickSearch":0, "changeable":0, "filterable":0, "timeout":60, "ext":"./pg/lib/tokenm.json$$$./pg/lib/pushshare.txt$$$db$$$1", "style": { "type": "list", "ratio": 1.1 } }, 
 {"key":"Wogg","name":"👽玩偶|PG","type":3,"api":"csp_Wogg","jar":"./pg/pg.jar;md5;C161E02038EFEAFC5EBD2CD365BA1F05","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://wogg.xxooo.cf/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$WOGG"},
 //{"key":"Guanying","name":"🎥观影|PG","type":3,"api":"csp_Guanying","jar":"./pg/pg.jar;md5;C161E02038EFEAFC5EBD2CD365BA1F05","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://www.gying.net$$$noproxy$$$1$$$./pg/lib/guanying.txt$$$GUANYING"},
 //{"key":"yydsys","name":"🕵多多|PG","type":3,"api":"csp_Wobg","jar":"./pg/pg.jar;md5;C161E02038EFEAFC5EBD2CD365BA1F05","searchable": 1,"quickSearch":1, "changeable":1, "filterable":1, "timeout":60, "ext":"./pg/lib/tokenm.json$$$https://tv.yydsys.top/$$$noproxy$$$1$$$./pg/lib/wogg.json$$$WNLG"},

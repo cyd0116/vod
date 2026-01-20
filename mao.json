@@ -17,11 +17,22 @@
 "source": "?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"
 }
 },
-{"name": "develop线路","type": 0,"url": "https://raw.githubusercontent.com/develop202/migu_video/refs/heads/main/interface.txt","playerType":2,"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}","logo": "https://diyp9999.112114.xyz/logo/{name}.png","catchup": {"type": "append","source": "?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"}},
 {
-"name": "CYD线路",
+  "name": "咪咕线路",
+  "type": 0,
+  "url": "https://raw.githubusercontent.com/develop202/migu_video/refs/heads/main/interface.txt",
+  "playerType": 2,
+  "epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}",
+  "logo": "https://diyp9999.112114.xyz/logo/{name}.png",
+  "catchup": {
+    "type": "append",
+    "source": "?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"
+}
+},
+{
+"name": "官方线路",
 "type": 0,
-"url": "./tv/tv.txt",
+"url": "https://raw.githubusercontent.com/cyd0116/vod/refs/heads/main/tv/tv.txt",
 "ua": "okhttp/3.15",
 "timeout": 10,
 "epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}",

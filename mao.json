@@ -22,7 +22,7 @@
   "type": 0,
   "url": "https://raw.githubusercontent.com/develop202/migu_video/refs/heads/main/interface.txt",
   "playerType": 2,
-  "epg": "https://fy.188766.xyz/all.xml.gz/?ch={name}&date={date}",
+  "epg": "https://fy.188766.xyz/all.xml/?ch={name}&date={date}",
   "logo": "https://live.404003.xyz/LOGO/{name}.png",
   "catchup": {
     "type": "append",

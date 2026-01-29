@@ -23,7 +23,7 @@
   "url": "https://raw.githubusercontent.com/develop202/migu_video/refs/heads/main/interface.txt",
   "playerType": 2,
   "epg": "https://fy.188766.xyz/all.xml.gz/?ch={name}&date={date}",
-  "logo": "http://127.0.0.1:9978/storage/emulated/0/酷9/logo/{name}.png",
+  "logo": "https://live.404003.xyz/LOGO/{name}.png",
   "catchup": {
     "type": "append",
     "source": "?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"

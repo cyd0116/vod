@@ -10,8 +10,8 @@
 "playerType": 2,
 "timeout": 10,
 "ua": "bingcha/1.1",
-"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}",
-"logo": "https://diyp9999.112114.xyz/logo/{name}.png",
+"epg": "https://fy.188766.xyz/all.xml.gz/?ch={name}&date={date}",
+"logo": "https://live.404003.xyz/LOGO/{name}.png",
 "catchup": {
 "type": "append",
 "source": "?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"
@@ -22,8 +22,8 @@
   "type": 0,
   "url": "https://raw.githubusercontent.com/develop202/migu_video/refs/heads/main/interface.txt",
   "playerType": 2,
-  "epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}",
-  "logo": "https://diyp9999.112114.xyz/logo/{name}.png",
+  "epg": "https://fy.188766.xyz/all.xml.gz/?ch={name}&date={date}",
+  "logo": "https://live.404003.xyz/LOGO/{name}.png",
   "catchup": {
     "type": "append",
     "source": "?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"
@@ -34,8 +34,8 @@
   "type": 0,
   "url": "https://ds65.tv1288.xyz",
   "playerType": 2,
-  "epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}",
-  "logo": "https://diyp9999.112114.xyz/logo/{name}.png",
+  "epg": "https://fy.188766.xyz/all.xml.gz/?ch={name}&date={date}",
+  "logo": "https://live.404003.xyz/LOGO/{name}.png",
   "catchup": {
     "type": "append",
     "source": "?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"
@@ -47,8 +47,8 @@
 "url": "https://raw.githubusercontent.com/cyd0116/vod/refs/heads/main/tv/tv.txt",
 "ua": "okhttp/3.15",
 "timeout": 10,
-"epg": "https://diyp9999.112114.xyz/?ch={name}&date={date}",
-"logo": "https://diyp9999.112114.xyz/logo/{name}.png",
+"epg": "https://fy.188766.xyz/all.xml.gz/?ch={name}&date={date}",
+"logo": "https://live.404003.xyz/LOGO/{name}.png",
 "catchup": {
 "days":"7",
 "type": "default",
@@ -71,7 +71,6 @@
 //{ "key": "快看", "name": "🐞快看(SP)", "type": 3, "api": "csp_Kuaikan","jar":"./ys/Yoursmile.jar;md5;310C68CFD6F15BF792C08464BC3F4D67", "searchable": 1, "quickSearch": 1, "changeable": 1, "filterable": 1 },
 //{"key":"csp_Qiyou","name":"🐞奇优(SP)","type":3,"api":"csp_Qiyou","jar":"./ys/Yoursmile.jar;md5;310C68CFD6F15BF792C08464BC3F4D67","searchable":1,"quickSearch":1,"filterable":1},
 {"key":"巧技二","name":"🐞聚搜(SP)","type":3,"api":"csp_qiao2","jar":"./ys/Yoursmile.jar;md5;310C68CFD6F15BF792C08464BC3F4D67","searchable":1,"quickSearch":1,"filterable":1,"ext":"7lj763gg402i7942412h849jg1558j9jl8g19213il86316k465719lik158491h179312h4934183ig2l05g9"},
-{"key":"巧技五","name":"🐞搜搜(SP)","type":3,"api":"csp_qiao2","jar":"./ys/Yoursmile.jar;md5;310C68CFD6F15BF792C08464BC3F4D67","searchable":1,"quickSearch":1,"filterable":1,"ext":"7lj763gg402i7942412h849jg1558j9jl8g19213il86316k465719lik158491h179312hk935886ig2l05g9"},
 {"key":"驿站","name":"🐞驿站(SP)","type":3,"api":"csp_Xdai","jar":"./ys/Yoursmile.jar;md5;310C68CFD6F15BF792C08464BC3F4D67","playerType":2,"ext":"7lj763gg0939795i007gi48hk112jji7g1k69j079jj06g721j461kk7h703431g079j0g9hi15lg2j6232lk993i1g416hlg87i7l09i8khi6ij749j0lg77l9g154kg2gljkl1g625"},
 {"key":"永夜","name":"🐞永夜(SP)","type":3,"api":"csp_Xdai","jar":"./ys/Yoursmile.jar;md5;310C68CFD6F15BF792C08464BC3F4D67","playerType":2,"searchable":1,"quickSearch":1,"filterable":1,"ext":"7lj763gg0939790i413gjh9kk011jijiggll990k9li73l224k770ik0j10l502j2j9l798lhj778hh33g018h94k5j400kij3567j7gji97kkk4118421g03lll"},
 //{"key":"csp_LiteApple","name":"🐞苹果(SP)","type":3,"api":"csp_LiteApple","jar":"./ys/Yoursmile.jar;md5;310C68CFD6F15BF792C08464BC3F4D67","searchable":1,"quickSearch":1,"filterable":1},

@@ -5,7 +5,7 @@
 "lives": [
 //{"name": "冰茶线路","type": 0,"url": "https://bc.188766.xyz/?ip=&mishitong=true&mima=bingcha1130&json=true","playerType": 2,"timeout": 10,"ua": "bingcha/1.1","epg": "http://epg.51zmt.top:8000/api/diyp/?ch={name}&date={date}","logo": "http://127.0.0.1:9978/file/酷9/logo/{name}.png","catchup": {"type": "append","source": "?playseek=${(b)yyyyMMddHHmmss}-${(eyyyyMMddHHmmss}"}},
 {
-  "name": "MIGU线路",
+  "name": "咪咕线路",
   "type": 0,
   "url": "https://ds65.tv1288.xyz",
   "playerType": 2,
@@ -27,8 +27,8 @@
     "source": "?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"
 }
 },
-  {
-  "name": "咪咕线路",
+{
+  "name": "develop202线路",
   "type": 0,
   "url": "https://raw.githubusercontent.com/develop202/migu_video/refs/heads/main/interface.txt",
   "playerType": 2,

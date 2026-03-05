@@ -7,7 +7,7 @@
 {
   "name": "咪咕线路",
   "type": 0,
-  "url": "http://127.0.0.1:9978/proxy?do=live&url=https://ds65.tv1288.xyz",
+  "url": "https://ds65.tv1288.xyz",
   "playerType": 2,
   "epg": "http://epg.51zmt.top:8000/api/diyp/e.xml.gz/?ch={name}&date={date}",
   "logo": "http://127.0.0.1:9978/file/酷9/logo/{name}.png",

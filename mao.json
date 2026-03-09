@@ -20,7 +20,7 @@
   "type": 0,
   "url": "https://raw.githubusercontent.com/develop202/migu_video/refs/heads/main/interface.txt",
   "playerType": 2,
-  "epg": "https://raw.githubusercontent.com/develop202/migu_video/refs/heads/main/playback.xml/?ch={name}&date={date}",
+  "epg": "https://raw.githubusercontent.com/develop202/migu_video/refs/heads/main/playback.xml",
   "logo": "http://127.0.0.1:9978/file/酷9/logo/{name}.png",
   "catchup": {
     "type": "append",

@@ -59,18 +59,18 @@
 {"key":"Wexokconfig","name":"🐮配置🐮","type":3,"api":"csp_WexConfigGuard","searchable":0,"changeable":0,"indexs":0},
 {"key": "MyQuark", "name": "🐮我的资源┃夸克🐮", "type": 3, "api": "csp_MyQuarkGuard", "searchable":0, "changeable":0, "timeout": 50, "style": { "type": "list" } },
 
-{ "key": "WexBoBo", "name": "💥伯伯┃秒播💥", "type": 3, "api": "csp_WexBoBoGuard", "searchable": 1, "changeable": 1 }, 
 { "key": "WexReBo", "name": "💥热播┃秒播💥", "type": 3, "api": "csp_WexReBoGuard", "searchable": 1, "changeable": 1 }, 
-{ "key": "WexDuBoKu", "name": "💥独播┃秒播💥", "type": 3, "api": "csp_WexDuBoKuGuard", "searchable": 1, "changeable": 1 }, 
-{ "key": "WexYiYs", "name": "💥伊影┃秒播💥", "type": 3, "api": "csp_WexYiYsGuard", "searchable": 1, "changeable": 1 }, 
 {"key": "WexYueYue","name": "💥闪电┃秒播💥","type": 3,"api": "csp_WexYueYueGuard","searchable": 1,"changeable": 1},
+{ "key": "WexBoBo", "name": "💥伯伯┃秒播💥", "type": 3, "api": "csp_WexBoBoGuard", "searchable": 1, "changeable": 1 }, 
+{ "key": "WexDuBoKu", "name": "💥独播┃秒播💥", "type": 3, "api": "csp_WexDuBoKuGuard", "searchable": 1, "changeable": 1 }, 
 { "key": "賤賤", "name": "💥荐片┃秒播💥", "type": 3, "api": "csp_WexJianPianGuard", "searchable": 1, "changeable": 1 }, 
 { "key": "WexGuaZi", "name": "💥瓜子┃秒播💥", "type": 3, "api": "csp_WexGuaZiGuard", "searchable": 1, "changeable": 1 }, 
 { "key": "AnimeMoDu", "name": "💥魔都┃秒播💥", "type": 3, "api": "csp_AnimeMoDuGuard", "searchable": 1, "changeable": 1 },
+{ "key": "WexYiYs", "name": "💥伊影┃秒播💥", "type": 3, "api": "csp_WexYiYsGuard", "searchable": 1, "changeable": 1 }, 
 { "key": "WexWenCai", "name": "💥文才┃秒播💥", "type": 3, "api": "csp_WexWenCaiGuard", "searchable": 1, "changeable": 1 }, 
 { "key": "WexIkanBot", "name": "💥爱看机器人┃采集💥", "type": 3, "api": "csp_WexIkanBotGuard", "searchable": 1, "changeable": 1 },
 //{ "key": "WexBtTwo", "name": "🎇BtTwo┃秒播🎇", "type": 3, "api": "csp_WexBtTwoGuard", "searchable": 1, "changeable": 1 }, 
-{"key":"bili","name":"🅱哔哩┃合集🅱","type":3,"api":"csp_NewBiLiGuard","searchable":1,"quickSearch":0,"filterable":1,"ext":"./wex/bili001.txt"},
+{"key":"bili","name":"🅱哔哩┃合集🅱","type":3,"api":"csp_NewBiLiGuard","searchable":0,"quickSearch":0,"filterable":1,"ext":"./wex/bili001.txt"},
 
 //采集
 {"key":"量子","name":"🐝量子(🏀NBA回看)","type": 1,"api": "https://cj.lziapi.com/api.php/provide/vod/from/lzm3u8", "searchable": 1, "quickSearch":1,"changeable": 1,"categories": ["篮球","记录片", "足球", "动作片", "喜剧片", "科幻片", "恐怖片", "大陆综艺" ] },

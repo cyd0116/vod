@@ -1,5 +1,5 @@
 {
-"spider":"./wex/wex.txt;md5;3b41d7df12161c9cf3d1250caad60733",
+"spider":"./wex/wex.txt;md5;504c6976a8f3abab659d867dd3cddef9",
 "wallpaper": "https://深色壁纸.xxooo.cf/",
 
 "lives": [
@@ -12,7 +12,7 @@
   "logo": "http://127.0.0.1:9978/file/酷9/logo/{name}.png",
   "catchup": {
     "type": "append",
-    "source": "?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"
+    "source": "&playbackbegin=${(b)yyyyMMddHHmmss}&playbackend=${(e)yyyyMMddHHmmss}"
 }
 },
 {
@@ -24,7 +24,7 @@
   "logo": "http://127.0.0.1:9978/file/酷9/logo/{name}.png",
   "catchup": {
     "type": "append",
-    "source": "?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"
+    "source": "&playbackbegin=${(b)yyyyMMddHHmmss}&playbackend=${(e)yyyyMMddHHmmss}"
 }
 },
 {"name": "Kimentanm线路",
@@ -35,7 +35,7 @@
   "logo": "http://127.0.0.1:9978/file/酷9/logo/{name}.png",
   "catchup": {
     "type": "append",
-    "source": "?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"
+    "source": "&playbackbegin=${(b)yyyyMMddHHmmss}&playbackend=${(e)yyyyMMddHHmmss}"
 }
 },
 {
@@ -48,7 +48,7 @@
 "logo": "http://127.0.0.1:9978/file/酷9/logo/{name}.png",
   "catchup": {
     "type": "append",
-    "source": "?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"
+    "source": "&playbackbegin=${(b)yyyyMMddHHmmss}&playbackend=${(e)yyyyMMddHHmmss}"
 }
 }
 ],
@@ -70,7 +70,7 @@
 { "key": "WexWenCai", "name": "💥文才┃秒播💥", "type": 3, "api": "csp_WexWenCaiGuard", "searchable": 1, "changeable": 1 }, 
 { "key": "WexIkanBot", "name": "💥爱看机器人┃采集💥", "type": 3, "api": "csp_WexIkanBotGuard", "searchable": 1, "changeable": 1 },
 //{ "key": "WexBtTwo", "name": "🎇BtTwo┃秒播🎇", "type": 3, "api": "csp_WexBtTwoGuard", "searchable": 1, "changeable": 1 }, 
-{"key":"bili","name":"🅱哔哩┃合集🅱","type":3,"api":"csp_NewBiLiGuard","searchable":0,"quickSearch":0,"filterable":1,"ext":"./wex/bili001.txt"},
+{"key":"bili","name":"🅱哔哩┃合集🅱","type":3,"api":"csp_NewBiLiGuard","searchable":1,"quickSearch":1,"filterable":1,"ext":"./wex/bili001.txt"},
 
 //采集
 {"key":"量子","name":"🐝量子(🏀NBA回看)","type": 1,"api": "https://cj.lziapi.com/api.php/provide/vod/from/lzm3u8", "searchable": 1, "quickSearch":1,"changeable": 1,"categories": ["篮球","记录片", "足球", "动作片", "喜剧片", "科幻片", "恐怖片", "大陆综艺" ] },

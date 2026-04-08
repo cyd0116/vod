@@ -1,5 +1,5 @@
 {
-"spider":"./wex/wex.txt;md5;504c6976a8f3abab659d867dd3cddef9",
+"spider":"./wex/wex.txt;md5;d185b72a2532394619bd976eb44ef35e",
 "wallpaper": "https://深色壁纸.xxooo.cf/",
 
 "lives": [
@@ -8,7 +8,7 @@
   "type": 0,
   "url": "https://ds65.tv1288.xyz",
   "playerType": 2,
-  "epg": "https://raw.githubusercontent.com/develop202/migu_video/refs/heads/main/playback.xml",
+  "epg": "https://github.com/taksssss/tv/blob/main/epg/51zmt.xml",
   "logo": "http://127.0.0.1:9978/file/酷9/logo/{name}.png",
   "catchup": {
     "type": "append",
@@ -31,7 +31,7 @@
   "type": 0,
   "url": "https://raw.githubusercontent.com/Kimentanm/aptv/master/m3u/iptv.m3u",
   "playerType": 2,
-  "epg": "https://raw.githubusercontent.com/develop202/migu_video/refs/heads/main/playback.xml",
+  "epg": "https://github.com/taksssss/tv/blob/main/epg/51zmt.xml",
   "logo": "http://127.0.0.1:9978/file/酷9/logo/{name}.png",
   "catchup": {
     "type": "append",
@@ -44,7 +44,7 @@
 "url": "https://raw.githubusercontent.com/cyd0116/vod/refs/heads/main/tv/tv.txt",
 "ua": "okhttp/3.15",
 "timeout": 10,
-"epg": "https://raw.githubusercontent.com/develop202/migu_video/refs/heads/main/playback.xml",
+"epg": "https://github.com/taksssss/tv/blob/main/epg/51zmt.xml",
 "logo": "http://127.0.0.1:9978/file/酷9/logo/{name}.png",
   "catchup": {
     "type": "append",
@@ -88,6 +88,7 @@
 { "key": "NewDuoDuo", "name": "💓多多┃聚合💓", "type": 3, "api": "csp_NewDuoDuoGuard", "searchable": 1, "changeable": 1, "timeout": 120 }, 
 { "key": "二小", "name": "💓二小┃聚合💓", "type": 3, "api": "csp_NewErXiaoGuard", "searchable": 1, "changeable": 1 }, 
 { "key": "SoTjSo", "name": "💓TG┃聚合💓", "type": 3, "api": "csp_SoTjSoGuard", "searchable": 1, "changeable": 1 }, 
+{ "key": "原盘", "name": "💓原盘┃夸克💓", "type": 3, "api": "csp_New4KZnGuard", "searchable": 1, "changeable": 1 },
 
 { "key": "NewJuTou", "name": "🎠剧透┃综合🎠", "type": 3, "api": "csp_NewJuTouGuard", "searchable": 1, "changeable": 1 }, 
 { "key": "SoHaiYin", "name": "🎠海音┃综合🎠", "type": 3, "api": "csp_SoHaiYinGuard", "searchable": 1, "changeable":1 }, 
@@ -102,7 +103,13 @@
 
 { "key": "LiveHuYa", "name": "🐯虎牙┃直播🐯", "type": 3, "api": "csp_LiveHuYaGuard", "searchable": 0, "changeable": 0 }, 
 { "key": "LiveDouYu", "name": "🐳斗鱼┃直播🐳", "type": 3, "api": "csp_LiveDouYuGuard", "searchable": 0, "changeable": 0 }, 
+
 { "key": "BookShiJie", "name": "🎃极品┃听书🎃", "type": 3, "api": "csp_BookShiJieGuard", "searchable": 0, "changeable": 0}, 
+{ "key": "BookYueTing", "name": "🎃悦庭┃听书🎃", "type": 3, "api": "csp_BookYueTingGuard", "searchable": 0, "changeable":0, "timeout": 120 }, 
+{ "key": "BookWuWei", "name": "🎃无忧┃听书🎃", "type": 3, "api": "csp_BookWuWeiGuard", "searchable":0, "changeable":0 },
+
+{ "key": "MusicKuWo", "name": "🎼酷听┃音乐🎼", "type": 3, "api": "csp_MusicKuWoGuard", "searchable":0, "changeable": 0 },
+{ "key": "Music163", "name": "🎼易听┃音乐🎼", "type": 3, "api": "csp_Music163Guard", "searchable":0, "changeable": 0 }, 
 { "key": "MusicIKtv", "name": "🎼KTV┃音乐🎼", "type": 3, "api": "csp_MusicIKtvGuard", "searchable": 0, "changeable": 0 },
 
 { "key": "SportGuaZi", "name": "🌐瓜子┃体育🌐", "type": 3, "api": "csp_SportGuaZiGuard", "searchable": 0, "changeable": 0, "style": { "type": "list" } }, 

@@ -8,7 +8,7 @@
   "type": 0,
   "url": "https://ds65.tv1288.xyz",
   "playerType": 2,
-  "epg": "https://123.tv1288.xyz/2026.xml",
+  "epg": "https://raw.githubusercontent.com/taksssss/tv/refs/heads/main/epg/erw.xml",
   "logo": "http://127.0.0.1:9978/file/酷9/logo/{name}.png",
   "catchup": {
     "type": "append",

@@ -8,7 +8,7 @@
   "type": 0,
   "url": "https://ds65.tv1288.xyz",
   "playerType": 2,
-  "epg": "https://github.com/taksssss/tv/blob/main/epg/51zmt.xml",
+  "epg": "https://raw.githubusercontent.com/taksssss/tv/refs/heads/main/epg/51zmt.xml",
   "logo": "http://127.0.0.1:9978/file/酷9/logo/{name}.png",
   "catchup": {
     "type": "append",
@@ -31,7 +31,7 @@
   "type": 0,
   "url": "https://raw.githubusercontent.com/Kimentanm/aptv/master/m3u/iptv.m3u",
   "playerType": 2,
-  "epg": "https://github.com/taksssss/tv/blob/main/epg/51zmt.xml",
+  "epg": "https://raw.githubusercontent.com/taksssss/tv/refs/heads/main/epg/51zmt.xml",
   "logo": "http://127.0.0.1:9978/file/酷9/logo/{name}.png",
   "catchup": {
     "type": "append",
@@ -44,7 +44,7 @@
 "url": "https://raw.githubusercontent.com/cyd0116/vod/refs/heads/main/tv/tv.txt",
 "ua": "okhttp/3.15",
 "timeout": 10,
-"epg": "https://github.com/taksssss/tv/blob/main/epg/51zmt.xml",
+"epg": "https://raw.githubusercontent.com/taksssss/tv/refs/heads/main/epg/51zmt.xml",
 "logo": "http://127.0.0.1:9978/file/酷9/logo/{name}.png",
   "catchup": {
     "type": "append",

@@ -1,5 +1,5 @@
 {
-"spider":"./wex/wex.txt;md5;d185b72a2532394619bd976eb44ef35e",
+"spider":"./wex/wex.txt;md5;28662d5b493bb2c9e03b577e9ab56dc4",
 "wallpaper": "https://深色壁纸.xxooo.cf/",
 
 "lives": [
@@ -65,11 +65,15 @@
 { "key": "WexDuBoKu", "name": "💥独播┃秒播💥", "type": 3, "api": "csp_WexDuBoKuGuard", "searchable": 1, "changeable": 1 }, 
 { "key": "賤賤", "name": "💥荐片┃秒播💥", "type": 3, "api": "csp_WexJianPianGuard", "searchable": 1, "changeable": 1 }, 
 { "key": "WexGuaZi", "name": "💥瓜子┃秒播💥", "type": 3, "api": "csp_WexGuaZiGuard", "searchable": 1, "changeable": 1 }, 
-{ "key": "AnimeMoDu", "name": "💥魔都┃秒播💥", "type": 3, "api": "csp_AnimeMoDuGuard", "searchable": 1, "changeable": 1 },
-{ "key": "WexYiYs", "name": "💥伊影┃秒播💥", "type": 3, "api": "csp_WexYiYsGuard", "searchable": 1, "changeable": 1 }, 
 { "key": "WexWenCai", "name": "💥文才┃秒播💥", "type": 3, "api": "csp_WexWenCaiGuard", "searchable": 1, "changeable": 1 }, 
+{ "key": "WexYiYs", "name": "💥伊影┃秒播💥", "type": 3, "api": "csp_WexYiYsGuard", "searchable": 1, "changeable": 1 }, 
 { "key": "WexIkanBot", "name": "💥爱看机器人┃采集💥", "type": 3, "api": "csp_WexIkanBotGuard", "searchable": 1, "changeable": 1 },
 //{ "key": "WexBtTwo", "name": "🎇BtTwo┃秒播🎇", "type": 3, "api": "csp_WexBtTwoGuard", "searchable": 1, "changeable": 1 }, 
+{ "key": "AnimeMoDu", "name": "🤡魔都┃动漫🤡", "type": 3, "api": "csp_AnimeMoDuGuard", "searchable": 1, "changeable": 1 },
+{ "key": "AnimeGiriGiri", "name": "🤡小爱┃动漫🤡", "type": 3, "api": "csp_AnimeGiriGiriGuard", "searchable": 1, "changeable": 1 }, 
+{ "key": "AnimeFanShu", "name": "🤡番薯┃动漫🤡", "type": 3, "api": "csp_AnimeFanShuGuard", "searchable": 1, "changeable": 1 }, 
+{ "key": "AnimeXiFan", "name": "🤡稀饭┃动漫🤡", "type": 3, "api": "csp_AnimeXiFanGuard", "searchable": 1, "changeable": 1 },
+{ "key": "MusicLiYuan", "name": "🎎戏曲┃秒播🎎", "type": 3, "api": "csp_MusicLiYuanGuard", "searchable": 1, "changeable": 0, "style": { "type": "rect", "ratio": 2 } },
 {"key":"bili","name":"🅱哔哩┃合集🅱","type":3,"api":"csp_NewBiLiGuard","searchable":1,"quickSearch":1,"filterable":1,"ext":"./wex/bili001.txt"},
 
 //采集

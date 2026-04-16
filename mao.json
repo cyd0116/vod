@@ -48,7 +48,7 @@
 "logo": "http://127.0.0.1:9978/file/酷9/logo/{name}.png",
   "catchup": {
     "type": "append",
-    "source": "&playbackbegin=${(b)yyyyMMddHHmmss}&playbackend=${(e)yyyyMMddHHmmss}"
+    "source": "?&playbackbegin=${(b)yyyyMMddHHmmss}&playbackend=${(e)yyyyMMddHHmmss}"
 }
 }
 ],

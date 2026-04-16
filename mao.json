@@ -41,7 +41,7 @@
 {
 "name": "官方线路",
 "type": 0,
-"url": "https://raw.githubusercontent.com/cyd0116/vod/refs/heads/main/tv/tv2.txt",
+"url": "https://raw.githubusercontent.com/cyd0116/vod/refs/heads/main/tv/tv.txt",
 "timeout": 10,
 "playerType": 2,
 "epg": "https://raw.githubusercontent.com/taksssss/tv/refs/heads/main/epg/51zmt.xml",

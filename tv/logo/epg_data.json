@@ -1,0 +1,180 @@
+{
+  "epgs": [
+{
+"tvid": "1",
+"epgid": "CCTV1",
+"name": "CCTV1-高清,CCTV1,CCTV-1,CCTV-01,CCTV-1hd,CCTV-1高清,CCTV-1综合,CCTV1 综合,CCTV1综合,CCTV-1综合[高清],CCTV1 综合[高清],CCTV-1 综合[高清],CCTV-1超清,CCTV1-综合",
+"status": "1",
+"note": "CCTV-1综合",
+"logo": "http://127.0.0.1:9978/file/酷9/logo/CCTV1.png"
+},
+{
+"tvid": "2",
+"epgid": "CCTV2",
+"name": "CCTV2-高清,CCTV2,CCTV-2,CCTV-02,CCTV-2hd,CCTV-2高清,CCTV-2财经,CCTV2 财经,CCTV2财经,CCTV-2财经[高清],CCTV2 财经[高清],CCTV-2 财经[高清],CCTV-2超清,CCTV2-财经",
+"status": "1",
+"note": "CCTV-2财经",
+"logo": "http://127.0.0.1:9978/file/酷9/logo/CCTV2.png"
+},
+{
+"tvid": "3",
+"epgid": "CCTV3",
+"name": "CCTV3-高清,CCTV3,CCTV-3,CCTV-03,CCTV-3hd,CCTV-3高清,CCTV-3综艺,CCTV3 综艺,CCTV3综艺,CCTV-3综艺[高清],CCTV3 综艺[高清],CCTV-3 综艺[高清],CCTV-3超清,CCTV3-综艺",
+"status": "1",
+"note": "CCTV-3综艺",
+"logo": "http://127.0.0.1:9978/file/酷9/logo/CCTV3.png"
+},
+{
+"tvid": "4",
+"epgid": "CCTV4",
+"name": "CCTV4-高清,CCTV4,CCTV-4,CCTV-04,CCTV-04,CCTV-4hd,CCTV-4高清,CCTV-4国际,CCTV-4中文国际,CCTV4 中文国际,CCTV4中文国际,CCTV-4中文国际[高清],CCTV4 中文国际[高清],CCTV-4 中文国际[高清],CCTV-4超清,CCTV4-国际",
+"status": "1",
+"note": "CCTV-4中文国际",
+"logo": "http://127.0.0.1:9978/file/酷9/logo/CCTV4.png"
+},
+{
+"tvid": "5",
+"epgid": "CCTV4欧洲",
+"name": "CCTV-4中文国际欧洲,CCTV-4欧洲,CCTV4欧洲,CCTV4中文国际欧洲,CCTV-4中文国际 欧洲",
+"status": "1",
+"note": "CCTV-4中文国际欧洲",
+"logo": "http://127.0.0.1:9978/file/酷9/logo/CCTV4欧洲.png"
+},
+{
+"tvid": "6",
+"epgid": "CCTV4美洲",
+"name": "CCTV-4中文国际美洲,CCTV-4美洲,CCTV4美洲,CCTV4中文国际美洲,CCTV-4中文国际 美洲",
+"status": "1",
+"note": "CCTV-4中文国际美洲",
+"logo": "http://127.0.0.1:9978/file/酷9/logo/CCTV4美洲.png"
+},
+{
+"tvid": "7",
+"epgid": "CCTV5",
+"name": "CCTV5-高清,CCTV5,CCTV-5,CCTV-05,CCTV-5hd,CCTV-5高清,CCTV-5体育,CCTV5 体育,CCTV5体育,CCTV-5体育[高清],CCTV5 体育[高清],CCTV-5 体育[高清],CCTV-5超清,CCTV5-体育,CCTV-5体育高清,CCTV5 体育高清,CCTV-5 体育高清,CCTV5体育高清",
+"status": "1",
+"note": "CCTV-5体育",
+"logo": "http://127.0.0.1:9978/file/酷9/logo/CCTV5.png"
+},
+{
+"tvid": "8",
+"epgid": "CCTV5+",
+"name": "CCTV5+-高清,CCTV5+,CCTV5 +,CCTV5＋,CCTV-5+,CCTV-5+hd,CCTV-5+高清,CCTV5⁺体育赛事,CCTV5⁺,CCTV-5⁺,CCTV-5⁺体育赛事,CCTV-体育赛事,CCTV-5+体育赛事,CCTV-5+赛事,CCTV5+ 体育赛事,CCTV5+体育赛事,体育赛事,CCTV-5+赛事[高清],CCTV5+ 体育赛事[高清],CCTV-5+ 体育赛事[高清],CCTV-5+超清,CCTV5+-体育赛事",
+"status": "1",
+"note": "CCTV-5+体育赛事",
+"logo": "https://raw.githubusercontent.com/cyd0116/vod/refs/heads/main/tv/logo/CCTV5+.png"
+},
+{
+"tvid": "9",
+"epgid": "CCTV6",
+"name": "CCTV6-高清,CCTV6,CCTV-6,CCTV-06,CCTV-6hd,CCTV6电影,CCTV-6高清,CCTV-6电影,CCTV6 电影,CCTV6电影,CCTV-6电影[高清],CCTV6 电影[高清],CCTV-6 电影[高清],CCTV-6超清,CCTV6影视,CCTV6-电影",
+"status": "1",
+"note": "CCTV-6电影",
+"logo": "http://127.0.0.1:9978/file/酷9/logo/CCTV6.png"
+},
+{
+"tvid": "10",
+"epgid": "CCTV7",
+"name": "CCTV7-高清,CCTV7,CCTV-7,CCTV-07,CCTV-7hd,CCTV-7高清,CCTV-7国防军事,CCTV7国防军事,CCTV-7国防,CCTV7国防,CCTV7-国防军事,CCTV7-军事,CCTV7 国防军事,CCTV7国防军事,CCTV7-军事[高清],CCTV7 国防军事[高清],CCTV-7国防军事[高清],CCTV-7 国防军事[高清],CCTV-7超清,CCTV7-军农",
+"status": "1",
+"note": "CCTV-7国防军事",
+"logo": "http://127.0.0.1:9978/file/酷9/logo/CCTV7.png"
+},
+{
+"tvid": "11",
+"epgid": "CCTV8",
+"name": "CCTV8-高清,CCTV8,CCTV-8,CCTV-08,CCTV-8hd,CCTV-8高清,CCTV8电视剧,CCTV-8电视,CCTV8电视,CCTV-8电视剧,CCTV8 电视剧,CCTV8电视剧,CCTV8-电视剧[高清],CCTV8 电视剧[高清],CCTV-8 电视剧[高清],CCTV-8电视剧[高清],CCTV-8超清,CCTV8-电视剧",
+"status": "1",
+"note": "CCTV-8电视剧",
+"logo": "http://127.0.0.1:9978/file/酷9/logo/CCTV8.png"
+},
+{
+"tvid": "12",
+"epgid": "CCTV9",
+"name": "CCTV9-高清,CCTV9,CCTV-9,CCTV-09,CCTV-9hd,CCTV-9高清,CCTV-9记录,CCTV-9纪录,CCTV9纪录,CCTV9 纪录,CCTV9纪录[高清],CCTV9 纪录[高清],CCTV-9纪录[高清],CCTV-9 纪录[高清],CCTV-9超清,CCTV9-纪录",
+"status": "1",
+"note": "CCTV-9纪录",
+"logo": "http://127.0.0.1:9978/file/酷9/logo/CCTV9.png"
+},
+{
+"tvid": "13",
+"epgid": "CCTV10",
+"name": "CCTV10-高清,CCTV10,CCTV-10,CCTV-10hd,CCTV-10高清,CCTV-10科教,CCTV10 科教,CCTV10科教,CCTV-10科教[高清],CCTV10 科教[高清],CCTV-10 科教[高清],CCTV-10超清,CCTV10-科教",
+"status": "1",
+"note": "CCTV-10科教",
+"logo": "http://127.0.0.1:9978/file/酷9/logo/CCTV10.png"
+},
+{
+"tvid": "14",
+"epgid": "CCTV11",
+"name": "CCTV11-高清,CCTV11,CCTV-11,CCTV-11hd,CCTV-11高清,CCTV-11戏曲,CCTV11 戏曲,CCTV11戏曲,CCTV-11戏曲[高清],CCTV11 戏曲[高清],CCTV-11 戏曲[高清],CCTV-11超清,CCTV11-戏曲",
+"status": "1",
+"note": "CCTV-11戏曲",
+"logo": "http://127.0.0.1:9978/file/酷9/logo/CCTV11.png"
+},
+{
+"tvid": "15",
+"epgid": "CCTV12",
+"name": "CCTV12-高清,CCTV12,CCTV-12,CCTV-12hd,CCTV-12高清,CCTV-12社会,CCTV-12社会与法,CCTV12 社会与法,CCTV12社会与法,CCTV-12社会与法[高清],CCTV12 社会与法[高清],CCTV-12 社会与法[高清],CCTV-12超清,CCTV12-社会与法",
+"status": "1",
+"note": "CCTV-12社会与法",
+"logo": "http://127.0.0.1:9978/file/酷9/logo/CCTV12.png"
+},
+{
+"tvid": "16",
+"epgid": "CCTV13",
+"name": "CCTV13-高清,CCTV13,CCTV-13,CCTV-13hd,CCTV-13高清,CCTV13新闻,CCTV-13新闻,CCTV13 新闻,CCTV13新闻,CCTV-13新闻[高清],CCTV13 新闻[高清],CCTV-13 新闻[高清],CCTV-13超清,CCTV13-新闻",
+"status": "1",
+"note": "CCTV-13新闻",
+"logo": "http://127.0.0.1:9978/file/酷9/logo/CCTV13.png"
+},
+{
+"tvid": "17",
+"epgid": "CCTV14",
+"name": "CCTV14-高清,CCTV14,CCTV 14,CCTV-14,CCTV-14hd,CCTV-14高清,CCTV-14少儿,CCTV14 少儿,CCTV14少儿,CCTV-14少儿[高清],CCTV14 少儿[高清],CCTV-14 少儿[高清],CCTV-14超清,CCTV14-少儿",
+"status": "1",
+"note": "CCTV-14少儿",
+"logo": "http://127.0.0.1:9978/file/酷9/logo/CCTV14.png"
+},
+{
+"tvid": "18",
+"epgid": "CCTV15",
+"name": "CCTV15-高清,CCTV15,CCTV-15,CCTV-15hd,CCTV-15高清,CCTV-15音乐,CCTV15 音乐,CCTV15音乐,CCTV-15音乐[高清],CCTV15 音乐[高清],CCTV-15 音乐[高清],CCTV-15超清,CCTV15-音乐",
+"status": "1",
+"note": "CCTV-15音乐",
+"logo": "http://127.0.0.1:9978/file/酷9/logo/CCTV15.png"
+},
+{
+"tvid": "19",
+"epgid": "CCTV16",
+"name": "CCTV16-高清,CCTV16,CCTV16 4K,CCTV-16,CCTV-16hd,CCTV-16高清,CCTV-16高清4M,CCTV-16高清8M,CCTV-16奥运,CCTV-16奥运4K,CCTV16 奥林匹克,CCTV-16,CCTV-16奥林匹克超清,CCTV16奥林匹克,CCTV-16 奥林匹克 4K,CCTV16 奥林匹克[高清],CCTV-16 奥林匹克[高清],CCTV-16奥林匹克[高清],CCTV16 奥林匹克[超清],CCTV-16奥林匹克[超清],CCTV-16 奥林匹克[超清HDR],CCTV16-4K,CCTV16-奥林匹克,CCTV-16_4K",
+"status": "1",
+"note": "CCTV-16奥林匹克",
+"logo": "https://raw.githubusercontent.com/cyd0116/vod/refs/heads/main/tv/logo/CCTV16.png"
+},
+{
+"tvid": "20",
+"epgid": "CCTV17",
+"name": "CCTV17-高清,CCTV17,CCTV-17,CCTV-17hd,CCTV-17高清,CCTV-17超清,CCTV-17农业,CCTV17农业,CCTV-17农业农村,CCTV17 农业农村,CCTV17农业农村,CCTV-17农村农业,CCTV17农村农业,CCTV-17农业农村[高清],CCTV17 农业农村[高清],CCTV-17 农业农村[高清],CCTV17-农业农村",
+"status": "1",
+"note": "CCTV-17农业农村",
+"logo": "http://127.0.0.1:9978/file/酷9/logo/CCTV17.png"
+},
+{
+"tvid": "21",
+"epgid": "CCTV4K",
+"name": "CCTV 4K,CCTV-4k,CCTV4K高清,CCTV 4K高清,CCTV-4k高清,CCTV4K 高清,CCTV4K超高清,CCTV 4K超高清,CCTV-4k超高清,CCTV-4k 超高清,CCTV4K 超高清,CCTV4K超清,CCTV 4K超清,CCTV-4k超清,CCTV4K 超清,CCTV-高清,CCTV高清,CCTV 高清",
+"status": "1",
+"note": "CCTV-4K超高清",
+"logo": "http://127.0.0.1:9978/file/酷9/logo/CCTV4K.png"
+},
+{
+"tvid": "22",
+"epgid": "CCTV8K",
+"name": "CCTV 8K,CCTV-8k,CCTV8K高清,CCTV 8K高清,CCTV-8k高清,CCTV8K 高清,CCTV8K超高清,CCTV 8K超高清,CCTV-8k超高清,CCTV-8k 超高清,CCTV8K 超高清,CCTV-超高清,CCTV超高清,CCTV8K超清,CCTV 8K超清,CCTV-8k超清,CCTV8K 超清,CCTV-超清,CCTV超清,CCTV 超清,CCTV超高清,CCTV8K频道",
+"status": "1",
+"note": "CCTV-8K超高清",
+"logo": "http://127.0.0.1:9978/file/酷9/logo/CCTV8K.png"
+}
+  ]
+}

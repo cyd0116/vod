@@ -1,6 +1,6 @@
 #EXTM3U
 x-tvg-url="https://raw.githubusercontent.com/taksssss/tv/refs/heads/main/epg/51zmt.xml" 
-catchup="append" catchup-source="&playbackbegin=${(b)yyyyMMddHHmmss}&playbackend=${(e)yyyyMMddHHmmss}"
+catchup="append" catchup-source="?&playbackbegin=${(b)yyyyMMddHHmmss}&playbackend=${(e)yyyyMMddHHmmss}"
 #EXTINF:-1 group-title="央视|官方",CCTV1 综合
 webview://https://yangshipin.cn/tv/home?pid=600001859#webview://https://tv.cctv.com/live/cctv1/
 #EXTINF:-1 group-title="央视|官方",CCTV2 财经

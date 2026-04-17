@@ -62,7 +62,7 @@
 "name": "CCTV5+-高清,CCTV5+,CCTV5 +,CCTV5＋,CCTV-5+,CCTV-5+hd,CCTV-5+高清,CCTV5⁺体育赛事,CCTV5⁺,CCTV-5⁺,CCTV-5⁺体育赛事,CCTV-体育赛事,CCTV-5+体育赛事,CCTV-5+赛事,CCTV5+ 体育赛事,CCTV5+体育赛事,体育赛事,CCTV-5+赛事[高清],CCTV5+ 体育赛事[高清],CCTV-5+ 体育赛事[高清],CCTV-5+超清,CCTV5+-体育赛事",
 "status": "1",
 "note": "CCTV-5+体育赛事",
-"logo": "https://raw.githubusercontent.com/cyd0116/vod/refs/heads/main/tv/logo/CCTV5+.png"
+"logo": "http://127.0.0.1:9978/file/酷9/logo/CCTV5＋.png"
 },
 {
 "tvid": "9",
@@ -150,7 +150,7 @@
 "name": "CCTV16-高清,CCTV16,CCTV16 4K,CCTV-16,CCTV-16hd,CCTV-16高清,CCTV-16高清4M,CCTV-16高清8M,CCTV-16奥运,CCTV-16奥运4K,CCTV16 奥林匹克,CCTV-16,CCTV-16奥林匹克超清,CCTV16奥林匹克,CCTV-16 奥林匹克 4K,CCTV16 奥林匹克[高清],CCTV-16 奥林匹克[高清],CCTV-16奥林匹克[高清],CCTV16 奥林匹克[超清],CCTV-16奥林匹克[超清],CCTV-16 奥林匹克[超清HDR],CCTV16-4K,CCTV16-奥林匹克,CCTV-16_4K",
 "status": "1",
 "note": "CCTV-16奥林匹克",
-"logo": "https://raw.githubusercontent.com/cyd0116/vod/refs/heads/main/tv/logo/CCTV16.png"
+"logo": "http://127.0.0.1:9978/file/酷9/logo/CCTV16.png"
 },
 {
 "tvid": "20",

@@ -1,5 +1,5 @@
 {
-"spider":"./wex/wex.txt;md5;e343a22acd0d63070a77b97608166ecf",
+"spider":"./wex/wex.txt;md5;03a6211a751367f46f1704a8b1d10d36",
 "wallpaper": "https://深色壁纸.xxooo.cf/",
 
 "lives": [
@@ -8,7 +8,7 @@
   "type": 0,
   "url": "https://ds65.tv1288.xyz",
   "playerType": 2,
-  //"epg": "https://raw.githubusercontent.com/taksssss/tv/refs/heads/main/epg/51zmt.xml",
+  "epg": "https://raw.githubusercontent.com/taksssss/tv/refs/heads/main/epg/51zmt.xml",
   "logo": "http://127.0.0.1:9978/file/酷9/logo/{name}.png",
   "catchup": {
     "type": "append",
@@ -20,7 +20,7 @@
   "type": 0,
   "url": "https://raw.githubusercontent.com/develop202/migu_video/refs/heads/main/interface.txt",
   "playerType": 2,
-  //"epg": "https://raw.githubusercontent.com/develop202/migu_video/refs/heads/main/playback.xml",
+  "epg": "https://raw.githubusercontent.com/develop202/migu_video/refs/heads/main/playback.xml",
   "logo": "http://127.0.0.1:9978/file/酷9/logo/{name}.png",
   "catchup": {
     "type": "append",
@@ -86,6 +86,7 @@
 { "key": "玩偶", "name": "💓玩偶┃臻彩", "type": 3, "api": "csp_NewWoggGuard", "searchable": 1, "changeable": 1 }, 
 { "key": "NewHuBan", "name": "💓虎斑┃臻彩💓", "type": 3, "api": "csp_NewHuBanGuard", "searchable": 1, "changeable": 1 }, 
 { "key": "NewZhiZhen", "name": "💓至臻┃臻彩💓", "type": 3, "api": "csp_NewZhiZhenGuard", "searchable": 1, "changeable": 1 }, 
+{ "key": "二小", "name": "💓指南┃臻彩💓", "type": 3, "api": "csp_NewErXiaoGuard", "searchable": 1, "changeable": 1 },
 { "key": "NewShaYang", "name": "💓撒仰┃臻彩💓", "type": 3, "api": "csp_NewShaYangGuard", "searchable": 1, "changeable": 1 }, 
 { "key": "NewGuanYing", "name": "💓观影┃聚合💓", "type": 3, "api": "csp_NewGuanYingGuard", "searchable": 1, "changeable": 1, "timeout": 120 }, 
 { "key": "NewMuOu", "name": "💓木偶┃聚合💓", "type": 3, "api": "csp_NewMuOuGuard", "searchable": 1, "changeable": 1 }, 

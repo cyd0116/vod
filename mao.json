@@ -1,5 +1,5 @@
 {
-"spider":"./wex/wex.txt;md5;03a6211a751367f46f1704a8b1d10d36",
+"spider":"./wex/wex.txt;md5;b65010f126553cb754b333fe1bef0567",
 "wallpaper": "https://深色壁纸.xxooo.cf/",
 
 "lives": [
@@ -156,7 +156,7 @@
 				"keywords":"名称,片名,推荐",
 				"tgsearch_url":"https://tg.252035.xyz",
 				"tgsearch_media_url":"https://tg.252035.xyz",				
-				"channellist": "alyp_4K_Movies|1000,Aliyun_4K_Movies|1000,alypzyhzq|1000,Aliyundrive_Share_Channel|1000,alyp_1,shareAliyun,alyp_TV,tianyi_pd2,tianyirigeng,tyypzhpd,cloudtianyi,clouddriveresources,tgsearchers3",
+				"channellist": "alyp_4K_Movies|1000,Aliyun_4K_Movies|1000,aliyun_4k_movies,alypzyhzq|1000,Aliyundrive_Share_Channel|1000,alyp_1,shareAliyun,sharealiyun,alyp_TV,aliyun:zaihuayun,aliyunys,clouddriveresources,tgsearchers3",
 				//"channellist": "pan123pan,zyfb123,zyzhpd123,xx123pan,tianyi_pd2,tianyirigeng,tyypzhpd,cloudtianyi,ydypzyfx,alyp_4K_Movies|1000,Aliyun_4K_Movies|1000,alypzyhzq|1000,Aliyundrive_Share_Channel|1000,alyp_1,shareAliyun,ucpanpan,hao115|1000,Mbox115|1000,shares_115|1000,guaguale115,Channel_Shares_115,oneonefivewpfx",	
 				"proxy":"noproxy"
 			},

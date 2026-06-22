@@ -1,5 +1,5 @@
 {
-"spider":"./wex/wex.jar;md5;a4410b3a6d9eb221f4694bd46873b829",
+"spider":"./wex/wex.jar;md5;c0b7317763e162949ba0a829c21edb12",
 "wallpaper": "https://深色壁纸.xxooo.cf/",
 
 "lives": [
@@ -59,12 +59,15 @@
 { "key": "WexBoBo", "name": "💥伯伯┃秒播💥", "type": 3, "api": "csp_WexBoBoGuard", "searchable": 1, "changeable": 1 }, 
 { "key": "WexDuBoKu", "name": "💥独播┃秒播💥", "type": 3, "api": "csp_WexDuBoKuGuard", "searchable": 1, "changeable": 1 }, 
 { "key": "WexGuaZi", "name": "💥瓜子┃秒播💥", "type": 3, "api": "csp_WexGuaZiGuard", "searchable": 1, "changeable": 1 }, 
+{ "key": "WexV6DaShiXiong", "name": "💥师兄┃秒播💥", "type": 3, "api": "csp_WexV6DaShiXiongGuard", "searchable": 1, "changeable": 1 }, 
+{ "key": "WexV6TeGou", "name": "💥太狗┃秒播💥", "type": 3, "api": "csp_WexV6TeGouGuard", "searchable": 1, "changeable": 1 }, 
 { "key": "WexWenCai", "name": "💥文才┃秒播💥", "type": 3, "api": "csp_WexWenCaiGuard", "searchable": 1, "changeable": 1 }, 
 { "key": "WexYiYs", "name": "💥伊影┃秒播💥", "type": 3, "api": "csp_WexYiYsGuard", "searchable": 1, "changeable": 1 }, 
 { "key": "WexIkanBot", "name": "💥爱看机器人┃采集💥", "type": 3, "api": "csp_WexIkanBotGuard", "searchable": 1, "changeable": 1 },
 //{ "key": "賤賤", "name": "💥荐片┃秒播💥", "type": 3, "api": "csp_WexJianPianGuard", "searchable": 1, "changeable": 1 }, 
 //{ "key": "WexBtTwo", "name": "🎇BtTwo┃秒播🎇", "type": 3, "api": "csp_WexBtTwoGuard", "searchable": 1, "changeable": 1 }, 
 { "key": "AnimeMoDu", "name": "🤡魔都┃动漫🤡", "type": 3, "api": "csp_AnimeMoDuGuard", "searchable": 1, "changeable": 1 },
+{ "key": "AnimeFanShu", "name": "🤡番薯┃动漫🤡", "type": 3, "api": "csp_AnimeFanShuGuard", "searchable": 1, "changeable": 1 }, 
 { "key": "AnimeAoWuGuard", "name": "🤡嗷呜┃动漫🤡", "type": 3, "api": "csp_AnimeAoWuGuard", "searchable": 1, "changeable": 1 }, 
 { "key": "AnimeFanChaGuard", "name": "🤡饭茶┃动漫🤡", "type": 3, "api": "csp_AnimeFanChaGuard", "searchable": 1, "changeable": 1 }, 
 { "key": "AnimeMiaoWuGuard", "name": "🤡喵呜┃动漫🤡", "type": 3, "api": "csp_AnimeMiaoWuGuard", "searchable": 1, "changeable": 1 },
@@ -115,7 +118,8 @@
 { "key": "SportGuaZi", "name": "🌐瓜子┃体育🌐", "type": 3, "api": "csp_SportGuaZiGuard", "searchable": 0, "changeable": 0, "style": { "type": "list" } }, 
 { "key": "SportKanqiu", "name": "🌐八八┃体育🌐", "type": 3, "api": "csp_SportKanqiuGuard", "searchable": 0, "changeable": 0 },
 { "key": "SportKanQiuTong", "name": "🌐球通┃体育🌐", "type": 3, "api": "csp_SportKanQiuTongGuard", "searchable": 0, "changeable": 0, "style": { "type": "list" } },
-
+{ "key": "SportFeiQiu", "name": "🌐飞球┃体育🌐", "type": 3, "api": "csp_SportFeiQiuGuard", "searchable": 1, "changeable": 0, "style": { "type": "list" } }, 
+{ "key": "SportKaFei", "name": "🌐咖啡┃体育🌐", "type": 3, "api": "csp_SportKaFeiGuard", "searchable": 1, "changeable": 0, "style": { "type": "list" } },
 
 //道长(JS)
 {"key": "dr_JRKAN直播","name": "🏀JRKAN直播(JS)","type": 3,"api": "./drpy_dzlive/drpy_libs/drpy2.min.js","searchable": 0,"quickSearch": 0,"changeable":0,"ext": "./drpy_dzlive/drpy_js/JRKAN直播.js"},

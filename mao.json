@@ -51,7 +51,7 @@
       "url" : "https://gongdian.top/tv/iptv",
       "playerType" : 1,
   "epg": "https://raw.githubusercontent.com/taksssss/tv/refs/heads/main/epg/51zmt.xml",
-  "logo": "http://127.0.0.1:9978/file/酷9/logo/{name}.png",
+  "logo": "https://gongdian.top/tv/taibiao/{name}.png",
   "catchup": {
     "type": "append",
     "source": "?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"

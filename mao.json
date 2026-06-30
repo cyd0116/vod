@@ -19,6 +19,44 @@
     "source": "?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"
 }
 },
+{
+      "name" : "平台线路",
+      "type" : 0,
+      "url" : "http://47.120.41.246:8025/vip/jar/zb.php",
+      "playerType" : 1,
+	  "epg": "https://raw.githubusercontent.com/taksssss/tv/refs/heads/main/epg/51zmt.xml",
+  "logo": "http://127.0.0.1:9978/file/酷9/logo/{name}.png",
+  "catchup": {
+    "type": "append",
+    "source": "?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"
+}
+    },
+
+ {
+      "name": "嘉禾线路",
+      "type": 0,
+      "url": "http://46.207.209.www.hxyy.jiaheysyy.top/jhzb.json",
+      "playerType": 2,
+      "ua": "okhttp/3",
+  "epg": "https://raw.githubusercontent.com/taksssss/tv/refs/heads/main/epg/51zmt.xml",
+  "logo": "http://127.0.0.1:9978/file/酷9/logo/{name}.png",
+  "catchup": {
+    "type": "append",
+    "source": "?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"
+}
+    },
+{
+      "name" : "宫殿线路",
+      "type" : 0,
+      "url" : "https://gongdian.top/tv/iptv",
+      "playerType" : 1,
+  "epg": "https://raw.githubusercontent.com/taksssss/tv/refs/heads/main/epg/51zmt.xml",
+  "logo": "http://127.0.0.1:9978/file/酷9/logo/{name}.png",
+  "catchup": {
+    "type": "append",
+    "source": "?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"
+}
+    },
 {"name": "Kimentanm线路",
   "type": 0,
   "url": "https://raw.githubusercontent.com/Kimentanm/aptv/master/m3u/iptv.m3u",

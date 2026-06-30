@@ -7,7 +7,8 @@
 {
   "name": "develop202线路",
   "type": 0,
-  "url": "https://raw.githubusercontent.com/develop202/migu_video/refs/heads/main/interface.txt",
+  "url": "https://gitee.com/gcychris/migu_video/raw/main/interface.txt",
+  //"url": "https://raw.githubusercontent.com/develop202/migu_video/refs/heads/main/interface.txt",
   //"url": "https://raw.nuaa.cf/develop202/migu_video/refs/heads/main/interface.txt",
   //"url": "https://raw.yzuu.cf/develop202/migu_video/refs/heads/main/interface.txt",
   "playerType": 2,
@@ -35,6 +36,7 @@
 "name": "官方线路",
 "type": 0,
 "url": "https://raw.githubusercontent.com/cyd0116/vod/refs/heads/main/tv/tv.txt",
+//"url": "https://d.kstore.dev/download/12569/vod/tv/tv.txt",
 //"url": "https://raw.nuaa.cf/cyd0116/vod/refs/heads/main/tv/tv.txt",
 //"url": "https://raw.yzuu.cf/cyd0116/vod/refs/heads/main/tv/tv.txt",
 "timeout": 10,
@@ -61,11 +63,10 @@
 { "key": "WexGuaZi", "name": "💥瓜子┃秒播💥", "type": 3, "api": "csp_WexGuaZiGuard", "searchable": 1, "changeable": 1 }, 
 { "key": "WexV6DaShiXiong", "name": "💥师兄┃秒播💥", "type": 3, "api": "csp_WexV6DaShiXiongGuard", "searchable": 1, "changeable": 1 }, 
 { "key": "WexV6TeGou", "name": "💥太狗┃秒播💥", "type": 3, "api": "csp_WexV6TeGouGuard", "searchable": 1, "changeable": 1 }, 
-{ "key": "WexWenCai", "name": "💥文才┃秒播💥", "type": 3, "api": "csp_WexWenCaiGuard", "searchable": 1, "changeable": 1 }, 
 { "key": "WexYiYs", "name": "💥伊影┃秒播💥", "type": 3, "api": "csp_WexYiYsGuard", "searchable": 1, "changeable": 1 }, 
+{ "key": "WexWenCai", "name": "💥文才┃秒播💥", "type": 3, "api": "csp_WexWenCaiGuard", "searchable": 1, "changeable": 1 }, 
 { "key": "WexIkanBot", "name": "💥爱看机器人┃采集💥", "type": 3, "api": "csp_WexIkanBotGuard", "searchable": 1, "changeable": 1 },
 //{ "key": "賤賤", "name": "💥荐片┃秒播💥", "type": 3, "api": "csp_WexJianPianGuard", "searchable": 1, "changeable": 1 }, 
-//{ "key": "WexBtTwo", "name": "🎇BtTwo┃秒播🎇", "type": 3, "api": "csp_WexBtTwoGuard", "searchable": 1, "changeable": 1 }, 
 { "key": "AnimeMoDu", "name": "🤡魔都┃动漫🤡", "type": 3, "api": "csp_AnimeMoDuGuard", "searchable": 1, "changeable": 1 },
 { "key": "AnimeAoWuGuard", "name": "🤡嗷呜┃动漫🤡", "type": 3, "api": "csp_AnimeAoWuGuard", "searchable": 1, "changeable": 1 }, 
 { "key": "AnimeFanChaGuard", "name": "🤡饭茶┃动漫🤡", "type": 3, "api": "csp_AnimeFanChaGuard", "searchable": 1, "changeable": 1 }, 
@@ -103,7 +104,7 @@
 
 { "key": "BookShiJie", "name": "🎃极品┃听书🎃", "type": 3, "api": "csp_BookShiJieGuard", "searchable": 0, "changeable": 0}, 
 { "key": "BookYueTing", "name": "🎃悦庭┃听书🎃", "type": 3, "api": "csp_BookYueTingGuard", "searchable": 0, "changeable":0, "timeout": 120 }, 
-{ "key": "Book23TingShu", "name": "🎃爱上┃听书🎃", "type": 3, "api": "csp_Book23TingShuGuard", "searchable": 1, "changeable": 1 },
+{ "key": "Book23TingShu", "name": "🎃爱上┃听书🎃", "type": 3, "api": "csp_Book23TingShuGuard", "searchable": 0, "changeable":0 },
 
 { "key": "MusicKuWo", "name": "🎼酷听┃音乐🎼", "type": 3, "api": "csp_MusicKuWoGuard", "searchable":0, "changeable": 0 },
 { "key": "Music163", "name": "🎼易听┃音乐🎼", "type": 3, "api": "csp_Music163Guard", "searchable":0, "changeable": 0 }, 
@@ -111,9 +112,9 @@
 
 { "key": "SportKanqiu", "name": "🌐八八┃体育🌐", "type": 3, "api": "csp_SportKanqiuGuard", "searchable": 0, "changeable": 0 },
 { "key": "SportGuaZi", "name": "🌐瓜子┃体育🌐", "type": 3, "api": "csp_SportGuaZiGuard", "searchable": 0, "changeable": 0, "style": { "type": "list" } }, 
-{ "key": "SportKaFei", "name": "🌐咖啡┃体育🌐", "type": 3, "api": "csp_SportKaFeiGuard", "searchable": 1, "changeable": 0, "style": { "type": "list" } },
+{ "key": "SportKaFei", "name": "🌐咖啡┃体育🌐", "type": 3, "api": "csp_SportKaFeiGuard", "searchable":0, "changeable": 0, "style": { "type": "list" } },
 { "key": "SportKanQiuTong", "name": "🌐球通┃体育🌐", "type": 3, "api": "csp_SportKanQiuTongGuard", "searchable": 0, "changeable": 0, "style": { "type": "list" } },
-{ "key": "SportFeiQiu", "name": "🌐飞球┃体育🌐", "type": 3, "api": "csp_SportFeiQiuGuard", "searchable": 1, "changeable": 0, "style": { "type": "list" } }, 
+{ "key": "SportFeiQiu", "name": "🌐飞球┃体育🌐", "type": 3, "api": "csp_SportFeiQiuGuard", "searchable":0, "changeable": 0, "style": { "type": "list" } }, 
 
 //道长(JS)
 {"key": "dr_JRKAN直播","name": "🏀JRKAN直播(JS)","type": 3,"api": "./drpy_dzlive/drpy_libs/drpy2.min.js","searchable": 0,"quickSearch": 0,"changeable":0,"ext": "./drpy_dzlive/drpy_js/JRKAN直播.js"},

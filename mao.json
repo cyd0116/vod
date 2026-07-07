@@ -1,5 +1,5 @@
 {
-"spider":"./wex/wex.jar;md5;1a506e8dfa9c58ca9daf4d701812260d",
+"spider":"./wex/wex.jar;md5;1262dc40ed916e6d67c9015e6b4af2bd",
 "wallpaper": "https://深色壁纸.xxooo.cf/",
 
 "lives": [
@@ -45,24 +45,13 @@
     "source": "?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"
 }
     },
-{
-      "name" : "宫殿线路",
-      "type" : 0,
-      "url" : "https://gongdian.top/tv/iptv",
-      "playerType" : 1,
-  "epg": "https://raw.githubusercontent.com/taksssss/tv/refs/heads/main/epg/51zmt.xml",
-  "logo": "http://127.0.0.1:9978/file/酷9/logo/{name}.png",
-  "catchup": {
-    "type": "append",
-    "source": "?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"
-}
-    },
 {"name": "Kimentanm线路",
   "type": 0,
   "url": "https://raw.githubusercontent.com/Kimentanm/aptv/master/m3u/iptv.m3u",
   //"url": "https://raw.nuaa.cf/Kimentanm/aptv/master/m3u/iptv.m3u",
   //"url": "https://raw.yzuu.cf/Kimentanm/aptv/master/m3u/iptv.m3u",
   "playerType": 2,
+  "UA":"AptvPlayer/1.0",
   "epg": "https://raw.githubusercontent.com/taksssss/tv/refs/heads/main/epg/51zmt.xml",
   "logo": "http://127.0.0.1:9978/file/酷9/logo/{name}.png",
   "catchup": {

@@ -46,8 +46,9 @@
 }
     },
 
-//{"name": "Kimentanm线路", "type": 0, "url": "https://raw.githubusercontent.com/Kimentanm/aptv/master/m3u/iptv.m3u", //"url": "https://raw.nuaa.cf/Kimentanm/aptv/master/m3u/iptv.m3u", //"url": "https://raw.yzuu.cf/Kimentanm/aptv/master/m3u/iptv.m3u", "playerType": 2, "UA":"AptvPlayer/1.0", "epg": "https://raw.githubusercontent.com/taksssss/tv/refs/heads/main/epg/51zmt.xml", "logo": "http://127.0.0.1:9978/file/酷9/logo/{name}.png", "catchup": { "type": "append", "source": "?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}" } },{
+//{"name": "Kimentanm线路", "type": 0, "url": "https://raw.githubusercontent.com/Kimentanm/aptv/master/m3u/iptv.m3u", //"url": "https://raw.nuaa.cf/Kimentanm/aptv/master/m3u/iptv.m3u", //"url": "https://raw.yzuu.cf/Kimentanm/aptv/master/m3u/iptv.m3u", "playerType": 2, "UA":"AptvPlayer/1.0", "epg": "https://raw.githubusercontent.com/taksssss/tv/refs/heads/main/epg/51zmt.xml", "logo": "http://127.0.0.1:9978/file/酷9/logo/{name}.png", "catchup": { "type": "append", "source": "?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}" } },
 
+{
 "name": "官方线路",
 "type": 0,
 "url": "https://raw.githubusercontent.com/cyd0116/vod/refs/heads/main/tv/tv.txt",

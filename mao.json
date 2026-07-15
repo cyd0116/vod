@@ -1,5 +1,5 @@
 {
-"spider":"./wex/wex.jar;md5;fc469ae29c98cf87d95a1f9dcfada35c",
+"spider":"./wex/wex.jar;md5;d79504cd4b2635d2c23ad791ed00d54e",
 "wallpaper": "https://深色壁纸.xxooo.cf/",
 
 "lives": [
@@ -73,11 +73,11 @@
 {"key": "MyQuark", "name": "🐮我的资源┃夸克🐮", "type": 3, "api": "csp_MyQuarkGuard", "searchable":0, "changeable":0, "timeout": 50, "style": { "type": "list" } },
 { "key": "MyPan123", "name": "🐮我的┃123🐮", "type": 3, "api": "csp_MyPan123Guard", "searchable":0, "changeable": 0, "timeout": 50, "style": { "type": "list" } },
 
-{ "key": "WexGuaZi", "name": "💥瓜子┃秒播💥", "type": 3, "api": "csp_WexGuaZiGuard", "searchable": 1,"quickSearch":1, "changeable": 1 }, 
 {"key": "WexYueYue","name": "💥闪电┃秒播💥","type": 3,"api": "csp_WexYueYueGuard","searchable": 1,"quickSearch":1,"changeable": 1},
 { "key": "WexBoBo", "name": "💥伯伯┃秒播💥", "type": 3, "api": "csp_WexBoBoGuard", "searchable": 1,"quickSearch":1, "changeable": 1 }, 
-{ "key": "WexReBo", "name": "💥热播┃秒播💥", "type": 3, "api": "csp_WexReBoGuard", "searchable": 1, "quickSearch":1,"changeable": 1 }, 
 { "key": "WexDuBoKu", "name": "💥独播┃秒播💥", "type": 3, "api": "csp_WexDuBoKuGuard", "searchable": 1,"quickSearch":1, "changeable": 1 }, 
+{ "key": "WexGuaZi", "name": "💥瓜子┃秒播💥", "type": 3, "api": "csp_WexGuaZiGuard", "searchable": 1,"quickSearch":1, "changeable": 1 }, 
+{ "key": "WexReBo", "name": "💥热播┃秒播💥", "type": 3, "api": "csp_WexReBoGuard", "searchable": 1, "quickSearch":1,"changeable": 1 }, 
 { "key": "WexV6DaShiXiong", "name": "💥师兄┃秒播💥", "type": 3, "api": "csp_WexV6DaShiXiongGuard", "searchable": 1,"quickSearch":1, "changeable": 1 }, 
 { "key": "WexV6TeGou", "name": "💥太狗┃秒播💥", "type": 3, "api": "csp_WexV6TeGouGuard", "searchable": 1,"quickSearch":1, "changeable": 1 }, 
 { "key": "WexWenCai", "name": "💥文才┃秒播💥", "type": 3, "api": "csp_WexWenCaiGuard", "searchable": 1,"quickSearch":1, "changeable": 1 }, 

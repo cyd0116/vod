@@ -1,5 +1,5 @@
 {
-"spider":"./wex/wex.jar;md5;d79504cd4b2635d2c23ad791ed00d54e",
+"spider":"./wex/wex.jar;md5;5d06887f0bd6e14e98a1ca63e556b4c7",
 "wallpaper": "https://深色壁纸.xxooo.cf/",
 
 "lives": [
@@ -31,7 +31,6 @@
     "source": "?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"
 }
     },
-
  {
       "name": "嘉禾线路",
       "type": 0,
@@ -39,6 +38,30 @@
       "playerType": 1,
       "ua": "okhttp/3",
   "epg": "https://raw.githubusercontent.com/taksssss/tv/refs/heads/main/epg/51zmt.xml",
+  "logo": "http://127.0.0.1:9978/file/酷9/logo/{name}.png",
+  "catchup": {
+    "type": "append",
+    "source": "?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"
+}
+    },
+{
+      "name" : "直播电视线路(V4)",
+      "type" : 0,
+      "url" : "https://live.zbds.top/tv/iptv4.m3u",
+      "playerType" : 1,
+	  "epg": "https://raw.githubusercontent.com/taksssss/tv/refs/heads/main/epg/51zmt.xml",
+  "logo": "http://127.0.0.1:9978/file/酷9/logo/{name}.png",
+  "catchup": {
+    "type": "append",
+    "source": "?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"
+}
+    },
+{
+      "name" : "直播电视线路(V6)",
+      "type" : 0,
+      "url" : "https://live.zbds.top/tv/iptv6.m3u",
+      "playerType" : 1,
+	  "epg": "https://raw.githubusercontent.com/taksssss/tv/refs/heads/main/epg/51zmt.xml",
   "logo": "http://127.0.0.1:9978/file/酷9/logo/{name}.png",
   "catchup": {
     "type": "append",
@@ -73,10 +96,10 @@
 {"key": "MyQuark", "name": "🐮我的资源┃夸克🐮", "type": 3, "api": "csp_MyQuarkGuard", "searchable":0, "changeable":0, "timeout": 50, "style": { "type": "list" } },
 { "key": "MyPan123", "name": "🐮我的┃123🐮", "type": 3, "api": "csp_MyPan123Guard", "searchable":0, "changeable": 0, "timeout": 50, "style": { "type": "list" } },
 
+{ "key": "WexGuaZi", "name": "💥瓜子┃秒播💥", "type": 3, "api": "csp_WexGuaZiGuard", "searchable": 1,"quickSearch":1, "changeable": 1 }, 
 {"key": "WexYueYue","name": "💥闪电┃秒播💥","type": 3,"api": "csp_WexYueYueGuard","searchable": 1,"quickSearch":1,"changeable": 1},
 { "key": "WexBoBo", "name": "💥伯伯┃秒播💥", "type": 3, "api": "csp_WexBoBoGuard", "searchable": 1,"quickSearch":1, "changeable": 1 }, 
 { "key": "WexDuBoKu", "name": "💥独播┃秒播💥", "type": 3, "api": "csp_WexDuBoKuGuard", "searchable": 1,"quickSearch":1, "changeable": 1 }, 
-{ "key": "WexGuaZi", "name": "💥瓜子┃秒播💥", "type": 3, "api": "csp_WexGuaZiGuard", "searchable": 1,"quickSearch":1, "changeable": 1 }, 
 { "key": "WexReBo", "name": "💥热播┃秒播💥", "type": 3, "api": "csp_WexReBoGuard", "searchable": 1, "quickSearch":1,"changeable": 1 }, 
 { "key": "WexV6DaShiXiong", "name": "💥师兄┃秒播💥", "type": 3, "api": "csp_WexV6DaShiXiongGuard", "searchable": 1,"quickSearch":1, "changeable": 1 }, 
 { "key": "WexV6TeGou", "name": "💥太狗┃秒播💥", "type": 3, "api": "csp_WexV6TeGouGuard", "searchable": 1,"quickSearch":1, "changeable": 1 }, 
@@ -84,10 +107,9 @@
 { "key": "WexIkanBot", "name": "💥爱看机器人┃采集💥", "type": 3, "api": "csp_WexIkanBotGuard", "searchable": 1,"quickSearch":1, "changeable": 1 },
 //{ "key": "WexYiYs", "name": "💥伊影┃秒播💥", "type": 3, "api": "csp_WexYiYsGuard", "searchable": 1,"quickSearch":1, "changeable": 1 }, 
 //{ "key": "賤賤", "name": "💥荐片┃秒播💥", "type": 3, "api": "csp_WexJianPianGuard", "searchable": 1, "changeable": 1 }, 
-{ "key": "AnimeMoDu", "name": "🤡魔都┃动漫🤡", "type": 3, "api": "csp_AnimeMoDuGuard", "searchable": 1,"quickSearch":1, "changeable": 1 },
-{ "key": "AnimeAoWuGuard", "name": "🤡嗷呜┃动漫🤡", "type": 3, "api": "csp_AnimeAoWuGuard", "searchable": 1,"quickSearch":1, "changeable": 1 }, 
-{ "key": "AnimeFanChaGuard", "name": "🤡饭茶┃动漫🤡", "type": 3, "api": "csp_AnimeFanChaGuard", "searchable": 1,"quickSearch":1, "changeable": 1 }, 
+{ "key": "AnimeHuaziGuard", "name": "🤡花海┃动漫🤡", "type": 3, "api": "csp_AnimeHuaziGuard", "searchable": 1,"quickSearch":1, "changeable": 1 },
 { "key": "AnimeMiaoWuGuard", "name": "🤡喵呜┃动漫🤡", "type": 3, "api": "csp_AnimeMiaoWuGuard", "searchable": 1,"quickSearch":1, "changeable": 1 },
+{ "key": "AnimeMoDu", "name": "🤡魔都┃动漫🤡", "type": 3, "api": "csp_AnimeMoDuGuard", "searchable": 1,"quickSearch":1, "changeable": 1 },
 { "key": "AnimeFanShu", "name": "🤡番薯┃动漫🤡", "type": 3, "api": "csp_AnimeFanShuGuard", "searchable": 1,"quickSearch":1, "changeable": 1 }, 
 { "key": "MusicLiYuan", "name": "🎎戏曲┃秒播🎎", "type": 3, "api": "csp_MusicLiYuanGuard", "searchable":0,"quickSearch":0, "changeable": 0, "style": { "type": "rect", "ratio": 2 } },
 {"key":"bili","name":"🅱哔哩┃合集🅱","type":3,"api":"csp_NewBiLiGuard","searchable":1,"quickSearch":1,"filterable":1,"ext":"./wex/bili001.txt"},

@@ -45,21 +45,9 @@
 }
     },
 {
-      "name" : "直播电视线路(V4)",
+      "name" : "直播电视线路",
       "type" : 0,
       "url" : "https://live.zbds.top/tv/iptv4.m3u",
-      "playerType" : 1,
-	  "epg": "https://raw.githubusercontent.com/taksssss/tv/refs/heads/main/epg/51zmt.xml",
-  "logo": "http://127.0.0.1:9978/file/酷9/logo/{name}.png",
-  "catchup": {
-    "type": "append",
-    "source": "?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"
-}
-    },
-{
-      "name" : "直播电视线路(V6)",
-      "type" : 0,
-      "url" : "https://live.zbds.top/tv/iptv6.m3u",
       "playerType" : 1,
 	  "epg": "https://raw.githubusercontent.com/taksssss/tv/refs/heads/main/epg/51zmt.xml",
   "logo": "http://127.0.0.1:9978/file/酷9/logo/{name}.png",

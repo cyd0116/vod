@@ -1,5 +1,5 @@
 {
-"spider":"./wex/wex.jpg;md5;5bd4dcbbbcc4cd71d86a8f2e61ab0d2b",
+"spider":"./wex/wex.jpg;md5;5dae36d8839a6d07d094c761f54a271f",
 "wallpaper": "https://深色壁纸.xxooo.cf/",
 
 "lives": [
@@ -95,13 +95,11 @@
 { "key": "AiNewMuOu", "name": "💓木偶┃聚合💓", "type": 3, "api": "csp_AiNewMuOuGuard", "searchable": 1,"quickSearch":1, "changeable": 1 }, 
 { "key": "AiNewDuoDuo", "name": "💓多多┃聚合💓", "type": 3, "api": "csp_AiNewDuoDuoGuard", "searchable": 1,"quickSearch":1, "changeable": 1, "timeout": 120 }, 
 { "key": "AiNewGuanYing", "name": "💓观影┃聚合💓", "type": 3, "api": "csp_AiNewGuanYingGuard", "searchable": 1,"quickSearch":1, "changeable": 1, "timeout": 120 }, 
-{ "key": "AiNewLibvio", "name": "💓立播┃4K💓", "type": 3, "api": "csp_AiNewLibvioGuard", "searchable": 1, "quickSearch":1, "changeable": 1 }, 
+{ "key": "AiNewLibvio", "name": "💓立播┃聚合💓", "type": 3, "api": "csp_AiNewLibvioGuard", "searchable": 1, "quickSearch":1, "changeable": 1 }, 
+{ "key": "AiQwMkv", "name": "💓七味┃聚合💓", "type": 3, "api": "csp_AiQwMkvGuard", "searchable": 1, "quickSearch":1, "changeable": 1 }, 
+{ "key": "AiNewPianKu", "name": "💓盘库┃聚合💓", "type": 3, "api": "csp_AiNewPianKuGuard", "searchable": 1, "quickSearch": 1, "changeable": 1 }, 
 { "key": "AiNewYiDong4K", "name": "💓移动┃4K💓", "type": 3, "api": "csp_AiNewYiDong4KGuard", "searchable": 1, "quickSearch":1, "changeable": 1 }, 
 { "key": "原盘", "name": "💓原盘┃夸克💓", "type": 3, "api": "csp_AiNewZhiNan4KGuard", "searchable": 1,"quickSearch":1, "changeable": 1 },
-
-//暂不能播放
-//{ "key": "AiQwMkv", "name": "💓七味┃4K💓", "type": 3, "api": "csp_AiQwMkvGuard", "searchable": 1, "quickSearch":1, "changeable": 1 }, 
-//{ "key": "AiNewPianKu", "name": "💓盘库┃4K💓", "type": 3, "api": "csp_AiNewPianKuGuard", "searchable": 1, "quickSearch": 1, "changeable": 1 }, 
 
 //需注册
 //{ "key": "AiNewPanLian", "name": "💓盘链┃4K💓", "type": 3, "api": "csp_AiNewPanLianGuard", "searchable": 1, "quickSearch": 1, "changeable": 1 }, 

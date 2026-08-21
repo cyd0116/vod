@@ -1,9 +1,9 @@
 {
-"spider":"./wex/wex.jpg;md5;5dae36d8839a6d07d094c761f54a271f",
+"spider":"./wex/wex.jpg;md5;2d0a16cc7c1f166031432958169d5b9b",
 "wallpaper": "https://深色壁纸.xxooo.cf/",
 
 "lives": [
-{ "name": "咪咕线路", "type": 0, "url": "https://ds65.tv1288.xyz", "playerType": 2,"ua" : "bingcha/1.1 (mianfeifenxiang) ", "epg": "https://raw.githubusercontent.com/taksssss/tv/refs/heads/main/epg/51zmt.xml", "logo": "http://127.0.0.1:9978/file/酷9/logo/{name}.png", "catchup": { "type": "append", "source": "?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}" } },
+{ "name": "冰茶线路", "type": 0, "url": "https://ds65.tv1288.xyz", "playerType": 2,"ua" : "bingcha/1.1 (mianfeifenxiang) ", "epg": "https://raw.githubusercontent.com/taksssss/tv/refs/heads/main/epg/51zmt.xml", "logo": "http://127.0.0.1:9978/file/酷9/logo/{name}.png", "catchup": { "type": "append", "source": "?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}" } },
 {
       "name" : "平台线路",
       "type" : 0,

@@ -1,5 +1,5 @@
 {
-"spider":"./wex/wex.jpg;md5;2d0a16cc7c1f166031432958169d5b9b",
+"spider":"./wex/wex.jpg;md5;d43ebe5e93083713f7e3477874ab2d39",
 "wallpaper": "https://深色壁纸.xxooo.cf/",
 
 "lives": [
@@ -70,6 +70,7 @@
 { "key": "WexAiBoBo", "name": "💥伯伯┃秒播💥", "type": 3, "api": "csp_WexAiBoBoGuard", "searchable": 1,"quickSearch":1, "changeable": 1 }, 
 { "key": "WexAiDuBoKu", "name": "💥独播┃秒播💥", "type": 3, "api": "csp_WexAiDuBoKuGuard", "searchable": 1,"quickSearch":1, "changeable": 1 }, 
 { "key": "WexAiReBo", "name": "💥热播┃秒播💥", "type": 3, "api": "csp_WexAiReBoGuard", "searchable": 1, "quickSearch":1,"changeable": 1 }, 
+{ "key": "WexFengYe4K", "name": "💥小枫┃秒播💥", "type": 3, "api": "csp_WexFengYe4KGuard", "searchable": 1, "quickSearch":1, "changeable": 0 },
 { "key": "WexAiIkanBot", "name": "💥爱看机器人┃采集💥", "type": 3, "api": "csp_WexAiIkanBotGuard", "searchable": 1,"quickSearch":1, "changeable": 1 },
 //{ "key": "WexAiWenCai", "name": "💥文才┃秒播💥", "type": 3, "api": "csp_WexAiWenCaiGuard", "searchable": 1,"quickSearch":1, "changeable": 1 }, 
 //{ "key": "WexAiYiYs", "name": "💥伊影┃秒播💥", "type": 3, "api": "csp_WexAiYiYsGuard", "searchable": 1,"quickSearch":1, "changeable": 1 }, 

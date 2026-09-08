@@ -149,7 +149,6 @@
 
 { "key": "MusicAiQingTing", "name": "🎼蜻蜓┃电台🎼", "type": 3, "api": "csp_MusicAiQingTingGuard", "searchable": 0, "changeable": 0 },
 { "key": "MusicAiKuWoa", "name": "🎼小酷┃音乐🎼", "type": 3, "api": "csp_MusicAiKuWoaGuard", "searchable":0, "changeable": 0 },
-{ "key": "MusicAiIKtv", "name": "🎼KTV┃音乐🎼", "type": 3, "api": "csp_MusicAiIKtvGuard", "searchable": 0, "changeable": 0 },
 { "key": "MusicAiKuWo", "name": "🎼酷听┃音乐🎼", "type": 3, "api": "csp_MusicAiKuWoGuard", "searchable":0, "changeable": 0 },
 { "key": "MusicAi163", "name": "🎼易听┃音乐🎼", "type": 3, "api": "csp_MusicAi163Guard", "searchable":0, "changeable": 0 }, 
 
@@ -160,8 +159,8 @@
 { "key": "SportAiFeiQiu", "name": "🌐飞球┃体育🌐", "type": 3, "api": "csp_SportAiFeiQiuGuard", "searchable":0, "changeable": 0, "style": { "type": "list" } }, 
 
 //道长(JS)
-{"key": "dr_JRKAN直播","name": "🏀JRKAN直播(JS)","type": 3,"api": "./drpy_dzlive/drpy_libs/drpy2.min.js","searchable": 0,"quickSearch": 0,"changeable":0,"ext": "./drpy_dzlive/drpy_js/JRKAN直播.js"},
 { "key": "hipy_js_88看球[球]", "name": "🏀88看球(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 0, "quickSearch": 0, "filterable": 1,"changeable":0, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/88看球[球].js" }, 
+{"key": "dr_JRKAN直播","name": "🏀JRKAN直播(JS)","type": 3,"api": "./drpy_dzlive/drpy_libs/drpy2.min.js","searchable": 0,"quickSearch": 0,"changeable":0,"ext": "./drpy_dzlive/drpy_js/JRKAN直播.js"},
 { "key": "hipy_js_大全[央]", "name": "🔥央视(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 0, "quickSearch": 0, "filterable": 1, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/央视大全[官].js" }, 
 //{"key": "hipy_js_爱看机器人[虫]", "name": "📺爱看机器人(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 1, "quickSearch": 1, "filterable": 1, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/爱看机器人[虫].js" }, 
 //{ "key": "hipy_js_我的哔哩[官]1", "name": "🅱️哔哩(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 0, "quickSearch":0, "filterable": 1, "order_num": 1, "ext": "./drpy_dzlive/drpy_js/我的哔哩[官].js?type=url&params=../json/哔哩大全.json" }, 
@@ -220,14 +219,14 @@
 //{"key":"永乐","name":"🐞永乐(XBPQ)","type":3,"api":"csp_XBPQ","jar":"./ys/Yoursmile.jar;md5;89FB71E4381730AA32813BEAF6CE666E","searchable":1,"quickSearch":1,"filterable":1,"ext":{"请求头":"User-Agent$MOBILE_UA","编码":"UTF-8","分类":"电影$1#电视剧$2#综艺$3#动漫$4","类型":"动作片$6#喜剧片$7#爱情片$8#科幻片$9#奇幻片$10#恐怖片$11#剧情片$12#战争片$20#动画片$26#悬疑片$22#冒险片$23#犯罪片$24#惊悚片$45#歌舞片$46#灾难片$47#网络片$48||国产剧$13#港台剧$14#日剧$15#韩剧$33#欧美剧$16#泰剧$34#新马剧$35#其他剧$25||内地综艺$27#港台综艺$28#日本综艺$29#韩国综艺$36#欧美综艺$30#新马泰综艺$37#其他综艺$38||国产动漫$31#日本动漫$32#韩国动漫$39#港台动漫$40#新马泰动漫$41#欧美动漫$42#其他动漫$43","分类url":"https://www.ylys.tv/vodshow/{cateId}-{area}-{by}-{class}-{lang}-{letter}---{catePg}---{year}.html"}},
 
 //道长(JS)
-{"key": "drpy_A8音乐","name": "🎵A8音乐(JS)","type": 3,"api": "./drpy_dzlive/drpy_libs/drpy2.min.js","searchable":0,"quickSearch":0,"changeable":0,"ext": "./drpy_dzlive/drpy_js/A8音乐.js","playerType":"2"},
-{"key": "drpy_蜻蜓FM","name": "🎧蜻蜓FM(JS)","type": 3,"api": "./drpy_dzlive/drpy_libs/drpy2.min.js","searchable": 0,"quickSearch": 0,"changeable":0,"ext": "./drpy_dzlive/drpy_js/蜻蜓FM.js","playerType":"2"},
-{ "key": "hipy_js_广播迷FM[听]", "name": "🎧广播迷FM(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable":0, "quickSearch": 0, "changeable":0,"filterable": 0, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/广播迷FM[听].js" }, 
-{ "key": "hipy_js_酷我听书[听]", "name": "🎧酷我听书(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable":0,"quickSearch":0,"changeable":0,"filterable": 1, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/酷我听书[听].js" }, 
-{"key":"hipy_js_博看听书","name":"🎧博看听书(JS)","type":3,"api":"./drpy_dzlive/drpy_libs/drpy2.min.js","searchable":0,"quickSearch":0,"changeable":0,"ext":"./drpy_dzlive/drpy_js/博看听书[听].js","playerType":"2"},
-{"key":"hipy_js_六月听书","name":"🎧六月听书(JS)","type":3,"api":"./drpy_dzlive/drpy_libs/drpy2.min.js","searchable":0,"quickSearch":0,"changeable":0,"ext":"./drpy_dzlive/drpy_js/六月听书[听].js","playerType":"2"},
-{"key":"hipy_js_有声小说","name":"🎧有声小说(JS)","type":3,"api":"./drpy_dzlive/drpy_libs/drpy2.min.js","searchable":0,"quickSearch":0,"changeable":0,"ext":"./drpy_dzlive/drpy_js/有声小说吧[听].js","playerType":"2"},
-{"key":"hipy_js_相声随身听","name":"🎧相声随身听(JS)","type":3,"api":"./drpy_dzlive/drpy_libs/drpy2.min.js","searchable":0,"quickSearch":0,"changeable":0,"ext":"./drpy_dzlive/drpy_js/相声随身听[听].js","playerType":"2"},
+//{"key": "drpy_A8音乐","name": "🎵A8音乐(JS)","type": 3,"api": "./drpy_dzlive/drpy_libs/drpy2.min.js","searchable":0,"quickSearch":0,"changeable":0,"ext": "./drpy_dzlive/drpy_js/A8音乐.js","playerType":"2"},
+//{"key": "drpy_蜻蜓FM","name": "🎧蜻蜓FM(JS)","type": 3,"api": "./drpy_dzlive/drpy_libs/drpy2.min.js","searchable": 0,"quickSearch": 0,"changeable":0,"ext": "./drpy_dzlive/drpy_js/蜻蜓FM.js","playerType":"2"},
+//{ "key": "hipy_js_广播迷FM[听]", "name": "🎧广播迷FM(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable":0, "quickSearch": 0, "changeable":0,"filterable": 0, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/广播迷FM[听].js" }, 
+//{ "key": "hipy_js_酷我听书[听]", "name": "🎧酷我听书(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable":0,"quickSearch":0,"changeable":0,"filterable": 1, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/酷我听书[听].js" }, 
+//{"key":"hipy_js_博看听书","name":"🎧博看听书(JS)","type":3,"api":"./drpy_dzlive/drpy_libs/drpy2.min.js","searchable":0,"quickSearch":0,"changeable":0,"ext":"./drpy_dzlive/drpy_js/博看听书[听].js","playerType":"2"},
+//{"key":"hipy_js_六月听书","name":"🎧六月听书(JS)","type":3,"api":"./drpy_dzlive/drpy_libs/drpy2.min.js","searchable":0,"quickSearch":0,"changeable":0,"ext":"./drpy_dzlive/drpy_js/六月听书[听].js","playerType":"2"},
+//{"key":"hipy_js_有声小说","name":"🎧有声小说(JS)","type":3,"api":"./drpy_dzlive/drpy_libs/drpy2.min.js","searchable":0,"quickSearch":0,"changeable":0,"ext":"./drpy_dzlive/drpy_js/有声小说吧[听].js","playerType":"2"},
+//{"key":"hipy_js_相声随身听","name":"🎧相声随身听(JS)","type":3,"api":"./drpy_dzlive/drpy_libs/drpy2.min.js","searchable":0,"quickSearch":0,"changeable":0,"ext":"./drpy_dzlive/drpy_js/相声随身听[听].js","playerType":"2"},
 
 {"key":"push_agent","name":"推送","type":3,"api":"csp_PushGuard","searchable":0,"changeable":0}
 ],

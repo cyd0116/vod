@@ -77,7 +77,7 @@
 //王二小(SP)
 {"key":"Douban","name":"🐮豆瓣🐮","type":3,"api":"csp_NewDouBanGuard","searchable":0,"quickSearch":0,"filterable":0,"ext":"./wex/douban.txt"},
 {"key":"Wexokconfig","name":"🐮配置🐮","type":3,"api":"csp_PanConfigGuard","searchable":0,"changeable":0,"indexs":0},
-{ "key": "MyPan", "name": "🐮我的┃网盘🐮", "type": 3, "api": "csp_MyPanGuard", "searchable": 0, "changeable": 0, "indexs": 0, "style": { "type": "list" } },
+{ "key": "MyPan", "name": "🐮我的┃网盘🐮", "type": 3,"jar":"./wex/newwex.jpg;md5;C4CE8D61764F37C8F35B765BC77B4559", "api": "csp_MyPanGuard", "searchable": 0, "changeable": 0, "indexs": 0, "style": { "type": "list" } },
 { "key": "WexAiBoBo", "name": "💥伯伯┃秒播💥", "type": 3, "api": "csp_WexAiBoBoGuard", "searchable": 1,"quickSearch":1, "changeable": 1 }, 
 { "key": "WexAiReBo", "name": "💥热播┃秒播💥", "type": 3, "api": "csp_WexAiReBoGuard", "searchable": 1, "quickSearch":1,"changeable": 1 }, 
 {"key": "WexAiYueYue","name": "💥闪电┃秒播💥","type": 3,"api": "csp_WexAiYueYueGuard","searchable": 1,"quickSearch":1,"changeable": 1},

@@ -102,7 +102,7 @@
 { "key": "AnimeCiYuanCheng", "name": "🤡次元┃动漫🤡", "type": 3, "api": "csp_AnimeCiYuanChengGuard", "searchable": 1, "changeable": 1 },
 { "key": "AnimeAiMoDu", "name": "🤡魔都┃动漫🤡", "type": 3, "api": "csp_AnimeAiMoDuGuard", "searchable": 1,"quickSearch":1, "changeable": 1 },
 { "key": "MusicAiLiYuan", "name": "🎎戏曲┃秒播🎎", "type": 3, "api": "csp_MusicAiLiYuanGuard", "searchable":0,"quickSearch":0, "changeable": 0, "style": { "type": "rect", "ratio": 2 } },
-{"key":"bilibili","name":"🅱哔哩┃合集🅱","type":3,"api":"csp_BiliGuard","searchable":0,"quickSearch":0,"filterable":0, "style": {"type": "rect","ratio": 1.433},"ext":"./wex/bili001.txt"},
+{"key":"bilibili","name":"🅱哔哩┃合集🅱","type":3,"api":"csp_BiliGuard","searchable":1,"quickSearch":1,"filterable":1, "style": {"type": "rect","ratio": 1.433},"ext":"./wex/bili001.txt"},
 
 //采集
 {"key":"量子","name":"🐝量子(🏀NBA回看)","type": 1,"api": "https://cj.lziapi.com/api.php/provide/vod/from/lzm3u8", "searchable":0, "quickSearch":0,"changeable": 1,"categories": ["篮球","记录片", "足球", "动作片", "喜剧片", "科幻片", "恐怖片", "大陆综艺" ] },
@@ -153,10 +153,9 @@
 { "key": "MusicAiKuWo", "name": "🎼酷听┃音乐🎼", "type": 3, "api": "csp_MusicAiKuWoGuard", "searchable":0, "changeable": 0 },
 { "key": "MusicAi163", "name": "🎼易听┃音乐🎼", "type": 3, "api": "csp_MusicAi163Guard", "searchable":0, "changeable": 0 }, 
 
-{ "key": "SportAiKanqiu", "name": "🌐八八┃体育🌐", "type": 3, "api": "csp_SportAiKanqiuGuard", "searchable": 0, "changeable": 0 },
 { "key": "SportAiGuaZi", "name": "🌐瓜子┃体育🌐", "type": 3, "api": "csp_SportAiGuaZiGuard", "searchable": 0, "changeable": 0, "style": { "type": "list" } }, 
+{ "key": "SportAiKanqiu", "name": "🌐八八┃体育🌐", "type": 3, "api": "csp_SportAiKanqiuGuard", "searchable": 0, "changeable": 0 },
 { "key": "SportAiKaFei", "name": "🌐咖啡┃体育🌐", "type": 3, "api": "csp_SportAiKaFeiGuard", "searchable":0, "changeable": 0, "style": { "type": "list" } },
-{ "key": "SportAiKanQiuTong", "name": "🌐球通┃体育🌐", "type": 3, "api": "csp_SportAiKanQiuTongGuard", "searchable": 0, "changeable": 0, "style": { "type": "list" } },
 { "key": "SportAiFeiQiu", "name": "🌐飞球┃体育🌐", "type": 3, "api": "csp_SportAiFeiQiuGuard", "searchable":0, "changeable": 0, "style": { "type": "list" } }, 
 
 //道长(JS)

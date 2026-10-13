@@ -103,6 +103,14 @@
 { "key": "AnimeAiMoDu", "name": "🤡魔都┃动漫🤡", "type": 3, "api": "csp_AnimeAiMoDuGuard", "searchable": 1,"quickSearch":1, "changeable": 1 },
 { "key": "MusicAiLiYuan", "name": "🎎戏曲┃秒播🎎", "type": 3, "api": "csp_MusicAiLiYuanGuard", "searchable":0,"quickSearch":0, "changeable": 0, "style": { "type": "rect", "ratio": 2 } },
 {"key":"bilibili","name":"🅱哔哩┃合集🅱","type":3,"api":"csp_BiliGuard","searchable":1,"quickSearch":1,"filterable":1, "style": {"type": "rect","ratio": 1.433},"ext":"./wex/bili001.txt"},
+{ "key": "SportAiGuaZi", "name": "🌐瓜子┃体育🌐", "type": 3, "api": "csp_SportAiGuaZiGuard", "searchable": 0, "changeable": 0, "style": { "type": "list" } }, 
+{ "key": "SportAiKanqiu", "name": "🌐八八┃体育🌐", "type": 3, "api": "csp_SportAiKanqiuGuard", "searchable": 0, "changeable": 0 },
+{ "key": "SportAiKaFei", "name": "🌐咖啡┃体育🌐", "type": 3, "api": "csp_SportAiKaFeiGuard", "searchable":0, "changeable": 0, "style": { "type": "list" } },
+{ "key": "SportAiFeiQiu", "name": "🌐飞球┃体育🌐", "type": 3, "api": "csp_SportAiFeiQiuGuard", "searchable":0, "changeable": 0, "style": { "type": "list" } }, 
+
+ { "key": "360吧球py", "name": "360吧球py","type": 3,"api": "./py/360吧球.py" },
+ { "key": "央视网py", "name": "央视网py","type": 3,"api": "./py/央视网.py" },
+
 
 //采集
 {"key":"量子","name":"🐝量子(🏀NBA回看)","type": 1,"api": "https://cj.lziapi.com/api.php/provide/vod/from/lzm3u8", "searchable":0, "quickSearch":0,"changeable": 1,"categories": ["篮球","记录片", "足球", "动作片", "喜剧片", "科幻片", "恐怖片", "大陆综艺" ] },
@@ -113,9 +121,12 @@
 //王二小(网盘)
 { "key": "玩偶", "name": "💓玩偶┃臻彩", "type": 3, "api": "csp_AiNewWoggGuard", "searchable": 1,"quickSearch":1, "changeable": 1 }, 
 { "key": "AiNewHuBan", "name": "💓虎斑┃臻彩💓", "type": 3, "api": "csp_AiNewHuBanGuard", "searchable": 1,"quickSearch":1, "changeable": 1 }, 
+{ "key": "AiNewKuaiYing", "name": "💓快影┃臻彩💓", "type": 3, "api": "csp_AiNewKuaiYingGuard", "searchable": 1, "quickSearch": 1, "changeable": 1 },  
+{ "key": "AiNewLaBi", "name": "💓蜡笔┃臻彩💓", "type": 3, "api": "csp_AiNewLaBiGuard", "searchable": 1, "quickSearch": 1, "changeable": 1 },  
+{ "key": "花卷", "name": "💓花卷┃臻彩💓", "type": 3, "api": "csp_AiNewHuaJuanGuard", "searchable": 1, "quickSearch": 1, "changeable": 1 },
 { "key": "AiNewMuOu", "name": "💓木偶┃聚合💓", "type": 3, "api": "csp_AiNewMuOuGuard", "searchable": 1,"quickSearch":1, "changeable": 1 }, 
 { "key": "AiNewDuoDuo", "name": "💓多多┃聚合💓", "type": 3, "api": "csp_AiNewDuoDuoGuard", "searchable": 1,"quickSearch":1, "changeable": 1, "timeout": 120 }, 
-{ "key": "花卷", "name": "💓花卷┃聚合💓", "type": 3, "api": "csp_AiNewHuaJuanGuard", "searchable": 1, "quickSearch": 1, "changeable": 1 },
+{ "key": "AiNewShanDian", "name": "💓闪电┃聚合💓", "type": 3, "api": "csp_AiNewShanDianGuard", "searchable": 1, "quickSearch": 1, "changeable": 1 },
 { "key": "AiNewLibvio", "name": "💓立播┃聚合💓", "type": 3, "api": "csp_AiNewLibvioGuard", "searchable": 1, "quickSearch":1, "changeable": 1 }, 
 { "key": "AiNewGuanYing", "name": "💓观影┃聚合💓", "type": 3, "api": "csp_AiNewGuanYingGuard", "searchable": 1,"quickSearch":1, "changeable": 1, "timeout": 120 }, 
 { "key": "AiQwMkv", "name": "💓七味┃聚合💓", "type": 3, "api": "csp_AiQwMkvGuard", "searchable": 1, "quickSearch":1, "changeable": 1 }, 
@@ -153,15 +164,12 @@
 { "key": "MusicAiKuWo", "name": "🎼酷听┃音乐🎼", "type": 3, "api": "csp_MusicAiKuWoGuard", "searchable":0, "changeable": 0 },
 { "key": "MusicAi163", "name": "🎼易听┃音乐🎼", "type": 3, "api": "csp_MusicAi163Guard", "searchable":0, "changeable": 0 }, 
 
-{ "key": "SportAiGuaZi", "name": "🌐瓜子┃体育🌐", "type": 3, "api": "csp_SportAiGuaZiGuard", "searchable": 0, "changeable": 0, "style": { "type": "list" } }, 
-{ "key": "SportAiKanqiu", "name": "🌐八八┃体育🌐", "type": 3, "api": "csp_SportAiKanqiuGuard", "searchable": 0, "changeable": 0 },
-{ "key": "SportAiKaFei", "name": "🌐咖啡┃体育🌐", "type": 3, "api": "csp_SportAiKaFeiGuard", "searchable":0, "changeable": 0, "style": { "type": "list" } },
-{ "key": "SportAiFeiQiu", "name": "🌐飞球┃体育🌐", "type": 3, "api": "csp_SportAiFeiQiuGuard", "searchable":0, "changeable": 0, "style": { "type": "list" } }, 
-
 //道长(JS)
-{ "key": "hipy_js_88看球[球]", "name": "🏀88看球(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 0, "quickSearch": 0, "filterable": 1,"changeable":0, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/88看球[球].js" }, 
-{"key": "dr_JRKAN直播","name": "🏀JRKAN直播(JS)","type": 3,"api": "./drpy_dzlive/drpy_libs/drpy2.min.js","searchable": 0,"quickSearch": 0,"changeable":0,"ext": "./drpy_dzlive/drpy_js/JRKAN直播.js"},
+//{ "key": "hipy_js_88看球[球]", "name": "🏀88看球(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 0, "quickSearch": 0, "filterable": 1,"changeable":0, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/88看球[球].js" }, 
+//{"key": "dr_JRKAN直播","name": "🏀JRKAN直播(JS)","type": 3,"api": "./drpy_dzlive/drpy_libs/drpy2.min.js","searchable": 0,"quickSearch": 0,"changeable":0,"ext": "./drpy_dzlive/drpy_js/JRKAN直播.js"},
 { "key": "hipy_js_大全[央]", "name": "🔥央视(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 0, "quickSearch": 0, "filterable": 1, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/央视大全[官].js" }, 
+{ "key": "央视频d3", "name": "央视频d3", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy3.esm.min.js", "searchable": 0, "quickSearch": 0, "filterable": 1, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/央视频d3.js" }, 
+
 //{"key": "hipy_js_爱看机器人[虫]", "name": "📺爱看机器人(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 1, "quickSearch": 1, "filterable": 1, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/爱看机器人[虫].js" }, 
 //{ "key": "hipy_js_我的哔哩[官]1", "name": "🅱️哔哩(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 0, "quickSearch":0, "filterable": 1, "order_num": 1, "ext": "./drpy_dzlive/drpy_js/我的哔哩[官].js?type=url&params=../json/哔哩大全.json" }, 
 //{"key":"hipy_js_360影视[官]", "name": "📺360影视(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 1, "quickSearch": 1, "filterable": 1, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/360影视[官].js","categories": [ "纪录片","电影", "电视剧","综艺", "动漫", "少儿","体育" ]},

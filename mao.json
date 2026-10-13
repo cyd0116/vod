@@ -115,7 +115,7 @@
 {"key":"电影天堂","name":"🐝电影天堂(采集)","type":1,"api":"http://caiji.dyttzyapi.com/api.php/provide/vod/from/dyttm3u8/at/m3u8/","searchable":0,"quickSearch":0,"changeable":1,"filterable":1,"timeout":10,"categories": ["记录片","动作片", "喜剧片", "科幻片"] },
 
 //PY 
-//{ "key": "央视网py", "name": "央视网py","type": 3,"api": "./py/央视网.py" },
+{ "key": "央视py", "name": "央视(py)","type": 3,"api": "./py/央视.py" },
 
 //王二小(网盘)
 { "key": "玩偶", "name": "💓玩偶┃臻彩", "type": 3, "api": "csp_AiNewWoggGuard", "searchable": 1,"quickSearch":1, "changeable": 1 }, 
@@ -166,8 +166,8 @@
 //道长(JS)
 //{ "key": "hipy_js_88看球[球]", "name": "🏀88看球(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 0, "quickSearch": 0, "filterable": 1,"changeable":0, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/88看球[球].js" }, 
 //{"key": "dr_JRKAN直播","name": "🏀JRKAN直播(JS)","type": 3,"api": "./drpy_dzlive/drpy_libs/drpy2.min.js","searchable": 0,"quickSearch": 0,"changeable":0,"ext": "./drpy_dzlive/drpy_js/JRKAN直播.js"},
-{ "key": "hipy_js_大全[央]", "name": "🔥央视(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 0, "quickSearch": 0, "filterable": 1, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/央视大全[官].js" }, 
-{ "key": "央视频dr3", "name": "央视频dr3", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy3.js", "searchable": 0, "quickSearch": 0, "filterable": 1, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/央视频-dr3.js" }, 
+//{ "key": "hipy_js_大全[央]", "name": "🔥央视(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 0, "quickSearch": 0, "filterable": 1, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/央视大全[官].js" }, 
+//{ "key": "央视频d3", "name": "央视频d3", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy3.js", "searchable": 0, "quickSearch": 0, "filterable": 1, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/央视频d3.js" }, 
 
 //{"key": "hipy_js_爱看机器人[虫]", "name": "📺爱看机器人(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 1, "quickSearch": 1, "filterable": 1, "order_num": 0, "ext": "./drpy_dzlive/drpy_js/爱看机器人[虫].js" }, 
 //{ "key": "hipy_js_我的哔哩[官]1", "name": "🅱️哔哩(JS)", "type": 3, "api": "./drpy_dzlive/drpy_libs/drpy2.min.js", "searchable": 0, "quickSearch":0, "filterable": 1, "order_num": 1, "ext": "./drpy_dzlive/drpy_js/我的哔哩[官].js?type=url&params=../json/哔哩大全.json" }, 

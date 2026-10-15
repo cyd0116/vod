@@ -116,7 +116,7 @@
 {"key":"电影天堂","name":"🐝电影天堂(采集)","type":1,"api":"http://caiji.dyttzyapi.com/api.php/provide/vod/from/dyttm3u8/at/m3u8/","searchable":0,"quickSearch":0,"changeable":1,"filterable":1,"timeout":10,"categories": ["记录片","动作片", "喜剧片", "科幻片"] },
 
 //PY 
-{ "key": "央视py", "name": "🔥央视(py)","type": 3,"api": "./py/央视大全.py" },
+{ "key": "央视py", "name": "🔥央视(py)","type": 3,"api": "./py/央视大全720p.py" },
 { "key": "央视节目py", "name": "🔥央视节目(py)","type": 3,"api": "./py/央视节目.py" },
 { "key": "小苹果py", "name": "🔥小苹果(py)","type": 3,"api": "./py/小苹果.py" },
 

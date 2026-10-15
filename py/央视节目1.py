@@ -78,36 +78,6 @@ _YSP_COLUMNS = [
 # lid -> (name,cid,remark)
 _YSP_COLUMNS_MAP = {lid:(name,cid,rem) for lid,name,cid,rem in _YSP_COLUMNS}
 
-# ===== 栏目所属频道映射(用于"节目大全"按 CCTV 频道筛选) =====
-# key=lid, value=EPGC频道id(与 config filter 里 cid 的 v 一致)
-# 未列出的栏目在选中其所属频道外的频道时会 fallback 显示全量, 不会崩溃
-_YSP_COLUMN_CHANNEL = {
-	"10492": "EPGC1386744804340116",  # 新闻联播 -> CCTV13
-	"10151": "EPGC1386744804340116",  # 焦点访谈 -> CCTV13
-	"10747": "EPGC1386744804340116",  # 新闻直播间 -> CCTV13
-	"10526": "EPGC1386744804340116",  # 新闻1+1 -> CCTV13
-	"10490": "EPGC1386744804340116",  # 新闻调查 -> CCTV13
-	"10508": "EPGC1386744804340116",  # 新闻周刊 -> CCTV13
-	"10509": "EPGC1386744804340116",  # 世界周刊 -> CCTV13
-	"10501": "EPGC1386744804340115",  # 法治在线 -> CCTV12
-	"10031": "EPGC1386744804340115",  # 今日说法 -> CCTV12
-	"10366": "EPGC1386744804340115",  # 生命线 -> CCTV12
-	"10507": "EPGC1386744804340115",  # 每周质量报告 -> CCTV12
-	"10028": "EPGC1386744804340103",  # 百家讲坛 -> CCTV10
-	"10725": "EPGC1386744804340103",  # 健康中国 -> CCTV10
-	"10016": "EPGC1386744804340107",  # 天下足球 -> CCTV5
-	"10022": "EPGC1386744804340102",  # 对话 -> CCTV2
-	"10224": "EPGC1386744804340102",  # 中国经济大讲堂 -> CCTV2
-	"10029": "EPGC1386744804340104",  # 今日关注 -> CCTV4
-	"10111": "EPGC1386744804340104",  # 鲁健访谈 -> CCTV4
-	"10136": "EPGC1386744804340104",  # 今日亚洲 -> CCTV4
-	"10685": "EPGC1386744804340104",  # 高端访谈 -> CCTV4
-	"10205": "EPGC1386744804340109",  # 军事纪实 -> CCTV7
-	"10577": "EPGC1386744804340109",  # 国防故事 -> CCTV7
-	"10674": "EPGC1386744804340108",  # 中国电影报道 -> CCTV6
-	"10682": "EPGC1386744804340110",  # 乡村振兴中国行 -> CCTV17
-}
-
 # ===== 央视频 search: 剧名->vid 运行时映射 (纯Python, 无第三方依赖) =====
 class _YspPB:
 	__slots__ = ("d","o")
@@ -1045,54 +1015,40 @@ class Spider(Spider):  # 元类 默认的元类 type
 				})
 			pagecount=50
 		elif tid=='节目大全':
-			# 【筛选修复】读取壳子传入的频道筛选(extend['cid']=EPGCxxx),
-			#   按 _YSP_COLUMN_CHANNEL 映射表过滤栏目; 未匹配到任何栏目时 fallback 全量, 不崩溃。
-			sel_cid = _ysp_extval(extend, 'cid')
-			cols = _YSP_COLUMNS
-			if sel_cid:
-				_filtered = [c for c in cols if _YSP_COLUMN_CHANNEL.get(c[0]) == sel_cid]
-				if _filtered:
-					cols = _filtered
-			# 【电视栏目·完整复刻别人机制】直接返回48栏目静态清单(内置 _YSP_COLUMNS,
-			#   与别人"电视栏目"分类一致), 不再请求老接口 api.cntv.cn/lanmu/columnSearch。
-			#   vod_id三段式: library~~~<lid>~~~<cid>, detailContent用 lid 取全部期次。
-			# ★图片修复: 原 vod_pic 用旧模板 columnPic/<lid>/20210129/default.jpg 已全部404(全无图)。
-			#     改为从每个栏目 lid 详情页 __STATE_video__.payloads.sharevideo.pastCover.coverList[0]
-			#     提取真实封面图(poster.poster.imageUrl, 实测200可访问)。单栏目超时/失败则留空占位,
-			#     避免列表加载卡顿; 仅首页(pg==1)提取, 翻页沿用。
-			#     ★性能优化: 48栏目改为 ThreadPoolExecutor 并行提取(每栏目一个线程), 串行约29.6s
-			#     降至约2.3s; 并用 _YSP_COV_CACHE 内存缓存, 同一会话内重复进入不再重复请求。
-			videos=[]
-			_cov = {}
-			if pg == '1' or pg == 1:
-				if not getattr(self, '_ysp_cov_cache', None):
-					self._ysp_cov_cache = {}
-				_missing = [_c for _c in cols if _c[0] not in self._ysp_cov_cache]
-				if _missing:
-					from concurrent.futures import ThreadPoolExecutor
-					def _cov_fetch(_row):
-						_lid = _row[0]
-						try:
-							_js = _ysp_fetch_state('https://m.yangshipin.cn/video?type=0&lid=%s' % _lid)
-							_cl = ((((_js or {}).get('payloads',{}) or {}).get('sharevideo',{}) or {}).get('pastCover',{}) or {}).get('coverList',[]) or []
-							if _cl:
-								return (_lid, (((_cl[0].get('poster',{}) or {}).get('poster',{}) or {}).get('imageUrl') or '').split('/1080?')[0])
-						except Exception:
-							pass
-						return (_lid, '')
-					with ThreadPoolExecutor(max_workers=10) as _ex:
-						for _lid,_img in _ex.map(_cov_fetch, _missing):
-							self._ysp_cov_cache[_lid] = _img
-				_cov = dict(self._ysp_cov_cache)
-			for _lid,_name,_cid,_rem in cols:
-				_vod_id = 'library~~~%s~~~%s' % (_lid, _cid)
-				videos.append({
-					"vod_id": _vod_id,
-					"vod_name": self._strip_title_marks(_name),
-					"vod_pic": _cov.get(_lid,''),
-					"vod_remarks": _rem
-				})
+			# 【筛选修复·参考文件1】改走 CNTV columnSearch 接口, 筛选参数(cid/fc/fl/year/month)
+			#   直接拼进 URL, 与文件1"央视大全"完全一致, 筛选立即生效。
+			cid=''#频道
+			if 'cid' in extend.keys():
+				cid=extend['cid']
+			fc=''#分类
+			if 'fc' in extend.keys():
+				fc=extend['fc']
+			fl=''#字母
+			if 'fl' in extend.keys():
+				fl=extend['fl']
+			year=''#年份
+			if 'year' in extend.keys():
+				year=extend['year']
+			month=''#月份
+			if 'month' in extend.keys():
+				month=extend['month']
+			url='https://api.cntv.cn/lanmu/columnSearch?&fl={0}&fc={1}&cid={2}&p={3}&n=20&serviceId=tvcctv&t=json&cb=ko'.format(fl,fc,cid,pg)
 			pagecount=20
+			# 请求并解析(JSONP回调ko({...}); 需先去壳)
+			htmlText = self.webReadFile(urlStr=url,header=self.header)
+			index=htmlText.rfind(');')
+			if index>-1:
+				htmlText=htmlText[3:index]
+				videos = self.get_list1(html=htmlText,tid=tid)
+			else:
+				videos=[]
+			# 【分页修复】columnSearch 是真实分页接口, 返回不足20条说明到底, 否则返回pg+1
+			result['list'] = videos
+			result['page'] = pg
+			result['pagecount'] = (int(pg)+1) if len(videos)>=20 else pg
+			result['limit'] = 90
+			result['total'] = 999999
+			return result
 		else:
 			url = 'https://tv.cctv.com/epg/index.shtml'
 
@@ -1121,18 +1077,32 @@ class Spider(Spider):  # 元类 默认的元类 type
 		#   原样作为 ids[0] 传入, 不会用 ### 或任何分隔符预拆。此处优先识别 library~~~ 三段式:
 		#   从 _YSP_COLUMNS_MAP 反查栏目名, 设置 tid='节目大全' 走对应分支, 避免 aid[3] 越界崩溃。
 		_raw0 = array[0]
-		if isinstance(_raw0, str) and _raw0.startswith('library~~~'):
-			_parts = _raw0.split('~~~')
-			_lid = _parts[1] if len(_parts) > 1 else ''
-			_cid = _parts[2] if len(_parts) > 2 else ''
-			_row = _YSP_COLUMNS_MAP.get(_lid)
-			tid = '节目大全'
-			title = self._strip_title_marks(_row[0]) if _row else ''
-			logo = (self._ysp_cov_cache or {}).get(_lid, '') if hasattr(self, '_ysp_cov_cache') else ''
-			id = 'library~~~%s~~~%s' % (_lid, _cid)
-			vod_year = ''
-			actors = ''
-			brief = _row[2] if _row else ''
+		if tid == '节目大全':
+			# 【筛选修复】categoryContent 现已返回 ### 格式 guid(id字段为32位hex或videoSharedCode),
+			#   detailContent 走与文件1完全一致的原生链路: videoinfoByGuid -> topicId -> 栏目期次列表。
+			#   _raw0 形如 "节目大全###<栏目名>###<url>###<img>###<guid>###<日期>###<actors>###<brief>"
+			if '###' in _raw0:
+				aid = _raw0.split('###')
+				tid = aid[0] if len(aid) > 0 else ''
+				title = aid[1] if len(aid) > 1 else ''
+				lastVideo = aid[2] if len(aid) > 2 else ''
+				logo = aid[3] if len(aid) > 3 else ''
+				id = aid[4] if len(aid) > 4 else ''
+				vod_year = aid[5] if len(aid) > 5 else ''
+				actors = aid[6] if len(aid) > 6 else ''
+				brief = aid[7] if len(aid) > 7 else ''
+			else:
+				# 兜底: 老格式 library~~~ 三段式(兼容历史缓存)
+				_parts = _raw0.split('~~~')
+				_lid = _parts[1] if len(_parts) > 1 else ''
+				_cid = _parts[2] if len(_parts) > 2 else ''
+				_row = _YSP_COLUMNS_MAP.get(_lid)
+				title = self._strip_title_marks(_row[0]) if _row else ''
+				logo = (self._ysp_cov_cache or {}).get(_lid, '') if hasattr(self, '_ysp_cov_cache') else ''
+				id = 'library~~~%s~~~%s' % (_lid, _cid)
+				vod_year = ''
+				actors = ''
+				brief = _row[2] if _row else ''
 			lastVideo = ''
 		elif isinstance(_raw0, str) and _raw0.startswith('prog~~~'):
 			# 【program分类·方案A】categoryContent 返回的 vod_id: prog~~~<cid>~~~<title>~~~<cover>

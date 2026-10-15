@@ -301,7 +301,7 @@ class Spider(Spider):  # 元类 默认的元类 type
 	def webReadFile(self,urlStr,header):
 		html=''
 		req=urllib.request.Request(url=urlStr)#,headers=header
-		with  urllib.request.urlopen(req)  as response:
+		with urllib.request.urlopen(req, timeout=15) as response:
 			html = response.read().decode('utf-8')
 		return html
 	#判断网络地址是否存在
@@ -365,34 +365,56 @@ class Spider(Spider):  # 元类 默认的元类 type
 		soup = re.compile(r'<[^>]+>',re.S)
 		txt =soup.sub('', txt)
 		return txt.replace("&nbsp;"," ")
-	#取m3u8
+	#取m3u8【清晰度自动选择：超清2000 > 高清1200 > 标清850 > 流畅450】
 	def get_m3u8(self,urlTxt):
-		url = "https://vdn.apps.cntv.cn/api/getHttpVideoInfo.do?pid={0}".format(urlTxt)
-		html=self.webReadFile(urlStr=url,header=self.header)
-		jo =json.loads(html)
-		link = jo['hls_url'].strip()
-		html = self.webReadFile(urlStr=link,header=self.header)
-		content = html.strip()
-		arr = content.split('\n')
-		urlPrefix = self.get_RegexGetText(Text=link,RegexText='(http[s]?://[a-zA-z0-9.]+)/',Index=1)
-		subUrl = arr[-1].split('/')
-		# 优先 2000(720P 超清)，失败再用 1200 兜底
-subUrl[3] = '2000'
-subUrl[-1] = '2000.m3u8'
-hdUrl = urlPrefix + '/'.join(subUrl)
+		# 1) 取视频信息
+		api = "https://vdn.apps.cntv.cn/api/getHttpVideoInfo.do?pid={0}".format(urlTxt)
+		try:
+			html = self.webReadFile(urlStr=api, header=self.header)
+			jo = json.loads(html)
+			link = (jo.get('hls_url') or '').strip()
+		except Exception:
+			link = ''
+		if not link:
+			return ''
 
-url = urlPrefix + arr[-1]
-hdRsp = self.TestWebPage(urlStr=hdUrl, header=self.header)
-if hdRsp != 200:
-    # 回退 1200
-    subUrl[3] = '1200'
-    subUrl[-1] = '1200.m3u8'
-    hdUrl = urlPrefix + '/'.join(subUrl)
-    if self.TestWebPage(urlStr=hdUrl, header=self.header) == 200:
-        url = hdUrl
-		else:
-			url=''
-		return url
+		# 2) 读主 m3u8，确认真实存在的清晰度档位
+		try:
+			master = self.webReadFile(urlStr=link, header=self.header).strip()
+		except Exception:
+			master = ''
+
+		# 清晰度优先级：数字越大分辨率/码率越高；2000=超清 1280*720
+		quality_order = ['2000', '1200', '850', '450']
+		avail = []
+		if master:
+			for q in quality_order:
+				if re.search(r'/{0}/\S+{1}\.m3u8'.format(q, q), master) or \
+				   ('/{0}/'.format(q) in master):
+					avail.append(q)
+			if not avail:      # 主列表里没匹配到标记，按默认优先级硬试
+				avail = list(quality_order)
+
+		# 3) 依次试探，返回第一个可访问的最高档
+		base = link.split('?')[0]
+		for q in avail:
+			try:
+				# 把路径中 /hls/main/ 换成 /hls/<q>/，结尾换成 <q>.m3u8
+				hdUrl = re.sub(r'/hls/main/', '/hls/{0}/'.format(q), base)
+				hdUrl = re.sub(r'/hls/\d+/', '/hls/{0}/'.format(q), hdUrl)
+				hdUrl = re.sub(r'[^/]+\.m3u8$', '{0}.m3u8'.format(q), hdUrl)
+			except Exception:
+				hdUrl = ''
+			if not hdUrl:
+				continue
+			try:
+				if self.TestWebPage(urlStr=hdUrl, header=self.header) == 200:
+					return hdUrl
+			except Exception:
+				pass
+
+		# 4) 全部试探失败，返回主 m3u8 由播放器自行处理
+		return link
 	#搜索
 	def get_list_search(self,html,tid):
 		jRoot = json.loads(html)

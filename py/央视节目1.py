@@ -77,13 +77,6 @@ _YSP_COLUMNS = [
 ]
 # lid -> (name,cid,remark)
 _YSP_COLUMNS_MAP = {lid:(name,cid,rem) for lid,name,cid,rem in _YSP_COLUMNS}
-# 【方案A】栏目名(去《》后) -> lid 映射, 供 get_list1 把 columnSearch 结果挂回央视频 lid 播放链路
-_YSP_COLUMN_LID_MAP = {_strip_n(name):lid for lid,name,cid,rem in _YSP_COLUMNS}
-def _strip_n(n):
-	import re as _re
-	t = str(n).replace('《','').replace('》','').strip()
-	t = _re.sub(r'[\(（].*?[\)）]$', '', t).strip()
-	return t or str(n)
 
 # ===== 央视频 search: 剧名->vid 运行时映射 (纯Python, 无第三方依赖) =====
 class _YspPB:
@@ -1084,35 +1077,33 @@ class Spider(Spider):  # 元类 默认的元类 type
 		#   原样作为 ids[0] 传入, 不会用 ### 或任何分隔符预拆。此处优先识别 library~~~ 三段式:
 		#   从 _YSP_COLUMNS_MAP 反查栏目名, 设置 tid='节目大全' 走对应分支, 避免 aid[3] 越界崩溃。
 		_raw0 = array[0]
-		if isinstance(_raw0, str) and _raw0.startswith('library~~~'):
-			# 【方案A·恢复】节目大全列表项重新输出 library~~~<lid>~~~<cid>, 走央视频老链路:
-			#   用 lid 取 pastCover -> 期次vid列表, playerContent 走 get_ysp_mp4 720P MP4直链。
-			_parts = _raw0.split('~~~')
-			_lid = _parts[1] if len(_parts) > 1 else ''
-			_cid = _parts[2] if len(_parts) > 2 else ''
-			_row = _YSP_COLUMNS_MAP.get(_lid)
-			tid = '节目大全'
-			title = self._strip_title_marks(_row[0]) if _row else ''
-			logo = (self._ysp_cov_cache or {}).get(_lid, '') if hasattr(self, '_ysp_cov_cache') else ''
-			id = 'library~~~%s~~~%s' % (_lid, _cid)
-			vod_year = ''
-			actors = ''
-			brief = _row[2] if _row else ''
-			lastVideo = ''
-		elif tid == '节目大全' or (isinstance(_raw0, str) and '###' in _raw0 and _raw0.split('###')[0]=='节目大全'):
-			# 【兜底】栏目名未匹配到48栏目表时走CNTV原生链路: videoinfoByGuid -> topicId -> 期次列表
-			if not isinstance(_raw0, str) or '###' not in _raw0:
-				aid = [_raw0, '', '', '', '', '', '', '']
+		if tid == '节目大全':
+			# 【筛选修复】categoryContent 现已返回 ### 格式 guid(id字段为32位hex或videoSharedCode),
+			#   detailContent 走与文件1完全一致的原生链路: videoinfoByGuid -> topicId -> 栏目期次列表。
+			#   _raw0 形如 "节目大全###<栏目名>###<url>###<img>###<guid>###<日期>###<actors>###<brief>"
+			if '###' in _raw0:
+				aid = _raw0.split('###')
+				tid = aid[0] if len(aid) > 0 else ''
+				title = aid[1] if len(aid) > 1 else ''
+				lastVideo = aid[2] if len(aid) > 2 else ''
+				logo = aid[3] if len(aid) > 3 else ''
+				id = aid[4] if len(aid) > 4 else ''
+				vod_year = aid[5] if len(aid) > 5 else ''
+				actors = aid[6] if len(aid) > 6 else ''
+				brief = aid[7] if len(aid) > 7 else ''
 			else:
-				aid = (_raw0.split('###') + ['','','','','','','',''])[:8]
-			tid = aid[0]
-			title = self._strip_title_marks(aid[1])
-			lastVideo = aid[2]
-			logo = aid[3]
-			id = aid[4]
-			vod_year = aid[5]
-			actors = aid[6]
-			brief = aid[7]
+				# 兜底: 老格式 library~~~ 三段式(兼容历史缓存)
+				_parts = _raw0.split('~~~')
+				_lid = _parts[1] if len(_parts) > 1 else ''
+				_cid = _parts[2] if len(_parts) > 2 else ''
+				_row = _YSP_COLUMNS_MAP.get(_lid)
+				title = self._strip_title_marks(_row[0]) if _row else ''
+				logo = (self._ysp_cov_cache or {}).get(_lid, '') if hasattr(self, '_ysp_cov_cache') else ''
+				id = 'library~~~%s~~~%s' % (_lid, _cid)
+				vod_year = ''
+				actors = ''
+				brief = _row[2] if _row else ''
+			lastVideo = ''
 		elif isinstance(_raw0, str) and _raw0.startswith('prog~~~'):
 			# 【program分类·方案A】categoryContent 返回的 vod_id: prog~~~<cid>~~~<title>~~~<cover>
 			#   <cid> 为央视频节目库的节目cid。全集解析在下方 try 块 prog 专用分支用 cid 精确取,
@@ -1736,15 +1727,7 @@ class Spider(Spider):  # 元类 默认的元类 type
 			actors=''
 			if len(url) == 0:
 				continue
-			# 【方案A·筛选+播放兼得】用栏目名反查 _YSP_COLUMNS 拿央视频 lid,
-			#   使 vod_id 保持 library~~~<lid>~~~<cid> 三段式, 播放链路(detailContent/playerContent)
-			#   完全走央视频老逻辑(MP4直链); 列表由 columnSearch 提供(筛选生效)。
-			#   映射不到的栏目(name未出现在48栏目表里) fallback 到 ### 格式走CNTV兜底链路。
-			_ysp_lid = _YSP_COLUMN_LID_MAP.get(title, '')
-			if tid == '节目大全' and _ysp_lid:
-				guid = 'library~~~%s~~~%s' % (_ysp_lid, id)
-			else:
-				guid = "{0}###{1}###{2}###{3}###{4}###{5}###{6}###{7}".format(tid,title,url,img,id,year,actors,brief)
+			guid="{0}###{1}###{2}###{3}###{4}###{5}###{6}###{7}".format(tid,title,url,img,id,year,actors,brief)
 			#print(vod_id)
 			videos.append({
 				"vod_id":guid,
@@ -1788,15 +1771,7 @@ class Spider(Spider):  # 元类 默认的元类 type
 				actors=''
 			if len(url) == 0:
 				continue
-			# 【方案A·筛选+播放兼得】用栏目名反查 _YSP_COLUMNS 拿央视频 lid,
-			#   使 vod_id 保持 library~~~<lid>~~~<cid> 三段式, 播放链路(detailContent/playerContent)
-			#   完全走央视频老逻辑(MP4直链); 列表由 columnSearch 提供(筛选生效)。
-			#   映射不到的栏目(name未出现在48栏目表里) fallback 到 ### 格式走CNTV兜底链路。
-			_ysp_lid = _YSP_COLUMN_LID_MAP.get(title, '')
-			if tid == '节目大全' and _ysp_lid:
-				guid = 'library~~~%s~~~%s' % (_ysp_lid, id)
-			else:
-				guid = "{0}###{1}###{2}###{3}###{4}###{5}###{6}###{7}".format(tid,title,url,img,id,year,actors,brief)
+			guid="{0}###{1}###{2}###{3}###{4}###{5}###{6}###{7}".format(tid,title,url,img,id,year,actors,brief)
 			#print(vod_id)
 			videos.append({
 				"vod_id":guid,

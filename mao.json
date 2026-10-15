@@ -117,7 +117,7 @@
 
 //PY 
 { "key": "央视py", "name": "🔥央视(py)","type": 3,"api": "./py/央视大全720p.py" },
-{ "key": "央视节目py", "name": "🔥央视节目(py)","type": 3,"api": "./py/央视节目1.py" },
+{ "key": "央视频py", "name": "🔥央视频(py)","type": 3,"api": "./py/央视频.py" },
 { "key": "小苹果py", "name": "🔥小苹果(py)","type": 3,"api": "./py/小苹果.py" },
 
 //王二小(网盘)

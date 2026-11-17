@@ -96,14 +96,16 @@
 { "key": "SportAiKaFei", "name": "🌐咖啡┃体育🌐", "type": 3, "api": "csp_SportAiKaFeiGuard", "searchable":0, "changeable": 0, "style": { "type": "list" } },
 { "key": "SportAiFeiQiu", "name": "🌐飞球┃体育🌐", "type": 3, "api": "csp_SportAiFeiQiuGuard", "searchable":0, "changeable": 0, "style": { "type": "list" } }, 
 
+//PY 
+{ "key": "98直播py", "name": "🔥98直播(py)","type": 3,"api": "./py/98直播.py" },
+{ "key": "央视节目py", "name": "🔥央视节目(py)","type": 3,"api": "./py/央视节目.py" },
+{ "key": "1905电影py", "name": "🔥1905电影(py)","type": 3,"api": "./py/1905电影.py" },	
+	
 //采集
 {"key":"量子","name":"🐝量子(🏀NBA回看)","type": 1,"api": "https://cj.lziapi.com/api.php/provide/vod/from/lzm3u8", "searchable":0, "quickSearch":0,"changeable": 1,"categories": ["篮球","记录片", "足球", "动作片", "喜剧片", "科幻片", "恐怖片", "大陆综艺" ] },
 {"key":"暴风","name":"🐝暴风(🏀NBA回看)","type": 1,"api": "https://bfzyapi.com/api.php/provide/vod/?","searchable":0,"quickSearch":0,"categories": [ "篮球","纪录片","足球", "动作片", "喜剧片", "科幻片", "恐怖片", "大陆综艺"] },
 {"key":"非凡","name":"🐝非凡(采集)","type": 1,"api": "http://cj.ffzyapi.com/api.php/provide/vod/from/ffm3u8", "searchable":0,"quickSearch":0, "changeable": 1,"categories": [ "记录片", "足球","体育","体育赛事", "动作片", "喜剧片", "科幻片", "恐怖片", "大陆综艺" ] },
 {"key":"电影天堂","name":"🐝电影天堂(采集)","type":1,"api":"http://caiji.dyttzyapi.com/api.php/provide/vod/from/dyttm3u8/at/m3u8/","searchable":0,"quickSearch":0,"changeable":1,"filterable":1,"timeout":10,"categories": ["记录片","动作片", "喜剧片", "科幻片"] },
-
-//PY 
-{ "key": "央视节目py", "name": "🔥央视节目(py)","type": 3,"api": "./py/央视节目.py" },
 
 //王二小(网盘)
 { "key": "玩偶", "name": "💓玩偶┃臻彩", "type": 3, "api": "csp_AiNewWoggGuard", "searchable": 1,"quickSearch":1, "changeable": 1 }, 
@@ -134,7 +136,7 @@
 //{ "key": "SoKaKa", "name": "🎠卡卡┃综合🎠", "type": 3, "api": "csp_SoKaKaGuard", "searchable": 1, "changeable": 1 },
 //{ "key": "SoAiQuanPanGuard", "name": "🎠全盘┃综合🎠", "type": 3, "api": "csp_SoAiQuanPanGuard", "searchable": 1, "changeable": 0 },
 
-/暂不能播放
+//暂不能播放
 //{ "key": "AiNewZhiZhen", "name": "💓至臻┃臻彩💓", "type": 3, "api": "csp_AiNewZhiZhenGuard", "searchable": 1,"quickSearch":1, "changeable": 1 }, 
 //{ "key": "二小", "name": "💓指南┃臻彩💓", "type": 3, "api": "csp_AiNewXiaoPanGuard", "searchable": 1,"quickSearch":1, "changeable": 1 },
 //{ "key": "SoAiAiPanSo", "name": "🎠爱盘┃综合🎠", "type": 3, "api": "csp_SoAiAiPanSoGuard", "searchable": 1, "changeable": 1 }, 

@@ -104,7 +104,7 @@
 {"name":"jx3","type":1,"url":"http://43.136.176.188:91/api/?key=4ef232e96172b0bda78d393c695fe7c4&url="},
 {"name":"jx4","type":1,"url":"http://pan.qiaoji8.com/tvbox/neibu.php?url="} ]} },
 { "key": "央视节目", "name": "🔥央视节目(py)","type": 3,"api": "https://raw.githubusercontent.com/cyd0116/vod/refs/heads/main/py/央视节目.py" },
-{ "key": "pgdj", "name": "🔥pgdj(py)","type": 3,"api": "https://raw.githubusercontent.com/cyd0116/vod/refs/heads/main/py/pgdj.py",
+{ "key": "pgdj", "name": "🔥pgdj(py)","type": 3,"api": "https://raw.githubusercontent.com/cyd0116/vod/refs/heads/main/py/pgdj.py"},
 	
 //采集
 {"key":"量子","name":"🐝量子(🏀NBA回看)","type": 1,"api": "https://cj.lziapi.com/api.php/provide/vod/from/lzm3u8", "searchable":0, "quickSearch":0,"changeable": 1,"categories": ["篮球","记录片", "足球", "动作片", "喜剧片", "科幻片", "恐怖片", "大陆综艺" ] },

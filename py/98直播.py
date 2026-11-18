@@ -118,10 +118,10 @@ PARSE_PROBE = True
 PARSE_PROBE_ALL = True
 PARSE_PROBE_TIMEOUT = 2
 PARSE_PROBE_WORKERS = 6
-PARSE_DEAD_USE_SHELL = False
+PARSE_DEAD_USE_SHELL = True
 SHELL_PARSE_FALLBACK = True
 PARSE_URL_ENCODE = False
-PARSE_AS_SNIFF = True
+PARSE_AS_SNIFF = False
 
 SITE = "https://m.98zb.com"
 BASES = ["https://m.98zb.com", "https://m.98zhibo.com",

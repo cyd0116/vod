@@ -3,10 +3,9 @@
 "wallpaper": "https://深色壁纸.xxooo.cf/",
 
 "lives": [
-{ "name": "冰茶线路", "type": 0, "url": "https://ds65.tv1288.xyz", "playerType": 2,"ua" : "bingcha/1.1 (mianfeifenxiang) ", "epg": "https://raw.githubusercontent.com/taksssss/tv/refs/heads/main/epg/51zmt.xml", "logo": "http://127.0.0.1:9978/file/酷9/logo/{name}.png", "catchup": { "type": "append", "source": "?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}" } },
-{ "name": "央视频(高码)", "type": 0, "url": "http://127.0.0.1:8767/all.m3u","ua" : "bingcha/1.1 (mianfeifenxiang) ", "epg": "https://raw.githubusercontent.com/taksssss/tv/refs/heads/main/epg/51zmt.xml", "logo": "http://127.0.0.1:9978/file/酷9/logo/{name}.png", "catchup": { "type": "append", "source": "?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}" } },
+{ "name": "冰茶", "type": 0, "url": "https://ds65.tv1288.xyz", "playerType": 2,"ua" : "bingcha/1.1 (mianfeifenxiang) ", "epg": "https://raw.githubusercontent.com/taksssss/tv/refs/heads/main/epg/51zmt.xml", "logo": "http://127.0.0.1:9978/file/酷9/logo/{name}.png", "catchup": { "type": "append", "source": "?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}" } },
 {
-        "name": "Kimentanm线路",
+        "name": "Kimentanm",
         "type": 0,
         "url": "https://raw.githubusercontent.com/Kimentanm/aptv/master/m3u/iptv.m3u",
         "playerType": 2,
@@ -19,33 +18,7 @@
 }
 },
 {
-      "name": "综合线路",
-      "type": 0,
-      "playerType": 2,
-      "url": "http://193.123.86.190:14888/TV/iptv.php",
-      "ua": "bingcha/1.1 (mianfeifenxiang) ",
-  "epg": "https://raw.githubusercontent.com/taksssss/tv/refs/heads/main/epg/51zmt.xml",
-  "logo": "http://127.0.0.1:9978/file/酷9/logo/{name}.png",
-  "catchup": {
-    "type": "append",
-    "source": "?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"
-}
-    },
-{
-      "name" : "Gather(肥猫)",
-      "type" : 0,
-      "url" : "https://tv.tmxk.kdns.fr/yplrnuc7",
-	  "ua": "okhttp/3.8.1",
-      "playerType" : 2,
-	  "epg": "https://raw.githubusercontent.com/taksssss/tv/refs/heads/main/epg/51zmt.xml",
-  "logo": "http://127.0.0.1:9978/file/酷9/logo/{name}.png",
-  "catchup": {
-    "type": "append",
-    "source": "?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"
-}
-    },
-{
-      "name": "嘉禾线路(电信)",
+      "name": "嘉禾(电信)",
       "type": 0,
       "url": "http://46.207.209.www.hxyy.jiaheysyy.top/jhzb.json",
       "playerType": 1,
@@ -56,7 +29,8 @@
     "type": "append",
     "source": "?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}"
 }
-    }
+    },
+{ "name": "央视频(高码)", "type": 0, "url": "http://127.0.0.1:8767/all.m3u","ua" : "bingcha/1.1 (mianfeifenxiang) ", "epg": "https://raw.githubusercontent.com/taksssss/tv/refs/heads/main/epg/51zmt.xml", "logo": "http://127.0.0.1:9978/file/酷9/logo/{name}.png", "catchup": { "type": "append", "source": "?playseek=${(b)yyyyMMddHHmmss}-${(e)yyyyMMddHHmmss}" } }
 ],
 
 "sites":[
@@ -97,14 +71,13 @@
 { "key": "SportAiFeiQiu", "name": "🌐飞球┃体育🌐", "type": 3, "api": "csp_SportAiFeiQiuGuard", "searchable":0, "changeable": 0, "style": { "type": "list" } }, 
 
 //PY 
-{ "key": "98直播", "name": "🔥98直播(py)","type": 3,"api": "https://raw.githubusercontent.com/cyd0116/vod/refs/heads/main/py/98直播.py",
+{ "key": "py_98直播", "name": "🔥98直播(py)","type": 3,"api": "https://raw.githubusercontent.com/cyd0116/vod/refs/heads/main/py/98直播.py",
 "ext":{"parses":[
 {"name":"jx1","type":1,"url":"http://122.228.84.103:7777/api/?key=4Dk5tdayvY6NZufEMG&url="},
 {"name":"jx2","type":1,"url":"http://110.42.7.182:880/api/?key=7e84f07dc78fbb3406d64a1ab7d966b3&url="},
 {"name":"jx3","type":1,"url":"http://43.136.176.188:91/api/?key=4ef232e96172b0bda78d393c695fe7c4&url="},
 {"name":"jx4","type":1,"url":"http://pan.qiaoji8.com/tvbox/neibu.php?url="} ]} },
-{ "key": "央视节目", "name": "🔥央视节目(py)","type": 3,"api": "https://raw.githubusercontent.com/cyd0116/vod/refs/heads/main/py/央视节目.py" },
-{ "key": "pgdj", "name": "🔥pgdj(py)","type": 3,"api": "https://raw.githubusercontent.com/cyd0116/vod/refs/heads/main/py/pgdj.py"},
+{ "key": "py_央视节目", "name": "🔥央视节目(py)","type": 3,"api": "https://raw.githubusercontent.com/cyd0116/vod/refs/heads/main/py/央视节目.py" },
 	
 //采集
 {"key":"量子","name":"🐝量子(🏀NBA回看)","type": 1,"api": "https://cj.lziapi.com/api.php/provide/vod/from/lzm3u8", "searchable":0, "quickSearch":0,"changeable": 1,"categories": ["篮球","记录片", "足球", "动作片", "喜剧片", "科幻片", "恐怖片", "大陆综艺" ] },

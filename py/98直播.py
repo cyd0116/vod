@@ -143,6 +143,19 @@ SITE = "https://m.98zb.com"
 BASES = ["https://m.98zb.com", "https://m.98zhibo.com",
          "https://www.98zhibo.com", "https://www.98zb.com"]
 
+# ======================================================================
+# ★ 一级分类白名单：只列在这里的才会在 OK影视 顶部分类栏显示。
+#   用户要求去掉：红框里的分类 + 直播 + 源自检 → 默认只留「完整比赛录像」入口。
+#   想加回某个，把它的 key 追加进 SHOW_CATS 即可，其余代码不用动。
+#   全部 17 个 key 对照：
+#     today 今日视频 | live 直播 | nba NBA录像 | zuqiu 足球录像
+#     cba CBA录像 | zonghe 综合录像 | nbajj NBA集锦 | zuqiujj 足球集锦
+#     cbajj CBA集锦 | nbaqx 篮球球星 | zuqiuqx 足球球星
+#     nba2 NBA | zuqiu2 足球 | cba2 CBA | zonghe2 综合
+#     mobile 手机版 | diag 源自检
+# ======================================================================
+SHOW_CATS = ["today", "nba", "zuqiu", "cba", "zonghe"]
+
 # 静态分类（与站点导航一致）；第三项是导航学习失败时的兜底路径
 _CATS = [
     ("today",    "今日视频", ""),
@@ -164,6 +177,7 @@ _CATS = [
     ("diag",     "源自检",   ""),
 ]
 _CAT_NAME = dict((k, n) for k, n, _p in _CATS)
+_VISIBLE_CATS = [c for c in _CATS if c[0] in set(SHOW_CATS)]
 
 _UA = ("Mozilla/5.0 (Linux; Android 11) AppleWebKit/537.36 "
        "(KHTML, like Gecko) Chrome/124.0 Mobile Safari/537.36")
@@ -178,6 +192,30 @@ _MEDIA_RE = re.compile(
 _EP_SKIP = re.compile(
     r'统计|公众号|QQ群|淘宝|京东|优惠|电影票|小程序|上一篇|下一篇|'
     r'更多|首页|末页|下一页|友情链接|免责', re.I)
+
+# ======================================================================
+# ★ 二级/三级目录过滤：排除「十佳 / 集锦 / 精华」等非完整比赛条目
+#   二级 = 分类列表里的比赛卡片（_items）
+#   三级 = 详情页里的分节选集（_episodes）
+#
+#   命中即丢弃（子串匹配，覆盖常见变体）：
+#     集锦/锦集/集绵、全场集锦、进球集锦、赛后集锦、本场集锦、集锦回放
+#     精华/精华版/全场精华、精华回放、赛事精华
+#     十佳/十佳球/十佳进球、五佳/五佳球、TOP10
+#     高光/高光时刻、花絮、纯享、看点、混剪、剪辑、盘点
+#     highlights / condensed（英文标题）
+#   「精彩」只在组合词（精彩瞬间/镜头/回放/时刻/十佳球…）里排除，
+#    避免误杀「精彩全场录像回放」这类正经完整比赛标题。
+#
+#   ★ 一定保留：全场录像回放 / 全场回放 / 第X节录像 / 完整版 / 加时
+#   ★ 想专门看集锦：把 DROP_HIGHLIGHTS 改成 False 即可，无需改别处。
+# ======================================================================
+DROP_HIGHLIGHTS = True
+_HIGHLIGHT_SKIP = re.compile(
+    r'集锦|锦集|集绵|精华|十佳|五佳|高光|花絮|纯享|看点|'
+    r'混剪|剪辑|盘点|进球集锦|集锦回放|精华回放|'
+    r'精彩(?:瞬间|镜头|回放|时刻|集锦|球|十佳|进球)|'
+    r'TOP\s*\d+|highlights?|condensed', re.I)
 
 _ctx = ssl.create_default_context()
 _ctx.check_hostname = False
@@ -1135,7 +1173,7 @@ def _weibo_resolve(url):
 # ======================================================================
 class Spider(Spider):
 
-    VERSION = "98直播吧 v6.6（默认壳子解析兜底）"
+    VERSION = "98直播吧 v6.8（精简一级分类）"
 
     def getName(self):
         return "98直播吧"
@@ -1204,12 +1242,7 @@ class Spider(Spider):
 
     config = {
         "player": {},
-        "filter": {
-            "直播": [{"key": "g", "name": "赛事", "value": [
-                {"n": "全部", "v": ""}, {"n": "足球", "v": "足球"},
-                {"n": "篮球", "v": "篮球"}, {"n": "NBA", "v": "NBA"},
-                {"n": "CBA", "v": "CBA"}, {"n": "综合", "v": "综合"}]}]
-        }
+        "filter": {}   # 直播分类已隐藏，不再挂它的筛选组
     }
     header = {
         "User-Agent": _UA,
@@ -1218,13 +1251,13 @@ class Spider(Spider):
 
     # ------------------------------------------------------------------
     def homeContent(self, filter):
-        """★ 纯静态、零网络 —— 与可播放样例完全一致，保证分类一定显示。"""
+        """★ 纯静态、零网络；一级分类只输出 SHOW_CATS 白名单里的。"""
         result = {}
         classes = []
-        for k, n, _p in _CATS:
+        for k, n, _p in _VISIBLE_CATS:
             classes.append({'type_name': n, 'type_id': k})
         result['class'] = classes
-        if filter:
+        if filter and self.config['filter']:
             result['filters'] = self.config['filter']
         return result
 
@@ -1268,6 +1301,9 @@ class Spider(Spider):
                 continue
             if _EP_SKIP.search(t) or href in seen or not _is98(href):
                 continue
+            # ★ 二级目录：全场精华 / 集锦 / 十佳 等一律不进列表
+            if DROP_HIGHLIGHTS and _HIGHLIGHT_SKIP.search(t):
+                continue
             seen.add(href)
             dm = re.search(r"\d{1,2}月\d{1,2}日|20\d{2}年\d{1,2}月\d{1,2}日", t)
             out.append({"vod_id": _enc(href), "vod_name": t,
@@ -1309,8 +1345,9 @@ class Spider(Spider):
                                   "vod_name": "源自检 · 点开看配置与取流日志",
                                   "vod_pic": "", "vod_remarks": "排障用"}],
                         'page': 1, 'pagecount': 1, 'limit': 1, 'total': 1}
-            # ★ 订阅里分类 id 变过 / 壳用了旧缓存 tid → 一律回落今日视频
-            if tid not in _CAT_NAME:
+            # ★ 未知 tid / 已隐藏的一级分类被旧缓存请求 → 一律回落今日视频，
+            #   既不会白屏，也不会把隐藏分类的内容偷偷显示回来。
+            if tid not in set(SHOW_CATS):
                 tid = 'today'
 
             html, final = self._home()
@@ -1378,13 +1415,16 @@ class Spider(Spider):
                 continue
             if _EP_SKIP.search(t) or not href.startswith("http"):
                 continue
+            # ★ 三级目录：全场精华 / 全场集锦 / 精彩十佳球 一律不进选集
+            if DROP_HIGHLIGHTS and _HIGHLIGHT_SKIP.search(t):
+                continue
             m = re.match(r"^\s*[\[【(（]([^\]】)）]{1,12})[\]】)）]", t)
             if not m:
                 continue
             g = m.group(1).strip()[:12]
             name = re.sub(r"^\s*[\[【(（][^\]】)）]{1,12}[\]】)）]\s*", "", t)
             short = re.search(r"第[一二三四1-4]节\s*录像|全场录像回放|"
-                              r"全场回放|全场集锦|加时|完整版|录像回放|精华回放", name)
+                              r"全场回放|加时|完整版|录像回放", name)
             name = (short.group(0) if short else name)[:36]
             key = (g, href)
             if key in seen:
@@ -1403,7 +1443,17 @@ class Spider(Spider):
         if vid in ('diag', 'hint', 'today_hint', 'err'):
             lines = ["98直播吧 · 源自检（静态·不发网络请求）",
                      "版本: " + self.VERSION, "",
-                     "分类: %d 个，纯静态返回，站点不通也会显示" % len(_CATS),
+                     "一级分类: %d 个（%s）" %
+                        (len(_VISIBLE_CATS),
+                         " / ".join(n for _k, n, _p in _VISIBLE_CATS)),
+                     "已隐藏: %d 个（红框分类 + 直播 + 源自检）；" %
+                        (len(_CATS) - len(_VISIBLE_CATS)),
+                     "  想加回：改文件顶部 SHOW_CATS 列表即可",
+                     "  源自检诊断页仍保留（旧缓存点进去可用），只是不在分类栏",
+                     "二级/三级目录过滤集锦·精华·十佳: " +
+                        ("开启 ✅" if DROP_HIGHLIGHTS else "关闭(保留集锦)"),
+                     "  保留：全场录像回放 / 第X节录像 / 全场回放",
+                     "  丢弃：全场精华 / 全场集锦 / 精彩十佳球 等",
                      "首页: homeContent 零网络请求 / 无 __init__", "",
                      "【微博取流配置】",
                      "WB_COOKIE: " + ("已填 ✅" if WB_COOKIE else "未填 ❌"),

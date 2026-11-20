@@ -34,12 +34,14 @@ import urllib.parse
 #   * 没有 __init__（基类初始化在本壳里会卡住 → 一直转圈）
 #   * homeContent 纯静态；状态全部放模块级全局，不用实例属性
 #   * playerContent 主链路 parse=0 直连（实测可播）；取不到直链时
-#     ★ 默认兜底 = OK影视 壳子内置解析(parse=1 + jx=1)，不再丢死解析地址
+#     ★ 默认兜底 = OK影视 壳子内置解析(parse=1 + jx=1)，不丢解析网页地址
 #   * ★ py 不内置任何解析地址：全部从订阅 ext.parses / SUBSCRIBE_URLS 读
 #     订阅 parses 仍会全量尝试，命中直链用 parse=0；没命中一律落壳子解析
-#   * ★★ 官方页(腾讯/爱奇艺/优酷/咪咕)：实测 98 点进去自动播放、且官网
-#     视频可直接走壳子解析。v7.1 起 playerContent 最早短路，原样交壳
-#     (parse=1+jx=1+flag)，不探测订阅 parses、不弹「需鉴权/全超时」文字。
+#   * ★★ 官方视频(腾讯国语/腾讯原声等) v7.4：py 零动作，直接交壳。
+#     官方页不能直连 → 最优先判定，不试直连/不取流/不探测/不重试；
+#     只返回【parse=1 + url + header】三个字段，绝不写 msg（壳会把 msg
+#     当「播放失败原因」弹 ⚠ 页并中断解析）。
+#     壳本身已配好「先超级解析 → 失败自动走 https 解析」，顺序由壳负责。
 #     备选 OFFICIAL_SNIFF_PREFIX="video://" 走 X5 WebView 嗅探。
 #   * localProxy 返回三元素 [code, ctype, body]
 # ======================================================================
@@ -55,7 +57,7 @@ WB_COOKIE = ""
 # ★ 默认兜底 = OK影视 壳子内置解析（parse=1 + jx=1）
 # 兜底顺序：py 直取 1080P → 订阅 parses 尝试(命中直链才用) → 壳子内置解析
 #   无论「没配解析」「全部超时」「有响应但无直链」，最终默认都交壳子解析，
-#   不再把死解析地址丢给播放器（转圈/感叹号），也不再停在文字提示页。
+#   不再把解析网页地址丢给播放器（转圈/感叹号），也不再停在文字提示页。
 #
 # 1) ★ py 里【不再内置任何解析地址】，PARSES_INLINE 默认留空 []。
 #    全部解析只从订阅列表读（见下面 2），换解析改订阅即可，不用改 py。
@@ -85,13 +87,13 @@ WB_COOKIE = ""
 #       py 在「播放兜底」时拉一次并缓存；json / txt / base64 / 行式全吃，
 #       3 秒超时、只拉一层。首页/分类/自检绝不因它联网。
 #
-#    ③ PARSES_INLINE：默认留空（py 不再写死解析）。只在手头没有订阅
+#    ③ PARSES_INLINE：默认留空（py 不内置解析）。只在手头没有订阅
 #       配置、想临时应急时才粘几条进去。
 #       订阅里的 parses 项若自带 ext/header(Referer/UA/Cookie) 会一并沿用。
 #    ※ PARSES_FILE 仍保留：只在你想「显式指定一个本地订阅文件」时填，
 #      不会去做目录遍历扫描。
 #    ★ 若三处都没给解析：兜底直接交 OK影视 壳子内置解析（parse=1），
-#      或按 PARSE_DEAD_USE_SHELL 给可读文字，不会卡在死地址上。
+#      或按 PARSE_DEAD_USE_SHELL 给可读文字，不会卡在解析网页上。
 #
 # 3) ★ 自动轮流尝试「全部」解析地址：
 #    PARSE_PROBE_ALL = True → 一次兜底里并行请求订阅列表中的全部解析
@@ -157,24 +159,40 @@ PARSE_AS_SNIFF = False
 
 # ======================================================================
 # ★★ 官方页（腾讯/爱奇艺/优酷/咪咕）：py 完全不碰，原样交壳解析
-#   实测纠正：98 点进腾讯页是【自动播放】的，不需要手动点按钮；
-#   且官网视频【可以直接走壳子自带解析】。之前「要点播放/过广告」的
-#   推断是错的，已撤回。真正的问题只有一个：py 以前把官方页塞进
-#   _fallback_parse，先跑订阅里 4 条死解析、再显示一大段「需鉴权/全超时」
-#   提示，结果壳没被干净地调用到解析。
-#
-#   现在的做法（v7.1）：playerContent 一识别到官方页就【最早短路】，
-#     ① 不取流 ② 不探测订阅 parses ③ 不带任何误导提示
-#     直接返回 parse=1 + jx=1 + url=官方页 + flag=英文平台标记，
-#     和「官网视频能走壳解析」的源保持同一种交法。
-#   同时保证 url 是真实官方页：98 中转页里若嵌官方页，会先抽出来再交。
+#   官方视频不能直连；壳本身已配好「超级解析 → 失败自动走 https 解析」。
+#   playerContent 识别到官方页就【最早短路】：不试直连、不取流、
+#   不探测订阅 parses、不带任何提示，直接极简交壳（v7.4 见下方配置块）。
+#   98 中转页里若嵌官方页，会先抽出真实官方页再交，不丢中转页给壳。
 #
 #   B 备选：OFFICIAL_SNIFF_PREFIX="video://" → 改 parse=0 交 video:// 网页，
 #     让 X5 WebView 渲染嗅探（需电视端 + X5 内核）。默认留空不用。
 # ======================================================================
 OFFICIAL_SNIFF_PREFIX = ""   # 留空 = 走壳解析池；填 "video://" 走 B
-OFFICIAL_PAGE_HINT = False   # 默认关：官方页交壳时 msg 保持极简，不弹误导文字
+OFFICIAL_PAGE_HINT = False
 OFFICIAL_ADD_FLAG = True     # 回传 flag=qq/iqiyi…，帮壳匹配解析项 ext.flag
+
+# ======================================================================
+# ★★ v7.4 官方视频（腾讯国语/腾讯原声等）：py 零动作，直接交壳
+#
+#   实测确认：官方页不能直连，也不需要 py 先试直连/先试解析。
+#   壳本身已配好顺序 —— 先【超级解析】，失败后自动走【https 解析】。
+#   这是壳内部的解析链，不需要回调 py。所以 py 只做一件事：
+#     识别到官方页 → 原样极简交壳(parse=1 + url + header，零 msg)
+#   不探测、不取流、不拼解析地址、不重试、不带 flag/format/playUrl。
+#
+#   ★ 交壳必须零 msg：壳会把 playerContent.msg 当「播放失败原因」
+#     弹 ⚠ 页并中断解析（就是早先截图那行字的来源）。
+#   ★ 官方页判定放在 playerContent 最前，连 _stream_ok 都不经过，
+#     确保「直接走壳子超级解析」，不做任何直连尝试。
+#
+#   下面两个开关只作兼容保留，默认全关；打开会让 py 抢在壳前面，
+#   与「先超级解析、后 https」的顺序冲突，不建议。
+# ======================================================================
+OFFICIAL_CLEAN = True          # ★ 交壳零 msg（必须开）
+OFFICIAL_RETRY_PARSES = False  # ★ 不需要「再点一次」
+OFFICIAL_AUTO_HTTPS = False    # ★ 默认关：官方页不抢先探测，顺序交给壳
+OFFICIAL_HTTPS_ONLY = True     # 仅在显式开启 AUTO_HTTPS 时生效
+OFFICIAL_AUTO_TIMEOUT = 2
 
 SITE = "https://m.98zb.com"
 BASES = ["https://m.98zb.com", "https://m.98zhibo.com",
@@ -268,11 +286,12 @@ _ctx.verify_mode = ssl.CERT_NONE
 _G = {"home": None, "learned": False, "cat_url": {},
       "wb_visitor": "", "wb_log": [],
       "cfg_parses": [], "parses": None, "parses_note": "",
-      "parse_ext": {}, "sub_urls": [], "ext_subs": [],
+      "parse_ext": {}, "sub_urls": [], "ext_subs": [], "cfg_files": [],
       "sub_parses": None, "sub_note": "", "sub_key": "",
       "parse_cursor": 0, "parse_last": {}, "parse_used": "",
       "parse_probe_log": [], "parse_round": 0, "parse_dead": False,
-      "shell_turn": {}}   # page -> 0(下一轮走壳) / 1(下一轮走订阅parses)
+      "shell_turn": {},      # 非官方页：0→先壳 / 1→下轮试订阅parses
+      "official_turn": {}}  # 官方页：0→极简交壳 / 1→下轮订阅parses全量
 
 
 # ======================================================================
@@ -429,19 +448,22 @@ def _clean(t):
 #   ★ 纯本地文件读取，绝不发网络请求；只在需要兜底时才惰性执行。
 # ======================================================================
 def _candidate_files():
-    """★ 不再自动扫描本机目录。只认两种显式入口：
-       ① PARSES_FILE 指定的那一个订阅文件
-       ② SUBSCRIBE_URLS 里用户填进 OK影视 的订阅地址（网络拉取）
+    """★ 不扫描本机目录。只认【显式指定】的订阅文件：
+       ① PARSES_FILE（py 顶部常量）
+       ② ext 里带进来的本机订阅路径（subscribe / parses_file / configFile）
+       ③ SUBSCRIBE_URLS 是网络地址，由 _pull_subscribe 单独处理
     """
     out = []
-    p = str(PARSES_FILE or "").strip()
-    if p:
-        # 兼容 file:// 前缀与 ~ 展开
+    raw = [str(PARSES_FILE or "").strip()] + \
+          [str(x) for x in (_G.get("cfg_files") or [])]
+    for p in raw:
+        if not p:
+            continue
         if p.startswith("file://"):
             p = p[7:]
         try:
             p = os.path.abspath(os.path.expanduser(p))
-            if os.path.isfile(p):
+            if os.path.isfile(p) and p not in out:
                 out.append(p)
         except Exception:
             pass
@@ -863,58 +885,94 @@ def _official_flag(page):
     return ""
 
 
-def _official_to_shell(page, headers):
-    """★★ 官方页直通壳解析（v7.1 核心修正）。
-
-    实测：98 点进腾讯页自动播放；官网视频可直接走壳子解析。
-    所以 py 只做一件事——把真实官方页原样交给壳，别掺和：
-      · 不进 _fallback_parse（不会再探测订阅里 4 条死解析）
-      · 不显示「需鉴权 / 全部超时 / 请改用国语回放」那段误导文字
-      · 不带任何「要点播放按钮」的提示（该推断已被实测推翻）
-      · 补 UA / Referer=官方页本身，避免防盗链 403
-      · 回传 flag=qq 等英文标记，帮壳匹配解析项 ext.flag
-    """
-    _G["parse_used"] = "官方页→壳子解析(直通)"
-    _G["parse_probe_log"] = []
-    _G["parse_dead"] = False
-    _G["shell_turn"].pop(page, None)
-    hd = dict(headers or {})
-    hd["User-Agent"] = _UA
-    hd["Referer"] = page
-    out = {"playUrl": "", "header": hd, "format": "",
-           "msg": "已交 OK影视 壳子解析"}
-    if OFFICIAL_ADD_FLAG:
-        fl = _official_flag(page)
-        if fl:
-            out["flag"] = fl
-    prefix = str(OFFICIAL_SNIFF_PREFIX or "").strip()
+def _clean_shell(page, hd, prefix=""):
+    """★★ 极简交壳返回：只留标准三件套，绝不写 msg。
+    壳会把 playerContent 的 msg 当「播放失败原因」弹出 ⚠ 页并中断解析，
+    这就是截图里「已交 OK影视 壳子解析」那行字的来源。"""
+    out = {"parse": 1, "url": page, "header": hd}
     if prefix:
-        out.update({"parse": 0, "url": prefix + page, "jx": 0})
-        out["msg"] += "（video:// 嗅探）"
-        _G["parse_used"] = "官方页→X5嗅探(直通)"
-    else:
-        out.update({"parse": 1, "url": page, "jx": 1})
-    if OFFICIAL_PAGE_HINT:
-        out["msg"] += "；若未自动解析，可在播放页侧栏「解析」手选重试"
+        out = {"parse": 0, "url": prefix + page, "header": hd}
+    if not OFFICIAL_CLEAN:
+        # 仅供排障：打开会重现 ⚠ 错误页，默认不启用
+        out.update({"playUrl": "", "jx": 1 if not prefix else 0,
+                    "format": "", "msg": "已交 OK影视 壳子解析"})
+        if OFFICIAL_ADD_FLAG and not prefix:
+            fl = _official_flag(page)
+            if fl:
+                out["flag"] = fl
     return out
 
 
+def _https_parses(ps):
+    """只留能拼播放页的 https 解析（兼容回退模式用）。"""
+    out = []
+    for name, u in ps:
+        s = str(u or "").strip()
+        low = s.lower()
+        if not low.startswith("https://"):
+            continue
+        if "url=" not in low and "{url}" not in s:
+            continue
+        out.append((name, s))
+    return out
+
+
+def _official_to_shell(page, headers):
+    """★★ 官方页 v7.4：py 零动作，原样极简交壳。
+
+    壳自己已配好「先超级解析 → 失败自动走 https 解析」的内部解析链，
+    不需要 py 回调、不需要 py 抢先探测、不需要再点一下。
+    官方页不能直连，所以连 _stream_ok / 取流都不做（判定放在最前）。
+    """
+    hd = dict(headers or {})
+    hd["User-Agent"] = _UA
+    hd["Referer"] = page
+    prefix = str(OFFICIAL_SNIFF_PREFIX or "").strip()
+
+    _G["shell_turn"].pop(page, None)
+    _G["official_turn"].pop(page, None)
+    _G["parse_probe_log"] = []
+    _G["parse_dead"] = False
+
+    # B 备选：video:// X5 嗅探（默认不走）
+    if prefix:
+        _G["parse_used"] = "官方页→X5嗅探(备选)"
+        return _clean_shell(page, hd, prefix)
+
+    # 兼容回退：仅显式把 OFFICIAL_AUTO_HTTPS 改 True 才让 py 抢先探测
+    # （默认 False，避免破坏壳「先超级解析、后 https」的顺序）
+    if OFFICIAL_AUTO_HTTPS:
+        try:
+            ps, _note = _get_parses()
+            cand = _https_parses(ps) if OFFICIAL_HTTPS_ONLY else list(ps or [])
+            if cand:
+                start, _fixed = _parse_start(cand)
+                _G["parse_round"] = int(_G.get("parse_round") or 0) + 1
+                if PARSE_PROBE_ALL:
+                    direct, hit, logs = _probe_parse_all(cand, page, start)
+                else:
+                    direct, hit, logs = _probe_parse(cand, page, start)
+                _G["parse_probe_log"] = logs
+                if direct:
+                    _G["parse_used"] = "官方页→https解析直链(兼容模式)"
+                    return {"parse": 0, "url": direct, "header": hd,
+                            "format": "video/mp4"}
+        except Exception:
+            _G["parse_probe_log"] = []
+
+    _G["parse_used"] = "官方页→壳超级解析(顺序由壳：超级解析→https)"
+    return _clean_shell(page, hd)
+
+
 def _shell_return(page, head_note, headers, why):
-    """统一构造「交 OK影视 壳」的返回（微博 / 98 中转页等非官方页用）。"""
+    """非官方页交壳：同样必须零 msg，否则壳会弹 ⚠ 页中断解析。"""
     hd = dict(headers or {})
     prefix = str(OFFICIAL_SNIFF_PREFIX or "").strip()
-    base = (why if why.startswith(head_note)
-            else head_note + " → " + why + "。")
     if prefix and _is_official(page):
         hd["User-Agent"] = _UA
         hd["Referer"] = page
         _G["parse_used"] = "壳嗅探(video://前缀)"
-        return {"parse": 0, "playUrl": "", "url": prefix + page, "jx": 0,
-                "header": hd, "format": "",
-                "msg": base.rstrip("。") + "（已加 " + prefix +
-                       " 让 X5 内核渲染嗅探）。"}
-    return {"parse": 1, "playUrl": "", "url": page, "jx": 1,
-            "header": hd, "format": "", "msg": base}
+    return _clean_shell(page, hd, prefix if prefix and _is_official(page) else "")
 
 
 def _fallback_parse(page, head_note, headers):
@@ -976,19 +1034,15 @@ def _fallback_parse(page, head_note, headers):
                                    "；".join(probe_log[:8])))}
 
             # ①b ★ 全部解析接口都超时/不可达时，默认直接交 OK影视 壳子
-            #     解析，不再把死地址丢给播放器（转圈/感叹号），也不停在文字页。
+            #     解析，不再把解析网页地址丢给播放器（转圈/感叹号），也不停在文字页。
             dead = bool(probe_log) and all(
                 ("超时/不可达" in x or "地址无效" in x or "未执行" in x)
                 for x in probe_log)
             _G["parse_dead"] = dead
             if dead:
                 _G["parse_used"] = "全部解析不可达"
-                tip = (head_note + " → 订阅里的 %d 条解析接口全部超时/不可达。"
-                       "若是 http://IP:端口 明文接口，Android 高版本默认"
-                       "拦截明文流量，也可能接口已失效。请改用第一组"
-                       "【国语回放】由 py 直取 1080P，或在订阅里换成"
-                       "可用的 https 解析。已默认交 OK影视 壳子内置解析。"
-                       "逐条：%s"
+                tip = (head_note + " → 订阅里的 %d 条解析接口暂时不可达，"
+                       "已默认交 OK影视 壳子解析。逐条：%s"
                        % (n, "；".join(probe_log[:8])))
                 if PARSE_DEAD_USE_SHELL and SHELL_PARSE_FALLBACK:
                     return _shell_return(page, head_note, headers, tip)
@@ -1308,7 +1362,7 @@ def _weibo_resolve(url):
 # ======================================================================
 class Spider(Spider):
 
-    VERSION = "98直播吧 v7.1（官方页直通壳解析·零探测）"
+    VERSION = "98直播吧 v7.4（官方视频纯交壳·顺序由壳）"
 
     def getName(self):
         return "98直播吧"
@@ -1343,13 +1397,26 @@ class Spider(Spider):
                         v = obj.get(k)
                         if isinstance(v, str) and len(v) > 60:
                             _collect_from_text(v, one)
-                # 订阅地址：subscribe / urls / sub
+                # 订阅地址 / 本机订阅文件：subscribe / urls / parses_file …
                 if isinstance(obj, dict):
-                    subs = []
-                    for k in ("subscribe", "subscribeUrl", "sub", "url"):
-                        u = _maybe_sub_url(str(obj.get(k) or ""))
+                    subs, local_files = [], []
+                    for k in ("subscribe", "subscribeUrl", "sub", "url",
+                              "parses_file", "parsesFile", "configFile",
+                              "config_file", "file", "path"):
+                        v = str(obj.get(k) or "").strip()
+                        if not v:
+                            continue
+                        u = _maybe_sub_url(v)
                         if u:
                             subs.append(u)
+                            continue
+                        low = v.lower()
+                        if not low.startswith(("http://", "https://")) and \
+                                (low.startswith("/") or "\\" in v or
+                                 low.endswith((".json", ".txt", ".js"))):
+                            local_files.append(v)
+                    if local_files:
+                        _G["cfg_files"] = local_files[:6]
                     arr = obj.get("urls")
                     if isinstance(arr, list):
                         for it in arr[:12]:
@@ -1617,10 +1684,20 @@ class Spider(Spider):
                                         if SHELL_FIRST else "关(先试订阅parses)"),
                      "PARSE_ON_RETRY: " + ("开(重试才试订阅parses)"
                                            if PARSE_ON_RETRY else "关(永远只用壳)"),
-                     "★★ 官方页: 直通壳解析(零探测·零提示) — " +
-                        "腾讯/爱奇艺/优酷/咪咕点进去自动播放",
+                     "★★ 官方视频: py 零动作，直接极简交壳",
+                     "   顺序由壳负责：超级解析 → 失败自动走 https 解析",
+                     "   不试直连 / 不取流 / 不探测 / 不用再点一下",
+                     "★★ OFFICIAL_AUTO_HTTPS: " +
+                        ("开(兼容回退,py抢先探测,不推荐)" if OFFICIAL_AUTO_HTTPS
+                         else "关【默认·顺序完全交给壳】"),
+                     "OFFICIAL_HTTPS_ONLY: " +
+                        ("开" if OFFICIAL_HTTPS_ONLY else "关") +
+                        " (仅兼容回退时生效)",
+                     "★★ OFFICIAL_CLEAN: " +
+                        ("开【交壳零msg·修掉⚠错误页】" if OFFICIAL_CLEAN
+                         else "关(会重现⚠页,不建议)"),
                      "OFFICIAL_ADD_FLAG: " +
-                        ("开(回传 flag=qq 等帮壳匹配解析)" if OFFICIAL_ADD_FLAG
+                        ("开(仅非精简模式生效)" if OFFICIAL_ADD_FLAG
                          else "关"),
                      "OFFICIAL_SNIFF_PREFIX: " +
                         (repr(OFFICIAL_SNIFF_PREFIX) + " (X5 嗅探备选)"
@@ -1676,31 +1753,21 @@ class Spider(Spider):
                       "", "【★ py 已不内置任何解析】",
                       "解析全部来自订阅：改订阅里的 ext.parses 即可换解析，",
                       "不用改 py。若上面显示 0 条，请检查订阅 ext 是否传入。",
-                      "", "【★ v6.9 默认顺序：先壳，重试再试订阅 parses】",
-                      "① py 直取 1080P（第一组【国语回放】，优先）",
-                      "② 取不到 → 一律先交 OK影视 壳子自带解析(parse=1)",
-                      "③ 壳播不了，返回再点同一集 → 订阅 ext.parses 全量",
-                      "   命中直链用 parse=0；没命中又回 ②",
-                      "⚠ parse=1 一次性返回，壳失败无回调，故 ②③ 靠重试",
-                      "实现。不会把死解析地址丢给播放器（不转圈/不感叹号）。",
-                      "", "【★ v7.1 官方页：已改为直通壳解析】",
-                      "实测纠正：98 点进腾讯页是自动播放的，官网视频也",
-                      "可以直接走壳子解析。旧版把官方页塞进兜底链，先跑",
-                      "订阅里 4 条死解析、再弹「需鉴权/全部超时」文字，",
-                      "所以壳没被干净调用到 —— 这才是不能解析的真因。",
-                      "现在：识别到 v.qq / iqiyi / youku / mgtv / migu 就",
-                      "第一时间原样交壳(parse=1+jx=1+flag=qq)，零探测、",
-                      "零提示；98 中转页里嵌官方页也会先抽出来再交。",
-                      "若壳仍未解析：播放页侧栏「解析」手选一次；或把",
-                      "OFFICIAL_SNIFF_PREFIX 填 \"video://\" 走 X5 嗅探。",
-                      "", "【解析接口全部超时】",
-                      "http://IP:端口 明文接口，Android 高版本默认拦截，",
-                      "也可能接口已失效。换成 https 解析即可。",
-                      "", "【把订阅里的 parses 喂给 py · 二选一】",
-                      "A 订阅 json 里给本源加 ext.parses（零网络，最稳）",
-                      "B 或在 py 顶部填 SUBSCRIBE_URLS = [\"你的订阅地址\"]",
-                      "（不会自动扫本机目录，只读你指定的订阅入口）",
-                      "", "清一次壳缓存 → 重新导入订阅 → 重启 OK影视"]
+                      "", "【★ v7.4 官方视频（腾讯国语/腾讯原声等）】",
+                      "官方页不能直连 → py 不试直连、不取流、不探测、",
+                      "不重试、不拼解析地址。识别后第一动作就是极简交壳。",
+                      "顺序完全由壳执行：先【超级解析】，失败后自动走",
+                      "【https 解析】。一次点击搞定，不用再点一下。",
+                      "交壳只留 parse/url/header，零 msg（壳会把 msg 当",
+                      "播放失败原因弹 ⚠ 页并中断解析）。",
+                      "", "【★ 其余线路（微博国语回放等）】",
+                      "① py 直取 1080P 直链 parse=0",
+                      "② 取不到 → 先交壳解析",
+                      "③ 同一集再点 → 订阅 ext.parses 全量；没命中回 ②",
+                      "", "【★ 解析配置】",
+                      "官方视频的 https 解析由壳从订阅顶层 parses 读取，",
+                      "py 不参与；本源 ext.parses 仅用于其它线路兜底。",
+                      "", "清一次壳缓存 → 重启 OK影视"]
             return {'list': [{
                 "vod_id": "diag", "vod_name": "源自检 · 点开看诊断结果",
                 "vod_pic": "", "type_name": "诊断", "vod_year": "",
@@ -1773,13 +1840,13 @@ class Spider(Spider):
 
     # ------------------------------------------------------------------
     def playerContent(self, flag, id, vipFlags):
-        """主链路：py 自己取 1080P 直链（parse=0，实测可播）。
+        """★ 官方视频(腾讯国语/腾讯原声等)：最优先、py 零动作。
+           官方页不能直连 → 不试直连、不取流、不探测，原样极简交壳
+           (parse=1 + url + header，零 msg)。壳自己按「超级解析 →
+           失败自动走 https 解析」完成，顺序由壳决定。
 
-        ★★ 官方页(腾讯/爱奇艺/优酷/咪咕)在识别后【第一优先级直通壳解析】：
-           原样返回 parse=1 + jx=1 + flag，不探测订阅 parses、不弹提示。
-        ★ 其余页面取不到直链时按用户指定顺序：
-           ② 一律先交 OK影视 壳子自带解析
-           ③ 同一集重试才试订阅 ext.parses 全量 → 没命中又回 ②
+        ★ 其余页面（微博国语回放等）：py 直取 1080P 直链 parse=0；
+           取不到时 ② 一律先交壳解析 ③ 同一集重试才试订阅 parses。
         """
         headers = {'User-Agent': _UA, 'Referer': SITE + '/'}
         target = ''
@@ -1789,17 +1856,16 @@ class Spider(Spider):
             if not target.startswith("http"):
                 target = _abs(target, SITE + "/")
 
+            # ★★ 官方视频（腾讯国语/腾讯原声等）：第一动作就是极简交壳。
+            #    官方页不能直连，不试 _stream_ok、不取流、不拼解析地址。
+            #    壳已配好「先超级解析 → 失败自动走 https 解析」，py 不介入。
+            if _is_official(target):
+                return _official_to_shell(target, headers)
+
             # ---- 主链路 ①：明文直链 ----
             if _stream_ok(target):
                 return {"parse": 0, "playUrl": "", "url": target,
                         "jx": 0, "header": headers, "format": 'video/mp4'}
-
-            # ★★ 官方页直通：py 完全不碰，原样交给壳解析。
-            #    实测：98 点进腾讯页自动播放，且官网视频可直接走壳解析。
-            #    必须放在微博/98/parses 之前，否则会先跑死解析并弹出
-            #    「需鉴权 / 全部超时」那段文字，壳就没被干净调用到。
-            if _is_official(target):
-                return _official_to_shell(target, headers)
 
             # ---- 主链路 ②：微博主动取流（游客会话 + 接口） ----
             if _is_weibo(target):
@@ -1839,8 +1905,7 @@ class Spider(Spider):
                     self._fb_headers(page, headers))
 
             # ---- 其它第三方页面：仍按「先壳 → 重试才试订阅 parses」顺序 ----
-            #    官方页已在上面直通，不会走到这里，也不会再出现
-            #    「需鉴权 / 4 条解析全部超时」那段误导提示。
+            #    官方页已在最前面纯交壳，不会走到这里。
             return _fallback_parse(
                 target, "第三方页面",
                 self._fb_headers(target, headers))

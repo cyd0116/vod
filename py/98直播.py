@@ -1487,7 +1487,7 @@ def _weibo_resolve(url):
 # ======================================================================
 class Spider(Spider):
 
-    VERSION = "98直播吧 v7.7（诊断页纯文字·不触发播放）"
+    VERSION = "98直播吧 v7.8（诊断逐行列表·不怕无线路）"
 
     def getName(self):
         return "98直播吧"
@@ -1767,7 +1767,8 @@ class Spider(Spider):
                else str(array)) if array else ""
         if not vid:
             return {'list': []}
-        if vid in ('diag', 'hint', 'today_hint', 'err'):
+        if vid in ('diag', 'hint', 'today_hint', 'err') or \
+                str(vid).startswith("diag"):
             lines = ["98直播吧 · 源自检（静态·不发网络请求）",
                      "版本: " + self.VERSION, "",
                      "一级分类: %d 个（%s）" %
@@ -1775,12 +1776,13 @@ class Spider(Spider):
                          " / ".join(n for _k, n, _p in _VISIBLE_CATS)),
                      "已隐藏: %d 个（红框分类 + 直播）；" %
                         (len(_CATS) - len(_VISIBLE_CATS)),
-                     "★ 本页是纯文字诊断页：不带任何播放项，点开不会播放。",
-                     "★ 怎么打开本页：OK影视 搜索框输入「源自检」/「diag」",
-                     "  会返回「⚙ 源自检」卡片，点开即到本页（零网络）。",
+                     "★ v7.8：搜「源自检」会把本页【逐行做成列表卡片】，",
+                     "  不用点开任何卡片，滚动搜索结果就能读完诊断。",
+                     "★ 怎么打开：OK影视 搜索框输入「源自检」/「diag」",
+                     "  第一张是汇总卡，后面每行一条（含官方交壳链路）。",
+                     "  详情也保留一条「查看诊断文字」占位线路，点它不播放。",
                      "  想让分类栏直接显示：把 SHOW_DIAG 改成 True。",
-                     "  若壳仍尝试播放（提示解析失败），把订阅里该源",
-                     "  quickSearch 改成 0，或改用 SHOW_DIAG=True 的分类入口。",
+                     "  若壳仍尝试播放，把订阅里该源 quickSearch 改成 0。",
                      "  想加回其它分类：把 key 追加进 SHOW_CATS 即可",
                      "二级/三级目录过滤集锦·精华·十佳: " +
                         ("开启 ✅" if DROP_HIGHLIGHTS else "关闭(保留集锦)"),
@@ -1906,20 +1908,32 @@ class Spider(Spider):
                       "", "【★ 解析配置】",
                       "官方视频的 https 解析由壳从订阅顶层 parses 读取，",
                       "py 不参与；本源 ext.parses 仅用于其它线路兜底。",
+                      "", "【★★ 昨天能解、今天官方视频全解不了】",
+                      "py 对官方页是零动作纯交壳，同一份文件昨天/今天",
+                      "行为完全一致，所以这不是 py 改出来的。按顺序查：",
+                      "① 看上面「上一次官方视频交壳链路」的【最终交壳】：",
+                      "   必须是 v.qq.com / sports.qq.com / iqiyi.com 等；",
+                      "   若是 m.98zb.com → py 没抠到真实页，把链路发来补规则。",
+                      "② 域名对但仍解不了：拿这条 URL 在手机浏览器打开，",
+                      "   浏览器也播不了 → 源站改版/内容下架/要会员登录；",
+                      "   浏览器能播、壳不能 → 超级解析服务端波动或限流。",
+                      "③ 壳解析池里的接口今晚集体不可达 → 换可用接口。",
+                      "④ 别忘清壳缓存再重启（旧解析结果常被缓存住）。",
                       "", "清一次壳缓存 → 重启 OK影视"]
-            # ★★ v7.7：诊断页是【纯文字】，绝不能带任何播放项。
-            #   旧版这里放了 "回到首页$<98首页>"，壳点开详情会自动播第一集
-            #   → 把 98 首页当视频交壳解析 → 「播放地址解析失败」。
-            #   vod_play_from / vod_play_url 留空串（兼容要求字段存在的壳），
-            #   壳就不会生成播放按钮，也不会调 playerContent。
+            # ★★ v7.8：空线路会让部分壳直接弹「暂无线路数据」并盖掉正文。
+            #   给一条【占位线路】，id 固定为 diag（playerContent 已拦截），
+            #   壳认为有线路 → 正常显示 vod_content；万一自动播第一集，
+            #   playerContent('diag') 返回空地址且不交壳，不会再解析 98 首页。
+            #   另外搜索「源自检」已把整份诊断逐行做成列表卡片，即使壳
+            #   跳过详情（quickSearch=1 直入播放），也能在列表里直接读到。
             return {'list': [{
                 "vod_id": "diag", "vod_name": "源自检 · 点开看诊断结果",
                 "vod_pic": "", "type_name": "诊断", "vod_year": "",
-                "vod_area": "", "vod_remarks": "纯文字诊断页 · 无播放项",
+                "vod_area": "", "vod_remarks": "诊断文字页 · 勿点播放",
                 "vod_actor": "", "vod_director": "",
                 "vod_content": "\n".join(lines),
-                "vod_play_from": "",
-                "vod_play_url": ""}]}
+                "vod_play_from": "诊断",
+                "vod_play_url": "查看诊断文字$diag"}]}
 
         url = _dec(vid)
         if not url.startswith("http"):
@@ -1974,11 +1988,37 @@ class Spider(Spider):
         # ★★ 诊断直达：搜「源自检 / 自检 / diag / debug」返回诊断卡片。
         #    纯静态、零网络，不占一级分类栏；点开即 detailContent('diag')。
         if kw and any(x in kw.lower() for x in _DIAG_KW):
-            return {'list': [{"vod_id": "diag",
-                              "vod_name": "⚙ 源自检 · 点开看官方视频交壳链路",
-                              "vod_pic": "", "vod_remarks": "排障用·零网络",
-                              "type_name": "诊断"}],
-                    'page': 1, 'pagecount': 1, 'limit': 1, 'total': 1}
+            # ★★ v7.8：把整份诊断【逐行做成列表卡片】。
+            #   有些壳点卡片会直接进播放/提示「暂无线路数据」，看不到详情；
+            #   现在不点任何卡片，搜索结果里就能滚着读完关键日志。
+            try:
+                body = self.detailContent(["diag"])["list"][0]["vod_content"]
+                all_lines = [x.rstrip() for x in body.splitlines() if x.strip()]
+            except Exception:
+                all_lines = ["源自检读取失败，请确认已覆盖 v7.8"]
+            keys = ("版本:", "最终交壳", "原始 target", "中转页", "整页 HTML",
+                    "⚠", "超级解析", "https", "官方视频", "quickSearch",
+                    "怎么打开", "已缓存可用解析", "上次", "本次兜底")
+            picked = all_lines[:10] + [x for x in all_lines[10:]
+                                       if any(k in x for k in keys)]
+            seen, cards = set(), [{
+                "vod_id": "diag",
+                "vod_name": "⚙ 源自检 v7.8 · 以下每行是一条诊断，不必点开",
+                "vod_pic": "", "vod_remarks": "纯文字·零网络·勿点播放",
+                "type_name": "诊断"}]
+            for i, ln in enumerate(picked[:40]):
+                t = ln.strip()
+                if not t or t in seen:
+                    continue
+                seen.add(t)
+                cards.append({
+                    "vod_id": "diag_l_%d" % i,
+                    "vod_name": t[:110],
+                    "vod_pic": "",
+                    "vod_remarks": "诊断行 %d · 勿点播放" % (i + 1),
+                    "type_name": "诊断"})
+            return {'list': cards, 'page': 1, 'pagecount': 1,
+                    'limit': len(cards), 'total': len(cards)}
         videos = []
         try:
             if kw:
@@ -2007,12 +2047,15 @@ class Spider(Spider):
             # ★★ v7.7 兜底：quickSearch=1 的壳点「源自检」搜索卡片会直接
             #   调 playerContent('diag')。诊断页不是视频，绝不交壳解析、
             #   绝不把 98 首页当播放地址 —— 否则就是「播放地址解析失败」。
-            if raw in ("diag", "hint", "today_hint", "err") or \
-                    raw.lower() in ("diag", "debug", "trace", "源自检", "自检"):
+            _is_diag = (raw in ("diag", "hint", "today_hint", "err") or
+                        raw.startswith("diag") or
+                        raw.lower() in ("diag", "debug", "trace", "源自检", "自检"))
+            if _is_diag:
                 return {"parse": 0, "playUrl": "", "url": "",
                         "jx": 0, "header": headers, "format": ""}
             target = _dec(raw)
             if target in ("diag", "hint", "today_hint", "err") or \
+                    target.startswith("diag") or \
                     target.lower() in ("diag", "debug", "trace", "源自检", "自检"):
                 return {"parse": 0, "playUrl": "", "url": "",
                         "jx": 0, "header": headers, "format": ""}

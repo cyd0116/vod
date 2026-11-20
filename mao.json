@@ -232,7 +232,8 @@
           "sohu",
           "bilibili",
           "哔哩哔哩",
-          "哔哩"
+          "哔哩",
+		  "migu","咪咕","miguvideo","cntv","cctv","央视","sports","体育"
         ],
         "header": {
           "User-Agent": "okhttp/4.1.0"
@@ -261,7 +262,8 @@
           "sohu",
           "bilibili",
           "哔哩哔哩",
-          "哔哩"
+          "哔哩",
+		  "migu","咪咕","miguvideo","cntv","cctv","央视","sports","体育"
         ],
         "header": {
           "User-Agent": "okhttp/4.1.0"
@@ -320,7 +322,8 @@
           "sohu",
           "bilibili",
           "哔哩哔哩",
-          "哔哩"
+          "哔哩",
+		  "migu","咪咕","miguvideo","cntv","cctv","央视","sports","体育"
         ]
       }
     },
@@ -346,7 +349,8 @@
           "sohu",
           "bilibili",
           "哔哩哔哩",
-          "哔哩"
+          "哔哩",
+		  "migu","咪咕","miguvideo","cntv","cctv","央视","sports","体育"
         ]
       }
     }

@@ -1487,7 +1487,7 @@ def _weibo_resolve(url):
 # ======================================================================
 class Spider(Spider):
 
-    VERSION = "98直播吧 v7.7（诊断页纯文字·不触发播放）"
+    VERSION = "98直播吧 v7.6（源自检可搜索直达）"
 
     def getName(self):
         return "98直播吧"
@@ -1775,12 +1775,9 @@ class Spider(Spider):
                          " / ".join(n for _k, n, _p in _VISIBLE_CATS)),
                      "已隐藏: %d 个（红框分类 + 直播）；" %
                         (len(_CATS) - len(_VISIBLE_CATS)),
-                     "★ 本页是纯文字诊断页：不带任何播放项，点开不会播放。",
                      "★ 怎么打开本页：OK影视 搜索框输入「源自检」/「diag」",
                      "  会返回「⚙ 源自检」卡片，点开即到本页（零网络）。",
                      "  想让分类栏直接显示：把 SHOW_DIAG 改成 True。",
-                     "  若壳仍尝试播放（提示解析失败），把订阅里该源",
-                     "  quickSearch 改成 0，或改用 SHOW_DIAG=True 的分类入口。",
                      "  想加回其它分类：把 key 追加进 SHOW_CATS 即可",
                      "二级/三级目录过滤集锦·精华·十佳: " +
                         ("开启 ✅" if DROP_HIGHLIGHTS else "关闭(保留集锦)"),
@@ -1907,19 +1904,14 @@ class Spider(Spider):
                       "官方视频的 https 解析由壳从订阅顶层 parses 读取，",
                       "py 不参与；本源 ext.parses 仅用于其它线路兜底。",
                       "", "清一次壳缓存 → 重启 OK影视"]
-            # ★★ v7.7：诊断页是【纯文字】，绝不能带任何播放项。
-            #   旧版这里放了 "回到首页$<98首页>"，壳点开详情会自动播第一集
-            #   → 把 98 首页当视频交壳解析 → 「播放地址解析失败」。
-            #   vod_play_from / vod_play_url 留空串（兼容要求字段存在的壳），
-            #   壳就不会生成播放按钮，也不会调 playerContent。
             return {'list': [{
                 "vod_id": "diag", "vod_name": "源自检 · 点开看诊断结果",
                 "vod_pic": "", "type_name": "诊断", "vod_year": "",
-                "vod_area": "", "vod_remarks": "纯文字诊断页 · 无播放项",
+                "vod_area": "", "vod_remarks": "网络 / 分类 / 播放解析",
                 "vod_actor": "", "vod_director": "",
                 "vod_content": "\n".join(lines),
-                "vod_play_from": "",
-                "vod_play_url": ""}]}
+                "vod_play_from": "98直播吧",
+                "vod_play_url": "回到首页$" + _enc(SITE + "/")}]}
 
         url = _dec(vid)
         if not url.startswith("http"):
@@ -2004,24 +1996,9 @@ class Spider(Spider):
         target = ''
         try:
             raw = str(id or "").strip()
-            # ★★ v7.7 兜底：quickSearch=1 的壳点「源自检」搜索卡片会直接
-            #   调 playerContent('diag')。诊断页不是视频，绝不交壳解析、
-            #   绝不把 98 首页当播放地址 —— 否则就是「播放地址解析失败」。
-            if raw in ("diag", "hint", "today_hint", "err") or \
-                    raw.lower() in ("diag", "debug", "trace", "源自检", "自检"):
-                return {"parse": 0, "playUrl": "", "url": "",
-                        "jx": 0, "header": headers, "format": ""}
             target = _dec(raw)
-            if target in ("diag", "hint", "today_hint", "err") or \
-                    target.lower() in ("diag", "debug", "trace", "源自检", "自检"):
-                return {"parse": 0, "playUrl": "", "url": "",
-                        "jx": 0, "header": headers, "format": ""}
             if not target.startswith("http"):
                 target = _abs(target, SITE + "/")
-            # 兼容旧缓存里那个「回到首页」假选集（解出来是 98 根首页）
-            if target.rstrip("/") == SITE.rstrip("/"):
-                return {"parse": 0, "playUrl": "", "url": "",
-                        "jx": 0, "header": headers, "format": ""}
 
             # ★★ 官方视频（腾讯国语/腾讯原声等）：第一动作就是极简交壳。
             #    官方页不能直连，不试 _stream_ok、不取流、不拼解析地址。

@@ -37,11 +37,12 @@ import urllib.parse
 #     ★ 默认兜底 = OK影视 壳子内置解析(parse=1 + jx=1)，不丢解析网页地址
 #   * ★ py 不内置任何解析地址：全部从订阅 ext.parses / SUBSCRIBE_URLS 读
 #     订阅 parses 仍会全量尝试，命中直链用 parse=0；没命中一律落壳子解析
-#   * ★★ 官方视频(腾讯国语/腾讯原声等) v7.4：py 零动作，直接交壳。
-#     官方页不能直连 → 最优先判定，不试直连/不取流/不探测/不重试；
-#     只返回【parse=1 + url + header】三个字段，绝不写 msg（壳会把 msg
-#     当「播放失败原因」弹 ⚠ 页并中断解析）。
-#     壳本身已配好「先超级解析 → 失败自动走 https 解析」，顺序由壳负责。
+#   * ★★ 官方视频(腾讯国语/腾讯原声等) v7.5：还原真实官方页再交壳。
+#     98 详情页给腾讯线路常是【本站中转页】，真实页藏在 iframe/JS/?url=
+#     里；只抓 <a href> 会把 98 中转页交给壳 → 壳不认域名 → 全部
+#     「播放地址解析失败」。现在从整页(含 query/302/iframe/JS)抠出
+#     v.qq.com 等真实官方页，再极简交壳，顺序仍由壳(超级解析→https)。
+#     不试直连/不取流/不探测/不重试/不写 msg；自检可回显完整链路。
 #     备选 OFFICIAL_SNIFF_PREFIX="video://" 走 X5 WebView 嗅探。
 #   * localProxy 返回三元素 [code, ctype, body]
 # ======================================================================
@@ -161,7 +162,7 @@ PARSE_AS_SNIFF = False
 # ★★ 官方页（腾讯/爱奇艺/优酷/咪咕）：py 完全不碰，原样交壳解析
 #   官方视频不能直连；壳本身已配好「超级解析 → 失败自动走 https 解析」。
 #   playerContent 识别到官方页就【最早短路】：不试直连、不取流、
-#   不探测订阅 parses、不带任何提示，直接极简交壳（v7.4 见下方配置块）。
+#   不探测订阅 parses、不带任何提示；v7.5 会先把中转页还原成真实官方页。
 #   98 中转页里若嵌官方页，会先抽出真实官方页再交，不丢中转页给壳。
 #
 #   B 备选：OFFICIAL_SNIFF_PREFIX="video://" → 改 parse=0 交 video:// 网页，
@@ -172,7 +173,7 @@ OFFICIAL_PAGE_HINT = False
 OFFICIAL_ADD_FLAG = True     # 回传 flag=qq/iqiyi…，帮壳匹配解析项 ext.flag
 
 # ======================================================================
-# ★★ v7.4 官方视频（腾讯国语/腾讯原声等）：py 零动作，直接交壳
+# ★★ v7.5 官方视频（腾讯国语/腾讯原声等）：还原真实官方页后交壳
 #
 #   实测确认：官方页不能直连，也不需要 py 先试直连/先试解析。
 #   壳本身已配好顺序 —— 先【超级解析】，失败后自动走【https 解析】。
@@ -211,6 +212,22 @@ BASES = ["https://m.98zb.com", "https://m.98zhibo.com",
 # ======================================================================
 SHOW_CATS = ["today", "nba", "zuqiu", "cba", "zonghe"]
 
+# ======================================================================
+# ★★ v7.6：「源自检」入口（诊断页）
+#   按你的要求，红框 10 个分类 + 直播 + 源自检 都已从一级分类栏去掉，
+#   首页推荐卡片也清空了 → 结果是【分类栏里已经没有可点的源自检】。
+#   上一版还让你「回来点源自检看链路」，是我疏忽，这里补上入口：
+#
+#   ① 搜索直达（默认开，不占分类栏、零网络）：
+#      在任何分类页用 OK影视 搜索框输入 源自检 / 自检 / diag / debug
+#      → 返回一张「⚙ 源自检」卡片 → 点开就是诊断页。
+#   ② 想让顶部分类栏直接显示这一项：把 SHOW_DIAG 改成 True，
+#      会多出第 6 个「⚙ 源自检」，红框 10 个和直播仍然不显示。
+#      排障完改回 False 即恢复 5 个分类。
+# ======================================================================
+SHOW_DIAG = False          # 默认关：一级分类栏保持 5 个
+_DIAG_KW = ("源自检", "自检", "诊断", "diag", "debug", "trace")
+
 # 静态分类（与站点导航一致）；第三项是导航学习失败时的兜底路径
 _CATS = [
     ("today",    "今日视频", ""),
@@ -233,6 +250,8 @@ _CATS = [
 ]
 _CAT_NAME = dict((k, n) for k, n, _p in _CATS)
 _VISIBLE_CATS = [c for c in _CATS if c[0] in set(SHOW_CATS)]
+if SHOW_DIAG and not any(c[0] == "diag" for c in _VISIBLE_CATS):
+    _VISIBLE_CATS = _VISIBLE_CATS + [c for c in _CATS if c[0] == "diag"]
 
 _UA = ("Mozilla/5.0 (Linux; Android 11) AppleWebKit/537.36 "
        "(KHTML, like Gecko) Chrome/124.0 Mobile Safari/537.36")
@@ -253,6 +272,22 @@ _EP_SKIP = re.compile(
 _OFFICIAL_PAGE = re.compile(
     r'(?:^|\.)(?:v\.qq|sports\.qq|qq|iqiyi|youku|mgtv|pptv|le|sohu|'
     r'cntv|cctv|miguvideo|migu|kandian)\.com(?::\d+)?$', re.I)
+
+# ★★ 从「任意文本」抠官方播放页：不只 <a href>，还要覆盖
+#   iframe src / JS location.href / var url='...' / ?url= / \/ 转义 / 百分号编码
+# 98 这类导航站常用中转页包一层，只抓 <a> 会把官方页漏掉，
+# 结果把 98 中转页交给壳 → 壳不认域名 → 「播放地址解析失败」。
+_OFFICIAL_HOSTS = (r'(?:[a-z0-9-]+\.)*'
+                   r'(?:v\.qq|sports\.qq|qq|iqiyi|youku|mgtv|pptv|le|sohu|'
+                   r'cntv|cctv|miguvideo|migu|kandian)\.com')
+_OFFICIAL_URL_RE = re.compile(
+    r'https?://' + _OFFICIAL_HOSTS + r'(?::\d+)?(?:/[^\s"\'<>\\)]*)?', re.I)
+
+# 播放源分组名（腾讯国语 / 腾讯原声 / 爱奇艺 …）用来判断这是「官方线路」。
+# 国语回放(微博) 不含这些词，不会被误判。
+_OFFICIAL_GROUP = re.compile(
+    r'腾讯|爱奇艺|奇艺|优酷|咪咕|芒果|PPTV|乐视|搜狐|央视|CCTV|原声',
+    re.I)
 
 # ======================================================================
 # ★ 二级/三级目录过滤：排除「十佳 / 集锦 / 精华」等非完整比赛条目
@@ -291,7 +326,8 @@ _G = {"home": None, "learned": False, "cat_url": {},
       "parse_cursor": 0, "parse_last": {}, "parse_used": "",
       "parse_probe_log": [], "parse_round": 0, "parse_dead": False,
       "shell_turn": {},      # 非官方页：0→先壳 / 1→下轮试订阅parses
-      "official_turn": {}}  # 官方页：0→极简交壳 / 1→下轮订阅parses全量
+      "official_turn": {},   # 兼容保留
+      "official_trace": []}  # ★ 上一次官方线路「还原真实官方页」的链路日志
 
 
 # ======================================================================
@@ -885,6 +921,95 @@ def _official_flag(page):
     return ""
 
 
+def _official_urls(text, base=""):
+    """★ 从任意文本抠出「真实官方播放页」，覆盖 <a>/iframe/JS/?url=/转义。
+
+    返回按可信度排序的去重列表：带 vid/mid/cover/id= 的排最前。
+    98 中转页里如果没有 <a href>，靠这个函数仍能拿到 v.qq.com 地址。
+    """
+    raw = _unesc(str(text or ""))
+    # 百分号编码过的整段 url 也要还原（?url=https%3A%2F%2Fv.qq.com%2F...）
+    try:
+        dec = urllib.parse.unquote(raw)
+        if dec != raw:
+            raw += "\n" + dec
+    except Exception:
+        pass
+    out, seen = [], set()
+    for m in _OFFICIAL_URL_RE.finditer(raw):
+        u = _abs(m.group(0).rstrip(".,;:)\"'\u3002"), base)
+        if not u or not _is_official(u) or u in seen:
+            continue
+        seen.add(u)
+        out.append(u)
+    def score(u):
+        q = urllib.parse.urlsplit(u)
+        blob = (q.path + "?" + q.query).lower()
+        s = 0
+        for k in ("cover", "/vid", "vid=", "mid=", "/v_", "id=", "cid=",
+                  "kbsweb", "game.htm", "/x/", "page"):
+            if k in blob:
+                s += 2
+        # 太短的首页/根路径多半是推广链接，降权
+        if len(q.path.rstrip("/")) < 4:
+            s -= 3
+        return -s
+    return sorted(out, key=score)
+
+
+def _resolve_official(target, headers):
+    """★★ 把「官方线路」还原成真实官方页再交壳（v7.5 核心修正）。
+
+    用户点的是腾讯国语/腾讯原声，但 98 详情页给的常是本站中转页：
+      · <a href> 只是壳，真实页在 iframe src / JS / ?url= 里
+      · 或直接 302 到官方页
+    只抓 <a> 时抽不到 → 把 98 中转页交壳 → 壳不认域名 → 「播放地址解析失败」。
+    这里依次尝试：target 自身 → query 内嵌 → fetch 后 final url → 整页 HTML。
+    全程把链路写进 _G['official_trace']，供「源自检」零网络回显。
+    """
+    tr = _G.setdefault("official_trace", [])
+    tr.clear()
+    tr.append("原始 target: " + str(target)[:160])
+    hd = dict(headers or {})
+
+    # ① target 自身或它的 query 里就有官方页
+    cands = _official_urls(target, SITE + "/")
+    tr.append("target/query 内抠到官方页: %d 条" % len(cands))
+
+    # ② 98 中转页：抓一次，先看 302 后的 final url，再扫整页 HTML
+    if not cands and _is98(target):
+        try:
+            h, final = _fetch(target, ref=SITE + "/", timeout=4)
+            tr.append("中转页 fetch: %s / final: %s" %
+                      ("成功 %d 字" % len(h) if h else "无内容",
+                       str(final)[:120] or "无"))
+            if final and _is_official(final):
+                cands.append(final)
+                tr.append("final(302) 命中官方页")
+            if h:
+                found = _official_urls(h + "\n" + str(final or ""), final or target)
+                tr.append("整页 HTML 抠到官方页: %d 条" % len(found))
+                for u in found:
+                    if u not in cands:
+                        cands.append(u)
+        except Exception as e:
+            tr.append("中转页 fetch 异常: " + str(e)[:70])
+
+    if cands:
+        real = cands[0]
+        tr.append("★ 最终交壳: " + real[:160])
+        for i, u in enumerate(cands[1:4]):
+            tr.append("   备选[%d]: %s" % (i + 1, u[:140]))
+        _G["parse_used"] = "官方线路→还原真实官方页→壳解析"
+        return _official_to_shell(real, hd)
+
+    # ③ 实在抽不到：仍交壳（交给 final url 优先），但把原因记清楚
+    tr.append("⚠ 未抠到官方页，交壳的是中转页 —— 壳很可能报解析失败")
+    tr.append("   请把以上几行发给作者，用于补一条中转页规则")
+    _G["parse_used"] = "官方线路→未抠到真实官方页(交中转页)"
+    return _clean_shell(target, hd)
+
+
 def _clean_shell(page, hd, prefix=""):
     """★★ 极简交壳返回：只留标准三件套，绝不写 msg。
     壳会把 playerContent 的 msg 当「播放失败原因」弹出 ⚠ 页并中断解析，
@@ -918,7 +1043,7 @@ def _https_parses(ps):
 
 
 def _official_to_shell(page, headers):
-    """★★ 官方页 v7.4：py 零动作，原样极简交壳。
+    """★★ 官方页 v7.5：拿到真实官方页后 py 零动作，原样极简交壳。
 
     壳自己已配好「先超级解析 → 失败自动走 https 解析」的内部解析链，
     不需要 py 回调、不需要 py 抢先探测、不需要再点一下。
@@ -1362,7 +1487,7 @@ def _weibo_resolve(url):
 # ======================================================================
 class Spider(Spider):
 
-    VERSION = "98直播吧 v7.4（官方视频纯交壳·顺序由壳）"
+    VERSION = "98直播吧 v7.6（源自检可搜索直达）"
 
     def getName(self):
         return "98直播吧"
@@ -1648,10 +1773,12 @@ class Spider(Spider):
                      "一级分类: %d 个（%s）" %
                         (len(_VISIBLE_CATS),
                          " / ".join(n for _k, n, _p in _VISIBLE_CATS)),
-                     "已隐藏: %d 个（红框分类 + 直播 + 源自检）；" %
+                     "已隐藏: %d 个（红框分类 + 直播）；" %
                         (len(_CATS) - len(_VISIBLE_CATS)),
-                     "  想加回：改文件顶部 SHOW_CATS 列表即可",
-                     "  源自检诊断页仍保留（旧缓存点进去可用），只是不在分类栏",
+                     "★ 怎么打开本页：OK影视 搜索框输入「源自检」/「diag」",
+                     "  会返回「⚙ 源自检」卡片，点开即到本页（零网络）。",
+                     "  想让分类栏直接显示：把 SHOW_DIAG 改成 True。",
+                     "  想加回其它分类：把 key 追加进 SHOW_CATS 即可",
                      "二级/三级目录过滤集锦·精华·十佳: " +
                         ("开启 ✅" if DROP_HIGHLIGHTS else "关闭(保留集锦)"),
                      "  保留：全场录像回放 / 第X节录像 / 全场回放",
@@ -1741,6 +1868,13 @@ class Spider(Spider):
                 lines.append("上一次「全部解析尝试」逐条结果:")
                 for _lg in _G["parse_probe_log"][-16:]:
                     lines.append("  " + _lg)
+            lines += ["", "【★★ 上一次官方视频交壳链路】"
+                      "（点一节「腾讯国语/腾讯原声」后再回来）"]
+            _tr = _G.get("official_trace") or []
+            lines += ["  " + x for x in (_tr or ["（暂无，去点一节官方线路）"])[-12:]]
+            lines += ["  判定：最后一行的「最终交壳」必须是 v.qq.com / "
+                      "iqiyi.com 等官方域名；",
+                      "  若是 m.98zb.com 中转页，壳必然报「播放地址解析失败」。"]
             lines += ["", "【上一次真实取流日志】（点一节录像后再回来）"]
             lines += ["  " + x for x in (_G["wb_log"] or ["（暂无）"])[-14:]]
             lines += ["", "【★ 重启后没分类的真因：api 写法】",
@@ -1753,9 +1887,11 @@ class Spider(Spider):
                       "", "【★ py 已不内置任何解析】",
                       "解析全部来自订阅：改订阅里的 ext.parses 即可换解析，",
                       "不用改 py。若上面显示 0 条，请检查订阅 ext 是否传入。",
-                      "", "【★ v7.4 官方视频（腾讯国语/腾讯原声等）】",
+                      "", "【★ v7.5 官方视频（腾讯国语/腾讯原声等）】",
                       "官方页不能直连 → py 不试直连、不取流、不探测、",
                       "不重试、不拼解析地址。识别后第一动作就是极简交壳。",
+                      "★ 若 98 给的是中转页：先从 iframe/JS/?url=/302 抠出",
+                      "真实 v.qq.com 等官方页再交壳（否则壳报解析失败）。",
                       "顺序完全由壳执行：先【超级解析】，失败后自动走",
                       "【https 解析】。一次点击搞定，不用再点一下。",
                       "交壳只留 parse/url/header，零 msg（壳会把 msg 当",
@@ -1826,9 +1962,17 @@ class Spider(Spider):
 
     # ------------------------------------------------------------------
     def searchContent(self, key, quick, pg='1'):
+        kw = str(key or "").strip()
+        # ★★ 诊断直达：搜「源自检 / 自检 / diag / debug」返回诊断卡片。
+        #    纯静态、零网络，不占一级分类栏；点开即 detailContent('diag')。
+        if kw and any(x in kw.lower() for x in _DIAG_KW):
+            return {'list': [{"vod_id": "diag",
+                              "vod_name": "⚙ 源自检 · 点开看官方视频交壳链路",
+                              "vod_pic": "", "vod_remarks": "排障用·零网络",
+                              "type_name": "诊断"}],
+                    'page': 1, 'pagecount': 1, 'limit': 1, 'total': 1}
         videos = []
         try:
-            kw = str(key or "").strip()
             if kw:
                 html, final = self._home()
                 videos = [x for x in self._items(html, final)
@@ -1860,7 +2004,15 @@ class Spider(Spider):
             #    官方页不能直连，不试 _stream_ok、不取流、不拼解析地址。
             #    壳已配好「先超级解析 → 失败自动走 https 解析」，py 不介入。
             if _is_official(target):
+                _G["official_trace"] = ["直接官方页: " + target[:160],
+                                        "★ 最终交壳: " + target[:160]]
                 return _official_to_shell(target, headers)
+
+            # ★★ 分组是「腾讯国语/腾讯原声…」但链接是包装页/中转页时，
+            #    先还原出真实官方页再交壳。否则壳拿到 98 站域名不认，
+            #    超级解析 + https 解析全跑完仍报「播放地址解析失败」。
+            if _OFFICIAL_GROUP.search(str(flag or "")) and not _is_weibo(target):
+                return _resolve_official(target, headers)
 
             # ---- 主链路 ①：明文直链 ----
             if _stream_ok(target):
@@ -1896,10 +2048,23 @@ class Spider(Spider):
                         #   官方页再交壳；不要把 98 中转页丢给壳解析。
                         if _is_official(href):
                             return _official_to_shell(href, headers)
+                    # ★ 双保险：整页（含 iframe/JS/?url=）也扫一遍官方页，
+                    #   不依赖 <a href>，避免把 98 中转页丢给壳。
+                    for real in _official_urls(h + "\n" + str(f or ""), page):
+                        _G["official_trace"] = [
+                            "中转页(双保险): " + str(target)[:150],
+                            "★ 还原到: " + real[:160]]
+                        return _official_to_shell(real, headers)
                     m = _MEDIA_RE.search(_unesc(h))
                     if m:
                         return {"parse": 0, "playUrl": "", "url": m.group(0),
                                 "jx": 0, "header": headers, "format": 'video/mp4'}
+                if _is_official(page):
+                    return _official_to_shell(page, headers)
+                _G["official_trace"] = [
+                    "中转页未抠到官方页: " + str(target)[:150],
+                    "fetch final: " + str(f or "无")[:120],
+                    "⚠ 交壳的是中转页 —— 壳很可能报解析失败，请把这几行发来"]
                 return _fallback_parse(
                     page, "98中转页未取到内联/微博直链",
                     self._fb_headers(page, headers))

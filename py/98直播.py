@@ -26,6 +26,7 @@ from urllib import request, parse
 import urllib
 import urllib.request
 import urllib.parse
+import threading
 
 # ======================================================================
 # 骨架 100% 对齐「央视节目.py」（用户实测可播放的文件）：
@@ -210,7 +211,24 @@ BASES = ["https://m.98zb.com", "https://m.98zhibo.com",
 #     nba2 NBA | zuqiu2 足球 | cba2 CBA | zonghe2 综合
 #     mobile 手机版 | diag 源自检
 # ======================================================================
-SHOW_CATS = ["today", "nba", "zuqiu", "cba", "zonghe"]
+# ★★ 分类层三处调整（只在分类页生效；播放链路仍是 v7.5 原样，版本号不变）
+#   ① 不显示「今日视频」：已从 SHOW_CATS 移除。
+#   ② 录像分类尽量列全：放宽条目识别、规范分页 URL、读真实总页数。
+#   ③ NBA 只显示「有国语回放」的比赛：腾讯国语/腾讯原声目前解不了，
+#      留着也是点不开的卡片；国语回放 = 微博组，py 能直取 1080P。
+#      代价：进 NBA 分类时并发抓若干详情页做判定（只在分类页发生，
+#      homeContent / 启动路径仍零网络），结果缓存，同一场不重复抓。
+#      抓不到的保守保留并标「未校验」，避免网络抖动误杀比赛。
+#      不想做校验：把 NBA_ONLY_GUOYU 改成 False。
+SHOW_CATS = ["nba", "zuqiu", "cba", "zonghe"]
+_FALLBACK_TID = "zuqiu"       # 旧缓存请求 today / 未知 tid → 回落足球录像
+
+NBA_ONLY_GUOYU = True
+GUOYU_ONLY_CATS = {"nba"}     # 想让别的分类也过滤，加 zuqiu / cba / zonghe
+GUOYU_CHECK_LIMIT = 60        # 每页最多校验条数（其余保留，避免拖慢）
+GUOYU_WORKERS = 12            # 并发抓详情页数
+GUOYU_TIMEOUT = 3             # 单条详情超时（秒）
+GUOYU_TOTAL_TIMEOUT = 9       # 整体上限；超时未校验的一律保留，不拖住分类页
 
 # 静态分类（与站点导航一致）；第三项是导航学习失败时的兜底路径
 _CATS = [
@@ -234,6 +252,18 @@ _CATS = [
 ]
 _CAT_NAME = dict((k, n) for k, n, _p in _CATS)
 _VISIBLE_CATS = [c for c in _CATS if c[0] in set(SHOW_CATS)]
+
+# 导航学习失败时的兜底栏目路径；会逐个试，取比赛条目最多的那份。
+_CAT_FALLBACKS = {
+    "nba":    ["/nbalx/", "/nbalx/list_175_1.html", "/nba/"],
+    "zuqiu":  ["/zqlx/", "/zqlx/list_208_1.html", "/football/"],
+    "cba":    ["/cbalx/", "/cbalx/list_180_1.html", "/cba/"],
+    "zonghe": ["/zhlx/", "/zhlx/list_196_1.html", "/zonghe/"],
+}
+
+
+def _norm(s):
+    return re.sub(r'[\s\W_]+', '', str(s or '')).lower()
 
 _UA = ("Mozilla/5.0 (Linux; Android 11) AppleWebKit/537.36 "
        "(KHTML, like Gecko) Chrome/124.0 Mobile Safari/537.36")
@@ -309,7 +339,8 @@ _G = {"home": None, "learned": False, "cat_url": {},
       "parse_probe_log": [], "parse_round": 0, "parse_dead": False,
       "shell_turn": {},      # 非官方页：0→先壳 / 1→下轮试订阅parses
       "official_turn": {},   # 兼容保留
-      "official_trace": []}  # ★ 上一次官方线路「还原真实官方页」的链路日志
+      "official_trace": [],  # ★ 上一次官方线路「还原真实官方页」的链路日志
+      "guoyu_cache": {}}    # ★ 详情页是否有「国语回放」分组的缓存
 
 
 # ======================================================================
@@ -992,6 +1023,60 @@ def _resolve_official(target, headers):
     return _clean_shell(target, hd)
 
 
+def _page_url(u, n):
+    """DedeCMS 数字分页：list_208_1.html → list_208_<n>.html。"""
+    if not u:
+        return ""
+    mm = re.search(r"(list_\d+_)(\d+)(\.html?)$", u, re.I)
+    if mm:
+        return u[:mm.start()] + mm.group(1) + str(n) + mm.group(3)
+    return ""
+
+
+def _next_page(html, base):
+    """从分类页里找「下一页」链接（兼容 » / 下页 / 末页）。"""
+    for href, text in _links(html or "", base or ""):
+        if _text(text) in ("下一页", "下页", "»", "末页", ">"):
+            return href
+    return ""
+
+
+def _max_page(html, base):
+    """★ 从分类页里读真实总页数：数字页码链接 + list_N_<n>.html + 「共N页」。
+    旧版只靠「有没有下一页」猜，pagecount 恒为 2，壳翻两页就停，
+    足球录像自然比原站少一大截。"""
+    mx = 1
+    for href, inner in _links(html or "", base or ""):
+        mm = re.search(r'list_\d+_(\d+)\.html?', href, re.I)
+        if mm:
+            try:
+                mx = max(mx, int(mm.group(1)))
+            except Exception:
+                pass
+        t = _text(inner).strip()
+        if t.isdigit() and 1 <= int(t) <= 99:
+            mx = max(mx, int(t))
+    mm = re.search(r'(?:共|总)\s*(\d{1,3})\s*页', html or "")
+    if mm:
+        try:
+            mx = max(mx, int(mm.group(1)))
+        except Exception:
+            pass
+    return min(mx, 30)
+
+
+def _canon_cat_url(u, html, base):
+    """★ 把分类 URL 规范成 list_N_1.html，让 _page_url 能直接算第 n 页。
+    目录首页（/zqlx/）没有数字页码时翻页只能靠「下一页」链逐跳，很慢。"""
+    for href, _t in _links(html or "", base or ""):
+        if _is98(href) and re.search(r'list_\d+_1\.html?$', href, re.I):
+            return href
+    m = re.search(r'https?://[^\s"\'<>]+/list_\d+_1\.html?', html or "", re.I)
+    if m:
+        return _abs(m.group(0), base)
+    return u
+
+
 def _clean_shell(page, hd, prefix=""):
     """★★ 极简交壳返回：只留标准三件套，绝不写 msg。
     壳会把 playerContent 的 msg 当「播放失败原因」弹出 ⚠ 页并中断解析，
@@ -1591,26 +1676,51 @@ class Spider(Spider):
         if not html:
             return
         for href, text in _links(html, final):
+            nt = _norm(text)
+            if not nt or len(nt) > 12:
+                continue
             for k, name, _p in _CATS:
                 if k in ("today", "live", "diag") or k in _G["cat_url"]:
                     continue
-                if text == name or (len(text) <= len(name) + 2 and name in text):
+                nn = _norm(name)
+                # 「足球录像」/「足球录像回放」/「NBA录像回放」都能命中；
+                # 但不允许「NBA」这种短导航抢走「NBA录像」分类(会学错 URL)。
+                if nn and nn in nt and len(nt) <= len(nn) + 4:
                     _G["cat_url"][k] = href
                     break
 
     def _items(self, html, base):
+        """★ 分类页/首页的比赛卡片。
+
+       旧版强制标题含「录像|回放|集锦|十佳|精华|全场」，把 98 分类页里
+       大量只写「腾讯原声 / 腾讯国语 / 英超第N轮 …vs…」的比赛整批丢掉，
+       于是足球录像比原站少一大半、NBA 只剩「国语回放」那几场。
+       现在只要求「像一条比赛条目」：含日期 或 含 vs/对阵。
+       """
         out, seen = [], set()
         for href, text in _links(html, base):
             t = _clean(text)
-            if not t or len(t) < 9 or len(t) > 95:
+            if not t or len(t) < 6 or len(t) > 110:
                 continue
-            if not re.search(r"\d{1,2}月\d{1,2}日|20\d{2}年\d{1,2}月", t):
-                continue
-            if not re.search(r"录像|回放|集锦|十佳|精华|全场", t):
+            has_date = re.search(r"\d{1,2}月\d{1,2}日|20\d{2}年|"
+                                 r"\d{1,2}[-/]\d{1,2}", t)
+            # 不用 vs\b：中文队名紧跟 vs（「曼联vs利物浦」）时 \b 不成立
+            has_game = re.search(r"(?i)vs|对阵|\d{1,2}\s*[-:]\s*\d{1,2}", t)
+            # ★ 没有日期也没有 vs 的比赛（如「英超第12轮 全场录像回放」）
+            #   靠「录像/回放/全场」独立准入，避免整批漏掉。
+            has_rec = re.search(r"录像|回放|全场|完整版|第[一二三四1-4]节", t)
+            if not (has_date or has_game or has_rec):
                 continue
             if _EP_SKIP.search(t) or href in seen or not _is98(href):
                 continue
-            # ★ 二级目录：全场精华 / 集锦 / 十佳 等一律不进列表
+            # 「视频录像专区 / 栏目列表」这类导航词不算比赛
+            if re.search(r"专区|频道|栏目|列表|排行榜|专题", t) and \
+                    not (has_date or has_game):
+                continue
+            # 纯直播/比分链接不进录像列表（除非标题本身写了录像回放）
+            if re.search(r"直播|比分", t) and not re.search(r"录像|回放|全场", t):
+                continue
+            # ★ 二级目录：全场精华 / 集锦 / 十佳 等一律不进列表（保留用户要求）
             if DROP_HIGHLIGHTS and _HIGHLIGHT_SKIP.search(t):
                 continue
             seen.add(href)
@@ -1618,6 +1728,81 @@ class Spider(Spider):
             out.append({"vod_id": _enc(href), "vod_name": t,
                         "vod_pic": "",
                         "vod_remarks": ((dm.group(0) + " · 录像") if dm else "录像")})
+        return out
+
+    def _guoyu_check(self, href):
+        """★ 抓比赛详情页，判断有没有【国语回放】分组（微博组，py 能直取
+        1080P）。腾讯国语/腾讯原声不算。返回 True / False / None(抓不到)。"""
+        ck = _G.setdefault("guoyu_cache", {})
+        if href in ck:
+            return ck[href]
+        try:
+            h, f = _fetch(href, ref=SITE + "/", timeout=GUOYU_TIMEOUT, alt=False)
+        except Exception:
+            h, f = "", ""
+        if not h:
+            ck[href] = None
+            return None
+        ok = False
+        for _u, inner in _links(h, f or href):
+            t = _clean(inner)
+            if not t or "腾讯" in t or "原声" in t:
+                continue
+            if re.search(r"国语\s*回放|[\[【]\s*国语(?:回放)?\s*[\]】]", t):
+                ok = True
+                break
+        if not ok:
+            # 有的详情页把分组写成纯文本而非 <a> 文本
+            for m in re.finditer(r"[\[【]\s*([^\]】]{1,12})[\]】]", h):
+                g = m.group(1)
+                if "国语" in g and "腾讯" not in g and "原声" not in g:
+                    ok = True
+                    break
+        ck[href] = ok
+        return ok
+
+    def _filter_guoyu(self, items):
+        """★ 只保留「有国语回放」的比赛。抓不到的保守保留并标「未校验」，
+        避免一次网络抖动把整页比赛误杀。校验只在分类页发生，结果缓存。"""
+        todo = items[:GUOYU_CHECK_LIMIT]
+        res, lock = {}, threading.Lock()
+
+        def work(it):
+            href = _dec(it.get("vod_id", ""))
+            if not href:
+                return
+            try:
+                v = self._guoyu_check(href)
+            except Exception:
+                v = None
+            with lock:
+                res[href] = v
+
+        t0 = time.time()
+        for i in range(0, len(todo), GUOYU_WORKERS):
+            if time.time() - t0 > GUOYU_TOTAL_TIMEOUT:
+                break               # 剩下的不校验，直接保留
+            batch = todo[i:i + GUOYU_WORKERS]
+            ts = [threading.Thread(target=work, args=(it,), daemon=True)
+                  for it in batch]
+            for t in ts:
+                try:
+                    t.start()
+                except Exception:
+                    pass
+            for t in ts:
+                t.join(GUOYU_TIMEOUT + 1)
+        out = []
+        for it in items:
+            href = _dec(it.get("vod_id", ""))
+            v = res.get(href) if href in res else "skip"
+            if v is False:          # 明确没有国语回放 → 丢掉（点了也播不了）
+                continue
+            if v is None:           # 没抓到 → 保留，标注
+                it = dict(it)
+                it["vod_remarks"] = (str(it.get("vod_remarks", "")) +
+                                     " · 未校验")[:40]
+            out.append(it)
         return out
 
     def _live(self, html, base):
@@ -1654,10 +1839,10 @@ class Spider(Spider):
                                   "vod_name": "源自检 · 点开看配置与取流日志",
                                   "vod_pic": "", "vod_remarks": "排障用"}],
                         'page': 1, 'pagecount': 1, 'limit': 1, 'total': 1}
-            # ★ 未知 tid / 已隐藏的一级分类被旧缓存请求 → 一律回落今日视频，
-            #   既不会白屏，也不会把隐藏分类的内容偷偷显示回来。
+            # ★ 「今日视频」已不显示；旧缓存仍请求 today / 未知 tid 时
+            #   回落到足球录像，既不会白屏，也不会把隐藏内容偷偷显示回来。
             if tid not in set(SHOW_CATS):
-                tid = 'today'
+                tid = _FALLBACK_TID
 
             html, final = self._home()
             if not html:
@@ -1673,39 +1858,71 @@ class Spider(Spider):
                 result.update({'list': items, 'limit': max(len(items), 1),
                                'total': max(len(items), 1)})
                 return result
-            if tid == 'today':
-                items = self._items(html, final)[:60]
-                result.update({'list': items, 'limit': max(len(items), 1),
-                               'total': max(len(items), 1)})
-                return result
+            # ★★ 分类 URL：导航学到的首选 + 兜底路径逐个试，取条目最多的。
+            #    旧版只试一个硬猜路径，抓不到就悄悄退回首页，于是分类里
+            #    显示的是首页那几场比赛 → 「比原网站少了很多」的主因之一。
+            cands = []
+            u0 = _G["cat_url"].get(tid)
+            if u0:
+                cands.append(u0)
+            for p in _CAT_FALLBACKS.get(tid, []):
+                cu = _abs(p, final or SITE + "/")
+                if cu not in cands:
+                    cands.append(cu)
+            best_html, best_final, best_url, best_n = "", "", "", -1
+            for cu in cands[:4]:
+                h2, f2 = _fetch(cu, ref=final or SITE + "/", timeout=5)
+                if not h2:
+                    continue
+                n2 = len(self._items(h2, f2 or cu))
+                if n2 > best_n:
+                    best_html, best_final, best_url, best_n = h2, (f2 or cu), cu, n2
+                if n2 >= 12:        # 够多就不再试后面的，省时间
+                    break
+            url = u0 or ""
+            if best_html:
+                html, final = best_html, best_final
+                url = _canon_cat_url(best_url, html, final)
+                _G["cat_url"][tid] = url
 
-            url = _G["cat_url"].get(tid)
-            if not url:
-                for k, name, p in _CATS:
-                    if k == tid and p:
-                        url = _abs(p, final or SITE + "/")
-                        break
-            if url:
-                h2, f2 = _fetch(url, ref=final or SITE + "/", timeout=5)
-                if h2 and self._items(h2, f2 or url):
-                    html, final = h2, (f2 or url)
-            items = self._items(html, final)
-            kw = _CAT_NAME.get(tid, "")
-            if kw and len(items) > 8:
-                key = re.sub(r"录像|集锦|球星", "", kw).strip()
-                if key:
-                    hit = [x for x in items if key in x['vod_name']]
-                    if hit:
-                        items = hit
+            # ★★ 分页：旧版第一页 pagecount 恒为 1，壳根本不翻页，
+            #    只见第一页 → 足球录像比原站少很多。现在支持逐页翻到底。
             if pg > 1:
-                for href, text in _links(html, final):
-                    if _text(text) in ("下一页", "下页", "»", "末页"):
-                        h3, f3 = _fetch(href, ref=final, timeout=5)
-                        if h3:
-                            items = self._items(h3, f3 or href)
-                            result['pagecount'] = max(pg + 1, 2)
-                        break
-            result.update({'list': items[:60],
+                pu = _page_url(url or final, pg)
+                if pu:
+                    hp, fp = _fetch(pu, ref=final or SITE + "/", timeout=5)
+                    if hp:
+                        html, final = hp, (fp or pu)
+                else:
+                    for _ in range(min(pg - 1, 8)):
+                        nx = _next_page(html, final)
+                        if not nx:
+                            break
+                        h3, f3 = _fetch(nx, ref=final, timeout=5)
+                        if not h3:
+                            break
+                        html, final = h3, (f3 or nx)
+            items = self._items(html, final)
+            # ★★ 删掉「按分类名二次过滤」：比赛标题里通常没有「足球 / NBA」
+            #    字样，栏目页本身就是该项目录像，不必再按标题筛一遍。
+
+            # ★★ NBA 只保留有「国语回放」的比赛（腾讯国语/原声解不了）
+            if NBA_ONLY_GUOYU and tid in GUOYU_ONLY_CATS:
+                items = self._filter_guoyu(items)
+
+            # ★★ 真实总页数：从数字页码 / list_N_<n>.html / 「共N页」读，
+            #    不再只靠「有没有下一页」把 pagecount 猜成 2。
+            mx = _max_page(html, final)
+            more = bool(_next_page(html, final) or
+                        _page_url(url or final, pg + 1))
+            if mx > 1:
+                # 页面自带数字页码 → 直接给真实总页数；否则「有下一页」
+                # 会让 pagecount 每翻一页 +1，一直空翻到上限 30。
+                pc = mx
+            else:
+                pc = pg + 1 if more else pg
+            result['pagecount'] = min(max(pc, pg), 30)
+            result.update({'list': items[:120],
                            'limit': max(len(items), 24),
                            'total': max(len(items), 24)})
         except Exception:

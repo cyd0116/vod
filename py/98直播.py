@@ -27,6 +27,7 @@ import urllib
 import urllib.request
 import urllib.parse
 import threading
+from datetime import date, timedelta
 
 # ======================================================================
 # 骨架 100% 对齐「央视节目.py」（用户实测可播放的文件）：
@@ -229,6 +230,22 @@ GUOYU_CHECK_LIMIT = 60        # 每页最多校验条数（其余保留，避免
 GUOYU_WORKERS = 12            # 并发抓详情页数
 GUOYU_TIMEOUT = 3             # 单条详情超时（秒）
 GUOYU_TOTAL_TIMEOUT = 9       # 整体上限；超时未校验的一律保留，不拖住分类页
+
+# ======================================================================
+# ★★ NBA 分类只看「近三天（含当天）」的比赛
+#   目的：把要抓详情页做「国语回放」校验的条目数压到几条，分类页不再慢。
+#   · 日期取自比赛标题：11月20日 / 2026年11月20日 / 11/20 / 2026/11/20
+#   · 跨年跨月自动推断年份（12月31日 在 1月1日 仍算近三天）
+#   · 比分「112-108」不会被误判成日期（只认中文月日 / 带 / 的格式）
+#   · 没有日期的条目默认不保留（无法证明是近三天）；若真机上因此
+#     条目偏少，把 NBA_RECENT_KEEP_NODATE 改成 True 即可。
+#   · 生效时 NBA 分类 pagecount=1：近三天都在第一页，壳不翻页 → 最快。
+# ======================================================================
+NBA_RECENT_ON = True
+RECENT_ONLY_CATS = {"nba"}    # 只作用于 NBA；想给足球也加就加 "zuqiu"
+NBA_RECENT_DAYS = 3           # 含当天：今天 / 昨天 / 前天
+NBA_RECENT_KEEP_NODATE = False
+_TODAY_OVERRIDE = None        # 仅回归测试注入用；设备端永远是 None=当天
 
 # 静态分类（与站点导航一致）；第三项是导航学习失败时的兜底路径
 _CATS = [
@@ -1077,6 +1094,46 @@ def _canon_cat_url(u, html, base):
     return u
 
 
+def _recent_ok(title, now=None):
+    """★ 标题里的日期是否落在「近 NBA_RECENT_DAYS 天（含当天）」。
+
+    支持：11月20日 / 2026年11月20日 / 11/20 / 2026/11/20。
+    年份缺省时试 去年/今年/明年，跨年跨月都能对上（12月31日 vs 1月1日）。
+    不认 112-108 这类比分（中文月日或斜杠格式才认）。
+    没解析出日期 → 由 NBA_RECENT_KEEP_NODATE 决定。
+    """
+    d0 = now or _TODAY_OVERRIDE or date.today()
+    lo = d0 - timedelta(days=max(NBA_RECENT_DAYS, 1) - 1)
+    s = str(title or "")
+    cand = []
+    # 2026年11月20日
+    for m in re.finditer(r'(20\d{2})\s*年\s*(\d{1,2})\s*月\s*(\d{1,2})\s*日', s):
+        cand.append((int(m.group(1)), int(m.group(2)), int(m.group(3))))
+    # 11月20日（年份靠候选推断）
+    for m in re.finditer(r'(?<!\d)(\d{1,2})\s*月\s*(\d{1,2})\s*日', s):
+        mo, dd = int(m.group(1)), int(m.group(2))
+        for yy in (d0.year - 1, d0.year, d0.year + 1):
+            cand.append((yy, mo, dd))
+    # 2026/11/20
+    for m in re.finditer(r'(?<!\d)(20\d{2})/(\d{1,2})/(\d{1,2})(?!\d)', s):
+        cand.append((int(m.group(1)), int(m.group(2)), int(m.group(3))))
+    # 11/20（斜杠；横线留给比分，不认）
+    for m in re.finditer(r'(?<!\d)(\d{1,2})/(\d{1,2})(?!\d)', s):
+        mo, dd = int(m.group(1)), int(m.group(2))
+        for yy in (d0.year - 1, d0.year, d0.year + 1):
+            cand.append((yy, mo, dd))
+    if not cand:
+        return bool(NBA_RECENT_KEEP_NODATE)
+    for yy, mo, dd in cand:
+        try:
+            d = date(yy, mo, dd)
+        except Exception:
+            continue
+        if lo <= d <= d0:
+            return True
+    return False
+
+
 def _clean_shell(page, hd, prefix=""):
     """★★ 极简交壳返回：只留标准三件套，绝不写 msg。
     壳会把 playerContent 的 msg 当「播放失败原因」弹出 ⚠ 页并中断解析，
@@ -1906,6 +1963,13 @@ class Spider(Spider):
             # ★★ 删掉「按分类名二次过滤」：比赛标题里通常没有「足球 / NBA」
             #    字样，栏目页本身就是该项目录像，不必再按标题筛一遍。
 
+            # ★★ NBA：先按「近三天(含当天)」砍掉旧比赛，再做国语回放校验。
+            #    顺序很关键 —— 要抓详情页的条目从几十条降到几条，分类页变快。
+            recent_applied = False
+            if NBA_RECENT_ON and tid in RECENT_ONLY_CATS:
+                recent_applied = True
+                items = [x for x in items if _recent_ok(x["vod_name"])]
+
             # ★★ NBA 只保留有「国语回放」的比赛（腾讯国语/原声解不了）
             if NBA_ONLY_GUOYU and tid in GUOYU_ONLY_CATS:
                 items = self._filter_guoyu(items)
@@ -1921,7 +1985,9 @@ class Spider(Spider):
                 pc = mx
             else:
                 pc = pg + 1 if more else pg
-            result['pagecount'] = min(max(pc, pg), 30)
+            # 近三天的比赛都在栏目第一页（最新在最前）；锁 pagecount=1，
+            # 壳不再翻页，也不再为第 2 页重复抓一遍详情 → 这是提速主因。
+            result['pagecount'] = 1 if recent_applied else min(max(pc, pg), 30)
             result.update({'list': items[:120],
                            'limit': max(len(items), 24),
                            'total': max(len(items), 24)})
@@ -1980,6 +2046,13 @@ class Spider(Spider):
                         ("开启 ✅" if DROP_HIGHLIGHTS else "关闭(保留集锦)"),
                      "  保留：全场录像回放 / 第X节录像 / 全场回放",
                      "  丢弃：全场精华 / 全场集锦 / 精彩十佳球 等",
+                     "★ NBA 近三天过滤: " +
+                        ("开启 ✅ (%d 天含当天，分类只留最新，pagecount=1)"
+                         % NBA_RECENT_DAYS if NBA_RECENT_ON else "关闭"),
+                     "  无日期条目: " +
+                        ("保守保留" if NBA_RECENT_KEEP_NODATE else "不保留"),
+                     "  只作用于: " + ", ".join(sorted(RECENT_ONLY_CATS)),
+                     "  条目少了 → 国语回放校验只需抓几条详情，分类页变快",
                      "首页: homeContent 零网络请求 / 无 __init__", "",
                      "【微博取流配置】",
                      "WB_COOKIE: " + ("已填 ✅" if WB_COOKIE else "未填 ❌"),

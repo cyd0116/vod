@@ -22,7 +22,8 @@ import urllib
 import urllib.request
 import time
 
-# ===== 央视频「电视栏目」50 栏目静态清单 (lid, 栏目名, 栏目cid, 期次备注) =====
+# ===== 央视频「电视栏目」50 栏目离线兜底快照 (lid, 栏目名, 栏目cid, 期次备注) =====
+# 注意: 这不是官网数据源, 仅当 program 接口彻底不可用时才用, 见上方说明。
 # 来源: 日志category(program_library)返回的完整栏目清单, 与别人"电视栏目"分类一致。
 # vod_id三段式: library~~~<lid>~~~<cid>; detailContent用 lid 取全部期次(~~~cid)。
 _YSP_COLUMNS = [
@@ -161,18 +162,66 @@ def _ysp_search(title, size=20):
 			if alb.get("cid"): albums.append(alb)
 	return albums
 
-# ============ 央视频 program 分类接口 (纯py签名, host必须m站) ============
-# 与央视频页面数据"完全一致"的分类数据源。签名公式已彻底逆向并三重验证。
+# ============ 央视频 program 分类接口 (签名公式已用官网 HAR 真实 body 验证) ============
+# ★本轮依据: 用户从 https://yangshipin.cn/resource/pool 导出的 HAR(95 条请求)。
+#   逐条对照发现旧 py 与官网 PC 站有 4 处硬差异, 这是"电视栏目找不到数据/节目不全"
+#   的直接原因 —— 请求根本没打到官网同一个端点:
+#     接口路径  官网 /voapi/omsot/media/v2/program    旧py /voapi/omsotm/... (多一个 m)
+#     yspappid  官网 519748109                       旧py 539073109 (移动端)
+#     Referer   官网 https://yangshipin.cn/           旧py https://m.yangshipin.cn/static/m/pool
+#     Origin    官网 https://yangshipin.cn            旧py https://m.yangshipin.cn
+#   filterValue 官网实测为 d11=program_library&itype=-1&sort=6, 与 _ysp_build_fv 输出一致 ✔
+#   yspsdkinput 用 HAR 的 body {"filterValue":"...","page":7,"pageSizeT":1} 重算 md5,
+#   得 d3e8afab4bff21eacf38a521fdbeb77e, 与官网请求头逐字相同 -> 签名算法完全正确 ✔
+#   yspsdksign 格式 md5(raw)-<input>-<guid>-<seqid>-<request-id> 亦与旧实现一致 ✔
+# ★双配置候选: 优先用官网 PC 配置(A); 若服务端对该配置签名校验不通过则回退旧移动端
+#   配置(B), 保住纪录片/特别节目原有可用链路。命中即停, 结果写进诊断。
 import hashlib as _hl, random as _rd
-_YSP_PROGRAM_URL = "https://csapi.yangshipin.cn/voapi/omsotm/media/v2/program"
 _YSP_TOKEN_URL  = "https://h5access.yangshipin.cn/web/open/token"
 _YSP_PGUID      = "mu1k3hl8_8zhsvo0vhwn"
 _YSP_PCOOKIE    = ("guid=%s; versionName=99.99.99; versionCode=999999; vplatform=109; platformVersion=Chrome; deviceModel=108; newLogin=1; pc_version=1.1.16; _abfpc=951791353206c47aa9fc22c73c8c99618fd54a77_2.0; cna=16fbd097dc393531d33a81a1a558e99b" % _YSP_PGUID)
+_YSP_PC_UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+              "(KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36 Edg/146.0.0.0")
+_YSP_M_UA  = ("Mozilla/5.0 (Linux; Android 10) AppleWebKit/537.36 "
+              "Chrome/91.0.4472.120 Mobile Safari/537.36")
+# (标签, 接口URL, yspappid, Referer, Origin, UA, 签名domain, 签名appid)
+# ⚠签名 raw 里的 domain/appid 无法从 HAR 反推(响应体已清理, 缺 token 原文), 属推断项。
+#   故加一条 'pc_mix': 端点与请求头用官网 PC 值, 但签名 raw 沿用原移动端 SDK 常量,
+#   覆盖"官网换了端点却仍用旧 SDK 签名串"这种情况。三者按顺序命中即停, 只在失败时
+#   才多发一次请求, 正常路径仍是单次请求。
+_YSP_API_CFG = (
+    ('pc',  'https://csapi.yangshipin.cn/voapi/omsot/media/v2/program',
+     '519748109', 'https://yangshipin.cn/', 'https://yangshipin.cn',
+     _YSP_PC_UA, 'yangshipin.cn', '519748109'),
+    ('pc_mix', 'https://csapi.yangshipin.cn/voapi/omsot/media/v2/program',
+     '519748109', 'https://yangshipin.cn/', 'https://yangshipin.cn',
+     _YSP_PC_UA, 'm.yangshipin.cn', '539073109'),
+    ('m',   'https://csapi.yangshipin.cn/voapi/omsotm/media/v2/program',
+     '539073109', 'https://m.yangshipin.cn/static/m/pool', 'https://m.yangshipin.cn',
+     _YSP_M_UA, 'm.yangshipin.cn', '539073109'),
+)
+# 官网 HAR 里 seqid 是全局自增(161,162,163,164), 与 page 无关; 旧py误用 str(page)
+_YSP_SEQID = [160]
 # 只保留网站 /resource/pool 二级目录里需要的三个页签(顺序: 电视栏目 -> 纪录片 -> 特别节目)。
 # 电视栏目对应节目库总表 program_library(筛选 itype+sort), 纪录片/特别节目对应各自 program_cid。
 _YSP_PROG_CID   = {"电视栏目":"program_library","纪录片":"program_cid_774","特别节目":"program_cid_777",
                     "动画片":"program_cid_775","电视剧":"program_cid_776","电影":"program_cid_778"}
 _YSP_TABS = ("电视栏目", "纪录片", "特别节目")  # homeContent 输出顺序, 与网站页签保持一致
+
+# ===== 诊断开关 =====
+# 本插件运行在用户的壳子里, 能直连央视频; 开发沙盒出口网关对 yangshipin.cn 返回 403,
+# 无法在这里验证真实响应。故内置诊断: 在 init() 的 extend 里带 "debug" 或设环境变量
+# YSP_DEBUG=1, 即把 program / playvinfo 的原始结构摘要打到日志, 凭一次日志即可精确定位。
+_YSP_DEBUG = False
+_YSP_DIAG = []
+def _ysp_diag(tag, msg):
+	line = '[YSP:%s] %s' % (tag, str(msg)[:1200])
+	_YSP_DIAG.append(line)
+	if len(_YSP_DIAG) > 400:
+		del _YSP_DIAG[:200]
+	if _YSP_DEBUG:
+		try: print(line)
+		except Exception: pass
 
 # ===== 央视频取流档位(与官网播放器点开节目时的默认顺序一致: fhd -> shd -> sd) =====
 # ★这不是"给用户的清晰度开关", 也不是对官网逻辑的重复设置:
@@ -200,15 +249,14 @@ _YSP_TAB_ALIASES = {'全部': '电视栏目', '': '电视栏目'}
 _YSP_LIBRARY_ITYPE_ORDER = ('全部','综合','财经','综艺','中文国际','体育','电影','国防军事',
                             '电视剧','科教','戏曲','社会与法','新闻','少儿','音乐','奥林匹克','农业农村')
 
-# ★「找不到数据」根因与修复: 官网「电视栏目」的「全部」态并不走
-#   media/v2/program 接口 —— 该接口只认 program_cid_XXX, 传 d11=program_library
-#   在真实壳子里返回空列表, 于是列表页显示"找不到数据"。原作者当年也是从
-#   category(program_library) 日志里抠出这份 50 栏目清单静态化的, 同理。
-#   这 50 条与官网截图逐项吻合(新闻联播/2026美加墨世界杯/走遍中国/今日说法/
-#   新闻直播间/今日亚洲/百家讲坛/健康中国…), 因此恢复为「电视栏目」的可靠数据源,
-#   封面与「最新更新日期」再逐栏目从 lid 详情页实时取(动态, 不写死)。
-# 下面这张表仅用于"选具体频道"时的本地归类筛选(接口不可用时的兜底),
-# 按栏目所属 CCTV 频道归入官网 itype 的 17 项; 归类依据为频道常识, 非接口返回值。
+# ★本轮纠偏: 官网 /resource/pool 的页面源码里明确出现 d11 / program_library /
+#   itype / filterValue / pageSize / category 字段, 说明「电视栏目」就是走
+#   media/v2/program 接口、以 d11=program_library + itype 做频道筛选, 由服务端
+#   返回全量栏目并分页。旧 py 里的 50 条清单只是原作者抓包后的离线快照,
+#   不是官网数据源 —— 用到它就会出现"全部里的节目不全、筛选后也不全"。
+#   现在三个页签一律走接口; 下面这份 50 条清单降级为【仅在接口完全失败时的
+#   离线兜底】, 只为避免整页空白, 不是内容来源。
+# _YSP_LIB_ITYPE 仅用于离线兜底时按频道归类; 正常走接口时筛选完全由服务端执行。
 _YSP_LIB_ITYPE = {
 	'10492':'新闻','10151':'新闻','10031':'社会与法','10028':'科教','10469':'科教',
 	'10013':'科教','10526':'新闻','10136':'中文国际','10747':'新闻','10050':'中文国际',
@@ -574,7 +622,7 @@ _YSP_FILTER_MAP = {
         },
     },
 }
-_YSP_TOKEN_CACHE = {"tk":None, "ts":0}
+_YSP_TOKEN_CACHE = {}   # key=yspappid -> {"tk","ts"}; PC 与 M 各自缓存, 互不串用
 
 def _ysp_extval(extend, key):
 	"""从壳子 extend 提取指定筛选 key 的选中值(兼容 字符串 或 {n,v} dict)。"""
@@ -648,20 +696,48 @@ def _ysp_filters_config():
 		             row('datapa-sort', '排序', sp, 'sort')],
 	}
 
+def _ysp_fv_candidates(pcid, tid, extend):
+	"""★HAR 已定稿, 不再做无依据的探测。
+	官网 5 条 program 请求的 filterValue 样本:
+	  「全部」态 d11=program_library&itype=-1&sort=6        (page 7/8/9/10 逐条滚动)
+	  「新闻」态 itype=769&sort=6&d11=program_library       (page 重置为 1)
+	两点确认: ① 筛选确实靠 itype 数值传给服务端, 769=新闻, 与枚举表一致;
+	          ② 官网在选了具体频道时会把键顺序重排成 itype&sort&d11。
+	服务端按 query 解析, 顺序不影响语义, 但为严格对齐官网, 筛选态照样重排。
+	上一轮加的 full/&pageSize 变体属于猜测, 会多发无效请求, 已删除。"""
+	fv = _ysp_build_fv(pcid, tid, extend)
+	if tid == '电视栏目':
+		try:
+			parts = dict(x.split('=', 1) for x in fv.split('&') if '=' in x)
+			if parts.get('itype', '-1') != '-1':
+				fv = 'itype=%s&sort=%s&d11=%s' % (
+					parts.get('itype', '-1'), parts.get('sort', '6'), pcid)
+		except Exception:
+			pass
+	return [fv]
+
 def _ysp_prs(n):
 	return ''.join(_rd.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789") for _ in range(n))
 
-def _ysp_get_token():
-	"""实时获取签名 token(5分钟时效), 带240s内存缓存。失败返回None。"""
+def _ysp_get_token(cfg=None):
+	"""实时获取签名 token(5分钟时效), 按 yspappid 分缓存。失败返回 None。
+	HAR 实测官网 PC 的 token 请求为:
+	  yspappid=519748109&guid=<运行时>&vappid=59306155&vsecret=<固定>&raw=1&version=v1&ts=&rnd=
+	除 yspappid 外与旧实现一致; vappid/vsecret 两个端共用同一对。"""
+	if cfg is None:
+		cfg = _YSP_API_CFG[0]
+	_tag, _url, appid, referer, origin, ua, _dom, _sigappid = cfg
 	now = time.time()
-	if _YSP_TOKEN_CACHE["tk"] and now - _YSP_TOKEN_CACHE["ts"] < 240:
-		return _YSP_TOKEN_CACHE["tk"]
+	c = _YSP_TOKEN_CACHE.get(appid)
+	if c and c["tk"] and now - c["ts"] < 240:
+		return c["tk"]
 	import ssl
 	ts  = str(int(time.time()*1000)); rnd = _ysp_prs(16)
-	url = "%s?yspappid=539073109&guid=%s&vappid=59306155&vsecret=b42702bf7309a179d102f3d51b1add2fda0bc7ada64cb801&raw=1&version=v1&ts=%s&rnd=%s" % (_YSP_TOKEN_URL, _YSP_PGUID, ts, rnd)
-	hdr = {"User-Agent":"Mozilla/5.0 (Linux; Android 10) AppleWebKit/537.36 Chrome/91.0.4472.120 Mobile Safari/537.36",
-	       "Referer":"https://m.yangshipin.cn/static/m/pool","Origin":"https://m.yangshipin.cn",
-	       "Accept":"application/json, text/plain, */*","Cookie":_YSP_PCOOKIE}
+	url = ("%s?yspappid=%s&guid=%s&vappid=59306155&"
+	       "vsecret=b42702bf7309a179d102f3d51b1add2fda0bc7ada64cb801&"
+	       "raw=1&version=v1&ts=%s&rnd=%s" % (_YSP_TOKEN_URL, appid, _YSP_PGUID, ts, rnd))
+	hdr = {"User-Agent":ua, "Referer":referer, "Origin":origin,
+	       "Accept":"*/*", "Content-Type":"application/json"}
 	ctx = ssl._create_unverified_context()
 	try:
 		d  = urllib.request.urlopen(urllib.request.Request(url, headers=hdr), timeout=20, context=ctx).read().decode('utf-8','replace')
@@ -669,7 +745,7 @@ def _ysp_get_token():
 	except Exception:
 		tk = None
 	if tk:
-		_YSP_TOKEN_CACHE["tk"] = tk; _YSP_TOKEN_CACHE["ts"] = now
+		_YSP_TOKEN_CACHE[appid] = {"tk":tk, "ts":now}
 	return tk
 
 def _ysp_date_issue(s):
@@ -715,57 +791,167 @@ def _ysp_remarks(d):
 		return '%d集全' % n
 	return ''
 
-def _ysp_program(filterValue, page=1, size=24):
-	"""央视频 program 分类接口 -> ([(title, cid, cover, remarks, brief), ...], has_more, total)。
-	★修复"下拉没有更多": 网站每页固定 24 条(旧代码请求 50 被截断为 24, 却按 50 判定
-	  "本页未满=到底", 导致壳子第一页后就停止翻页)。现在按网站真实页大小取数, 并把
-	  接口返回的总条数/本页是否满页一并返回给 categoryContent 决定 pagecount。
-	签名: yspsdkinput=hex_md5(按key排序拼接body); yspsdksign=md5("{guid};m.yangshipin.cn;{token};https:;539073109;{input};")+"-"+input。"""
+# ===== program 接口响应解析 =====
+# ★重要: 旧实现把 protobuf 字段编号写死(data=f2 / 条目=f3 / 4=cid / 5=title / 8=cover)。
+#   纪录片、特别节目恰好是这个结构, 但「电视栏目」(d11=program_library) 的响应层级可能不同,
+#   写死编号就会解析出 0 条 —— 这正是"电视栏目显示找不到数据"的高概率根因。
+#   改为: 先按已知结构解析, 若 0 条则递归遍历整棵 protobuf 树自适应识别节目条目,
+#   不再依赖任何字段编号; 字段含义按内容(中文标题 / cid 形态 / http 封面)判断。
+_CID_RE = re.compile(r'^[A-Za-z0-9][A-Za-z0-9_\-]{5,63}$')
+
+def _ysp_pb_walk(buf, depth=0, maxdepth=7):
+	"""产出 (depth, fields) —— 遍历 protobuf 所有嵌套层级的消息。"""
+	if depth > maxdepth or not isinstance(buf, (bytes, bytearray)) or len(buf) < 2:
+		return
+	try:
+		fields = _YspPB(bytes(buf)).read()
+	except Exception:
+		return
+	yield depth, fields
+	for fn, wt, v in fields:
+		if wt == 2 and isinstance(v, (bytes, bytearray)) and len(v) > 2:
+			for x in _ysp_pb_walk(v, depth + 1, maxdepth):
+				yield x
+
+def _ysp_item_from_fields(fields):
+	"""把一层的字段列表解释成一条节目。识别不出返回 None。"""
+	d = {}
+	order = []
+	for fn, wt, v in fields:
+		if wt == 2 and isinstance(v, (bytes, bytearray)):
+			s = _ysp_s(v)
+			# 过滤掉嵌套消息的二进制噪声(大量不可打印字符)
+			if not s or sum(1 for c in s if ord(c) < 32) > 0:
+				continue
+			d.setdefault(fn, []).append(s); order.append((fn, s))
+		elif wt == 0:
+			d.setdefault(fn, []).append(v)
+	cid = title = cover = brief = ''
+	for fn, s in sorted(order, key=lambda x: x[0]):
+		if s.startswith('http'):
+			if not cover: cover = s
+			continue
+		if _CID_RE.match(s) and not re.search(r'[\u4e00-\u9fff]', s) and not s.isdigit():
+			if not cid: cid = s
+			continue
+		if len(s) > 60 or s.isdigit():
+			continue
+		if re.search(r'[\u4e00-\u9fff]', s) or len(s) >= 2:
+			if not title: title = s
+			elif not brief and s != title: brief = s
+	if cid and title:
+		return (title, cid, cover, _ysp_remarks(d), brief)
+	return None
+
+def _ysp_program_items(rawb):
+	"""自适应解析整棵 protobuf 树, 返回去重后的节目列表。"""
+	items, seen = [], set()
+	# ① 已知结构优先(纪录片/特别节目走这条, 最快最准)
+	try:
+		top = _YspPB(rawb).read()
+		for data_f in [v for f, wt, v in top if f == 2 and wt == 2]:
+			for f, wt, v in _YspPB(data_f).read():
+				if f == 3 and wt == 2:
+					it = _ysp_item_from_fields(_YspPB(v).read())
+					if it and it[1] not in seen:
+						seen.add(it[1]); items.append(it)
+	except Exception:
+		pass
+	if items:
+		return items, 'known'
+	# ② 自适应: 递归找所有含 cid+标题 的消息
+	for depth, fields in _ysp_pb_walk(rawb):
+		it = _ysp_item_from_fields(fields)
+		if it and it[1] not in seen:
+			seen.add(it[1]); items.append(it)
+	return items, 'adaptive'
+
+def _ysp_pb_total(rawb):
+	"""只在外层(data 层)找总数, 不深入节目条目 —— 否则会把集数/时间戳误当 total,
+	导致"明明到底了还一直翻页"。"""
+	best = 0
+	for depth, fields in _ysp_pb_walk(rawb):
+		if depth > 2:
+			continue
+		for fn, wt, v in fields:
+			if wt == 0 and isinstance(v, int) and 24 <= v < 200000:
+				best = max(best, v)
+	return best
+
+def _ysp_program_once(cfg, filterValue, page, size):
+	"""按给定配置发一次 program 请求 -> (items, total, err)。
+	签名公式已用 HAR 真实 body 验证: md5(按key排序拼接 body) -> yspsdkinput。"""
 	import ssl
-	token = _ysp_get_token()
-	if not token: return [], False, 0
+	tag, url, appid, referer, origin, ua, sig_domain, sig_appid = cfg
+	token = _ysp_get_token(cfg)
+	if not token:
+		return [], 0, 'token'
 	body = {"filterValue":filterValue, "page":page, "pageSizeT":size}
 	pairs = ["%s=%s" % (k, urllib.parse.unquote(str(body[k]))) for k in sorted(body.keys())]
 	ysp  = _hl.md5("&".join(pairs).encode()).hexdigest()
-	seq  = str(page); reqid = "999999" + _ysp_prs(10) + str(int(time.time()*1000))
+	_YSP_SEQID[0] += 1
+	seq  = str(_YSP_SEQID[0])
+	reqid = "999999" + _ysp_prs(10) + str(int(time.time()*1000))
 	input_str = "%s-%s-%s-%s" % (ysp, _YSP_PGUID, seq, reqid)
-	raw  = "%s;m.yangshipin.cn;%s;https:;539073109;%s;" % (_YSP_PGUID, token, input_str)
+	raw  = "%s;%s;%s;https:;%s;%s;" % (_YSP_PGUID, sig_domain, token, sig_appid, input_str)
 	sign = _hl.md5(raw.encode()).hexdigest() + "-" + input_str
 	hdr = {"Accept":"application/json, text/plain, */*","Content-Type":"application/json",
-	       "yspappid":"539073109","platform":"109","app-platform":"pc","app-version":"1.0.0",
+	       "yspappid":appid,"platform":"109","app-platform":"pc","app-version":"1.0.0",
 	       "yspsdkinput":ysp,"yspsdksign":sign,"seqId":seq,"request-id":reqid,
-	       "User-Agent":"Mozilla/5.0 (Linux; Android 10) AppleWebKit/537.36 Chrome/91.0.4472.120 Mobile Safari/537.36",
-	       "Referer":"https://m.yangshipin.cn/static/m/pool","Origin":"https://m.yangshipin.cn","Cookie":_YSP_PCOOKIE}
+	       "User-Agent":ua,"Referer":referer,"Origin":origin}
+	if tag == 'm':
+		hdr['Cookie'] = _YSP_PCOOKIE
 	ctx = ssl._create_unverified_context()
 	try:
-		r = urllib.request.urlopen(urllib.request.Request(_YSP_PROGRAM_URL, data=json.dumps(body).encode(), headers=hdr, method='POST'), timeout=20, context=ctx)
+		r = urllib.request.urlopen(urllib.request.Request(url, data=json.dumps(body).encode(), headers=hdr, method='POST'), timeout=20, context=ctx)
 		rawb = r.read()
-	except Exception:
-		return [], False, 0
-	fields = _YspPB(rawb).read()
-	data_f = [v for f,wt,v in fields if f==2 and wt==2]
-	if not data_f: return [], False, 0
-	data_fields = _YspPB(data_f[0]).read()
-	progs = [v for f,wt,v in data_fields if f==3 and wt==2]
-	# 接口在 data 层或顶层给出 total: 用于精确判断是否还有下一页
-	total = 0
-	for f,wt,v in (fields + data_fields):
-		if wt == 0 and isinstance(v, int) and 0 < v < 1000000:
-			total = max(total, v)
-	out = []
-	for p in progs:
-		d = {}
-		for fn,wt,v in _YspPB(p).read():
-			if wt==2 and isinstance(v, bytes):
-				s = _ysp_s(v)
-				if s: d.setdefault(fn, []).append(s)
-			elif wt==0: d.setdefault(fn, []).append(v)
-		title = (d.get(5) or [''])[0]; cid = (d.get(4) or [''])[0]; cover = (d.get(8) or [''])[0]
-		brief = (d.get(6) or [''])[0]
-		if cid and title:
-			out.append((title, cid, cover, _ysp_remarks(d), brief))
-	has_more = bool(progs) and (len(progs) >= size or (total > 0 and page * size < total))
-	return out, has_more, total
+	except Exception as e:
+		return [], 0, type(e).__name__
+	items, how = _ysp_program_items(rawb)
+	total = _ysp_pb_total(rawb)
+	_ysp_diag('program', 'cfg=%s page=%s size=%s fv=%s bytes=%d parse=%s items=%d total=%s first=%s' %
+	          (tag, page, size, filterValue, len(rawb), how, len(items), total, items[:1]))
+	return items, total, ''
+
+def _ysp_program(filterValue, page=1, size=24):
+	"""央视频 program 分类接口 -> (items, has_more, total)。
+	★三个页签统一走官网接口, 筛选条件经 filterValue 原样透传, 不再用静态清单裁剪。
+	★按 HAR 修正: 优先 PC 配置(omsot / 519748109 / yangshipin.cn), 失败回退原 M 配置。
+	★HAR 里官网是 pageSizeT=1、page 逐条递增(7,8,9,10…)。插件需要按页聚合,
+	  故先按 size 请求; 若所有配置都返回空, 再按官网原样 pageSizeT=1 逐条取满一页,
+	  严格复刻官网行为(仅在兜底时触发, 正常路径仍是单次请求)。
+	★分页: 本页满 size 条才继续下拉, 未满即到底。"""
+	items, total, err = [], 0, ''
+	for cfg in _YSP_API_CFG:
+		items, total, err = _ysp_program_once(cfg, filterValue, page, size)
+		if items:
+			_ysp_diag('cfg', '生效配置 = %s (%s)' % (cfg[0], cfg[1]))
+			break
+	if not items:
+		# 兜底: 逐条请求(pageSizeT=1), 从 (page-1)*size+1 开始聚合
+		start = (page - 1) * size + 1
+		agg, seen = [], set()
+		for cfg in _YSP_API_CFG:
+			agg, seen = [], set()
+			for p in range(start, start + size):
+				one, _, _ = _ysp_program_once(cfg, filterValue, p, 1)
+				if not one:
+					break
+				for it in one:
+					if it[1] not in seen:
+						seen.add(it[1]); agg.append(it)
+				if len(agg) >= size:
+					break
+			if agg:
+				_ysp_diag('cfg', '生效配置 = %s (pageSizeT=1 逐条聚合)' % cfg[0])
+				break
+		items = agg
+	if not items:
+		_ysp_diag('program', '所有配置均无数据 fv=%s err=%s' % (filterValue, err))
+	has_more = len(items) >= size
+	if total > 0 and total <= page * size:
+		has_more = False
+	return items, has_more, total
 
 def _ysp_title_to_vid(title):
 	albs=_ysp_search(title)
@@ -1089,7 +1275,14 @@ class Spider(Spider):  # 元类 默认的元类 type
 	def getName(self):
 		return "中央电视台"#可搜索
 	def init(self,extend=""):
+		global _YSP_DEBUG
+		import os
+		if (os.environ.get('YSP_DEBUG') == '1'
+		    or 'debug' in str(extend).lower()):
+			_YSP_DEBUG = True
 		print("============{0}============".format(extend))
+		if _YSP_DEBUG:
+			print('[YSP] 诊断已开启: 将打印 program/playvinfo 响应结构; 排障后请去掉 extend 里的 debug')
 		pass
 	def destroy(self):
 		pass
@@ -1106,12 +1299,43 @@ class Spider(Spider):  # 元类 默认的元类 type
 		result['class'] = [{'type_name': t, 'type_id': t} for t in _YSP_TABS]
 		if(filter):
 			result['filters'] = self.config['filter']
+		# ★壳子首页「更新推荐」区块(截图里绿色背景那一栏): 主流壳子读
+		#   homeContent()['list'] 渲染, 另一类壳子读 homeVideoContent()。
+		#   两条协议都返回同一份「电视栏目」第一页, 共用缓存, 不重复请求、
+		#   不新增第四个目录。卡片字段与分类页逐字一致, 点开即走同一条取流链路。
+		result['list'] = self._ysp_home_recommend()
 		return result
+	# 首页「更新推荐」缓存: homeContent / homeVideoContent 每回首页都会调,
+	# 官网 pageSizeT=1 模式下一页要逐条请求, 不缓存会明显拖慢首页。TTL 5 分钟。
+	_YSP_HOME_CACHE = {"list": None, "ts": 0}
+	def _ysp_home_recommend(self):
+		"""生成壳子首页「更新推荐」列表 —— 直接复用「电视栏目」分类页第一页。
+		★不新增目录: 三个二级目录仍只由 homeContent()['class'] 输出。
+		★不改造卡片: 原样复用 categoryContent 的 vod_id / 封面 / vod_remarks,
+		  所以点开就能走 prog~~~ 详情链路并继续 1080P 优先取流, 角标仍是官网动态期次。
+		★默认「全部」+ 最新(sort=6), 即官网电视栏目按最新更新排序, 故名「更新推荐」。
+		★取数失败时沿用上次缓存, 避免首页推荐位突然空白。"""
+		now = time.time()
+		cache = self._YSP_HOME_CACHE
+		if cache["list"] and now - cache["ts"] < 300:
+			return list(cache["list"])
+		try:
+			r = self.categoryContent('电视栏目', '1', True, {'datapa-sort': '最新'})
+			rows = list(r.get('list') or [])
+		except Exception:
+			rows = []
+		if rows:
+			cache["list"] = rows
+			cache["ts"] = now
+		elif cache["list"]:
+			_ysp_diag('home', '本次取数为空, 沿用上次缓存避免首页空白')
+			return list(cache["list"])
+		_ysp_diag('home', '更新推荐 复用电视栏目 pg1, 得到 %d 条' % len(rows))
+		return rows
 	def homeVideoContent(self):
-		result = {
-			'list':[]
-		}
-		return result
+		"""另一类壳子的首页推荐接口, 与 homeContent()['list'] 同源同缓存。
+		title 供支持区块标题的壳子显示, 即截图里的「更新推荐」四个字。"""
+		return {'list': self._ysp_home_recommend(), 'title': '更新推荐'}
 	def _ysp_library_meta(self):
 		"""逐栏目取 lid 详情页, 返回 {lid: (cover, 最新期次日期)}。
 		★动态日期来源: __STATE_video__.payloads.sharevideo.pastCover.coverList[0]
@@ -1146,11 +1370,9 @@ class Spider(Spider):  # 元类 默认的元类 type
 		return self._ysp_lib_cache
 
 	def _ysp_library_content(self, pg, extend):
-		"""「电视栏目」(官网默认「全部」)的可靠数据源: 静态 50 栏目 + 实时封面/日期。
-		修复: ① 不再因 program_library 接口空而"找不到数据";
-		      ② 24 条/页精确分页(50 条共 3 页, 到底即止, 不重复);
-		      ③ 卡片日期逐栏目实时取, 不再写死;
-		      ④ 17 项频道筛选与最新/最热排序在本地生效。"""
+		"""【离线兜底, 非数据源】仅在 program 接口完全失败时调用, 避免整页空白。
+		静态 50 栏目 + 实时封面/日期; 24 条/页精确分页; 17 项频道筛选与排序本地生效。
+		正常情况一律走 _ysp_program_content / program 接口拿官网全量数据。"""
 		meta = self._ysp_library_meta()
 		cat = _ysp_extval(extend, 'datafl-sc')
 		sort = _ysp_extval(extend, 'datapa-sort')
@@ -1197,18 +1419,21 @@ class Spider(Spider):  # 元类 默认的元类 type
 		if tid not in _YSP_TABS:
 			tid = '电视栏目'
 		_pg = int(pg) if str(pg).isdigit() and int(pg) > 0 else 1
-		# ★★「找不到数据」修复: 官网「电视栏目」的「全部」态不走 media/v2/program,
-		#   该接口只认 program_cid_XXX, 传 d11=program_library 返回空 -> 壳子显示找不到数据。
-		#   改回原作者实测可用的 50 栏目清单 + 实时封面/日期 + 本地筛选 + 精确分页。
-		#   纪录片/特别节目仍走 program 接口(这两个在真实环境正常出数据)。
-		if tid == '电视栏目':
-			return self._ysp_library_content(_pg, extend)
+		# ★★依据官网 HAR 定稿: /resource/pool 的「电视栏目」走
+		#   POST csapi.yangshipin.cn/voapi/omsot/media/v2/program,
+		#   filterValue=d11=program_library&itype=<频道>&sort=<排序>, 服务端返回全量并分页。
+		#   旧 py 的 50 条静态清单只是抓包快照(且 HAR 里仅封面就出现 58 个不同 lid),
+		#   "全部"和筛选都不全 —— 已降级为接口彻底失败时的离线兜底, 不再是数据源。
+		#   接口端点/appid/Referer 等 4 处硬差异见 _YSP_API_CFG 注释。
 		_pcid = _YSP_PROG_CID.get(tid, '')
 		if not _pcid:
 			return {'list': [], 'page': _pg, 'pagecount': _pg, 'limit': 24, 'total': 0}
-		_fv = _ysp_build_fv(_pcid, tid, extend)
-		_SIZE = 24  # 网站 /resource/pool 每页固定 24 条
+		_SIZE = 24  # 插件每页展示 24 条(官网滚动加载为逐条, 由 _ysp_program 内部聚合)
+		_fv = _ysp_fv_candidates(_pcid, tid, extend)[0]
 		_progs, _has_more, _total = _ysp_program(_fv, page=_pg, size=_SIZE)
+		if not _progs:
+			_ysp_diag('fallback', 'program 接口无数据 fv=%s, 启用离线清单兜底' % _fv)
+			return self._ysp_library_content(_pg, extend)
 		videos = []
 		for _title, _cid, _cover, _rem, _brief in _progs:
 			# ★修复④: vod_remarks 用接口返回的真实最新期次/更新状态, 不再用静态清单里写死的日期
@@ -2105,27 +2330,53 @@ class Spider(Spider):  # 元类 默认的元类 type
 					jo = json.loads(s)
 				except Exception:
 					continue
-				# exem: 0=正常; 2=带有效vl的档位响应(综艺期次常返回2而非0); 其它(如-12=无此档)丢弃
+				# exem: 0=正常; 2=带有效vl的档位响应; 其它(如-12=无此档)丢弃
 				if jo.get('exem', -1) not in (0, 2):
+					_ysp_diag('playvinfo', 'defn=%s exem=%s 无有效档' % (defn, jo.get('exem')))
 					continue
-				try:
-					vi = jo['vl']['vi'][0]
-					base = vi['ul']['ui'][0]['url'].rstrip('/') + '/'
-					fn = vi['fn']
-					fvkey = vi['fvkey']
-					# 720P 硬底线: 服务端明确给了低于720的高度就丢弃
-					_vh = vi.get('vh') or 0
-					if _vh and _vh < 720:
+				vi_list = (jo.get('vl') or {}).get('vi') or []
+				if not isinstance(vi_list, list):
+					vi_list = []
+				_ysp_diag('playvinfo', 'defn=%s exem=%s vi数组=%s' % (
+					defn, jo.get('exem'),
+					[(x.get('vh'), (x.get('fn') or '')[:30], len(x.get('fvkey') or ''))
+					 for x in vi_list if isinstance(x, dict)]))
+				# ★★本轮核心修复: playvinfo 的 vl.vi 是"同一请求返回的多清晰度/多格式"数组,
+				#   1080P 流常常排在 720P 之后。旧代码只取 vi[0], 于是永远拿第一个(720P)——
+				#   这就是"官网自动1080P、本py只能720P"的最可能根因。
+				#   现遍历全部 vi 元素与全部取流 URL, 按服务端下发的实际 vh 择优。
+				for vi in vi_list:
+					if not isinstance(vi, dict):
 						continue
-				except Exception:
-					continue
-				cand = base + fn + '?vkey=' + fvkey + '&sdtfrom=' + sdtfrom + '&guid=' + guid
-				score = (1 if _vh >= 1080 else 0, _vh, -_idx)
-				if best is None or score > best[0]:
-					best = (score, cand)
-				if _vh >= 1080:
-					return cand           # 已拿到真 1080P, 立即返回, 零额外等待
-				break                      # 该档成功但不足1080P, 换下一档继续找
+					fvkey = vi.get('fvkey') or ''
+					if len(fvkey) < 20:            # 试看片段/无效流, 跳过
+						continue
+					fn = vi.get('fn') or ''
+					if not fn:
+						continue
+					_vh = vi.get('vh') or 0
+					if not _vh:
+						# 有些响应不给 vh, 只靠 fn / defn 里的档位标识区分清晰度
+						_fl = (fn + ' ' + str(vi.get('defn') or '') + ' ' + str(vi.get('fmt') or '')).lower()
+						if '1080' in _fl or 'fhd' in _fl: _vh = 1080
+						elif '720' in _fl or 'shd' in _fl: _vh = 720
+					if _vh and _vh < 720:          # 720P 硬底线
+						continue
+					ui_list = (vi.get('ul') or {}).get('ui') or []
+					if not isinstance(ui_list, list):
+						ui_list = []
+					for ui in ui_list:
+						base = ((ui.get('url') or '') if isinstance(ui, dict) else '').rstrip('/')
+						if not base:
+							continue
+						cand = base + '/' + fn + '?vkey=' + fvkey + '&sdtfrom=' + sdtfrom + '&guid=' + guid
+						score = (1 if _vh >= 1080 else 0, _vh, -_idx)
+						if best is None or score > best[0]:
+							best = (score, cand)
+				if best and best[0][0] == 1:
+					return best[1]                 # 已拿到真 1080P, 立即返回
+				break                              # 该域已给出有效响应 -> 换下一档位继续找
+		_ysp_diag('playvinfo', '最终择优 vh=%s' % (best[0][1] if best else 'NONE'))
 		return best[1] if best else ''
 	# ============ 选集VIP轻量判定(单次playvinfo, exem判据, 约0.7s) ============
 	def _ysp_is_vip(self, vid, timeout=5):

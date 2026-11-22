@@ -247,6 +247,38 @@ NBA_RECENT_DAYS = 3           # 含当天：今天 / 昨天 / 前天
 NBA_RECENT_KEEP_NODATE = False
 _TODAY_OVERRIDE = None        # 仅回归测试注入用；设备端永远是 None=当天
 
+# ======================================================================
+# ★★ 壳子预览页「更新推荐」= 与【NBA录像】分类栏下显示完全一致
+#   用户确认：近三天「国语回放」场次不多，真机抓详情不慢 → 推荐页不再
+#   图省事跳过校验，直接复用分类页的完整口径（近三天 + 国语回放校验 +
+#   排除集锦/精华/十佳），两边逐条一致，不会再混进腾讯原声/腾讯国语。
+#
+#   实现：homeVideoContent 直接走 categoryContent("nba", 1)；分类页把
+#   最终结果存进 _G["nba_final"]，推荐页优先复用它 → 点过分类后零请求。
+#   ★★ 分类刷新后首页必须跟着更新：分类页每次成功刷新都会覆盖
+#   nba_final 并把 nba_rev +1；推荐页【每次都以 nba_final 为准】，
+#   不再拿自己那份旧快照短路返回，所以分类一更新、首页下次打开就是新的。
+#   home_rev 记录首页同步到的版本号，源自检里可看到是否落后。
+#   冷启动没缓存时才自己算一遍，且用 _G["home_sync"] 让栏目页「抓到即停」
+#   （不为了挑条目最多去盲试全部兜底路径），把请求数压到最低。
+#   断网/分类页失败 → 不增加版本号、保留上一次结果，首页不会被清空；
+#   homeContent 的 4 个分类完全不受影响。
+#
+#   若真机上仍觉得慢：
+#     · HOME_NBA_CACHE_ONLY=True → 纯零网络，只在点过 NBA 分类后才有推荐
+#     · HOME_SHOW_NBA=False     → 回到空推荐
+#     · HOME_NBA_SYNC_CAT=False → 退回旧轻量模式（不抓详情，但会混腾讯卡）
+# ======================================================================
+HOME_SHOW_NBA = True
+HOME_NBA_SYNC_CAT = True      # ★ 默认：与 NBA 分类页完全一致（含国语回放校验）
+HOME_NBA_LIMIT = 0            # 0 = 不裁剪，完全跟随分类页；>0 才截断
+HOME_NBA_CACHE_ONLY = False   # True=绝不抓网，只复用已缓存的分类结果
+
+# 下面两个是旧轻量模式的兼容变量；SYNC_CAT=True 时由分类页的
+# NBA_RECENT_ON / NBA_ONLY_GUOYU 决定，这里不生效，保留避免旧配置报错。
+HOME_NBA_TIMEOUT = 2
+HOME_NBA_RECENT = True
+
 # 静态分类（与站点导航一致）；第三项是导航学习失败时的兜底路径
 _CATS = [
     ("today",    "今日视频", ""),
@@ -357,7 +389,13 @@ _G = {"home": None, "learned": False, "cat_url": {},
       "shell_turn": {},      # 非官方页：0→先壳 / 1→下轮试订阅parses
       "official_turn": {},   # 兼容保留
       "official_trace": [],  # ★ 上一次官方线路「还原真实官方页」的链路日志
-      "guoyu_cache": {}}    # ★ 详情页是否有「国语回放」分组的缓存
+      "guoyu_cache": {},    # ★ 详情页是否有「国语回放」分组的缓存
+      "nba_page": None,     # ★ 已抓到的 NBA 栏目页（首页推荐复用，零重复请求）
+      "nba_final": None,    # ★ NBA 分类页【最终列表】→ 推荐页逐条复用，完全一致
+      "nba_rev": 0,        # ★ NBA 分类页成功刷新次数（每次 +1）
+      "home_rev": -1,      # ★ 「更新推荐」上次同步到的分类版本号
+      "home_sync": False,   # ★ 推荐页调用中：栏目页抓到即停，少发请求
+      "home_nba": None}     # ★ 「更新推荐」上次返回快照（仅供自检显示）
 
 
 # ======================================================================
@@ -1713,9 +1751,70 @@ class Spider(Spider):
         return result
 
     def homeVideoContent(self):
-        # ★ 按用户要求：首页「更新推荐」不放诊断/提示卡片。
-        #   分类由 homeContent 的 class 提供，空推荐列表不会导致分类消失。
-        return {'list': []}
+        """★ 壳子预览页「更新推荐」与【NBA录像】分类栏下显示完全一致。
+
+        直接复用 categoryContent("nba", 1) 的最终列表：近三天、国语回放
+        校验、排除集锦/精华/十佳、顺序、备注全部一致，不会再混入腾讯
+        原声/国语卡片。
+
+        ★★ 分类更新 → 首页跟着更新：分类页每次成功刷新都会覆盖
+        _G["nba_final"] 并把 nba_rev +1。本方法【每次都以 nba_final 为
+        唯一真相】，不用自己那份旧快照短路返回，所以点一次分类刷新，
+        再回首页就是新列表；同步版本号记在 home_rev，源自检可查。
+        读缓存是纯内存、零网络请求，不会拖慢首页。
+        冷启动没缓存时才自己算一遍；断网/分类失败不清空已有结果。
+        """
+        if not HOME_SHOW_NBA:
+            return {'list': []}
+        items = []
+        try:
+            if HOME_NBA_SYNC_CAT:
+                final = _G.get("nba_final")
+                if final is None:
+                    if HOME_NBA_CACHE_ONLY:
+                        items = []
+                    else:
+                        # ★ 走分类页同一套口径；home_sync 让栏目页抓到即停
+                        _G["home_sync"] = True
+                        try:
+                            r = self.categoryContent("nba", 1, False, {})
+                            items = list(r.get("list") or [])
+                        finally:
+                            _G["home_sync"] = False
+                        # 分类页刚算完，nba_final 可能已是最新，再对齐一次
+                        if _G.get("nba_final") is not None:
+                            items = list(_G["nba_final"])
+                else:
+                    items = list(final)      # ★ 永远取分类页最新结果、零请求
+                if HOME_NBA_LIMIT and HOME_NBA_LIMIT > 0:
+                    items = items[:HOME_NBA_LIMIT]
+            else:
+                # 旧轻量模式（兼容应急）：栏目页缓存也会随分类刷新更新
+                final = _G.get("nba_page")
+                if final:
+                    html, base, _u = final
+                elif HOME_NBA_CACHE_ONLY:
+                    html, base = "", ""
+                else:
+                    html, base = "", ""
+                    for p in _CAT_FALLBACKS.get("nba", []):
+                        cu = _abs(p, SITE + "/")
+                        h0, f0 = _fetch(cu, ref=SITE + "/",
+                                        timeout=HOME_NBA_TIMEOUT, alt=False)
+                        if h0 and self._items(h0, f0 or cu):
+                            html, base = h0, (f0 or cu)
+                            break
+                if html:
+                    items = self._items(html, base)
+                    if HOME_NBA_RECENT and NBA_RECENT_ON:
+                        items = [x for x in items if _recent_ok(x["vod_name"])]
+                    items = items[:max(HOME_NBA_LIMIT, 12)]
+        except Exception:
+            # 异常时保留上一次快照，避免首页突然被清空
+            items = list(_G.get("home_nba") or [])
+        _G["home_nba"] = items
+        _G["home_rev"] = _G.get("nba_rev", 0)
+        return {'list': items}
 
     # ------------------------------------------------------------------
     def _home(self):
@@ -1936,11 +2035,17 @@ class Spider(Spider):
                     best_html, best_final, best_url, best_n = h2, (f2 or cu), cu, n2
                 if n2 >= 12:        # 够多就不再试后面的，省时间
                     break
+                # ★ 推荐页调用：抓到就停，别为了「挑条目最多」盲试兜底路径
+                if _G.get("home_sync") and n2 > 0:
+                    break
             url = u0 or ""
             if best_html:
                 html, final = best_html, best_final
                 url = _canon_cat_url(best_url, html, final)
                 _G["cat_url"][tid] = url
+                # ★ 点过 NBA 分类后，「更新推荐」直接复用这份栏目页，零网络。
+                if tid == "nba" and pg == 1:
+                    _G["nba_page"] = (html, final, url)
 
             # ★★ 分页：旧版第一页 pagecount 恒为 1，壳根本不翻页，
             #    只见第一页 → 足球录像比原站少很多。现在支持逐页翻到底。
@@ -1991,6 +2096,14 @@ class Spider(Spider):
             result.update({'list': items[:120],
                            'limit': max(len(items), 24),
                            'total': max(len(items), 24)})
+            # ★ 「更新推荐」逐条复用这份最终列表（含国语回放校验结果），
+            #   保证两边完全一致；点过分类后首页零请求。
+            # ★★ 每次分类成功刷新都覆盖并 +1 → 首页下次打开必然跟着更新。
+            #   只有走到这里(栏目页抓到、整套过滤跑完)才算有效刷新；
+            #   断网/异常走 except，不动版本号也不清首页。
+            if tid == "nba" and pg == 1 and best_html:
+                _G["nba_final"] = list(result["list"])
+                _G["nba_rev"] = _G.get("nba_rev", 0) + 1
         except Exception:
             result['list'] = []
         return result
@@ -2053,7 +2166,29 @@ class Spider(Spider):
                         ("保守保留" if NBA_RECENT_KEEP_NODATE else "不保留"),
                      "  只作用于: " + ", ".join(sorted(RECENT_ONLY_CATS)),
                      "  条目少了 → 国语回放校验只需抓几条详情，分类页变快",
-                     "首页: homeContent 零网络请求 / 无 __init__", "",
+                     "★ 预览页「更新推荐」: " +
+                        (("与 NBA录像 分类完全一致 ✅ (近三天+国语回放校验)" if
+                          HOME_NBA_SYNC_CAT else "旧轻量模式(会混腾讯卡)")
+                         if HOME_SHOW_NBA else "关闭(空列表)"),
+                     "  ★ 不再混入腾讯原声/腾讯国语（口径与分类页相同）",
+                     "  纯缓存零网络: " +
+                        ("开(只在点过分类后显示)" if HOME_NBA_CACHE_ONLY
+                         else "关(冷启动自己算一遍)") +
+                        " / 条数上限: " +
+                        ("跟随分类页" if not HOME_NBA_LIMIT
+                         else str(HOME_NBA_LIMIT)),
+                     "  ★ 分类刷新次数: %d / 首页已同步到第 %d 次 %s" %
+                        (_G.get("nba_rev", 0), _G.get("home_rev", -1),
+                         "✅ 已同步" if
+                         _G.get("home_rev", -1) >= _G.get("nba_rev", 0)
+                         else "⏳ 回首页即自动同步"),
+                     "  ★ 分类更新后首页会跟着变（每次以分类最终列表为准）",
+                     "  分类页最终列表缓存: %d 条 / 已缓存推荐: %d 条" %
+                        (len(_G["nba_final"] or [])
+                         if _G["nba_final"] is not None else 0,
+                         len(_G["home_nba"] or [])
+                         if _G["home_nba"] is not None else 0),
+                     "首页分类: homeContent 零网络请求 / 无 __init__", "",
                      "【微博取流配置】",
                      "WB_COOKIE: " + ("已填 ✅" if WB_COOKIE else "未填 ❌"),
                      "", "【解析来源 = 你填在 OK影视 的订阅列表】",

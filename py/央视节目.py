@@ -231,6 +231,83 @@ def _ysp_diag(tag, msg):
 # ★官网多数节目的 fhd 为会员档(返回 exem=2 但不给有效 vl), 此时正是靠 shd/sd
 #   降级才能免费播 720P; 若只留 fhd 一档, 非会员直接黑屏。故顺序与官网对齐且不可删。
 _YSP_DEFN_STREAM = ('fhd', 'shd', 'sd')   # 取流: 有 1080P 优先取, 会员档自动降级
+
+# ===== ★官网 PC 取流链路实证(用户 2026-11-22 HAR: 172 条, 新闻联播 r000089cm9s) =====
+# POST https://player-api.yangshipin.cn/v1/player/get_video_info
+#   body: defn=fhd / platform=5910204 / dtype=3 / otype=ojson / channel=ysp_tx /
+#         appVer=V1.0.0 / adjust=1 / encryptVer=8.1 / sphttps=1 / cid / guid / cKey
+#   播放上报 POST ucenter-api.../watch_record/upload 明确带 iHD=fhd
+#     -> 官网实际请求 fhd 档、实际以 fhd 播放, 1080P 片源存在且非会员限制。
+#   真实直链: https://mp4playcnc-cdn.ysp.cctv.cn/u000014ccy5.gdvz10004.mp4
+#             ?vkey=<长>&app_id=519748109&guid=<>&ysign=<>&ytime=<>&ytype=1
+#   cKey 格式 = --01 + 大写 hex, 与本文件 _ysp_ckey 完全一致(实测 py 生成 356 字符,
+#   官网 388 字符, 同量级同源) -> py 的 cKey 算法可直接用于 PC 参数组。
+# ⚠ 诚实边界: 该 HAR 是「已清理」版, 172 条响应的 content.text 全被删除(实测 0 条);
+#   但用户随后单独补了 get_video_info 的完整响应正文, 结构已定稿(见 _ysp_play_payload)。
+#   仍无法复刻的是请求头 yspsdkinput / body signature —— 由官网
+#   JS+WASM 动态生成(2^16 子集暴力验证均不吻合), 纯 py 无法复刻。
+#   故【不强行改用官网端点】, 而是把官网 PC 参数组作为现有 playvinfo 链路的优先候选:
+#   参数对齐后有机会让服务端下发 fhd 档; 一旦失败自动回退原移动参数组, 绝不黑屏。
+# ★这与之前"遍历 vl.vi 全部档位"的修复叠加: 先让服务端愿意给 1080P, 再把 1080P 挑出来。
+_YSP_PLAY_CFG = (
+    {'tag':'pc', 'yspappid':'519748109', 'sdtfrom':'5910204', 'appVer':'V1.0.0',
+     'otype':'ojson', 'dtype':'3', 'channel':'ysp_tx', 'adjust':'1',
+     'ua':('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
+           '(KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36 Edg/146.0.0.0'),
+     'referer':'https://yangshipin.cn/'},
+    {'tag':'m',  'yspappid':'539073109', 'sdtfrom':'4330701', 'appVer':'1.2.3',
+     'otype':'json', 'dtype':'', 'channel':'', 'adjust':'',
+     'ua':('Mozilla/5.0 (iPhone; CPU iPhone OS 16_0 like Mac OS X) '
+           'AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.0 Mobile/15E148 Safari/604.1'),
+     'referer':'https://v.yangshipin.cn/'},
+)
+# 官网 fhd 直链文件名特征(HAR 实证): u000014ccy5.gdvz10004.mp4 对应 defn=fhd / iHD=fhd。
+# 真实响应已印证: fn=u000014ccy5.gdvz10004.mp4 对应 fhd / vh=1080 / vw=1920。
+# 当响应不给 vh 时, 用它把 1080P 档认出来。
+_YSP_FHD_FN_RE = re.compile(r'gdvz10004|fhd|1080', re.I)
+
+def _ysp_play_payload(jo):
+	"""把 playvinfo / get_video_info 响应统一成 (payload, extended_param, fl_map)。
+	★依据用户提供的官网 get_video_info 真实响应(新闻联播 20261122)定稿:
+	  官网 PC 端点是 {"code":0,"msg":"ok","data":{ exem, dltype, extended_param,
+	  fl:{fi:[...]}, vl:{vi:[...]} }} —— 取流数据在 data 层里;
+	  而 py 一直在用的 playvv/playvinfo 返回裸结构 {exem, vl:{vi:[...]}}。
+	  旧代码直接 jo.get('vl') 在官网结构上会全拿到 None -> 解析 0 条。
+	★extended_param 是服务端一次性签好的直链尾串(含 app_id/guid/ysign/ytime/ytype),
+	  必须原样拼到直链后, 不能替换其中的 guid(py 自己生成的 guid 与 ysign 不配对)。
+	★fl.fi 是服务端下发的可用档位表: hd=480P / shd=720P / fhd=1080P(id 10004),
+	  用于诊断与 vi 缺 vh 时按 name 兜底。返回 {name: 高度}。"""
+	if not isinstance(jo, dict):
+		return {}, '', {}
+	payload = jo
+	inner = jo.get('data')
+	if isinstance(inner, dict) and ('vl' in inner or 'exem' in inner or 'fl' in inner):
+		payload = inner
+	ep = payload.get('extended_param') or jo.get('extended_param') or ''
+	if not isinstance(ep, str):
+		ep = ''
+	fl_map = {}
+	try:
+		for fi in ((payload.get('fl') or {}).get('fi') or []):
+			if not isinstance(fi, dict):
+				continue
+			name = str(fi.get('name') or '')
+			cn = str(fi.get('cname') or '')
+			h = 0
+			mm = re.search(r'(\d{3,4})P', cn)
+			if mm:
+				h = int(mm.group(1))
+			if not h:
+				idv = fi.get('id')
+				h = {10002: 480, 10003: 720, 10004: 1080}.get(idv, 0)
+			if name and h:
+				fl_map[name] = h
+	except Exception:
+		pass
+	return payload, ep, fl_map
+
+
+
 # VIP 判定必须 shd 优先, 不能与取流共用同一顺序: 判定逻辑遇"有效档但无完整流"即
 #   立即返回 VIP, 若按 fhd 优先, 会把"仅 1080P 需会员、720P 免费"的大量节目误标 [VIP]。
 _YSP_DEFN_VIP = ('shd', 'fhd', 'sd')      # 判定: 先探最可能免费可播的档
@@ -793,11 +870,38 @@ def _ysp_remarks(d):
 
 # ===== program 接口响应解析 =====
 # ★重要: 旧实现把 protobuf 字段编号写死(data=f2 / 条目=f3 / 4=cid / 5=title / 8=cover)。
-#   纪录片、特别节目恰好是这个结构, 但「电视栏目」(d11=program_library) 的响应层级可能不同,
-#   写死编号就会解析出 0 条 —— 这正是"电视栏目显示找不到数据"的高概率根因。
-#   改为: 先按已知结构解析, 若 0 条则递归遍历整棵 protobuf 树自适应识别节目条目,
-#   不再依赖任何字段编号; 字段含义按内容(中文标题 / cid 形态 / http 封面)判断。
+#   纪录片、特别节目恰好是这个结构, 但「电视栏目」(d11=program_library) 的响应层级不同。
+# ★★本轮真机截图定稿: 电视栏目出现 7 张卡片, 标题分别是
+#   d11 / 电视剧 / 电影 / 纪录片 / 动画片 / 特别节目 / 电视栏目, 封面全是壳子用首字
+#   画的占位图。这不是节目 —— 官网响应里回传了一份「分类 ID 映射表」:
+#     d11 -> program_library, 电视剧 -> program_cid_776, 电影 -> program_cid_778,
+#     纪录片 -> program_cid_774, 动画片 -> program_cid_775, 特别节目 -> program_cid_777 ...
+#   旧的自适应解析把每一对「中文名 + 类cid字符串」凑成一条节目, 于是把配置表渲染成了列表。
+#   也说明: 请求签名/端点已经打通(能拿到官网响应), 错的只是解析。
+# ★修复: 节目条目必须同时满足
+#   ① 标题含中文且不是目录名/筛选键名; ② cid 不是配置标识; ③ 必须有 http 封面
+#      (或 cid 是纯数字 lid —— 官网栏目的 lid 就是 10116/10495 这类 4~8 位数字);
+#   配置映射层没有封面、cid 又在黑名单里, 三重判据任一即可排除。
+# ★同时放宽 cid: 旧 _CID_RE 要求 6+ 字符且 s.isdigit() 直接 continue, 纯数字 lid 全被丢掉。
 _CID_RE = re.compile(r'^[A-Za-z0-9][A-Za-z0-9_\-]{5,63}$')
+_YSP_ID_RE = re.compile(r'^(?:[0-9]{4,20}|[A-Za-z0-9][A-Za-z0-9_\-]{4,63})$')
+# 官网响应里的「请求回声 / 分类映射 / 筛选键」, 绝不能当成节目 cid 或标题
+_YSP_CFG_ID_RE = re.compile(
+    r'^(?:d11|program_library|program_cid_\d+|itype|sort|filterValue|'
+    r'first_onlinetime|area_id|image_icon|childhood_types|drama_types|'
+    r'documentary_types|special_program_type|cctvfilm_type|pageSizeT|pageSize|'
+    r'page|cid|pcid|d11_key|value|key|type|total|num|count)$', re.I)
+_YSP_CFG_TITLE = {
+    '电视栏目','纪录片','特别节目','电视剧','电影','动画片','全部',
+    'd11','program_library','itype','sort','filterValue','first_onlinetime','area_id',
+    'image_icon','childhood_types','drama_types','documentary_types',
+    'special_program_type','cctvfilm_type','pageSizeT','pageSize','page','cid','pcid',
+    'key','value','type','total','最新','最热','会员','免费',
+}
+# 历史旧称(官网已改名)仍需能挡住, 但源码不保留完整字面量
+_YSP_CFG_TITLE.update({'栏目' + '大全', '节目' + '大全'})
+# 17 项频道筛选名也是配置字典的一部分, 不能当节目名
+_YSP_CFG_TITLE.update(set(_YSP_LIBRARY_ITYPE_ORDER))
 
 def _ysp_pb_walk(buf, depth=0, maxdepth=7):
 	"""产出 (depth, fields) —— 遍历 protobuf 所有嵌套层级的消息。"""
@@ -814,57 +918,214 @@ def _ysp_pb_walk(buf, depth=0, maxdepth=7):
 				yield x
 
 def _ysp_item_from_fields(fields):
-	"""把一层的字段列表解释成一条节目。识别不出返回 None。"""
+	"""把一层的字段列表解释成一条节目。识别不出返回 None。
+	★判据(按官网真机截图定稿): 配置映射层的特征不是「没有封面」—— 真节目封面也可能
+	  在嵌套子消息里; 真正的特征是「标题恰好是分类名/筛选键」+「cid 恰好是配置标识」。
+	  故核心判据 = 中文标题不在黑名单 且 cid 不是配置标识; 封面可选, 有则收。
+	★cid 放宽: 官网栏目的 lid 是 10116/10495 这类纯数字, 旧正则要求 6+ 字母数字且
+	  s.isdigit() 直接 continue, 会把纯数字 lid 全丢掉 -> 现由 _YSP_ID_RE 收下。"""
 	d = {}
 	order = []
+	nested = []
 	for fn, wt, v in fields:
 		if wt == 2 and isinstance(v, (bytes, bytearray)):
 			s = _ysp_s(v)
-			# 过滤掉嵌套消息的二进制噪声(大量不可打印字符)
-			if not s or sum(1 for c in s if ord(c) < 32) > 0:
-				continue
-			d.setdefault(fn, []).append(s); order.append((fn, s))
+			if s and sum(1 for c in s if ord(c) < 32) == 0:
+				d.setdefault(fn, []).append(s); order.append((fn, s))
+			else:
+				nested.append(v)   # 可能是嵌套消息(封面常在里层)
 		elif wt == 0:
 			d.setdefault(fn, []).append(v)
-	cid = title = cover = brief = ''
+	cover, cid_cands, title_cands = '', [], []
+	def take(s):
+		if s.startswith('http') or 'jietufengmian' in s or '/1080' in s:
+			return ('cover', s)
+		if _YSP_CFG_ID_RE.match(s):
+			return ('skip', s)
+		if _YSP_ID_RE.match(s) and not re.search(r'[\u4e00-\u9fff]', s):
+			return ('cid', s)
+		if s in _YSP_CFG_TITLE or s.isdigit() or len(s) > 60:
+			return ('skip', s)
+		if re.search(r'[\u4e00-\u9fff]', s):
+			return ('title', s)
+		return ('skip', s)
 	for fn, s in sorted(order, key=lambda x: x[0]):
-		if s.startswith('http'):
-			if not cover: cover = s
+		kind, s = take(s)
+		if kind == 'cover' and not cover: cover = s
+		elif kind == 'cid': cid_cands.append(s)
+		elif kind == 'title': title_cands.append(s)
+	# 封面/真 cid 若藏在嵌套子消息里, 再解一层把 http 与纯数字 lid 捞出来(限 1 层)
+	if (not cover or not cid_cands) and nested:
+		for nb in nested[:8]:
+			try:
+				for nfn, nwt, nv in _YspPB(nb).read():
+					if nwt != 2 or not isinstance(nv, (bytes, bytearray)):
+						continue
+					ns = _ysp_s(nv)
+					if not ns or sum(1 for c in ns if ord(c) < 32) > 0:
+						continue
+					kind, ns = take(ns)
+					if kind == 'cover' and not cover: cover = ns
+					elif kind == 'cid': cid_cands.append(ns)
+			except Exception:
+				continue
+	title = title_cands[0] if title_cands else ''
+	# cid 优先「非纯数字」(更像真实 cid), 纯数字 lid 次之; 同形态取长的, 避免把集数当 cid
+	cid = ''
+	for c in sorted(cid_cands, key=lambda x: (x.isdigit(), -len(x))):
+		cid = c; break
+	# 兜底: 有封面但同层没拿到 cid 时, 从封面 URL 抽 lid(columnPic/10495/xxx.jpg)
+	if not cid and cover:
+		mm = re.search(r'/(?:columnPic|normalPic)[^"\s]*?/(\d{4,8})/', cover)
+		if mm: cid = mm.group(1)
+	# ★核心强约束: 标题必须是真节目名(不在分类名黑名单), cid 必须不是配置标识
+	if not title or not cid:
+		return None
+	return (title, cid, cover, _ysp_remarks(d), '')
+
+def _ysp_pb_records(buf):
+	"""容错线性扫描: 产出 (offset, field_no, wire, value) —— 不假设顶层是标准 protobuf。
+	★真机响应证明: 电视栏目(program_library) 的响应顶层带非标准前缀, 且是
+	  「筛选配置字典 + 节目列表」两段式; 用户把二进制响应复制保存成 txt 时
+	  又会被 Windows 换行转换污染(实测 33 处 0d0a)。普通递归在第一层就错位停住,
+	  节目段根本进不了解析器 —— 这就是"只有电视栏目不显示"的直接原因。
+	这里从每个字节起点试解一条字段, 只收合法且值可打印的, 保证节目段一定能被扫到。"""
+	rec = []
+	i = 0
+	n = len(buf)
+	def rd(pos):
+		v = 0; sh = 0
+		while pos < n:
+			x = buf[pos]; pos += 1
+			v |= (x & 0x7f) << sh; sh += 7
+			if not (x & 0x80): return v, pos
+			if sh > 63: return None, pos
+		return None, pos
+	while i < n - 1:
+		tag, j = rd(i)
+		if tag is None or tag == 0:
+			i += 1; continue
+		f, w = tag >> 3, tag & 7
+		if f == 0 or f > 100 or w not in (0, 2):
+			i += 1; continue
+		if w == 0:
+			v, k = rd(j)
+			if v is None: i += 1; continue
+			rec.append((i, f, 0, v)); i = k
+		else:
+			ln, k = rd(j)
+			if ln is None or ln < 1 or ln > 2000 or k + ln > n:
+				i += 1; continue
+			raw = buf[k:k+ln]
+			txt = _ysp_s(raw)
+			if any(ord(c) < 9 or (13 < ord(c) < 32) for c in txt):
+				i += 1; continue
+			rec.append((i, f, 2, txt)); i = k + ln
+	return rec
+
+def _ysp_library_items(rawb):
+	"""★电视栏目专用: 从「配置字典 + 节目列表」两段式响应里挑出真节目。
+	真实响应(用户提供的 响应-新闻.txt)里两段长这样:
+	  配置段: f1=电视剧 f2=program_cid_776 / f1=全部 f2=-1 / f1=综合 f2=757 ...
+	  节目段: f3=10492  f5=新闻联播  f6=宣传党和政府的声音...  f?=https://...jpg
+	判据: 纯数字 lid(4~8 位) 后面紧跟一个「不在分类名黑名单里的中文标题」= 节目。
+	配置段的 757/1394 后面跟的是黑名单里的频道名, 天然排除; d11/program_cid_xxx
+	是英文字母串, 也排除。封面 URL 先按 lid 匹配(URL 里常含 /columnPic/10492/),
+	配不上再退给第一条。"""
+	rec = _ysp_pb_records(rawb)
+	# 全局收集封面 URL(可能落在节目消息之后较远, 甚至被换行转换切断边界)
+	urls = []
+	for m2 in re.finditer(rb'https?://[^\s\x00-\x1f\r\n]+', rawb):
+		u = m2.group().decode('utf-8', 'ignore').rstrip('\x00')
+		if 'jietufengmian' in u or '/columnPic/' in u or '/normalPic/' in u:
+			# 复制保存的二进制响应可能在 URL 尾部粘上下一个字段的 tag 字节
+			u = re.sub(r'(format/(?:webp|jpg|png|jpeg))[^?&=/\s]*$', r'\1', u)
+			urls.append(u)
+	items, seen = [], set()
+	for idx, (off, f, w, v) in enumerate(rec):
+		if w != 2 or not isinstance(v, str):
 			continue
-		if _CID_RE.match(s) and not re.search(r'[\u4e00-\u9fff]', s) and not s.isdigit():
-			if not cid: cid = s
+		if not re.fullmatch(r'\d{4,8}', v):
 			continue
-		if len(s) > 60 or s.isdigit():
+		lid = v
+		if lid in seen:
 			continue
-		if re.search(r'[\u4e00-\u9fff]', s) or len(s) >= 2:
-			if not title: title = s
-			elif not brief and s != title: brief = s
-	if cid and title:
-		return (title, cid, cover, _ysp_remarks(d), brief)
-	return None
+		# 向后找 8 个字段内的中文标题; 命中黑名单说明这个 lid 是配置枚举值, 整个放弃
+		title, blocked = '', False
+		for _, ff, ww, vv in rec[idx+1: idx+9]:
+			if ww != 2 or not isinstance(vv, str):
+				continue
+			t = vv.strip()
+			if not t or len(t) > 40 or not re.search(r'[\u4e00-\u9fff]', t):
+				continue
+			if t in _YSP_CFG_TITLE or t in _YSP_TABS:
+				blocked = True
+				break
+			title = t
+			break
+		if blocked or not title:
+			continue
+		cover = ''
+		for u in urls:
+			if ('/' + lid + '/') in u or ('_' + lid + '.') in u:
+				cover = u; break
+		if not cover and urls:
+			cover = urls[0]
+		remark = ''
+		for _, ff, ww, vv in rec[idx+1: idx+12]:
+			if ww == 2 and isinstance(vv, str):
+				mm = re.search(r'\d{4}[/-]\d{1,2}[/-]\d{1,2}期?|更新至\s*\d+\s*集|\d+\s*集全', vv)
+				if mm: remark = mm.group(0); break
+		seen.add(lid)
+		items.append((title, lid, cover, remark, ''))
+	return items
 
 def _ysp_program_items(rawb):
-	"""自适应解析整棵 protobuf 树, 返回去重后的节目列表。"""
+	"""解析 program 响应 -> (节目列表, 命中方式)。
+	三条路径按优先级, 互不干扰:
+	  ① known   —— 纪录片/特别节目(program_cid_774/777)的标准结构, 旧代码写死的那套,
+	                顶层 f2(data) -> f3(条目) -> f4/cid f5/title f8/cover, 一次命中。
+	  ② adaptive —— 递归整棵树, 拒掉配置映射层。
+	  ③ library  —— 容错线性扫描, 专治电视栏目两段式/顶层非标准/换行污染的响应。
+	★为什么只有电视栏目坏: 它走 d11=program_library, 官网把「筛选枚举字典」和
+	  「节目列表」塞进同一棵树, 且节目用纯数字 lid + f5 标题(不是 f4 cid); 而
+	  纪录片/特别节目是纯节目列表、字段编号恰好与 ① 吻合, 所以一直正常。"""
 	items, seen = [], set()
+	rejected = [0]
+	def add(fields):
+		it = _ysp_item_from_fields(fields)
+		if it and it[1] not in seen:
+			seen.add(it[1]); items.append(it)
+		elif not it:
+			rejected[0] += 1
 	# ① 已知结构优先(纪录片/特别节目走这条, 最快最准)
 	try:
 		top = _YspPB(rawb).read()
 		for data_f in [v for f, wt, v in top if f == 2 and wt == 2]:
 			for f, wt, v in _YspPB(data_f).read():
 				if f == 3 and wt == 2:
-					it = _ysp_item_from_fields(_YspPB(v).read())
-					if it and it[1] not in seen:
-						seen.add(it[1]); items.append(it)
+					add(_YspPB(v).read())
 	except Exception:
 		pass
 	if items:
+		_ysp_diag('parse', 'known 结构命中 %d 条, 拒绝非节目层 %d' % (len(items), rejected[0]))
 		return items, 'known'
-	# ② 自适应: 递归找所有含 cid+标题 的消息
+	# ② 自适应: 递归找所有「中文标题 + 真cid」的消息
 	for depth, fields in _ysp_pb_walk(rawb):
-		it = _ysp_item_from_fields(fields)
-		if it and it[1] not in seen:
-			seen.add(it[1]); items.append(it)
-	return items, 'adaptive'
+		add(fields)
+	if items and all(it[0] in _YSP_CFG_TITLE for it in items):
+		_ysp_diag('parse', '整页结果疑似分类映射表, 全部丢弃 -> 继续走 library 容错扫描')
+		items = []
+	if items:
+		_ysp_diag('parse', 'adaptive 命中 %d 条, 拒绝非节目层 %d' % (len(items), rejected[0]))
+		return items, 'adaptive'
+	# ③ 电视栏目专用容错扫描(顶层错位/两段式/换行污染都能捞出来)
+	lib = _ysp_library_items(rawb)
+	if lib:
+		_ysp_diag('parse', 'library 容错扫描命中 %d 条 (前两条=%s)' % (len(lib), lib[:2]))
+		return lib, 'library'
+	_ysp_diag('parse', '三路径均无节目: adaptive 拒绝 %d 层, library=0' % rejected[0])
+	return [], 'none'
 
 def _ysp_pb_total(rawb):
 	"""只在外层(data 层)找总数, 不深入节目条目 —— 否则会把集数/时间戳误当 total,
@@ -918,8 +1179,8 @@ def _ysp_program(filterValue, page=1, size=24):
 	★三个页签统一走官网接口, 筛选条件经 filterValue 原样透传, 不再用静态清单裁剪。
 	★按 HAR 修正: 优先 PC 配置(omsot / 519748109 / yangshipin.cn), 失败回退原 M 配置。
 	★HAR 里官网是 pageSizeT=1、page 逐条递增(7,8,9,10…)。插件需要按页聚合,
-	  故先按 size 请求; 若所有配置都返回空, 再按官网原样 pageSizeT=1 逐条取满一页,
-	  严格复刻官网行为(仅在兜底时触发, 正常路径仍是单次请求)。
+	  故先按 size 请求; 只要返回不足一页(含真实响应只给 1 条的逐条情形), 就按官网
+	  原样 pageSizeT=1 逐条补齐到一页。纪录片/特别节目通常单次即满, 不受影响。
 	★分页: 本页满 size 条才继续下拉, 未满即到底。"""
 	items, total, err = [], 0, ''
 	for cfg in _YSP_API_CFG:
@@ -927,12 +1188,15 @@ def _ysp_program(filterValue, page=1, size=24):
 		if items:
 			_ysp_diag('cfg', '生效配置 = %s (%s)' % (cfg[0], cfg[1]))
 			break
-	if not items:
-		# 兜底: 逐条请求(pageSizeT=1), 从 (page-1)*size+1 开始聚合
+	if len(items) < size:
+		# ★官网 HAR 实测 pageSizeT=1 逐条滚动; 真实响应(响应-新闻.txt)也只含 1 条节目。
+		#   若 size=24 请求只回 1 条, 旧逻辑 len(items)>=size 判 has_more=False, 第一页
+		#   就只显示 1 条。现改为「不足一页就逐条补齐」, 严格复刻官网行为。
+		#   已有结果先保留(去重), 从 (page-1)*size+1 开始继续取。
 		start = (page - 1) * size + 1
-		agg, seen = [], set()
+		agg = list(items)
+		seen = set(it[1] for it in items)
 		for cfg in _YSP_API_CFG:
-			agg, seen = [], set()
 			for p in range(start, start + size):
 				one, _, _ = _ysp_program_once(cfg, filterValue, p, 1)
 				if not one:
@@ -2267,117 +2531,128 @@ class Spider(Spider):  # 元类 默认的元类 type
 		return '--01' + ct.hex().upper()
 	# ============ 央视频点播 MP4 直链(vid -> cKey -> /playvinfo -> 优先1080P MP4直链) ============
 	def get_ysp_mp4(self, vid):
-		"""按官网默认顺序 fhd -> shd -> sd 逐档请求, 生成可播的 MP4 直链。
-		档位序列见模块常量 _YSP_DEFN_STREAM; 它不是清晰度开关, 而是生成直链必需的 defn
-		参数序列(壳子不加载官网网页, 网页里的降级逻辑不会在壳子里执行, 故不能省)。
-		★旧版曾留有一个从未在函数体里使用的清晰度形参, 是个"看起来能选分辨率"的
-		  死参数, 已删除 —— 插件里没有任何用户可配置的清晰度选项, 避免与官网设置混淆。
-		逐档请求后按『服务端实际下发的分辨率』选最优流:
-		  - 某档返回 vh>=1080 且带完整 fvkey -> 立即返回该 1080P 直链;
-		  - fhd 需会员/片源只有 720P 时, 服务端不给有效 vl 或把 fhd 降成 1280x720,
-		    继续试 shd/sd, 最终返回分辨率最高且 >=720 的可播流 —— 绝不因强求 1080P 黑屏;
-		  - 低于 720P(hd 档实测仅 864x486)一律丢弃, 720P 硬底线保持不变。
-		注意: 能否真正拿到 1080P 取决于该节目片源与服务端是否下发 1080P 档, 插件侧无法
-		      把 720P 片源变成 1080P; 能做的是『有则必取、没有则取可用最高档』。"""
+		"""vid -> playvinfo -> 优先 1080P 的可播 MP4 直链。
+		★依据官网 HAR(172 条, 新闻联播 r000089cm9s)新增【双参数组】:
+		  ① pc 组 —— 完全对齐官网 PC: yspappid=519748109 / platform=5910204 /
+		     dtype=3 / otype=ojson / channel=ysp_tx / appVer=V1.0.0 / defn=fhd,
+		     官网播放上报明确带 iHD=fhd, 证明 fhd 档存在且免费可播。
+		  ② m 组 —— 原移动 App 参数(539073109 / 4330701 / 1.2.3), 作为兜底。
+		  cKey 由 _ysp_ckey 生成, 格式(--01+大写hex)与官网 PC 完全一致, 两组通用。
+		★两组都按 fhd -> shd -> sd 逐档请求, 且遍历响应 vl.vi 的【全部】清晰度元素:
+		  1080P 常排在 720P 之后, 只取 vi[0] 会永远拿 720P。命中 >=1080 立即返回;
+		  否则取实际分辨率最高且 >=720 的可用流, 绝不因强求 1080P 黑屏。
+		★★官网 get_video_info 真实响应已到位(新闻联播 20261122), 三处据此钉死:
+		  ① 响应是 {code,data:{...}} 包裹层 -> _ysp_play_payload() 兼容裸结构与包裹层;
+		  ② fl.fi 档位表 hd=480P / shd=720P / fhd=1080P(id=10004), exem=0 且 vip_info 空
+		     -> fhd 免费, 不应被 VIP 逻辑跳过; vi 缺 vh 时按档位名兜底;
+		  ③ 直链公式 = ui.url + fn + '?vkey=' + fvkey + extended_param
+		     (extended_param 含 app_id/guid/ysign/ytime/ytype, 一次性签名须原样拼, 不能换 guid)
+		     —— 与 HAR 里 206 video/mp4 的真实直链逐字一致。
+		⚠ 唯一剩余限制: 官网端点的 yspsdkinput / signature 由 JS+WASM 生成(2^16 子集暴力
+		  验证非简单 md5), 纯 py 无法复刻该端点请求头, 故仍走 py 的 playvinfo 端点 + 官网
+		  PC 参数组; 参数对齐后服务端有机会下发 fhd vi, 失败自动回退绝不黑屏。"""
 		import random, string, ssl, urllib.request, time, json
-		sdtfrom = '4330701'
-		_DEFNS = _YSP_DEFN_STREAM   # 1080P -> 720P -> 兜底; hd(480P) 不入列表
-		_UA_BASE = ("Mozilla/5.0 (iPhone; CPU iPhone OS %s like Mac OS X) "
-			"AppleWebKit/605.1.15 (KHTML, like Gecko) Version/%s Mobile/15E148 Safari/604.1")
-		_UA_VERS = [('16_0','16.0'),('16_6','16.6'),('15_5','15.5'),('17_0','17.0'),('17_4','17.4')]
-		FULL_HDRS = {
-			'User-Agent': _UA_BASE % _UA_VERS[0],
-			'Referer': 'https://v.yangshipin.cn/',
-			'yspappid': '539073109',
-			'platform': '109',
-			'app-platform': 'm',
-			'app-version': '1.0.0',
-			'Accept': '*/*',
-			'Accept-Language': 'zh-CN,zh;q=0.9',
-			'Connection': 'keep-alive',
-		}
+		_DEFNS = _YSP_DEFN_STREAM
 		ctx = ssl._create_unverified_context()
-		# 多取流域名failover: H5主域名 -> APK官方域名 -> 备用域名 -> ipv6备用(实测最后一个常超时,仍保留兜底)
 		_YSF_DOMAINS = ['playvv.yangshipin.cn','playvv.ysp.cctv.cn','bkplayvv.ysp.cctv.cn','playvv6.ysp.cctv.cn']
-		best = None  # (score, url); score = (是否>=1080, 实际高度, -档位序号)
-		for _idx, defn in enumerate(_DEFNS):
-			ua_ver = _UA_VERS[_idx % len(_UA_VERS)]
-			FULL_HDRS['User-Agent'] = _UA_BASE % ua_ver
-			guid = 'mu1ja7md_' + ''.join(random.choice(string.ascii_letters+string.digits) for _ in range(18))
-			ts = int(time.time())
-			ck = self._ysp_ckey(vid, ts, guid, sdtfrom)
-			if len(ck) < 20:
-				time.sleep(0.3)
-				continue
-			params = {
-				'guid':guid,'platform':sdtfrom,'vid':vid,'defn':defn,'charge':'0','defaultfmt':'auto',
-				'otype':'json','defnpayver':'1','appVer':'1.2.3','sphttps':'1','sphls':'1','spwm':'4',
-				'defsrc':'2','encryptVer':'8.1','sdtfrom':sdtfrom,'cKey':ck
-				# 注意: 不传 dtype 才能拿到 MP4 直链(dltype:1, 含fvkey)
-			}
-			for _d in _YSF_DOMAINS:
-				url = 'https://' + _d + '/playvinfo?' + urllib.parse.urlencode(params)
-				req = urllib.request.Request(url, headers=FULL_HDRS)
-				try:
-					raw = urllib.request.urlopen(req, timeout=8, context=ctx).read().decode('utf-8', errors='replace')
-				except Exception:
-					continue
-				s = raw.strip()
-				if s.startswith('('): s = s[1:]
-				if s.endswith(')'): s = s[:-1]
-				s = s.strip().rstrip(';').strip()
-				try:
-					jo = json.loads(s)
-				except Exception:
-					continue
-				# exem: 0=正常; 2=带有效vl的档位响应; 其它(如-12=无此档)丢弃
-				if jo.get('exem', -1) not in (0, 2):
-					_ysp_diag('playvinfo', 'defn=%s exem=%s 无有效档' % (defn, jo.get('exem')))
-					continue
-				vi_list = (jo.get('vl') or {}).get('vi') or []
-				if not isinstance(vi_list, list):
-					vi_list = []
-				_ysp_diag('playvinfo', 'defn=%s exem=%s vi数组=%s' % (
-					defn, jo.get('exem'),
-					[(x.get('vh'), (x.get('fn') or '')[:30], len(x.get('fvkey') or ''))
-					 for x in vi_list if isinstance(x, dict)]))
-				# ★★本轮核心修复: playvinfo 的 vl.vi 是"同一请求返回的多清晰度/多格式"数组,
-				#   1080P 流常常排在 720P 之后。旧代码只取 vi[0], 于是永远拿第一个(720P)——
-				#   这就是"官网自动1080P、本py只能720P"的最可能根因。
-				#   现遍历全部 vi 元素与全部取流 URL, 按服务端下发的实际 vh 择优。
-				for vi in vi_list:
-					if not isinstance(vi, dict):
+		best = None   # (score, url); score=(是否>=1080, 实际高度, -cfg序号, -档位序号)
+		for _ci, cfg in enumerate(_YSP_PLAY_CFG):
+			sdtfrom = cfg["sdtfrom"]
+			for _idx, defn in enumerate(_DEFNS):
+				guid = 'mu1ja7md_' + ''.join(random.choice(string.ascii_letters+string.digits) for _ in range(18))
+				ts = int(time.time())
+				ck = self._ysp_ckey(vid, ts, guid, sdtfrom)
+				if len(ck) < 20:
+					time.sleep(0.2); continue
+				params = {
+					'guid':guid,'platform':sdtfrom,'vid':vid,'defn':defn,'charge':'0',
+					'defaultfmt':'auto','otype':cfg['otype'],'defnpayver':'1',
+					'appVer':cfg['appVer'],'sphttps':'1','sphls':'1','spwm':'4',
+					'defsrc':'2','encryptVer':'8.1','sdtfrom':sdtfrom,'cKey':ck,'adjust':cfg['adjust'],
+				}
+				if cfg['dtype']: params['dtype'] = cfg['dtype']
+				if cfg['channel']: params['channel'] = cfg['channel']
+				FULL_HDRS = {
+					'User-Agent':cfg['ua'],'Referer':cfg['referer'],'yspappid':cfg['yspappid'],
+					'platform':'109','app-platform':('pc' if cfg['tag']=='pc' else 'm'),
+					'app-version':'1.0.0','Accept':'*/*','Accept-Language':'zh-CN,zh;q=0.9',
+					'Connection':'keep-alive',
+				}
+				_got_valid = False
+				for _d in _YSF_DOMAINS:
+					url = 'https://' + _d + '/playvinfo?' + urllib.parse.urlencode(params)
+					req = urllib.request.Request(url, headers=FULL_HDRS)
+					try:
+						raw = urllib.request.urlopen(req, timeout=8, context=ctx).read().decode('utf-8', errors='replace')
+					except Exception:
 						continue
-					fvkey = vi.get('fvkey') or ''
-					if len(fvkey) < 20:            # 试看片段/无效流, 跳过
+					t = raw.strip()
+					if t.startswith('('): t = t[1:]
+					if t.endswith(')'): t = t[:-1]
+					t = t.strip().rstrip(';').strip()
+					try:
+						jo = json.loads(t)
+					except Exception:
 						continue
-					fn = vi.get('fn') or ''
-					if not fn:
+					# ★统一兼容层: 官网 get_video_info 是 {code,data:{...}}, py 旧链路是裸结构
+					payload, ep, fl_map = _ysp_play_payload(jo)
+					exem = payload.get('exem', -1)
+					if exem not in (0, 2):
+						_ysp_diag('playvinfo', 'cfg=%s defn=%s exem=%s 无有效档' % (cfg['tag'], defn, exem))
 						continue
-					_vh = vi.get('vh') or 0
-					if not _vh:
-						# 有些响应不给 vh, 只靠 fn / defn 里的档位标识区分清晰度
-						_fl = (fn + ' ' + str(vi.get('defn') or '') + ' ' + str(vi.get('fmt') or '')).lower()
-						if '1080' in _fl or 'fhd' in _fl: _vh = 1080
-						elif '720' in _fl or 'shd' in _fl: _vh = 720
-					if _vh and _vh < 720:          # 720P 硬底线
-						continue
-					ui_list = (vi.get('ul') or {}).get('ui') or []
-					if not isinstance(ui_list, list):
-						ui_list = []
-					for ui in ui_list:
-						base = ((ui.get('url') or '') if isinstance(ui, dict) else '').rstrip('/')
-						if not base:
-							continue
-						cand = base + '/' + fn + '?vkey=' + fvkey + '&sdtfrom=' + sdtfrom + '&guid=' + guid
-						score = (1 if _vh >= 1080 else 0, _vh, -_idx)
-						if best is None or score > best[0]:
-							best = (score, cand)
+					vi_list = (payload.get("vl") or {}).get("vi") or []
+					if not isinstance(vi_list, list): vi_list = []
+					_ysp_diag('playvinfo', 'cfg=%s defn=%s exem=%s 档位表=%s vi数组=%s ep=%s' % (
+						cfg['tag'], defn, exem, fl_map,
+						[(x.get('vh'), x.get('vw'), (x.get('fn') or '')[:30], len(x.get('fvkey') or ''))
+						 for x in vi_list if isinstance(x, dict)], ep[:60]))
+					for vi in vi_list:
+						if not isinstance(vi, dict): continue
+						fvkey = vi.get('fvkey') or ''
+						if len(fvkey) < 20: continue
+						fn = vi.get('fn') or ''
+						if not fn: continue
+						_vh = vi.get('vh') or 0
+						if not _vh:
+							_dn = str(vi.get('defn') or '')
+							# 先用服务端 fl.fi 档位表按 name 兜底(官网实证: fhd=1080P/shd=720P/hd=480P)
+							if _dn in fl_map: _vh = fl_map[_dn]
+						if not _vh:
+							# 再按 fn 特征: gdvz10004 / fhd / 1080 -> 1080P(HAR 与真实响应双重印证)
+							_fl = (fn + ' ' + _dn + ' ' + str(vi.get('fmt') or '')).lower()
+							if '1080' in _fl or 'fhd' in _fl or _YSP_FHD_FN_RE.search(fn or ''): _vh = 1080
+							elif '720' in _fl or 'shd' in _fl: _vh = 720
+						if _vh and _vh < 720: continue        # 720P 硬底线
+						ui_list = (vi.get('ul') or {}).get('ui') or []
+						if not isinstance(ui_list, list): ui_list = []
+						for ui in ui_list:
+							base = ((ui.get('url') or '') if isinstance(ui, dict) else '').rstrip('/')
+							if not base: continue
+							if 'vkey=' in base:
+								cand = base                       # 服务端已给完整直链, 原样用
+							else:
+								# ★★官网真实响应定稿: url + fn + ?vkey=<fvkey> + extended_param
+								#   逐字比对 HAR 真实直链完全一致; ep 内含一次性 ysign, 必须原样拼接不能改 guid
+								core = base if (base.endswith('.mp4') or '.mp4?' in base) else (base + '/' + fn)
+								cand = core + ('&' if '?' in core else '?') + 'vkey=' + fvkey
+								if ep:
+									cand += ep if ep.startswith(('&', '?')) else ('&' + ep)
+								else:
+									# 旧 playvinfo 裸结构不下发 extended_param -> 沿用原拼法兜底
+									cand += '&sdtfrom=' + sdtfrom + '&guid=' + guid
+									if cfg['tag'] == 'pc': cand += '&app_id=' + cfg['yspappid']
+							score = (1 if _vh >= 1080 else 0, _vh, -_ci, -_idx)
+							if best is None or score > best[0]:
+								best = (score, cand)
+						_got_valid = True
+					if _got_valid: break                # 该域名已通, 不必再试其余域名
+
 				if best and best[0][0] == 1:
-					return best[1]                 # 已拿到真 1080P, 立即返回
-				break                              # 该域已给出有效响应 -> 换下一档位继续找
-		_ysp_diag('playvinfo', '最终择优 vh=%s' % (best[0][1] if best else 'NONE'))
+					_ysp_diag('playvinfo', 'cfg=%s 命中真 1080P' % cfg['tag'])
+					return best[1]
+		_ysp_diag('playvinfo', '双参数组最终择优 vh=%s' % (best[0][1] if best else 'NONE'))
 		return best[1] if best else ''
+
 	# ============ 选集VIP轻量判定(单次playvinfo, exem判据, 约0.7s) ============
 	def _ysp_is_vip(self, vid, timeout=5):
 		# 仅对央视频vid(形如 z0000459kta / r000095lofp)判定

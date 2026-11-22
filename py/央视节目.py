@@ -233,33 +233,42 @@ def _ysp_diag(tag, msg):
 _YSP_DEFN_STREAM = ('fhd', 'shd', 'sd')   # 取流: 有 1080P 优先取, 会员档自动降级
 
 # ===== ★官网 PC 取流链路实证(用户 2026-11-22 HAR: 172 条, 新闻联播 r000089cm9s) =====
-# POST https://player-api.yangshipin.cn/v1/player/get_video_info
+# POST https://player-api.yangshipin.cn/v1/player/get_video_info  (官网 PC 端点)
 #   body: defn=fhd / platform=5910204 / dtype=3 / otype=ojson / channel=ysp_tx /
 #         appVer=V1.0.0 / adjust=1 / encryptVer=8.1 / sphttps=1 / cid / guid / cKey
 #   播放上报 POST ucenter-api.../watch_record/upload 明确带 iHD=fhd
 #     -> 官网实际请求 fhd 档、实际以 fhd 播放, 1080P 片源存在且非会员限制。
 #   真实直链: https://mp4playcnc-cdn.ysp.cctv.cn/u000014ccy5.gdvz10004.mp4
 #             ?vkey=<长>&app_id=519748109&guid=<>&ysign=<>&ytime=<>&ytype=1
-#   cKey 格式 = --01 + 大写 hex, 与本文件 _ysp_ckey 完全一致(实测 py 生成 356 字符,
-#   官网 388 字符, 同量级同源) -> py 的 cKey 算法可直接用于 PC 参数组。
-# ⚠ 诚实边界: 该 HAR 是「已清理」版, 172 条响应的 content.text 全被删除(实测 0 条);
-#   但用户随后单独补了 get_video_info 的完整响应正文, 结构已定稿(见 _ysp_play_payload)。
-#   仍无法复刻的是请求头 yspsdkinput / body signature —— 由官网
-#   JS+WASM 动态生成(2^16 子集暴力验证均不吻合), 纯 py 无法复刻。
-#   故【不强行改用官网端点】, 而是把官网 PC 参数组作为现有 playvinfo 链路的优先候选:
-#   参数对齐后有机会让服务端下发 fhd 档; 一旦失败自动回退原移动参数组, 绝不黑屏。
-# ★这与之前"遍历 vl.vi 全部档位"的修复叠加: 先让服务端愿意给 1080P, 再把 1080P 挑出来。
+#   cKey 格式 = --01 + 大写 hex, 与本文件 _ysp_ckey 完全一致。
+#
+# ★★【重要纠偏 · 用户真机反馈「全部节目黑屏转圈」】
+#   dtype=3 / otype=ojson / channel=ysp_tx / adjust=1 是【get_video_info 端点专属】参数,
+#   绝不能搬到 py 自己用的 playvv.yangshipin.cn/playvinfo 端点上:
+#     · 原文件注释实测结论「不传 dtype 才能拿到 MP4 直链(dltype:1, 含fvkey)」——
+#       传 dtype=3 会让服务端改返回非 MP4 结构, vi 里没有可用 fvkey;
+#     · otype=ojson 在 playvinfo 上不是标准 JSON 输出, json.loads 直接失败。
+#   两者叠加 -> 所有档位/所有域名全部 continue, 2组×3档×4域名×8s 跑完才返回空,
+#   表现就是「一直转圈、黑屏无提示」。这是跨端点误用参数, 与清晰度无关。
+#   ✅ 修复: 恢复原移动参数组为【首选且唯一正常路径】, PC 组只保留身份字段
+#      (yspappid/platform/appVer/UA/Referer), 去掉全部端点专属参数, 降级为兜底。
+#   ✅ 1080P 不靠换参数组: 靠【遍历 vl.vi 全部元素 + 按 vh 择优】——官网真实响应里
+#      fhd 档 vh=1080, 旧代码只取 vi[0] 才拿到 720; 这一层修复已足够且不动请求格式。
+# ⚠ 官网端点的 yspsdkinput / signature 由 JS+WASM 生成(2^16 子集暴力验证均不吻合),
+#   纯 py 无法复刻, 故不改用该端点。
 _YSP_PLAY_CFG = (
-    {'tag':'pc', 'yspappid':'519748109', 'sdtfrom':'5910204', 'appVer':'V1.0.0',
-     'otype':'ojson', 'dtype':'3', 'channel':'ysp_tx', 'adjust':'1',
-     'ua':('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
-           '(KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36 Edg/146.0.0.0'),
-     'referer':'https://yangshipin.cn/'},
-    {'tag':'m',  'yspappid':'539073109', 'sdtfrom':'4330701', 'appVer':'1.2.3',
-     'otype':'json', 'dtype':'', 'channel':'', 'adjust':'',
+    # ① 原移动 App 参数组 —— playvv/playvinfo 端点唯一已验证稳定可播的组合
+    {'tag':'m', 'yspappid':'539073109', 'sdtfrom':'4330701', 'appVer':'1.2.3',
+     'otype':'json', 'app_platform':'m',
      'ua':('Mozilla/5.0 (iPhone; CPU iPhone OS 16_0 like Mac OS X) '
            'AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.0 Mobile/15E148 Safari/604.1'),
      'referer':'https://v.yangshipin.cn/'},
+    # ② 官网 PC 身份(仅兜底) —— 不含任何 get_video_info 专属参数, 不破坏 playvinfo
+    {'tag':'pc', 'yspappid':'519748109', 'sdtfrom':'5910204', 'appVer':'V1.0.0',
+     'otype':'json', 'app_platform':'pc',
+     'ua':('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
+           '(KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36 Edg/146.0.0.0'),
+     'referer':'https://yangshipin.cn/'},
 )
 # 官网 fhd 直链文件名特征(HAR 实证): u000014ccy5.gdvz10004.mp4 对应 defn=fhd / iHD=fhd。
 # 真实响应已印证: fn=u000014ccy5.gdvz10004.mp4 对应 fhd / vh=1080 / vw=1920。
@@ -2532,33 +2541,40 @@ class Spider(Spider):  # 元类 默认的元类 type
 	# ============ 央视频点播 MP4 直链(vid -> cKey -> /playvinfo -> 优先1080P MP4直链) ============
 	def get_ysp_mp4(self, vid):
 		"""vid -> playvinfo -> 优先 1080P 的可播 MP4 直链。
-		★依据官网 HAR(172 条, 新闻联播 r000089cm9s)新增【双参数组】:
-		  ① pc 组 —— 完全对齐官网 PC: yspappid=519748109 / platform=5910204 /
-		     dtype=3 / otype=ojson / channel=ysp_tx / appVer=V1.0.0 / defn=fhd,
-		     官网播放上报明确带 iHD=fhd, 证明 fhd 档存在且免费可播。
-		  ② m 组 —— 原移动 App 参数(539073109 / 4330701 / 1.2.3), 作为兜底。
-		  cKey 由 _ysp_ckey 生成, 格式(--01+大写hex)与官网 PC 完全一致, 两组通用。
-		★两组都按 fhd -> shd -> sd 逐档请求, 且遍历响应 vl.vi 的【全部】清晰度元素:
-		  1080P 常排在 720P 之后, 只取 vi[0] 会永远拿 720P。命中 >=1080 立即返回;
-		  否则取实际分辨率最高且 >=720 的可用流, 绝不因强求 1080P 黑屏。
-		★★官网 get_video_info 真实响应已到位(新闻联播 20261122), 三处据此钉死:
-		  ① 响应是 {code,data:{...}} 包裹层 -> _ysp_play_payload() 兼容裸结构与包裹层;
-		  ② fl.fi 档位表 hd=480P / shd=720P / fhd=1080P(id=10004), exem=0 且 vip_info 空
-		     -> fhd 免费, 不应被 VIP 逻辑跳过; vi 缺 vh 时按档位名兜底;
-		  ③ 直链公式 = ui.url + fn + '?vkey=' + fvkey + extended_param
+		★★【本轮修复 · 真机「全部节目黑屏转圈」】
+		  上一版把官网 get_video_info 端点专属参数(dtype=3 / otype=ojson / channel=ysp_tx
+		  / adjust=1)硬塞进 playvv/playvinfo, 服务端返回非 MP4/非标准 JSON, 所有档位解析失败,
+		  2组×3档×4域名×8s 跑完才返回空 -> 一直转圈、黑屏无提示(原注释已写明不传 dtype)。
+		  现已恢复原生移动参数组为唯一正常路径; PC 组只带身份字段且【仅当原生组彻底失败】才用。
+		  另加 15s 全局 deadline + 拿到流即停, 杜绝无限转圈。
+		★1080P 不依赖换参数组, 而依赖【遍历 vl.vi 全部元素 + 按 vh 择优】:
+		  官网真实响应里 fhd 档 vi 的 vh=1080 / vw=1920, 旧代码只取 vi[0] 才拿 720。
+		★官网 get_video_info 真实响应定稿三处(均保留, 与请求格式无关):
+		  ① {code,data:{...}} 包裹层 -> _ysp_play_payload() 同时兼容裸结构;
+		  ② fl.fi: hd=480P / shd=720P / fhd=1080P(id=10004), exem=0 且 vip_info 空 -> fhd 免费;
+		     vi 缺 vh 时按档位名兜底;
+		  ③ 直链 = ui.url + fn + '?vkey=' + fvkey + extended_param
 		     (extended_param 含 app_id/guid/ysign/ytime/ytype, 一次性签名须原样拼, 不能换 guid)
-		     —— 与 HAR 里 206 video/mp4 的真实直链逐字一致。
-		⚠ 唯一剩余限制: 官网端点的 yspsdkinput / signature 由 JS+WASM 生成(2^16 子集暴力
-		  验证非简单 md5), 纯 py 无法复刻该端点请求头, 故仍走 py 的 playvinfo 端点 + 官网
-		  PC 参数组; 参数对齐后服务端有机会下发 fhd vi, 失败自动回退绝不黑屏。"""
+		     —— 与 HAR 里 206 video/mp4 真实直链逐字一致; 裸结构无 ep 时退回原拼法。
+		⚠ 官网端点 yspsdkinput / signature 由 JS+WASM 生成, 纯 py 无法复刻, 不改用该端点。"""
 		import random, string, ssl, urllib.request, time, json
 		_DEFNS = _YSP_DEFN_STREAM
 		ctx = ssl._create_unverified_context()
 		_YSF_DOMAINS = ['playvv.yangshipin.cn','playvv.ysp.cctv.cn','bkplayvv.ysp.cctv.cn','playvv6.ysp.cctv.cn']
 		best = None   # (score, url); score=(是否>=1080, 实际高度, -cfg序号, -档位序号)
+		deadline = time.time() + 15      # ★全局上限, 防止任何情况下无限转圈
 		for _ci, cfg in enumerate(_YSP_PLAY_CFG):
+			# ★PC 组仅在原生组彻底失败时兜底, 正常路径绝不碰非原生参数
+			if cfg['tag'] == 'pc' and best is not None:
+				break
+			if time.time() > deadline:
+				break
 			sdtfrom = cfg["sdtfrom"]
 			for _idx, defn in enumerate(_DEFNS):
+				if time.time() > deadline:
+					break
+				if best and _idx > 0:
+					break            # 已有可播流, 不再试更低档(不可能更清晰)
 				guid = 'mu1ja7md_' + ''.join(random.choice(string.ascii_letters+string.digits) for _ in range(18))
 				ts = int(time.time())
 				ck = self._ysp_ckey(vid, ts, guid, sdtfrom)
@@ -2568,22 +2584,23 @@ class Spider(Spider):  # 元类 默认的元类 type
 					'guid':guid,'platform':sdtfrom,'vid':vid,'defn':defn,'charge':'0',
 					'defaultfmt':'auto','otype':cfg['otype'],'defnpayver':'1',
 					'appVer':cfg['appVer'],'sphttps':'1','sphls':'1','spwm':'4',
-					'defsrc':'2','encryptVer':'8.1','sdtfrom':sdtfrom,'cKey':ck,'adjust':cfg['adjust'],
+					'defsrc':'2','encryptVer':'8.1','sdtfrom':sdtfrom,'cKey':ck,
 				}
-				if cfg['dtype']: params['dtype'] = cfg['dtype']
-				if cfg['channel']: params['channel'] = cfg['channel']
+				# ★绝不向 playvinfo 传 dtype / channel / adjust(端点专属, 会破坏 MP4 直链)
 				FULL_HDRS = {
 					'User-Agent':cfg['ua'],'Referer':cfg['referer'],'yspappid':cfg['yspappid'],
-					'platform':'109','app-platform':('pc' if cfg['tag']=='pc' else 'm'),
+					'platform':'109','app-platform':cfg['app_platform'],
 					'app-version':'1.0.0','Accept':'*/*','Accept-Language':'zh-CN,zh;q=0.9',
 					'Connection':'keep-alive',
 				}
 				_got_valid = False
 				for _d in _YSF_DOMAINS:
+					if time.time() > deadline:
+						break
 					url = 'https://' + _d + '/playvinfo?' + urllib.parse.urlencode(params)
 					req = urllib.request.Request(url, headers=FULL_HDRS)
 					try:
-						raw = urllib.request.urlopen(req, timeout=8, context=ctx).read().decode('utf-8', errors='replace')
+						raw = urllib.request.urlopen(req, timeout=6, context=ctx).read().decode('utf-8', errors='replace')
 					except Exception:
 						continue
 					t = raw.strip()
@@ -2650,7 +2667,10 @@ class Spider(Spider):  # 元类 默认的元类 type
 				if best and best[0][0] == 1:
 					_ysp_diag('playvinfo', 'cfg=%s 命中真 1080P' % cfg['tag'])
 					return best[1]
-		_ysp_diag('playvinfo', '双参数组最终择优 vh=%s' % (best[0][1] if best else 'NONE'))
+		if best:
+			_ysp_diag('playvinfo', '最终择优 vh=%s (已恢复可播)' % best[0][1])
+		else:
+			_ysp_diag('playvinfo', '★取流失败: 所有参数组/档位/域名均无有效 MP4 流, vid=%s' % vid)
 		return best[1] if best else ''
 
 	# ============ 选集VIP轻量判定(单次playvinfo, exem判据, 约0.7s) ============

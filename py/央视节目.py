@@ -2150,7 +2150,12 @@ class Spider(Spider):  # 元类 默认的元类 type
 				#   cid不是真实vid, 需先剥离"~~~"前缀, 打开 video?type=0&cid= 详情页
 				#   取 sharevideo.vid 真实vid, 再 get_ysp_mp4 取1080P优先(自动降级720P)的MP4直链。
 				_play_id = id
+				_prefer_fhd = False
 				if isinstance(_play_id, str) and _play_id.startswith('~~~'):
+					# ★栏目期次(新闻联播/今日说法等): 官网 defn=fhd 且 fhd 免费(exem=0 / vip_info 空)。
+					#   显式按 fhd 请求才能稳定 1080P, 否则旧骨架 shd「先到先得」会随机 720/1080。
+					#   影视剧/搜索(真实 vid / 32hex guid)不设此标志, 仍零额外请求秒播 720P。
+					_prefer_fhd = True
 					_cid = _play_id[3:]
 					_real = None
 					try:
@@ -2163,7 +2168,7 @@ class Spider(Spider):  # 元类 默认的元类 type
 						_play_id = _real
 				# 用 _play_id 取 1080P 优先(自动降级 720P)的 MP4 直链（_play_id 此时是真实 vid）
 				try:
-					cand = self.get_ysp_mp4(vid=_play_id)
+					cand = self.get_ysp_mp4(vid=_play_id, prefer_fhd=_prefer_fhd)
 				except Exception:
 					cand = None
 				if cand and cand.startswith('http'):
@@ -2539,7 +2544,7 @@ class Spider(Spider):  # 元类 默认的元类 type
 		ct = self._aes_cbc_encrypt(key, iv, Xn.encode('utf-8'))
 		return '--01' + ct.hex().upper()
 	# ============ 央视频点播 MP4 直链(vid -> cKey -> /playvinfo -> 零额外请求, 有1080P则取) ============
-	def get_ysp_mp4(self, vid):
+	def get_ysp_mp4(self, vid, prefer_fhd=False):
 		"""vid -> playvinfo -> 可播 MP4 直链(1080P 优先, 但绝不牺牲可播性)。
 		★★【本轮 · 真机「全部节目黑屏转圈」根因与修复】对照用户最初上传的原文件逐字定稿:
 		  原骨架 = _DEFNS [shd,fhd,sd] + 6 次 attempt 轮转 + 4 域名 failover + 8s 超时
@@ -2550,14 +2555,20 @@ class Spider(Spider):  # 元类 默认的元类 type
 		    ② 加 15s deadline —— fhd 卡住时 4域名×6s=24s 耗尽 deadline, 免费可播的 shd
 		       根本没机会请求 -> 返回空串 -> 一直转圈、黑屏无提示。
 		  ✅ 本版【逐字恢复原骨架】, 且【彻底不做任何前置探测请求】。
-		★用户最终口径: 绝大部分节目 fhd 是会员档, 不能为极少数 1080P 让绝大多数 720P
-		  节目多等哪怕一次网络请求。故 1080P 改为「零额外请求的机会主义获取」, 只有两种
-		  不花任何额外时间的情形能拿到:
-		    ① 服务端在同一次 playvinfo 响应的 vl.vi 里同时下发多档 -> 遍历全部元素按 vh
-		       择优, 直接挑出 1080P(旧代码只取 vi[0] 才永远 720P);
-		    ② 原骨架本就有 fhd 轮次: 当 shd 返回 exem=-12(原文件注释: 综艺/纪录片期次
-		       常见)而轮到 fhd 时, 服务端若给 1080P 就自然取到。
-		  其余情况一律第一个请求 shd 即出画面 —— 与原文件的播放速度逐字相同。
+		★用户最终口径(上一轮): 影视剧等绝大部分节目 fhd 是会员档, 不能为极少数 1080P
+		  让绝大多数 720P 节目多等一次网络请求 -> 默认路径仍 shd 首请求、命中即返回。
+		★★本轮·真机「1080P 不稳定」根因(官网 HAR + get_video_info 真实响应实证):
+		  官网 body 明确 defn=fhd、播放上报 iHD=fhd, 且真实响应 vl.vi 只有 1 个元素 ——
+		  服务端【按 defn 只返回所请求的那一档】, fl.fi 只是档位表不含流。
+		  故 defn=shd 只能 720; 旧骨架 shd→fhd→sd「命中即返回」, 只有 shd 首次失败
+		  轮到 fhd 时才偶得 1080 -> 同一期次这次 1080 下次 720(先到先得, 非片源差异)。
+		✅ 解法【按链路分流, 不牺牲 720P 节目】:
+		  · 栏目期次(新闻联播/今日说法等, 播放串 ~~~<cid>): prefer_fhd=True
+		    -> 显式按官网同款 defn=fhd 请求; 若某域名/CN 把 fhd 降成 720,
+		       继续试其余域名直到拿到 vh>=1080, 全部降级才用最高那条。
+		  · 影视剧/搜索(真实 vid / 32hex guid): prefer_fhd=False(默认)
+		    -> 逐字保持原骨架, 零额外请求, shd 一次往返秒播。
+		  两组都不做前置探测、不加 deadline、不改 cKey 与请求参数组。
 		★保留三处已被官网真实响应验证、且对原裸结构零副作用的增强:
 		  ① 遍历 vl.vi 全部元素按 vh 择优; ② _ysp_play_payload 兼容 data 包裹层;
 		  ③ extended_param 拼链 —— 裸结构无 ep 时与原版拼法逐字相同(base+fn+?vkey+&sdtfrom+&guid)。
@@ -2566,7 +2577,9 @@ class Spider(Spider):  # 元类 默认的元类 type
 		sdtfrom = '4330701'
 		# ★原文件逐字: shd(720P超清)优先; 综艺/纪录片期次视频 shd+auto 可能返回 exem=-12,
 		#   而 fhd/sd 直接给 1280x720 真档; hd 仅 864x486 不满足 720P 硬约束, 不入列表。
-		_DEFNS = ['shd', 'fhd', 'sd']
+		# ★栏目期次(prefer_fhd=True): 按官网同款显式 fhd 优先, 拿到 1080 才稳定;
+		#   fhd 完全失败时仍由下面 6 次轮转快速降级到 shd, 不黑屏。
+		_DEFNS = ['fhd', 'shd', 'sd'] if prefer_fhd else ['shd', 'fhd', 'sd']
 		_UA_BASE = ('Mozilla/5.0 (iPhone; CPU iPhone OS %s like Mac OS X) '
 			"AppleWebKit/605.1.15 (KHTML, like Gecko) Version/%s Mobile/15E148 Safari/604.1")
 		_UA_VERS = [('16_0','16.0'),('16_6','16.6'),('15_5','15.5'),('17_0','17.0'),('17_4','17.4')]
@@ -2579,9 +2592,10 @@ class Spider(Spider):  # 元类 默认的元类 type
 		ctx = ssl._create_unverified_context()
 		_YSF_DOMAINS = ['playvv.yangshipin.cn','playvv.ysp.cctv.cn','bkplayvv.ysp.cctv.cn','playvv6.ysp.cctv.cn']
 		
-		def _try(defn, domains, timeout, ua_ver):
-			"""发一次 playvinfo, 返回 (url, vh)。无有效流返回 (None, 0)。
-			   ★与原版唯一差别: 遍历 vi 全部元素按 vh 择优, 并兼容 data 包裹层 / extended_param。"""
+		def _try(defn, domains, timeout, ua_ver, want=0):
+			"""发一次 playvinfo, 返回 (vh, url)。无有效流返回 (None, 0)。
+			   want=1080 时: 某域名只给 720 不立即返回, 继续试其余域名凑 1080(抗 CDN 随机降级);
+			   want=0(默认)时: 命中即返回, 与原文件逐字一致。"""
 			guid = 'mu1ja7md_' + ''.join(random.choice(string.ascii_letters+string.digits) for _ in range(18))
 			ts = int(time.time())
 			ck = self._ysp_ckey(vid, ts, guid, sdtfrom)
@@ -2594,6 +2608,7 @@ class Spider(Spider):  # 元类 默认的元类 type
 				'defsrc':'2','encryptVer':'8.1','sdtfrom':sdtfrom,'cKey':ck
 				# 注意: 不传 dtype / channel / adjust 才能拿到 MP4 直链(dltype:1, 含fvkey)
 			}
+			best_domain = None   # 跨域名最优(仅 want 模式会用)
 			for _d in domains:
 				url = 'https://' + _d + '/playvinfo?' + urllib.parse.urlencode(params)
 				req = urllib.request.Request(url, headers=FULL_HDRS)
@@ -2647,17 +2662,25 @@ class Spider(Spider):  # 元类 默认的元类 type
 					if best_local is None or _vh > best_local[0]:
 						best_local = (_vh, cand)
 				if best_local:
-					return best_local
+					if best_domain is None or best_local[0] > best_domain[0]:
+						best_domain = best_local
+					# ★默认(want=0): 命中即返回, 与原文件逐字一致, 零额外请求
+					# ★want=1080: 只给 720 时继续试其余域名, 抗「同一期次随机降级」
+					if not want or best_local[0] >= want:
+						return best_local
+					continue
 				# ★关键防转圈: 该域名已给出「有效 exem 但无可用流」-> 不耗其余域名, 立刻换下一档
 				break
-			return (None, 0)
+			return best_domain if best_domain else (None, 0)
 		
 		# ===== 原文件逐字骨架: 6 次 attempt 轮转, 无 deadline, 命中即返回 =====
 		# ★零前置探测: 第一个请求就是 shd, 绝大多数节目一次网络往返即出画面。
 		for attempt in range(6):
 			defn = _DEFNS[attempt % len(_DEFNS)]
 			ua_ver = _UA_VERS[attempt % len(_UA_VERS)]
-			vh, u = _try(defn, _YSF_DOMAINS, 8, ua_ver)
+			# ★仅「栏目期次 + fhd 档」开启跨域名凑 1080; 其余档位/其余链路一律 want=0
+			_want = 1080 if (prefer_fhd and defn == 'fhd') else 0
+			vh, u = _try(defn, _YSF_DOMAINS, 8, ua_ver, want=_want)
 			if u:
 				_ysp_diag('playvinfo', '可播直链 vh=%s defn=%s' % (vh, defn))
 				return u

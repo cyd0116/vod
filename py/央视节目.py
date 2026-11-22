@@ -77,6 +77,10 @@ _YSP_COLUMNS = [
 	("10725","健康中国","srijdlkrfzkzlvp","2026/9/6期"),
 	("10780","《中国国宝大会》第四季","30ambc8qtyagf8g","2026/2/14期"),
 ]
+# ★修复④: 上表第4列是旧版写死的期次日期(如 2026/9/17期), 曾直接当作卡片 vod_remarks,
+#   导致所有栏目显示同一个固定日期。现在卡片日期一律由 program 接口动态返回, 这里把
+#   静态表的备注统一清空, 仅保留 (lid, name, cid) 供历史收藏的 library~~~ id 兼容解析。
+_YSP_COLUMNS = [(lid, name, cid, '') for lid, name, cid, rem in _YSP_COLUMNS]
 # lid -> (name,cid,remark)
 _YSP_COLUMNS_MAP = {lid:(name,cid,rem) for lid,name,cid,rem in _YSP_COLUMNS}
 
@@ -164,7 +168,25 @@ _YSP_PROGRAM_URL = "https://csapi.yangshipin.cn/voapi/omsotm/media/v2/program"
 _YSP_TOKEN_URL  = "https://h5access.yangshipin.cn/web/open/token"
 _YSP_PGUID      = "mu1k3hl8_8zhsvo0vhwn"
 _YSP_PCOOKIE    = ("guid=%s; versionName=99.99.99; versionCode=999999; vplatform=109; platformVersion=Chrome; deviceModel=108; newLogin=1; pc_version=1.1.16; _abfpc=951791353206c47aa9fc22c73c8c99618fd54a77_2.0; cna=16fbd097dc393531d33a81a1a558e99b" % _YSP_PGUID)
-_YSP_PROG_CID   = {"动画片":"program_cid_775","电视剧":"program_cid_776","纪录片":"program_cid_774","特别节目":"program_cid_777","电影":"program_cid_778"}
+# 只保留网站 /resource/pool 二级目录里需要的三个页签(顺序: 电视栏目 -> 纪录片 -> 特别节目)。
+# 电视栏目对应节目库总表 program_library(筛选 itype+sort), 纪录片/特别节目对应各自 program_cid。
+_YSP_PROG_CID   = {"电视栏目":"program_library","纪录片":"program_cid_774","特别节目":"program_cid_777",
+                    "动画片":"program_cid_775","电视剧":"program_cid_776","电影":"program_cid_778"}
+_YSP_TABS = ("电视栏目", "纪录片", "特别节目")  # homeContent 输出顺序, 与网站页签保持一致
+
+# ★原网站默认态: 进入"电视栏目"页签时, 筛选行首项「全部」被红色高亮选中,
+#   它代表的就是「栏目大全」——所有电视栏目的汇总(新闻联播/今日说法/走遍中国/百家讲坛…),
+#   并不是另一个要裁掉的目录。按原网站样子保留: 「全部」必须是分类筛选的第一项且为默认,
+#   对应 filterValue 的 itype=-1(不加任何频道过滤, 取全量栏目并重分页)。
+#   旧版插件把这一态叫「栏目大全 / 节目大全」, 这里作为 type_id 别名保留,
+#   老收藏/老壳子传进来照样落到栏目大全, 不会变成空列表。
+_YSP_COLUMN_ALL = '全部'
+_YSP_COLUMN_ALL_ALIASES = ('全部', '栏目大全', '节目大全', '')
+_YSP_TAB_ALIASES = {'栏目大全': '电视栏目', '节目大全': '电视栏目', '全部': '电视栏目', '': '电视栏目'}
+# 与截图3逐项核对的网站筛选行(顺序不可改): 全部 综合 财经 综艺 中文国际 体育 电影
+# 国防军事 电视剧 科教 戏曲 社会与法 新闻 少儿 音乐 奥林匹克 农业农村
+_YSP_LIBRARY_ITYPE_ORDER = ('全部','综合','财经','综艺','中文国际','体育','电影','国防军事',
+                            '电视剧','科教','戏曲','社会与法','新闻','少儿','音乐','奥林匹克','农业农村')
 # ===== 央视频节目库完整筛选枚举映射(从页面home: filters配置抓取, 与央视频完全一致) =====
 # 结构: {program_cid: {筛选key: {中文名: 数值枚举}}}
 # 各分类"类型"筛选key名不同: 动画片=childhood_types / 电视剧=drama_types /
@@ -530,18 +552,20 @@ def _ysp_extval(extend, key):
 	return v or ''
 
 def _ysp_build_fv(pcid, tid, extend):
-	"""壳子 extend(中文名) -> 央视频 program 接口 filterValue 数值串(与央视频完全一致)。
-	各分类"类型"key名不同: 动画片=childhood_types / 电视剧=drama_types /
-	纪录片=documentary_types / 特别节目=special_program_type / 电影=cctvfilm_type。
-	通用: 地区=area_id, 年份=first_onlinetime。
-	壳子key: datafl-sc=类型 / datadq-area=地区 / datanf-year=年份。
-	值在央视频无对应枚举(如壳子独有"谍战/欧洲"等)时回退'全部'(-1),
-	避免非法枚举导致接口报错; 年份/字母/频道筛选央视频不支持故忽略。"""
+	"""壳子 extend(中文名) -> 央视频 program 接口 filterValue(与 /resource/pool 页面一致)。
+	★修复三处导致"筛选失效"的问题:
+	  ① 电视栏目必须用 program_library 的 itype(一级分类), 旧代码误拼 childhood_types=-1,
+	     壳子选"新闻/体育"等完全不起作用;
+	  ② sort 旧代码写死 6(最新), 选"最热/最畅销"无变化 -> 改为按壳子选择映射 6/10/11;
+	  ③ 网站有"会员/免费"筛选行, 旧代码未拼 image_icon, 该行同样失效 -> 补上。
+	其余: 年份=first_onlinetime / 地区=area_id / 类型键随分类变化, 中文名查枚举表转数值。
+	壳子key: datafl-sc=类型|分类 / datanf-year=年份 / datadq-area=地区 /
+	         datahy-icon=会员 / datapa-sort=排序。"""
 	fmap = _YSP_FILTER_MAP.get(pcid, {})
-	_type_key = {'动画片':'childhood_types','电视剧':'drama_types','纪录片':'documentary_types',
-	             '特别节目':'special_program_type','电影':'cctvfilm_type'}.get(tid, '')
+	type_key = {'电视栏目':'itype', '纪录片':'documentary_types', '特别节目':'special_program_type',
+	            '电视剧':'drama_types', '动画片':'childhood_types', '电影':'cctvfilm_type'}.get(tid, '')
 	def _v(k, val, default='-1'):
-		if not val:
+		if not val or val == '全部':
 			return default
 		m = fmap.get(k, {})
 		if val in m:
@@ -550,12 +574,45 @@ def _ysp_build_fv(pcid, tid, extend):
 			return str(val)
 		return default
 	parts = ['d11=%s' % pcid]
-	tv = _ysp_extval(extend, 'datafl-sc')
-	parts.append('%s=%s' % (_type_key, _v(_type_key, tv)) if _type_key else 'childhood_types=-1')
-	parts.append('first_onlinetime=%s' % _v('first_onlinetime', _ysp_extval(extend, 'datanf-year')))
-	parts.append('area_id=%s' % _v('area_id', _ysp_extval(extend, 'datadq-area')))
-	parts.append('sort=6')
+	if type_key:
+		parts.append('%s=%s' % (type_key, _v(type_key, _ysp_extval(extend, 'datafl-sc'))))
+	if tid != '电视栏目':
+		parts.append('first_onlinetime=%s' % _v('first_onlinetime', _ysp_extval(extend, 'datanf-year')))
+		parts.append('area_id=%s' % _v('area_id', _ysp_extval(extend, 'datadq-area')))
+		parts.append('image_icon=%s' % _v('image_icon', _ysp_extval(extend, 'datahy-icon')))
+	parts.append('sort=%s' % _v('sort', _ysp_extval(extend, 'datapa-sort'), default='6'))
 	return '&'.join(parts)
+
+def _ysp_filters_config():
+	"""壳子筛选 UI 直接由 _YSP_FILTER_MAP 生成, 保证"选项<->接口枚举"一一对应,
+	避免手写配置与网站枚举脱节造成筛选失效。
+	★「全部 = 栏目大全」按原网站样子保留: 电视栏目分类行以「全部」为第一项(壳子默认
+	  选中第一项), 且 17 个选项的顺序逐项对照官网 /resource/pool 筛选行固定, 不增不减。"""
+	def row(key, name, pcid, fkey, order=None, first=None):
+		seq = list(_YSP_FILTER_MAP.get(pcid, {}).get(fkey, {}).keys())
+		if order:
+			seq = [x for x in order if x in seq] + [x for x in seq if x not in order]
+		if first:
+			if first in seq:
+				seq.remove(first)
+			seq.insert(0, first)  # 首项 = 默认选中 = 栏目大全
+		return {"key": key, "name": name, "value": [{"n": x, "v": x} for x in seq]}
+	doc, sp, tv = 'program_cid_774', 'program_cid_777', 'program_library'
+	return {
+		"电视栏目": [row('datafl-sc', '分类', tv, 'itype',
+		                 order=_YSP_LIBRARY_ITYPE_ORDER, first=_YSP_COLUMN_ALL),
+		             row('datapa-sort', '排序', tv, 'sort')],
+		"纪录片": [row('datafl-sc', '类型', doc, 'documentary_types', first=_YSP_COLUMN_ALL),
+		           row('datanf-year', '年份', doc, 'first_onlinetime', first=_YSP_COLUMN_ALL),
+		           row('datadq-area', '地区', doc, 'area_id', first=_YSP_COLUMN_ALL),
+		           row('datahy-icon', '会员', doc, 'image_icon', first=_YSP_COLUMN_ALL),
+		           row('datapa-sort', '排序', doc, 'sort')],
+		"特别节目": [row('datafl-sc', '类型', sp, 'special_program_type', first=_YSP_COLUMN_ALL),
+		             row('datanf-year', '年份', sp, 'first_onlinetime', first=_YSP_COLUMN_ALL),
+		             row('datadq-area', '地区', sp, 'area_id', first=_YSP_COLUMN_ALL),
+		             row('datahy-icon', '会员', sp, 'image_icon', first=_YSP_COLUMN_ALL),
+		             row('datapa-sort', '排序', sp, 'sort')],
+	}
 
 def _ysp_prs(n):
 	return ''.join(_rd.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789") for _ in range(n))
@@ -581,13 +638,58 @@ def _ysp_get_token():
 		_YSP_TOKEN_CACHE["tk"] = tk; _YSP_TOKEN_CACHE["ts"] = now
 	return tk
 
-def _ysp_program(filterValue, page=1, size=50):
-	"""央视频 program 分类接口 -> [(title, cid, cover, vidNum, updateNum), ...] 或 []。
-	签名：yspsdkinput=hex_md5(按key排序拼接body)；yspsdksign=md5("{guid};m.yangshipin.cn;{token};https:;539073109;{input};")+"-"+input。
-	host 必须 m.yangshipin.cn(www返回服务异常)。"""
+def _ysp_date_issue(s):
+	"""把接口里的日期串/8位数字统一成网站卡片形态 '2026/11/21期'(月日不带前导零)。"""
+	s = str(s or '')
+	m = re.search(r'(?<!\d)(20\d{2})[/\-.](\d{1,2})[/\-.](\d{1,2})(?!\d)', s)
+	if m:
+		return '%d/%d/%d期' % (int(m.group(1)), int(m.group(2)), int(m.group(3)))
+	m = re.search(r'(?<!\d)(20\d{2})(\d{2})(\d{2})(?!\d)', s)
+	if m:
+		return '%d/%d/%d期' % (int(m.group(1)), int(m.group(2)), int(m.group(3)))
+	return ''
+
+def _ysp_remarks(d):
+	"""★修复"卡片显示固定日期": 从 program 接口每条节目的真实字段里解析最新更新文案。
+	网站形态: 电视栏目='2026/11/21期' / 剧集='33集全' / '更新至27集'。
+	优先取带日期的期次串, 其次取集数文案, 最后用数字字段兜底; 全程动态, 不写死任何日期。"""
+	strs = [(fn, x.strip()) for fn, vals in d.items() for x in vals if isinstance(x, str) and x.strip()]
+	for fn, s in strs:
+		if '期' not in s:
+			continue
+		dt = _ysp_date_issue(s)
+		if dt:
+			return dt
+		mm = re.search(r'\d+\s*期全', s)
+		if mm and len(s) < 24:
+			return mm.group(0)
+	for fn, s in strs:
+		if len(s) > 24:
+			continue
+		mm = re.search(r'更新至\s*\d+\s*集|\d+\s*集全|\d+\s*集', s)
+		if mm:
+			return mm.group(0)
+	u = (d.get(12) or [None])[0]
+	n = (d.get(11) or [None])[0]
+	if isinstance(u, int):
+		if 20000101 <= u <= 20991231:
+			return _ysp_date_issue(u)
+		if isinstance(n, int) and 0 < u < n:
+			return '更新至%d集' % u
+		return '%d集全' % u
+	if isinstance(n, int) and n > 0:
+		return '%d集全' % n
+	return ''
+
+def _ysp_program(filterValue, page=1, size=24):
+	"""央视频 program 分类接口 -> ([(title, cid, cover, remarks, brief), ...], has_more, total)。
+	★修复"下拉没有更多": 网站每页固定 24 条(旧代码请求 50 被截断为 24, 却按 50 判定
+	  "本页未满=到底", 导致壳子第一页后就停止翻页)。现在按网站真实页大小取数, 并把
+	  接口返回的总条数/本页是否满页一并返回给 categoryContent 决定 pagecount。
+	签名: yspsdkinput=hex_md5(按key排序拼接body); yspsdksign=md5("{guid};m.yangshipin.cn;{token};https:;539073109;{input};")+"-"+input。"""
 	import ssl
 	token = _ysp_get_token()
-	if not token: return []
+	if not token: return [], False, 0
 	body = {"filterValue":filterValue, "page":page, "pageSizeT":size}
 	pairs = ["%s=%s" % (k, urllib.parse.unquote(str(body[k]))) for k in sorted(body.keys())]
 	ysp  = _hl.md5("&".join(pairs).encode()).hexdigest()
@@ -605,12 +707,17 @@ def _ysp_program(filterValue, page=1, size=50):
 		r = urllib.request.urlopen(urllib.request.Request(_YSP_PROGRAM_URL, data=json.dumps(body).encode(), headers=hdr, method='POST'), timeout=20, context=ctx)
 		rawb = r.read()
 	except Exception:
-		return []
+		return [], False, 0
 	fields = _YspPB(rawb).read()
-	data_f = [v for f,_,v in fields if f==2]
-	if not data_f: return []
+	data_f = [v for f,wt,v in fields if f==2 and wt==2]
+	if not data_f: return [], False, 0
 	data_fields = _YspPB(data_f[0]).read()
-	progs = [v for f,_,v in data_fields if f==3]
+	progs = [v for f,wt,v in data_fields if f==3 and wt==2]
+	# 接口在 data 层或顶层给出 total: 用于精确判断是否还有下一页
+	total = 0
+	for f,wt,v in (fields + data_fields):
+		if wt == 0 and isinstance(v, int) and 0 < v < 1000000:
+			total = max(total, v)
 	out = []
 	for p in progs:
 		d = {}
@@ -619,11 +726,12 @@ def _ysp_program(filterValue, page=1, size=50):
 				s = _ysp_s(v)
 				if s: d.setdefault(fn, []).append(s)
 			elif wt==0: d.setdefault(fn, []).append(v)
-		title = d.get(5,[''])[0]; cid = d.get(4,[''])[0]; cover = d.get(8,[''])[0]
-		vidnum = d.get(11,['']); upd = d.get(12,[''])
+		title = (d.get(5) or [''])[0]; cid = (d.get(4) or [''])[0]; cover = (d.get(8) or [''])[0]
+		brief = (d.get(6) or [''])[0]
 		if cid and title:
-			out.append((title, cid, cover, (vidnum[0] if vidnum else ''), (upd[0] if upd else '')))
-	return out
+			out.append((title, cid, cover, _ysp_remarks(d), brief))
+	has_more = bool(progs) and (len(progs) >= size or (total > 0 and page * size < total))
+	return out, has_more, total
 
 def _ysp_title_to_vid(title):
 	albs=_ysp_search(title)
@@ -957,21 +1065,11 @@ class Spider(Spider):  # 元类 默认的元类 type
 		pass
 	def homeContent(self,filter):
 		result = {}
-		cateManual = {
-			"栏目大全":"节目大全",
-			"电视剧": "电视剧",
-			"动画片": "动画片",
-			"纪录片": "纪录片",
-			"特别节目": "特别节目",
-			"电影": "电影"
-		}
-		classes = []
-		for k in cateManual:
-			classes.append({
-				'type_name':k,
-				'type_id':cateManual[k]
-			})
-		result['class'] = classes
+		# ★修复①: 只保留网站 /resource/pool 二级目录里的三个页签, 顺序严格为
+		#   电视栏目 -> 纪录片 -> 特别节目; 电视剧/电影/动画片等一律不再输出。
+		#   注意: 筛选行里的「全部」不是目录, 它是「电视栏目」页签的默认态(=栏目大全),
+		#   由 self.config['filter']['电视栏目'][0] 原样保留, 不参与本次目录裁剪。
+		result['class'] = [{'type_name': t, 'type_id': t} for t in _YSP_TABS]
 		if(filter):
 			result['filters'] = self.config['filter']
 		return result
@@ -981,104 +1079,48 @@ class Spider(Spider):  # 元类 默认的元类 type
 		}
 		return result
 	def categoryContent(self,tid,pg,filter,extend):
-		# 【健壮性】extend 可能被壳子以字符串传入(非dict), 统一转成dict避免 .keys() 崩溃
+		# 【健壮性】extend 可能被壳子以字符串传入(非dict), 统一转成dict
 		if not isinstance(extend, dict):
 			try:
 				extend = json.loads(extend) if isinstance(extend, str) and extend else {}
 			except Exception:
 				extend = {}
-		result = {}
-		month = ""#月
-		year = ""#年
-		area=''#地区
-		channel=''#频道
-		datafl=''#类型
-		letter=''#字母
-		pagecount=24
-		if tid in ('动画片','电视剧','纪录片','特别节目','电影'):
-			# 【央视频节目库·完全一致】program 接口(纯py签名, host=m.yangshipin.cn),
-			#   数据与央视频页面完全一致。vod_id 四段式: prog~~~<cid>~~~<title>~~~<cover>,
-			#   detailContent 识别 prog~~~ 前缀, 用 cid 打开详情页取全集真实vid。
-			_pcid = _YSP_PROG_CID.get(tid, '')
-			# filterValue 由 extend(壳子中文名) 映射为央视频数值枚举(与央视频完全一致)。
-			#   类型(datafl-sc)/地区(datadq-area)/年份(datanf-year) 均按分类映射到对应key;
-			#   壳子独有枚举(如谍战/欧洲等)央视频无对应 -> 回退全部(-1)。
-			_fv = _ysp_build_fv(_pcid, tid, extend)
-			_pg = int(pg) if str(pg).isdigit() else 1
-			_progs = _ysp_program(_fv, page=_pg, size=50)
-			videos=[]
-			for _title,_cid,_cover,_vn,_upd in _progs:
-				_rem = ('%s集' % _upd) if _upd else ''
-				videos.append({
-					"vod_id": "prog~~~%s~~~%s~~~%s" % (_cid, _title, _cover),
-					"vod_name": self._strip_title_marks(_title),
-					"vod_pic": _cover,
-					"vod_remarks": _rem
-				})
-			pagecount=50
-		elif tid=='节目大全':
-			# 【电视栏目·完整复刻别人机制】直接返回48栏目静态清单(内置 _YSP_COLUMNS,
-			#   与别人"电视栏目"分类一致), 不再请求老接口 api.cntv.cn/lanmu/columnSearch。
-			#   vod_id三段式: library~~~<lid>~~~<cid>, detailContent用 lid 取全部期次。
-			# ★图片修复: 原 vod_pic 用旧模板 columnPic/<lid>/20210129/default.jpg 已全部404(全无图)。
-			#     改为从每个栏目 lid 详情页 __STATE_video__.payloads.sharevideo.pastCover.coverList[0]
-			#     提取真实封面图(poster.poster.imageUrl, 实测200可访问)。单栏目超时/失败则留空占位,
-			#     避免列表加载卡顿; 仅首页(pg==1)提取, 翻页沿用。
-			#     ★性能优化: 48栏目改为 ThreadPoolExecutor 并行提取(每栏目一个线程), 串行约29.6s
-			#     降至约2.3s; 并用 _YSP_COV_CACHE 内存缓存, 同一会话内重复进入不再重复请求。
-			videos=[]
-			_cov = {}
-			if pg == '1' or pg == 1:
-				if not getattr(self, '_ysp_cov_cache', None):
-					self._ysp_cov_cache = {}
-				_missing = [_c for _c in _YSP_COLUMNS if _c[0] not in self._ysp_cov_cache]
-				if _missing:
-					from concurrent.futures import ThreadPoolExecutor
-					def _cov_fetch(_row):
-						_lid = _row[0]
-						try:
-							_js = _ysp_fetch_state('https://m.yangshipin.cn/video?type=0&lid=%s' % _lid)
-							_cl = ((((_js or {}).get('payloads',{}) or {}).get('sharevideo',{}) or {}).get('pastCover',{}) or {}).get('coverList',[]) or []
-							if _cl:
-								return (_lid, (((_cl[0].get('poster',{}) or {}).get('poster',{}) or {}).get('imageUrl') or '').split('/1080?')[0])
-						except Exception:
-							pass
-						return (_lid, '')
-					with ThreadPoolExecutor(max_workers=10) as _ex:
-						for _lid,_img in _ex.map(_cov_fetch, _missing):
-							self._ysp_cov_cache[_lid] = _img
-				_cov = dict(self._ysp_cov_cache)
-			for _lid,_name,_cid,_rem in _YSP_COLUMNS:
-				_vod_id = 'library~~~%s~~~%s' % (_lid, _cid)
-				videos.append({
-					"vod_id": _vod_id,
-					"vod_name": self._strip_title_marks(_name),
-					"vod_pic": _cov.get(_lid,''),
-					"vod_remarks": _rem
-				})
-			pagecount=20
-		else:
-			url = 'https://tv.cctv.com/epg/index.shtml'
-
-		if tid in ('节目大全','','动画片','电视剧','纪录片','特别节目','电影'):
-			# 已在上方用静态清单/program接口填充videos, 直接跳过网络请求(url未赋值, 不能调webReadFile)
-			pass
-		else:
-			htmlText =self.webReadFile(urlStr=url,header=self.header)
-			videos =self.get_list(html=htmlText,tid=tid)
-		#print(videos)
-		
-		result['list'] = videos
-		result['page'] = pg
-		# 分页: pagecount 表示"每页条数上限"。当本页已满(=本页条数达到上限)时,
-		#   旧逻辑返回9999暗示"还有下一页", 这适合无限滚动的节目库分类;
-		#   但对固定有限列表(pagecount=1)会误导壳子一直翻页导致重复。
-		#   ★修复: 仅当 pagecount>1 时才按"本页满→可能有下一页"返回9999;
-		#     pagecount<=1 的固定单页列表返回实际页数, 让壳子知道到底, 不再翻页。
-		result['pagecount'] = (9999 if len(videos)>=pagecount else pg) if pagecount>1 else pg
-		result['limit'] = 90
-		result['total'] = 999999
-		return result
+		# 旧版「栏目大全 / 节目大全 / 全部」都是指网站默认那个"全部"态,
+		#   不是额外的目录, 统一路由到「电视栏目」页签, 老收藏/老壳子不会变空列表。
+		tid = _YSP_TAB_ALIASES.get(tid, tid)
+		# ★默认「全部」= 栏目大全: 不带任何 itype 频道过滤, 取全量栏目并按官网 24 条/页翻页。
+		#   显式归一, 保证"点进去就是栏目大全"与官网一致, 不被当成可裁掉的其他目录。
+		if tid == '电视栏目':
+			_cat = _ysp_extval(extend, 'datafl-sc')
+			if _cat in _YSP_COLUMN_ALL_ALIASES:
+				extend = dict(extend)
+				extend['datafl-sc'] = _YSP_COLUMN_ALL
+		_pcid = _YSP_PROG_CID.get(tid, '')
+		if not _pcid:
+			return {'list': [], 'page': pg, 'pagecount': pg, 'limit': 24, 'total': 0}
+		_fv = _ysp_build_fv(_pcid, tid, extend)
+		_pg = int(pg) if str(pg).isdigit() and int(pg) > 0 else 1
+		_SIZE = 24  # 网站 /resource/pool 每页固定 24 条
+		_progs, _has_more, _total = _ysp_program(_fv, page=_pg, size=_SIZE)
+		videos = []
+		for _title, _cid, _cover, _rem, _brief in _progs:
+			# ★修复④: vod_remarks 用接口返回的真实最新期次/更新状态, 不再用静态清单里写死的日期
+			videos.append({
+				"vod_id": "prog~~~%s~~~%s~~~%s" % (_cid, _title, _cover),
+				"vod_name": self._strip_title_marks(_title),
+				"vod_pic": _cover,
+				"vod_remarks": _rem
+			})
+		# ★修复③: 旧代码 pageSizeT=50(实际被截断成24)却按 50 判定"本页未满=到底",
+		#   壳子第一页后就停止下拉 -> 节目显示不全。现按网站真实页大小取数,
+		#   并以接口返回的 has_more/total 决定 pagecount, 未满页才终止, 满页继续翻。
+		return {
+			'list': videos,
+			'page': _pg,
+			'pagecount': (9999 if _has_more else _pg),
+			'limit': _SIZE,
+			'total': _total or (_pg * _SIZE + (1 if _has_more else 0))
+		}
 	def detailContent(self,array):
 		result={}
 		# 【电视栏目·修复】壳子把 categoryContent 返回的三段式 vod_id(library~~~<lid>~~~<cid>)
@@ -1157,28 +1199,49 @@ class Spider(Spider):  # 元类 默认的元类 type
 		fromId2 = None
 		try:
 			if locals().get('_is_prog'):
-				# 【program分类·取全集】以节目cid打开详情页取 shareLongVideoRec.episodes.videoList
-				#   全集真实vid, 产"第N集$vid"播放串(fromId2='央视频' -> playerContent直接取MP4直链)。
-				#   比 _ysp_best_album(剧名搜索)更精确: 规避同名剧歧义, 与央视频页面数据完全一致。
+				# 【program分类·取全集】以节目cid打开央视频详情页, 按网站真实结构分派:
+				#   ① shareLongVideoRec.episodes.videoList -> 纪录片/特别节目(全集真实vid)
+				#   ② pastCover.coverList -> 电视栏目按期次组织的栏目(每期cid, 产 ~~~cid)
+				#   ③ 剧名搜索最佳全集专辑兜底  ④ 顶层 vid 单集兜底
+				# ★四种产出统一 fromId2='央视频': ①③的vid直接 get_ysp_mp4 取720P MP4直链;
+				#   ②的 ~~~cid 由 playerContent 先解析成真实vid再取720P直链, 播放能力不变。
 				videoList=[]
 				fromId2='央视频'
 				_seen=set()
+				_sv={}
 				try:
 					_js=_ysp_fetch_state('https://m.yangshipin.cn/video?type=0&cid=%s'%id)
 					if _js:
 						_sv=(_js.get('payloads',{}) or {}).get('sharevideo',{}) or {}
-						_eps=((_sv.get('shareLongVideoRec',{}) or {}).get('episodes',{}) or {}).get('videoList',[]) or []
-						for _it in _eps:
-							_vid=_it.get('vid')
-							_tt=str(_it.get('title') or '').strip()
-							if _vid and _vid not in _seen:
-								_seen.add(_vid)
-								if not _tt or not _tt.startswith('第'):
-									_tt='第%d集'%len(_seen)
-								videoList.append('%s$%s'%(_tt,_vid))
 				except Exception:
-					videoList=[]
-				# 兜底: 详情页取不到全集 -> 用剧名搜索最佳全集专辑(完整复刻影视剧类分支逻辑)
+					_sv={}
+				# ① 剧集/纪录片/特别节目: 全集 episodes
+				try:
+					_eps=((_sv.get('shareLongVideoRec',{}) or {}).get('episodes',{}) or {}).get('videoList',[]) or []
+					for _it in _eps:
+						_vid=_it.get('vid')
+						_tt=str(_it.get('title') or '').strip()
+						if _vid and _vid not in _seen:
+							_seen.add(_vid)
+							if not _tt or not _tt.startswith('第'):
+								_tt='第%d集'%len(_seen)
+							videoList.append('%s$%s'%(_tt,_vid))
+				except Exception:
+					pass
+				# ② 电视栏目: pastCover.coverList 历史期次(最新在前)
+				if not videoList:
+					try:
+						_cl=((_sv.get('pastCover',{}) or {}).get('coverList',[]) or [])
+						for _it in _cl:
+							_cid=_it.get('cid')
+							_t=str((((_it.get('poster') or {}).get('poster') or {}).get('firstLine') or {}).get('text') or '').strip()
+							if not _t: _t=str(_it.get('num') or '')
+							if _cid and _cid not in _seen:
+								_seen.add(_cid)
+								videoList.append('%s$~~~%s'%(_t or _cid, _cid))
+					except Exception:
+						pass
+				# ③ 兜底: 剧名搜索最佳全集专辑
 				if not videoList:
 					try:
 						_aa=_ysp_best_album(title)
@@ -1196,15 +1259,11 @@ class Spider(Spider):  # 元类 默认的元类 type
 							if _vid not in _seen:
 								_seen.add(_vid)
 								videoList.append('%s$%s'%(_en,_vid))
-				# 【二次兜底·单集特别节目】详情页无 episodes 且搜索无全集专辑时
-				#   (如"2026开学第一课"是 is_complete 单集, shareLongVideoRec 仅含
-				#   watchingfocus 无 episodes), 回退用 sharevideo 顶层 vid(单集)生成
-				#   播放串, 否则壳子详情页进不去/无法播放。
+				# ④ 单集兜底(如"2026开学第一课"): sharevideo 顶层 vid
 				if not videoList:
-					_sv2 = locals().get('_sv', {}) or {}
-					_top_vid = _sv2.get('vid','')
+					_top_vid = _sv.get('vid','')
 					if _top_vid and _top_vid not in _seen:
-						_tt2 = str(_sv2.get('title') or '').strip() or title
+						_tt2 = str(_sv.get('title') or '').strip() or title
 						_seen.add(_top_vid)
 						videoList.append('%s$%s'%(_tt2,_top_vid))
 			elif tid=="搜索":
@@ -1535,7 +1594,10 @@ class Spider(Spider):  # 元类 默认的元类 type
 		return result
 	config = {
 	"player": {},
-	"filter": {
+	# ★修复②: 筛选 UI 直接由 _YSP_FILTER_MAP 生成, 三个页签的选项/顺序/枚举与网站一致,
+	#   旧手写配置(电视剧/电影/动画片/节目大全…频道字母月份)已废弃, 保留仅为兼容旧壳子读取。
+	"filter": _ysp_filters_config(),
+	"_deprecated_filters": {
 	"电视剧":[{"key":"datafl-sc","name":"类型","value":[{"n":"历史","v":"历史"},{"n":"军事","v":"军事"},{"n":"武侠","v":"武侠"},{"n":"偶像","v":"偶像"},{"n":"爱情","v":"爱情"},{"n":"刑侦","v":"刑侦"},{"n":"古装","v":"古装"},{"n":"喜剧","v":"喜剧"},{"n":"奇幻","v":"奇幻"},{"n":"家庭","v":"家庭"},{"n":"悬疑","v":"悬疑"},{"n":"战争","v":"战争"},{"n":"剧情","v":"剧情"},{"n":"青春","v":"青春"},{"n":"神话","v":"神话"},{"n":"都市","v":"都市"},{"n":"农村","v":"农村"},{"n":"更多","v":"更多"}]}, {"key":"datadq-area","name":"地区","value":[{"n":"中国大陆","v":"中国大陆"},{"n":"中国香港","v":"中国香港"},{"n":"中国台湾","v":"中国台湾"},{"n":"美国","v":"美国"},{"n":"英国","v":"英国"},{"n":"泰国","v":"泰国"}]}, {"key":"datanf-year","name":"年份","value":[{"n":"2026","v":"2026"},{"n":"2025","v":"2025"},{"n":"2024","v":"2024"},{"n":"2023","v":"2023"},{"n":"2022","v":"2022"},{"n":"2021","v":"2021"},{"n":"2020","v":"2020"},{"n":"2019","v":"2019"},{"n":"2018","v":"2018"},{"n":"2017","v":"2017"},{"n":"2016","v":"2016"},{"n":"2015","v":"2015"},{"n":"2014","v":"2014"},{"n":"2013","v":"2013"},{"n":"2012","v":"2012"},{"n":"2011","v":"2011"},{"n":"2010","v":"2010"},{"n":"2009","v":"2009"},{"n":"2008","v":"2008"},{"n":"2007","v":"2007"},{"n":"2006","v":"2006"},{"n":"2005","v":"2005"},{"n":"更早","v":"更早"}]}],
 	"动画片":[{"key":"datafl-sc","name":"类型","value":[{"n":"益智","v":"益智"},{"n":"冒险","v":"冒险"},{"n":"合家欢","v":"合家欢"},{"n":"竞技","v":"竞技"},{"n":"少年","v":"少年"},{"n":"真人","v":"真人"},{"n":"魔幻科幻","v":"魔幻科幻"},{"n":"战斗","v":"战斗"},{"n":"儿童故事","v":"儿童故事"},{"n":"更多","v":"更多"}]}, {"key":"datadq-area","name":"地区","value":[{"n":"中国大陆","v":"中国大陆"},{"n":"美国","v":"美国"},{"n":"日本","v":"日本"},{"n":"英国","v":"英国"},{"n":"欧美","v":"欧美"}]}],
 	"纪录片":[{"key":"datafl-sc","name":"类型","value":[{"n":"文史","v":"文史"},{"n":"自然","v":"自然"},{"n":"美食","v":"美食"},{"n":"军事","v":"军事"},{"n":"科技","v":"科技"},{"n":"体育","v":"体育"},{"n":"健康","v":"健康"},{"n":"农业","v":"农业"},{"n":"旅游","v":"旅游"},{"n":"社会","v":"社会"},{"n":"更多","v":"更多"}]}, {"key":"datadq-area","name":"地区","value":[{"n":"中国大陆","v":"中国大陆"},{"n":"美国","v":"美国"},{"n":"日本","v":"日本"},{"n":"韩国","v":"韩国"},{"n":"英国","v":"英国"}]}, {"key":"datanf-year","name":"年份","value":[{"n":"2026","v":"2026"},{"n":"2025","v":"2025"},{"n":"2024","v":"2024"},{"n":"2023","v":"2023"},{"n":"2022","v":"2022"},{"n":"2021","v":"2021"},{"n":"2020","v":"2020"},{"n":"2019","v":"2019"},{"n":"2018","v":"2018"},{"n":"2017","v":"2017"},{"n":"2016","v":"2016"},{"n":"2015","v":"2015"},{"n":"2014","v":"2014"},{"n":"2013","v":"2013"},{"n":"2012","v":"2012"},{"n":"2011","v":"2011"},{"n":"2010","v":"2010"},{"n":"2009","v":"2009"},{"n":"2008","v":"2008"},{"n":"2007","v":"2007"},{"n":"2006","v":"2006"},{"n":"2005","v":"2005"},{"n":"更早","v":"更早"}]}],

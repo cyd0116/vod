@@ -1681,9 +1681,33 @@ class Spider(Spider):  # 元类 默认的元类 type
 			return self._ysp_library_content(_pg, extend)
 		videos = []
 		for _title, _cid, _cover, _rem, _brief in _progs:
+			# ★★【真机「暂无播放数据」根因修复 · 本轮核心】
+			#   电视栏目(program_library)接口条目给的是【纯数字栏目的 lid】(如 10492),
+			#   不是节目 cid。此前按纪录片/特别节目那样生成 prog~~~<lid>~~~... ,
+			#   detailContent 的 prog 分支会把这个 lid 当成 cid 去请求
+			#   video?type=0&cid=10492 -> 拿不到 __STATE_video__ -> 选集全空 -> return {}
+			#   -> 壳子转圈约 10s 后显示「暂无播放数据」。这与取流清晰度完全无关,
+			#   前几轮一直改 get_ysp_mp4 是找错了方向。
+			#   用户最初上传的原文件用静态清单, 卡片正是 library~~~<lid>~~~<栏目cid>,
+			#   detailContent 有专门分支用 video?type=0&lid=<lid> 取 pastCover.coverList
+			#   产 "期次$~~~<期次cid>" -> playerContent 解析真实 vid -> MP4 直链, 实测可播。
+			#   ✅ 保留官网接口的全量内容/筛选/动态日期/封面, 只把 vod_id 格式恢复到已验证链路。
+			_vod_id = "prog~~~%s~~~%s~~~%s" % (_cid, _title, _cover)
+			if tid == '电视栏目':
+				_lid = str(_cid)
+				if not re.fullmatch(r'\d{4,8}', _lid):
+					# 万一解析到的是真实栏目 cid 字符串, 按栏目名反查静态表拿 lid
+					for _k, _v in _YSP_COLUMNS_MAP.items():
+						if _v[0] == _title:
+							_lid = _k
+							break
+				if re.fullmatch(r'\d{4,8}', _lid):
+					_row = _YSP_COLUMNS_MAP.get(_lid)
+					_realcid = _row[1] if _row else _lid
+					_vod_id = 'library~~~%s~~~%s' % (_lid, _realcid)
 			# ★修复④: vod_remarks 用接口返回的真实最新期次/更新状态, 不再用静态清单里写死的日期
 			videos.append({
-				"vod_id": "prog~~~%s~~~%s~~~%s" % (_cid, _title, _cover),
+				"vod_id": _vod_id,
 				"vod_name": self._strip_title_marks(_title),
 				"vod_pic": _cover,
 				"vod_remarks": _rem
@@ -1700,7 +1724,7 @@ class Spider(Spider):  # 元类 默认的元类 type
 		}
 	def detailContent(self,array):
 		result={}
-		# 【电视栏目·修复】壳子把 categoryContent 返回的三段式 vod_id(library~~~<lid>~~~<cid>)
+		# 【电视栏目·播放链路】壳子把 categoryContent 返回的三段式 vod_id(library~~~<lid>~~~<cid>)
 		#   原样作为 ids[0] 传入, 不会用 ### 或任何分隔符预拆。此处优先识别 library~~~ 三段式:
 		#   从 _YSP_COLUMNS_MAP 反查栏目名, 设置 tid='电视栏目' 走对应分支, 避免 aid[3] 越界崩溃。
 		_raw0 = array[0]
@@ -1717,6 +1741,7 @@ class Spider(Spider):  # 元类 默认的元类 type
 			actors = ''
 			brief = _row[2] if _row else ''
 			lastVideo = ''
+			_is_library = True   # 供下方跳过无效的 videoinfoByGuid 回退(减少约 10s 转圈)
 		elif isinstance(_raw0, str) and _raw0.startswith('prog~~~'):
 			# 【program分类·方案A】categoryContent 返回的 vod_id: prog~~~<cid>~~~<title>~~~<cover>
 			#   <cid> 为央视频节目库的节目cid。全集解析在下方 try 块 prog 专用分支用 cid 精确取,
@@ -1755,7 +1780,9 @@ class Spider(Spider):  # 元类 默认的元类 type
 			brief = aid[7] if len(aid) > 7 else ''
 		fromId='CCTV'
 		Url=''
-		if tid=="电视栏目":
+		if tid=="电视栏目" and not locals().get('_is_library'):
+			# ★library~~~ 三段式不是 32位hex guid, 拿它请求 videoinfoByGuid 必然无效且耗时;
+			#   期次解析在下方 1867 行分支用 lid 独立完成, 这里整体跳过以消除转圈。
 			# 【电视栏目】新逻辑改走"栏目名->pastCover.coverList->cid->真实vid",
 			#   已不依赖 videoinfoByGuid 的 topicId; 此初始块仅作为回退时 Url 备用,
 			#   故整体包进 try, 即使 guid 无效/接口异常也绝不阻塞主流程(否则整段崩溃)。
@@ -1875,7 +1902,8 @@ class Spider(Spider):  # 元类 默认的元类 type
 					_lid=None
 					_mm=re.match(r'library~~~(\d+)~~~', str(id)) or re.match(r'^(\d+)$', str(id))
 					if _mm: _lid=_mm.group(1)
-					if _lid and _lid in _YSP_COLUMNS_MAP:
+					# ★不再要求 lid 必须存在于旧静态清单: 官网接口返回的新栏目同样可播
+					if _lid:
 						try:
 							_js=_ysp_fetch_state('https://m.yangshipin.cn/video?type=0&lid=%s'%_lid)
 							if _js:

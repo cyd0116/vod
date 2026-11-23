@@ -1276,6 +1276,65 @@ def _ysp_best_album(title):
 		return None
 	return best
 
+def _ysp_playinfo_vid(cid):
+	"""官方 cid -> 真实 vid(HAR 实证)。返回 vid 字符串或 None。
+	GET /voapi/omsot/album/v1/playinfo?cid=<cid>&ts=<ms>, 只带 yspappid/Referer/Origin,
+	无 yspsdkinput/yspsdksign/token/cKey —— 与 program 接口同域同身份, py 可复刻。
+	响应是 protobuf, 递归扫出第一个符合央视频 vid 格式的字符串。"""
+	import ssl
+	if not cid or not isinstance(cid, str):
+		return None
+	url = ('https://csapi.yangshipin.cn/voapi/omsot/album/v1/playinfo?cid=%s&ts=%s'
+	       % (urllib.parse.quote(cid), str(int(time.time() * 1000))))
+	hdr = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
+	                     '(KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36 Edg/157.0.0.0',
+	       'Referer': 'https://www.yangshipin.cn/', 'Origin': 'https://www.yangshipin.cn',
+	       'yspappid': '519748109', 'Accept': '*/*'}
+	try:
+		raw = urllib.request.urlopen(urllib.request.Request(url, headers=hdr),
+		                             timeout=12, context=ssl._create_unverified_context()).read()
+	except Exception:
+		return None
+	# --- protobuf wire-format 递归: 收集所有 len-delimited 字符串 ---
+	found = []
+	def _vi(b, i):
+		v = 0; sh = 0
+		while i < len(b) and sh < 70:
+			x = b[i]; i += 1; v |= (x & 0x7f) << sh
+			if not (x & 0x80): return v, i
+			sh += 7
+		return None, i
+	def _walk(b, d=0):
+		i = 0
+		while i < len(b) and d < 7:
+			key, i = _vi(b, i)
+			if key is None: break
+			wt = key & 7
+			if wt == 0:
+				_, i = _vi(b, i)
+			elif wt == 2:
+				ln, i = _vi(b, i)
+				if ln is None or i + ln > len(b): break
+				raw2 = b[i:i + ln]; i += ln
+				try:
+					txt = raw2.decode('utf-8')
+					if re.fullmatch(r'[a-z]\d{4}[a-z0-9]{5,}', txt):
+						found.append(txt)
+					if len(txt) >= 2:
+						_walk(raw2, d + 1)
+				except Exception:
+					_walk(raw2, d + 1)
+			elif wt == 5: i += 4
+			elif wt == 1: i += 8
+			else: break
+	_walk(raw)
+	for v in found:
+		# 排除 cid 本身(16位字母数字串)与栏目名
+		if v != cid:
+			_ysp_diag('detail', 'playinfo 官方映射 cid=%s -> vid=%s' % (cid, v))
+			return v
+	return None
+
 def _ysp_fetch_state(url):
 	"""请求央视频详情页, 解析并返回 __STATE_video__ JSON(或None)。"""
 	import ssl
@@ -2171,29 +2230,35 @@ class Spider(Spider):  # 元类 默认的元类 type
 					# ★先查缓存: 同一期次后续播放直接用上次的真实 vid, 不再发详情页请求
 					_real = _YSP_CID_VID_CACHE.get(_cid)
 					if not _real:
-						# ★解析偶发失败时重试 3 次(详情页偶发无 __STATE_video__),
-						#   绝不把 cid 当 vid 交给取流接口
-						for _attempt in range(3):
-							try:
-								_js = _ysp_fetch_state('https://m.yangshipin.cn/video?type=0&cid=%s' % _cid)
-								if _js:
-									_real = ((_js.get('payloads',{}) or {}).get('sharevideo',{}) or {}).get('vid','')
-							except Exception:
-								_real = None
-							if _real:
-								break
+						# ★首选: 官网同域免签的 album/v1/playinfo(HAR 实证 cid->vid 官方映射),
+						#   比 m.yangshipin.cn 详情页里的 __STATE_video__ 稳定得多。
+						try:
+							_real = _ysp_playinfo_vid(_cid)
+						except Exception:
+							_real = None
+						if not _real:
+							# 次选: 旧详情页解析, 重试 3 次(偶发无 __STATE_video__)
+							for _attempt in range(3):
+								try:
+									_js = _ysp_fetch_state('https://m.yangshipin.cn/video?type=0&cid=%s' % _cid)
+									if _js:
+										_real = ((_js.get('payloads',{}) or {}).get('sharevideo',{}) or {}).get('vid','')
+								except Exception:
+									_real = None
+								if _real:
+									break
 						if _real:
 							_YSP_CID_VID_CACHE[_cid] = _real
 							_ysp_diag('detail', 'cid=%s -> vid=%s 已缓存' % (_cid, _real))
 						else:
-							_ysp_diag('detail', '★cid=%s 解析真实 vid 失败(3次), 本次不取流' % _cid)
+							_ysp_diag('detail', '★cid=%s 解析真实 vid 失败, 本次不取流' % _cid)
 					if _real:
 						_play_id = _real
 					else:
 						# 解析彻底失败: 不把 cid 冒充 vid(那样会拿到不可控档位), 直接放弃本次取流
 						_play_id = None
 						_cid_failed = True
-				# 用 _play_id 取官网同款 fhd(1080P) 优先、自动降级 720P 的 MP4 直链
+				# 用 _play_id 取官网同款 fhd 档 MP4 直链(拒发时降级 720P)
 				try:
 					cand = self.get_ysp_mp4(vid=_play_id) if _play_id else None
 				except Exception:
@@ -2608,31 +2673,34 @@ class Spider(Spider):  # 元类 默认的元类 type
 		ctx = ssl._create_unverified_context()
 		_YSF_DOMAINS = ['playvv.yangshipin.cn','playvv.ysp.cctv.cn','bkplayvv.ysp.cctv.cn','playvv6.ysp.cctv.cn']
 
-		def _once(defn, domains, timeout, want=0):
-			"""请求某一档(最多 len(domains) 个域名)。返回 (vh, url)。
-			   want=1080: 只有拿到 >=1080 才立即返回; 都降成 720 返回其中最高的一条。
-			   want=0: 命中即返回。
-			   服务端明确拒发流(exem 非 0/2) -> 立刻 break, 返回 (None, 0), 不耗其余域名。"""
-			# ★固定设备 guid(不再每次随机); ts 仍是当前时间, cKey 每轮不同 -> 命中不同 CDN 节点
+		def _once(defn, domains, timeout):
+			"""请求指定档位, 返回 (vh, url, rejected)。
+			  ★定稿(依据官网 HAR + 用户 playinfo 正文):
+			  · 官网 defn=fhd 响应的 vl.vi 只有 1 个元素, 它【就是 fhd 档】;
+			    请求什么档、服务端就下发什么档, 不需要再用 vh/fn 反证它是 1080。
+			  · py 端点的 vi 很可能不含 vh / defn / fl.fi(那些是官网 get_video_info 的字段),
+			    旧代码算不出 vh 就把整条流丢掉, 掉进 shd 骨架 -> 正是「一会儿720一会儿1080」。
+			  · 本版: fhd 档只要有一条带完整 fvkey 的可播流就【直接返回】, vh 仅用于诊断;
+			    只有服务端明确拒发(exem 非 0/2)才返回 rejected=True 交给骨架降级。
+			  · 720P 硬底线保留: 服务端显式给出 <720 的 vh 才丢弃该流。"""
 			guid = _YSP_DEVICE_GUID
 			ts = int(time.time())
 			ck = self._ysp_ckey(vid, ts, guid, sdtfrom)
 			if len(ck) < 20:
-				time.sleep(0.3); return (None, 0)
+				time.sleep(0.3); return (0, "", False)
 			params = {
-				'guid':guid,'platform':sdtfrom,'vid':vid,'defn':defn,'charge':'0','defaultfmt':'auto',
+				'guid':guid,'platform':sdtfrom,'vid':vid,'defn':defn,'charge':'0','defaultfmt':defn,
 				'otype':'json','defnpayver':'1','appVer':'1.2.3','sphttps':'1','sphls':'1','spwm':'4',
 				'defsrc':'2','encryptVer':'8.1','sdtfrom':sdtfrom,'cKey':ck
-				# 注意: 不传 dtype / channel / adjust 才能拿到 MP4 直链(dltype:1, 含fvkey)
+				# 不传 dtype / channel / adjust 才能拿到 MP4 直链(dltype:1, 含 fvkey)
 			}
-			best = None   # (vh, url) 跨域名最优
 			for _d in domains:
 				url = 'https://' + _d + '/playvinfo?' + urllib.parse.urlencode(params)
 				req = urllib.request.Request(url, headers=FULL_HDRS)
 				try:
 					raw = urllib.request.urlopen(req, timeout=timeout, context=ctx).read().decode('utf-8', errors='replace')
 				except Exception:
-					continue      # 仅网络异常才换域名
+					continue          # 仅网络异常才换域名
 				t = raw.strip()
 				if t.startswith('('): t = t[1:]
 				if t.endswith(')'): t = t[:-1]
@@ -2642,14 +2710,12 @@ class Spider(Spider):  # 元类 默认的元类 type
 				except Exception:
 					continue
 				payload, ep, fl_map = _ysp_play_payload(jo)
-				# exem: 0=正常; 2=带有效vl的档位响应; 其它(如-12=无此档/会员)立刻换档
 				if payload.get('exem', -1) not in (0, 2):
-					_ysp_diag('playvinfo', 'defn=%s exem=%s 服务端拒发该档 -> 立即换档' % (defn, payload.get('exem')))
-					break
+					_ysp_diag('playvinfo', 'defn=%s exem=%s 服务端拒发该档 -> 降级' % (defn, payload.get('exem')))
+					return (0, "", True)
 				vi_list = (payload.get("vl") or {}).get("vi") or []
 				if not isinstance(vi_list, list): vi_list = []
-				_ysp_diag('playvinfo', 'defn=%s guid=%s 档位表=%s vi=%s' % (defn, guid, fl_map, [(x.get('vh'), (x.get('fn') or '')[:26]) for x in vi_list if isinstance(x, dict)]))
-				local_best = None
+				_ysp_diag('playvinfo', 'defn=%s 档位表=%s vi=%s' % (defn, fl_map, [(x.get('vh'), (x.get('fn') or '')[:30]) for x in vi_list if isinstance(x, dict)]))
 				for vi in vi_list:
 					if not isinstance(vi, dict): continue
 					try:
@@ -2664,56 +2730,37 @@ class Spider(Spider):  # 元类 默认的元类 type
 						if _dn in fl_map: _vh = fl_map[_dn]
 					if not _vh:
 						_fl = (fn + ' ' + str(vi.get('defn') or '') + ' ' + str(vi.get('fmt') or '')).lower()
-						if '1080' in _fl or 'fhd' in _fl or _YSP_FHD_FN_RE.search(fn or ''): _vh = 1080
-						elif '720' in _fl or 'shd' in _fl: _vh = 720
-					if _vh and _vh < 720: continue    # 720P 硬底线(用户最初要求)
+						if 'gdvz10004' in fn or '1080' in _fl: _vh = 1080
+						elif 'gdvz10003' in fn or '720' in _fl: _vh = 720
+					if _vh and _vh < 720: continue    # 720P 硬底线
 					if ep:
 						cand = (base + fn).rstrip('/') + '?vkey=' + fvkey
 						cand += ep if ep.startswith(('&','?')) else ('&' + ep)
 					else:
 						cand = base + fn + '?vkey=' + fvkey + '&sdtfrom=' + sdtfrom + '&guid=' + guid
-					if not want:
-						return (_vh, cand)              # shd/sd: 命中即返回
-					if local_best is None or _vh > local_best[0]:
-						local_best = (_vh, cand)
-				if local_best:
-					if best is None or local_best[0] > best[0]: best = local_best
-					if best[0] >= want:
-						return best                     # 拿到 1080, 立即停
-					continue                          # 该 CDN 降级, 同档换下一个域名
-				break                             # 有 exem 但一条可播流都没有 -> 立刻换档, 防转圈
-			return best if best else (None, 0)
+					# ★fhd 档返回的第一条可播流直接采用, 不再靠 vh 反证 / 不再跨域名凑档
+					return (_vh, cand, False)
+				# 有 exem 但一条可播流都没有 -> 视为该档不可用, 交给骨架降级
+				return (0, "", True)
+			return (0, "", False)
 
-		# ===== ① fhd 阶段: 官网同款档位, 有限重试直到拿到 1080 =====
-		#   3 轮 × 2 域名 = 最多 6 次请求; 每轮换域名顺序并生成新 cKey(ts 不同),
-		#   覆盖 CDN 动态降级。降级响应是立即返回(非超时), 正常 1 次就 1080, 不耽误播放。
-		fhd_best = (0, "")
-		fhd_rejected = False
-		for _round in range(3):
-			_d0, _d1 = _YSF_DOMAINS[_round % 4], _YSF_DOMAINS[(_round + 1) % 4]
-			_vh, _u = _once("fhd", [_d0, _d1], 5, want=1080)
-			if _u and _vh >= 1080:
-				_ysp_diag('playvinfo', '★fhd 第%d轮拿到 1080P, 直接采用(共%d次请求)' % (_round+1, (_round+1)*2))
-				return _u
-			if _u and _vh > fhd_best[0]:
-				fhd_best = (_vh, _u)
-			if not _u:
-				fhd_rejected = True
-				break        # 会员档/无此档, 服务端明确拒发 -> 立即换 shd, 不重试
-		if fhd_best[1] and not fhd_rejected:
-			_ysp_diag('playvinfo', '★fhd 6 次均只给 720 -> 片源/端点确实只给 720, 稳定采用 720P')
-			return fhd_best[1]
+		# ===== ① 官网同款 fhd 档: 给流即播(唯一主路径) =====
+		_vh, _u, _rejected = _once("fhd", _YSF_DOMAINS[:2], 8)
+		if _u:
+			_ysp_diag('playvinfo', '★fhd 档直链已采用 vh=%s(请求 fhd 即 fhd 档, 不再反证)' % _vh)
+			return _u
 
-		# ===== ② shd/sd 骨架回退: 6 次轮转, 4 域名, 8s, 命中即返回(不设全局超时)
+		# ===== ② 仅当服务端明确拒发 fhd(会员档/无此档)才降级 shd/sd 骨架 =====
 		for attempt in range(6):
 			defn = 'shd' if attempt % 2 == 0 else 'sd'
-			vh, u = _once(defn, _YSF_DOMAINS, 8, want=0)
+			_vh, u, _ = _once(defn, _YSF_DOMAINS, 8)
 			if u:
-				_ysp_diag('playvinfo', '可播直链 vh=%s defn=%s(骨架回退)' % (vh, defn))
+				_ysp_diag('playvinfo', '可播直链 vh=%s defn=%s(骨架降级)' % (_vh, defn))
 				return u
 			time.sleep(0.3 * (attempt + 1))
 		_ysp_diag('playvinfo', '★取流失败: 全部轮转无有效 MP4 流, vid=%s' % vid)
 		return ''
+
 
 	# ============ 选集VIP轻量判定(单次playvinfo, exem判据, 约0.7s) ============
 	def _ysp_is_vip(self, vid, timeout=5):
@@ -2749,7 +2796,7 @@ class Spider(Spider):  # 元类 默认的元类 type
 							continue
 					params = {
 						'guid':guid,'platform':sdtfrom,'vid':vid,'defn':defn,'charge':'0',
-						'defaultfmt':'auto','otype':'json','defnpayver':'1','appVer':'1.2.3',
+						'defaultfmt':defn,'otype':'json','defnpayver':'1','appVer':'1.2.3',
 						'sphttps':'1','sphls':'1','spwm':'4','defsrc':'2','encryptVer':'8.1',
 						'sdtfrom':sdtfrom,'cKey':ck
 					}

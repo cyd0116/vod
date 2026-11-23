@@ -2594,11 +2594,15 @@ class Spider(Spider):  # 元类 默认的元类 type
 		  cKey(已解密核对, 内部 vid/guid/ts 与 URL 完全一致)均无关。
 		  旧代码把 -12 当「该档不存在」立即降级 shd → 720P; shd 也被拒 → 返回空
 		  →「播放地址加载失败」。fhd 侥幸放行 → 1080P。三个现象同源。
-		  更致命的是: 31 条请求【全部】只发往第 1 个域名, 因为旧代码只在 urlopen
-		  抛异常时换域名, 而 -12 是 HTTP 200 却直接 return, 4 域名 failover 是摆设。
-		  ✅本版: -12 改判为「该节点拒发」→ 换域名 + 新 cKey 重试【同一档 fhd】;
-		    4 个节点全拒才降 shd(同样策略)。照搬官网「请求 fhd, 服务端给什么播什么」,
-		    不给服务端自动挑档的机会。首请求命中仍是 1 次请求、零延迟、1080P 秒播。
+		  ★再看 cKey 复用: dump 里 10 组「同一 cKey 连发 fhd+shd」10/10 全被拒;
+		    唯一翻盘组 z000004jqew 是 ts 464→465 换了新 cKey 才成功。
+		    → 服务端对重复 cKey 的连续请求一律拒发。
+		  ★上一版误把「换新 cKey」读成「换备用域名」, 加了 3 个从未验证的域名,
+		    真机反馈「频繁播放地址解析失败 / 个别 720p」= 备用节点不给流, 且同秒
+		    8 次请求复用同一 cKey 全被拒。该误判已撤销。
+		  ✅本版: 只用 dump 里 31/31 条都证明有效的唯一节点; -12 时用【新 cKey】
+		    重试【同一档 fhd】最多 3 轮, 全拒才降 shd。不换域名、不 sleep、不换档,
+		    照搬官网「请求 fhd, 服务端给什么播什么」。首请求命中仍 1 次请求秒播。
 
 		9 点干净基线保持: 固定 guid / cKey 8.1 / defaultfmt=auto / 720P 硬底线 /
 		extended_param 拼链 / 三目录 / 首页推荐; 无前置探测、无累计 sleep。"""
@@ -2613,33 +2617,39 @@ class Spider(Spider):  # 元类 默认的元类 type
 			'Connection': 'keep-alive',
 		}
 		ctx = ssl._create_unverified_context()
-		_YSF_DOMAINS = ['playvv.yangshipin.cn','playvv.ysp.cctv.cn',
-				'bkplayvv.ysp.cctv.cn','playvv6.ysp.cctv.cn']
+		# ★★★只用 dump 里 31/31 条真实请求都证明会返回有效响应的那一个节点。
+		#   上一版加入的 3 个备用域名, 真机反馈「频繁播放地址解析失败」——它们不
+		#   返回可用流, 却把请求数从 2 拉到 8, 还让同秒内复用同一 cKey, 更糟。
+		_YSF_DOMAINS = ['playvv.yangshipin.cn']
+
+		# ★每次请求都必须拿到【唯一】的 ts/cKey。dump 里 10 组「同一 cKey 连发
+		#   fhd+shd」全部 10/10 被 -12; 唯一翻盘组(z000004jqew)是 ts 从 464→465
+		#   换了新 cKey 才成功。同秒时 ts 递增(最多领先实际时间几秒, 在服务端
+		#   时间容差内), 绝不等待、绝不重复 —— 零人为延迟。
+		_last_ts = [0]
+		def _fresh_ts():
+			ts = int(time.time())
+			if ts <= _last_ts[0]:
+				ts = _last_ts[0] + 1
+			_last_ts[0] = ts
+			return ts
 
 		def _once(defn, domains, timeout):
 			'''请求某一档, 返回 (vh, url, rejected)。
-			   ★★★2026-11-23【壳子实时 dump 定稿】用户用取数版把 31 条 playvinfo
-			     原文落盘; cKey 已用 AES 解密逐条核对。实证结论(推翻此前全部猜测):
-			     ① 服务端按 defn 【只回一条】vi: fhd→vh=1080 / shd→vh=720,
-			        vl.cnt 恒为 1, fl.fi 是档位表不是流 —— 「多档数组乱序」不成立。
-			     ② 31 条里 23 条是 {"em":85,"exem":-12,"ip":"","s":"f",...},
-			        是【请求级拒发】而非「该档不存在」: 同一 vid 的 shd 也被同样拒绝。
-			        成功/失败请求的参数与请求头逐字相同, cKey 内 vid/guid/ts 与 URL
-			        完全一致且 ts 实时 → 不是签名/设备号/时间戳/会员态问题。
-			     ③ 31 条【全部】发往 playvv.yangshipin.cn —— 旧代码只在 urlopen
-			        抛异常时换域名, 而 -12 是 HTTP 200 却直接 return, 另外 3 个域名
-			        形同虚设, 一次都没试过。
-			     ④ 唯一翻盘组 z000004jqew: fhd 被拒, 1 秒后(新 ts/新 cKey)再问 shd 成功。
-			   ★本版据此只改一件事: -12 不再当作「该档不可用」立即降级, 而是
-			     【换下一个域名 + 重新生成 cKey 重试同一档】。请求档位始终是 fhd,
-			     不给服务端任何「自动挑档」的机会 —— 这正是「照搬官网」。
-			     exem 在 (0,2) 但无流(会员档)才立即降级, 不浪费域名。
-			     正常首请求命中仍是 1 次请求、零延迟、1080P 秒播。'''
+			   ★★★2026-11-23 壳子实时 dump(31 条)+真机反馈共同定稿:
+			     ① 服务端按 defn 只回【一条】vi: fhd→1080 / shd→720, 无多档乱序。
+			     ② 23/31 条是请求级拒发 exem=-12(ip=""/s="f"/无 vl), 与 vid、
+			        参数、请求头、guid、cKey 内容合法性全部无关。
+			     ③ 10 组「同一 cKey 连发两次」10/10 全被拒; 唯一翻盘是换了新 cKey。
+			        → 服务端对重复 cKey 的连续请求一律拒发。
+			     ④ 真机反馈: 加 3 个备用域名后「频繁解析失败」, 证明它们不可用。
+			   ★本版: 只用唯一已验证节点; -12 时用【新 cKey】重试【同一档 fhd】,
+			     最多 3 轮; 全拒才降 shd(同样策略)。不换域名、不换档、不 sleep。
+			     首请求命中仍是 1 次请求、零延迟、1080P 秒播。'''
 			guid = _YSP_DEVICE_GUID
-			for _d in domains:
-				# ★每个域名都重新生成 cKey(新 ts)。绝不人为 sleep: 真实网络下 4 个
-				#   域名的 HTTP 往返本身就会跨秒, cKey 自然不同; 用户明确要求零人为等待。
-				ts = int(time.time())
+			_d = domains[0]
+			for attempt in range(3):
+				ts = _fresh_ts()
 				ck = self._ysp_ckey(vid, ts, guid, sdtfrom)
 				if len(ck) < 20:
 					continue
@@ -2654,7 +2664,7 @@ class Spider(Spider):  # 元类 默认的元类 type
 				try:
 					raw = urllib.request.urlopen(req, timeout=timeout, context=ctx).read().decode('utf-8', errors='replace')
 				except Exception:
-					continue      # 网络异常换域名
+					continue      # 网络异常, 下一轮换新 cKey 再试同一节点
 				t = raw.strip()
 				if t.startswith('('): t = t[1:]
 				if t.endswith(')'): t = t[:-1]
@@ -2665,10 +2675,9 @@ class Spider(Spider):  # 元类 默认的元类 type
 					continue
 				payload, ep, fl_map = _ysp_play_payload(jo)
 				if payload.get('exem', -1) not in (0, 2):
-					# ★-12/-3 等是接入节点级拒发, 不是档位不可用:
-					#   换下一个域名、用新 cKey 重试【同一档】, 不降级、不放弃。
-					_ysp_diag('playvinfo', '节点 %s 拒发 defn=%s exem=%s, 换域名重试同档'
-						% (_d, defn, payload.get('exem')))
+					# ★-12 是请求级拒发: 换新 cKey 重试【同一档】, 不换域名、不降级。
+					_ysp_diag('playvinfo', 'defn=%s exem=%s 第%d轮被拒, 新cKey重试同档'
+						% (defn, payload.get('exem'), attempt + 1))
 					continue
 				vi_list = (payload.get("vl") or {}).get("vi") or []
 				if not isinstance(vi_list, list): vi_list = []
@@ -2706,18 +2715,17 @@ class Spider(Spider):  # 元类 默认的元类 type
 						% (defn, len(cands), [(c[1], c[3][:12]) for c in cands], cands[0][1]))
 					return (cands[0][1], cands[0][2], False)
 				return (None, 0, True)   # 响应有效但无可播流 -> 骨架降级
-			return (None, 0, False)  # 全域名网络异常
+			return (None, 0, False)  # 3 轮均被拒 / 网络异常
 
 		# ===== ① 官网同款: 一条 fhd 能力声明, 服务端给什么档就播什么档 =====
 		_vh, _u, _rej = _once("fhd", _YSF_DOMAINS, 8)
 		if _u:
 			return _u
 
-		# ===== ② 保底: 仅当 fhd 在【全部 4 个域名】都被拒, 才降一级请求 shd =====
-		#   ★dump 实证: -12 是节点级拒发, 换域名重试同档后多数能拿到 1080P;
-		#     只有服务端确实不给 fhd(会员档/片源上限)时, 才由 shd 给出 720P。
-		#   ★零前置探测、零累计 sleep: 首请求命中就是 1 次请求秒播; 只有被拒才重试,
-		#     请求数有界(fhd 4 + shd 4), 不再有旧版 6 次轮转 + 6.3s sleep 的拖慢。
+		# ===== ② 保底: 仅当 fhd 【3 轮换 cKey】都被拒, 才降一级请求 shd =====
+		#   ★真机反馈已证明「换备用域名」不可用, 本版只在同一节点用新 cKey 重试。
+		#   ★零前置探测、零 sleep: 首请求命中就是 1 次请求秒播; 只有被拒才重试,
+		#     请求数有界(fhd 3 + shd 3), 且每次都是快速 HTTP 200, 不转圈。
 		vh, u, _ = _once('shd', _YSF_DOMAINS, 8)
 		if u:
 			_ysp_diag('playvinfo', '可播直链 vh=%s defn=shd(fhd 全部节点被拒后降级)' % vh)

@@ -247,6 +247,18 @@ def _ysp_diag(tag, msg):
 # 当响应不给 vh 时, 用它把 1080P 档认出来。
 _YSP_FHD_FN_RE = re.compile(r'gdvz10004|fhd|1080', re.I)
 
+# ★★「同一期次这次1080下次720」根因之一: 旧代码每次播放都重新生成一个随机 guid。
+#   官网 HAR 里设备 guid 是固定的(mwr5lv3x_wood5lcnd1); 服务端按 guid/会话做档位调度,
+#   py 每次换设备 -> 同一 vid 被当成新会话, 档位自然飘。这里固定成同一台设备。
+#   cKey 8.1 的加密串里含 guid, 但只要求「请求里 guid 与 cKey 里一致」, 不要求随机。
+_YSP_DEVICE_GUID = 'mu1ja7md_5YMIqPWdHQ7uwqown9'
+
+# ★★根因之二: 每次播放都要重新请求 video?type=0&cid= 把期次 cid 解析成真实 vid。
+#   该详情页偶发返回 None 或不同数据 -> 解析失败时旧代码直接把 cid 当 vid 去取流,
+#   服务端对非法 vid 下发的档位与真实 vid 不同 -> 那一次变 720(甚至播不了)。
+#   解析成功后缓存 cid->vid, 同一期次后续播放不再依赖网络, 彻底钉死 vid。
+_YSP_CID_VID_CACHE = {}
+
 def _ysp_play_payload(jo):
 	"""把 playvinfo / get_video_info 响应统一成 (payload, extended_param, fl_map)。
 	★依据用户提供的官网 get_video_info 真实响应(新闻联播 20261122)定稿:
@@ -2141,6 +2153,7 @@ class Spider(Spider):  # 元类 默认的元类 type
 		#   直接get_ysp_mp4取确定性档位的MP4直链(vid为核心, 不再依赖guid映射)。
 		# startswith 兼容上一版曾短暂用过的「央视频栏目」播放源名(老收藏/缓存)
 		if isinstance(flag, str) and flag.startswith('央视频'):
+			_cid_failed = False
 			try:
 				_iphone = {
 					'User-Agent':'Mozilla/5.0 (iPhone; CPU iPhone OS 16_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.0 Mobile/15E148 Safari/604.1',
@@ -2155,18 +2168,34 @@ class Spider(Spider):  # 元类 默认的元类 type
 				#   仅此处需要做的: ~~~<cid> 是栏目期次 cid, 先解析成真实 vid。
 				if isinstance(_play_id, str) and _play_id.startswith('~~~'):
 					_cid = _play_id[3:]
-					_real = None
-					try:
-						_js = _ysp_fetch_state('https://m.yangshipin.cn/video?type=0&cid=%s' % _cid)
-						if _js:
-							_real = ((_js.get('payloads',{}) or {}).get('sharevideo',{}) or {}).get('vid','')
-					except Exception:
-						_real = None
+					# ★先查缓存: 同一期次后续播放直接用上次的真实 vid, 不再发详情页请求
+					_real = _YSP_CID_VID_CACHE.get(_cid)
+					if not _real:
+						# ★解析偶发失败时重试 3 次(详情页偶发无 __STATE_video__),
+						#   绝不把 cid 当 vid 交给取流接口
+						for _attempt in range(3):
+							try:
+								_js = _ysp_fetch_state('https://m.yangshipin.cn/video?type=0&cid=%s' % _cid)
+								if _js:
+									_real = ((_js.get('payloads',{}) or {}).get('sharevideo',{}) or {}).get('vid','')
+							except Exception:
+								_real = None
+							if _real:
+								break
+						if _real:
+							_YSP_CID_VID_CACHE[_cid] = _real
+							_ysp_diag('detail', 'cid=%s -> vid=%s 已缓存' % (_cid, _real))
+						else:
+							_ysp_diag('detail', '★cid=%s 解析真实 vid 失败(3次), 本次不取流' % _cid)
 					if _real:
 						_play_id = _real
+					else:
+						# 解析彻底失败: 不把 cid 冒充 vid(那样会拿到不可控档位), 直接放弃本次取流
+						_play_id = None
+						_cid_failed = True
 				# 用 _play_id 取官网同款 fhd(1080P) 优先、自动降级 720P 的 MP4 直链
 				try:
-					cand = self.get_ysp_mp4(vid=_play_id)
+					cand = self.get_ysp_mp4(vid=_play_id) if _play_id else None
 				except Exception:
 					cand = None
 				if cand and cand.startswith('http'):
@@ -2176,9 +2205,12 @@ class Spider(Spider):  # 元类 默认的元类 type
 			except Exception:
 				pass
 			if not url:
-				# vid取流失败 -> 通常为央视频VIP付费内容(免费剧瞬时成功, VIP剧拒发流)
-				#   给VIP标识提示, 而非静默黑屏
-				url = "【VIP】该剧为央视频付费内容，请登录央视频官方APP/VIP账号观看"
+				if _cid_failed:
+					# 期次 cid 解析真实 vid 失败(非会员问题), 给准确提示而非误标 VIP
+					url = "【取流失败】未能解析该期次的播放地址，请返回重进或稍后重试"
+				else:
+					# vid取流失败 -> 通常为央视频VIP付费内容, 给VIP标识而非静默黑屏
+					url = "【VIP】该剧为央视频付费内容，请登录央视频官方APP/VIP账号观看"
 				result["format"] = ''
 		elif re.search(r'^[0-9a-f]{32}$', id):
 			try:
@@ -2541,33 +2573,32 @@ class Spider(Spider):  # 元类 默认的元类 type
 		iv = bytes.fromhex(At)
 		ct = self._aes_cbc_encrypt(key, iv, Xn.encode('utf-8'))
 		return '--01' + ct.hex().upper()
-	# ============ 央视频点播 MP4 直链(vid -> cKey -> /playvinfo -> 官网同款 fhd) ============
+	# ============ 央视频点播 MP4 直链(vid -> cKey -> /playvinfo -> 官网同款 fhd, 固定设备) ============
 	def get_ysp_mp4(self, vid):
 		"""vid -> playvinfo -> 官网同款 fhd(1080P) 档的可播 MP4 直链。
-		★★【彻底解决「大部分720/偶尔1080」: 官网「自动选择」的真相】
-		  用户给出的官网播放页(新闻联播 lid=10492 vid=r000089cm9s / 今日说法 lid=10031
-		  vid=k000044dsox) 与已抓 HAR 逐字对上: 官网 get_video_info 的 body 写死
-		  "defn":"fhd", 播放上报 iHD=fhd, 响应 vl.vi 唯一元素 vh=1080 / fn=...gdvz10004.mp4,
-		  fl.fi 里 fhd=id10004=1080P, 且 exem=0 / vip_info 为空 -> fhd 免费。
-		  即: 官网所谓「自动 1080P」= 播放器固定请求 fhd 档, 不是 defn=auto 让服务端挑。
-		  上一版误用 defn=auto, 把决定权交给 CDN 动态调度 -> 正是「大部分720、偶尔1080」。
-		✅ 本版: 【所有点播, 无例外】第一个请求就是 defn=fhd(官网同款), 不再按分类/flag/
-		   id 前缀分流、不再 auto、不再 shd 优先、不再有状态机。这同时消灭前几轮全部随机源:
-		  兜底真实 vid 丢标记 -> 那次 720; 双路径交替; CDN 先到先得; 进程状态机。
-		  · fhd 档某个 CDN 把 1080 降成 720 时, 同档换其余域名直到拿到 vh>=1080, 拿到即停;
-		    全部降级才用其中最高的一条(仍可播)。
-		  · fhd 是会员档/无此档时, 服务端明确拒发流 -> 立即换 shd, 不 sleep、不试满域名,
-		    影视剧会员档节目只多一次快速失败请求, 不耽误播放、不黑屏。
-		  · 保留 720P 硬底线(服务端明确给 <720 才丢弃)。
-		★官网 PC 端点 get_video_info 的 signature/yspsdksign 由 WASM+SO 生成(2^16 子集 +
-		  13248 种拼接组合均未命中), 纯 py 无法复刻, 故不搬端点; 用 py 自己 cKey 8.1
-		  可复刻的 playvinfo 链路请求同一个 fhd 档。
-		★cKey 8.1 / extended_param 拼链 / 6 次轮转 / 4 域名 failover / library~~~ 链路均不变。"""
+		★★【本轮 · 同一期次 1080→720→1080 的第三个随机源, 全部钉死】
+		  用户真机: 新闻联播同一期次连续播放三次, 档位在 1080/720/1080 之间跳。
+		  片源固定、vid 固定, 说明每次播放发出的请求在变。代码里确实有三处每次都变:
+		  ① guid: 旧代码每次 random 生成一个新设备号。官网 HAR 里 device guid 是固定的
+		    (mwr5lv3x_wood5lcnd1); 服务端按 guid/会话做档位调度 -> 每次被当成新设备, 档位飘。
+		    ✅ 固定为 _YSP_DEVICE_GUID(cKey 仍带当前时间戳, 防重放不失效)。
+		  ② cid->vid: 每次播放都重新请求详情页解析 ~~~cid, 偶发失败时旧代码把 cid 冒充 vid
+		    发给取流接口 -> 非法 vid 拿到的档位不可控。✅ 解析成功即缓存, 失败重试 3 次,
+		    彻底失败则放弃取流(见 playerContent), 不再用 cid 取流。
+		  ③ CDN 动态降级: fhd 档某次只给 720。上一版 2 个域名都降 720 就直接接受 -> 那次 720。
+		    ✅ fhd 阶段做 3 轮有限重试(每轮换域名顺序 + 新 cKey), 最多 6 次请求;
+		    只要任一次拿到 vh>=1080 立即返回, 6 次都 720 才接受 720(片源/端点确实只给 720)。
+		★官网 HAR 硬证据: get_video_info body 写死 "defn":"fhd", 播放上报 iHD=fhd,
+		  响应 vl.vi 唯一元素 vh=1080 / gdvz10004, fl.fi 的 fhd=id10004, exem=0 免费。
+		  「偶尔能出 1080P」反证 py 这条 playvinfo 端点的 fhd 档确实能给 1080, 只是被挡住。
+		★所有点播一视同仁: 不再按分类或播放源做任何档位分流, 也没有进程状态机。
+		★cKey 8.1 / extended_param 拼链 / 720P 硬底线 / 4 域名 failover / library~~~ 链路不变。"""
 		import random, string, ssl, urllib.request, time, json
 		sdtfrom = '4330701'
 		_UA_BASE = ('Mozilla/5.0 (iPhone; CPU iPhone OS %s like Mac OS X) '
 			"AppleWebKit/605.1.15 (KHTML, like Gecko) Version/%s Mobile/15E148 Safari/604.1")
-		_UA_VERS = [('16_0','16.0'),('16_6','16.6'),('15_5','15.5'),('17_0','17.0'),('17_4','17.4')]
+		# ★固定 UA: 旧代码按 attempt 轮换 5 个 iOS 版本, 又多一个每次都变的变量
+		_UA_VERS = [('16_0','16.0')]
 		FULL_HDRS = {
 			'User-Agent': _UA_BASE % _UA_VERS[0], 'Referer': 'https://v.yangshipin.cn/',
 			'yspappid': '539073109', 'platform': '109', 'app-platform': 'm',
@@ -2577,19 +2608,17 @@ class Spider(Spider):  # 元类 默认的元类 type
 		ctx = ssl._create_unverified_context()
 		_YSF_DOMAINS = ['playvv.yangshipin.cn','playvv.ysp.cctv.cn','bkplayvv.ysp.cctv.cn','playvv6.ysp.cctv.cn']
 
-		def _once(defn, domains, timeout, ua_ver, want=0):
-			"""请求某一档。返回 (vh, url)。
-			   want=1080(仅 fhd 档): 某 CDN 降成 720 时继续同档换域名, 拿到 >=1080 即停;
-			                        全部降级则返回其中最高的一条, 保证可播。
-			   want=0(shd/sd): 命中即返回。
-			   ★服务端明确拒发流(exem 非 0/2, 或有 exem 但无任何可播 vi) -> 立刻 break 换档,
-			     不耗其余域名, 会员档节目不转圈。"""
-			guid = 'mu1ja7md_' + ''.join(random.choice(string.ascii_letters+string.digits) for _ in range(18))
+		def _once(defn, domains, timeout, want=0):
+			"""请求某一档(最多 len(domains) 个域名)。返回 (vh, url)。
+			   want=1080: 只有拿到 >=1080 才立即返回; 都降成 720 返回其中最高的一条。
+			   want=0: 命中即返回。
+			   服务端明确拒发流(exem 非 0/2) -> 立刻 break, 返回 (None, 0), 不耗其余域名。"""
+			# ★固定设备 guid(不再每次随机); ts 仍是当前时间, cKey 每轮不同 -> 命中不同 CDN 节点
+			guid = _YSP_DEVICE_GUID
 			ts = int(time.time())
 			ck = self._ysp_ckey(vid, ts, guid, sdtfrom)
 			if len(ck) < 20:
 				time.sleep(0.3); return (None, 0)
-			FULL_HDRS['User-Agent'] = _UA_BASE % ua_ver
 			params = {
 				'guid':guid,'platform':sdtfrom,'vid':vid,'defn':defn,'charge':'0','defaultfmt':'auto',
 				'otype':'json','defnpayver':'1','appVer':'1.2.3','sphttps':'1','sphls':'1','spwm':'4',
@@ -2619,7 +2648,7 @@ class Spider(Spider):  # 元类 默认的元类 type
 					break
 				vi_list = (payload.get("vl") or {}).get("vi") or []
 				if not isinstance(vi_list, list): vi_list = []
-				_ysp_diag('playvinfo', 'defn=%s 档位表=%s vi=%s' % (defn, fl_map, [(x.get('vh'), (x.get('fn') or '')[:26]) for x in vi_list if isinstance(x, dict)]))
+				_ysp_diag('playvinfo', 'defn=%s guid=%s 档位表=%s vi=%s' % (defn, guid, fl_map, [(x.get('vh'), (x.get('fn') or '')[:26]) for x in vi_list if isinstance(x, dict)]))
 				local_best = None
 				for vi in vi_list:
 					if not isinstance(vi, dict): continue
@@ -2655,23 +2684,35 @@ class Spider(Spider):  # 元类 默认的元类 type
 				break                             # 有 exem 但一条可播流都没有 -> 立刻换档, 防转圈
 			return best if best else (None, 0)
 
-		# ===== 唯一主路径: 官网同款 fhd 打头, 所有点播一视同仁 =====
-		_DEFNS = ['fhd', 'shd', 'sd']
+		# ===== ① fhd 阶段: 官网同款档位, 有限重试直到拿到 1080 =====
+		#   3 轮 × 2 域名 = 最多 6 次请求; 每轮换域名顺序并生成新 cKey(ts 不同),
+		#   覆盖 CDN 动态降级。降级响应是立即返回(非超时), 正常 1 次就 1080, 不耽误播放。
+		fhd_best = (0, "")
+		fhd_rejected = False
+		for _round in range(3):
+			_d0, _d1 = _YSF_DOMAINS[_round % 4], _YSF_DOMAINS[(_round + 1) % 4]
+			_vh, _u = _once("fhd", [_d0, _d1], 5, want=1080)
+			if _u and _vh >= 1080:
+				_ysp_diag('playvinfo', '★fhd 第%d轮拿到 1080P, 直接采用(共%d次请求)' % (_round+1, (_round+1)*2))
+				return _u
+			if _u and _vh > fhd_best[0]:
+				fhd_best = (_vh, _u)
+			if not _u:
+				fhd_rejected = True
+				break        # 会员档/无此档, 服务端明确拒发 -> 立即换 shd, 不重试
+		if fhd_best[1] and not fhd_rejected:
+			_ysp_diag('playvinfo', '★fhd 6 次均只给 720 -> 片源/端点确实只给 720, 稳定采用 720P')
+			return fhd_best[1]
+
+		# ===== ② shd/sd 骨架回退: 6 次轮转, 4 域名, 8s, 命中即返回(不设全局超时)
 		for attempt in range(6):
-			defn = _DEFNS[attempt % len(_DEFNS)]
-			ua_ver = _UA_VERS[attempt % len(_UA_VERS)]
-			_want = 1080 if defn == 'fhd' else 0
-			# ★fhd 档最多试前 2 个域名: 拿到 1080 即停; 两个都降成 720 就返回 720,
-			#   不为了「万一某 CDN 有 1080」把 4 个域名全耗掉, 守住 720P 节目的播放速度。
-			_domains = _YSF_DOMAINS[:2] if defn == 'fhd' else _YSF_DOMAINS
-			vh, u = _once(defn, _domains, 8, ua_ver, want=_want)
+			defn = 'shd' if attempt % 2 == 0 else 'sd'
+			vh, u = _once(defn, _YSF_DOMAINS, 8, want=0)
 			if u:
-				_ysp_diag('playvinfo', '★可播直链 vh=%s defn=%s(官网同款 fhd 打头)' % (vh, defn))
+				_ysp_diag('playvinfo', '可播直链 vh=%s defn=%s(骨架回退)' % (vh, defn))
 				return u
-			# ★fhd 会员档已由 _once 立即换档, 这里不再 sleep, 影视剧会员节目不耽误
-			if attempt >= 2:
-				time.sleep(0.3 * attempt)
-		_ysp_diag('playvinfo', '★取流失败: 6 次轮转均无有效 MP4 流, vid=%s' % vid)
+			time.sleep(0.3 * (attempt + 1))
+		_ysp_diag('playvinfo', '★取流失败: 全部轮转无有效 MP4 流, vid=%s' % vid)
 		return ''
 
 	# ============ 选集VIP轻量判定(单次playvinfo, exem判据, 约0.7s) ============
@@ -2700,7 +2741,7 @@ class Spider(Spider):  # 元类 默认的元类 type
 		for attempt in range(2):
 			for defn in _DEFNS:
 				try:
-					guid = 'mu1ja7md_' + ''.join(random.choice(string.ascii_letters+string.digits) for _ in range(18))
+					guid = _YSP_DEVICE_GUID
 					ts = int(time.time())
 					ck = self._ysp_ckey(vid, ts, guid, sdtfrom)
 					if len(ck) < 20:

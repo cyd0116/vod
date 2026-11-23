@@ -2581,9 +2581,11 @@ class Spider(Spider):  # 元类 默认的元类 type
 		走遍中国 1080P 标「会员」 -> 自动 720。播放器只发一条 defn=fhd 作能力声明,
 		服务端按片源/会员态下发「最高可用免费档」, 播放器原样播放。
 
-		★前十几轮「一会儿720一会儿1080」的根因: 拿到响应后又用 vh/gdvz10004/fl.fi
-		  去反证「是不是1080」, 认不出就丢掉、换域名重试、掉进 shd 骨架 —— 那才是插件
-		  在选档。本版彻底删除: 不再判档、不比大小、不凑 1080、不重试。
+		★★真机「一会儿720一会儿1080」的最终根因(用户取回的 py 端点真实响应):
+		  py 端点下发【多档 vi 数组且顺序随机】, 旧代码固定取 vi[0] —— 数组顺序变,
+		  播放器分辨率就跟着变。官网端点 vi 恒为一条, 所以照搬「取第一条」在这里是错的。
+		  ✅本版: 在同一份响应内部遍历全部档, 按服务端 vh/sl/defn/gdvz 取最高可用档。
+		  ★不新增请求、不换域名重试、不丢流; 单档响应时行为与原来完全相同。
 
 		基线逐字回到 9 点多版本(用户指定): 固定 guid / cKey 8.1 / defaultfmt=auto /
 		4 域名 failover / 6 次 shd-sd 轮转 / 720P 硬底线 / extended_param 拼链。
@@ -2604,8 +2606,18 @@ class Spider(Spider):  # 元类 默认的元类 type
 
 		def _once(defn, domains, timeout):
 			'''请求某一档, 返回 (vh, url, rejected)。
-			   ★照搬官网: vl.vi 第一条带 fvkey 的流【原样返回】, 不看 vh 挑档、
-			   不跨域名比大小、不因为给的是 720 就换域名重来。'''
+			   ★★真机响应(用户 2026-11-23 从浏览器地址栏取回)证明:
+			     py 的 playvv/playvinfo 与官网 player-api/get_video_info 不是一种结构 ——
+			     官网 vl.vi 恒为【一条】服务端选定档; py 这条老端点会下发【多档数组】,
+			     且数组顺序随 CDN/会话变化。旧代码固定取 vi[0] / 取第一条, 于是
+			     「同一期次 1080→720→1080」= 数组顺序在变, 不是服务端档位在变。
+			   ★照搬官网「自动选择最高可用免费档」的正确落点:
+			     在【这一份响应内部】遍历全部 vi, 按服务端自己下发的档位信息排序,
+			     取最高的一条。不新增请求、不换域名重试、不丢掉任何一条流。
+			     排序依据(依次降级, 认不出就当 0 排后面, 流仍然保留):
+			       vi['sl']==1(服务端选定档) > vi['vh'] > vi['defn']→fl.fi 档位表
+			       > fn 里的 gdvz 编号(10004=1080 / 10003=720)。
+			   ★若 vi 只有一条(与官网一致), 返回结果与「取第一条」完全相同, 不会变坏。'''
 			guid = _YSP_DEVICE_GUID
 			ts = int(time.time())
 			ck = self._ysp_ckey(vid, ts, guid, sdtfrom)
@@ -2637,6 +2649,7 @@ class Spider(Spider):  # 元类 默认的元类 type
 					return (None, 0, True)   # 服务端明确拒发该档 -> 交给骨架降级
 				vi_list = (payload.get("vl") or {}).get("vi") or []
 				if not isinstance(vi_list, list): vi_list = []
+				cands = []        # (排序键, vh, 直链, fn) —— 一条都不丢
 				for vi in vi_list:
 					if not isinstance(vi, dict): continue
 					try:
@@ -2646,15 +2659,29 @@ class Spider(Spider):  # 元类 默认的元类 type
 						continue
 					if not fvkey: continue
 					_vh = vi.get('vh') or 0
+					if not _vh:
+						_dn = str(vi.get('defn') or '')
+						if _dn in fl_map: _vh = fl_map[_dn]
+					# fn 里的 gdvz 编号兜底(官网真实响应 u000014ccy5.gdvz10004.mp4)
+					_gd = 0
+					_gm = re.search(r'gdvz(\d+)', fn or '')
+					if _gm:
+						_gd = {'10004': 1080, '10003': 720, '10002': 480}.get(_gm.group(1), 0)
 					if _vh and _vh < 720: continue    # 720P 硬底线: 仅明确低于720时跳过该条
 					if ep:
 						cand = (base + fn).rstrip('/') + '?vkey=' + fvkey
 						cand += ep if ep.startswith(('&','?')) else ('&' + ep)
 					else:
 						cand = base + fn + '?vkey=' + fvkey + '&sdtfrom=' + sdtfrom + '&guid=' + guid
-					_ysp_diag('playvinfo', 'defn=%s 服务端定档 vh=%s fn=%s -> 原样播放'
-						% (defn, _vh, (fn or '')[:30]))
-					return (_vh, cand, False)   # ★第一条即采用, 不比档 / 不换域名凑 1080
+					# ★服务端标记 sl=1 的档最优先; 其次按实际高度; 认不出高度仍保留
+					_sel = 1 if str(vi.get('sl') or '') in ('1', 'True', 'true') else 0
+					_h = _vh or _gd
+					cands.append(((_sel, _h), _h, cand, (fn or '')[:30]))
+				if cands:
+					cands.sort(key=lambda x: x[0], reverse=True)
+					_ysp_diag('playvinfo', 'defn=%s 服务端下发%d档 %s -> 采用最高可用档 vh=%s'
+						% (defn, len(cands), [(c[1], c[3][:12]) for c in cands], cands[0][1]))
+					return (cands[0][1], cands[0][2], False)
 				return (None, 0, True)   # 响应有效但无可播流 -> 骨架降级
 			return (None, 0, False)  # 全域名网络异常
 

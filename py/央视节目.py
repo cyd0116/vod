@@ -2151,7 +2151,7 @@ class Spider(Spider):  # 元类 默认的元类 type
 				#   cid不是真实vid, 需先剥离"~~~"前缀, 打开 video?type=0&cid= 详情页
 				#   取 sharevideo.vid 真实vid, 再 get_ysp_mp4 取1080P优先(自动降级720P)的MP4直链。
 				_play_id = id
-				# ★所有点播一律交给服务端自动选档, 不再按分类/flag 做任何档位分流。
+				# ★所有点播一律走官网同款 fhd 打头, 不再按分类/flag/id 前缀做任何档位分流。
 				#   仅此处需要做的: ~~~<cid> 是栏目期次 cid, 先解析成真实 vid。
 				if isinstance(_play_id, str) and _play_id.startswith('~~~'):
 					_cid = _play_id[3:]
@@ -2164,7 +2164,7 @@ class Spider(Spider):  # 元类 默认的元类 type
 						_real = None
 					if _real:
 						_play_id = _real
-				# 用 _play_id 取 1080P 优先(自动降级 720P)的 MP4 直链（_play_id 此时是真实 vid）
+				# 用 _play_id 取官网同款 fhd(1080P) 优先、自动降级 720P 的 MP4 直链
 				try:
 					cand = self.get_ysp_mp4(vid=_play_id)
 				except Exception:
@@ -2541,19 +2541,28 @@ class Spider(Spider):  # 元类 默认的元类 type
 		iv = bytes.fromhex(At)
 		ct = self._aes_cbc_encrypt(key, iv, Xn.encode('utf-8'))
 		return '--01' + ct.hex().upper()
-	# ============ 央视频点播 MP4 直链(vid -> cKey -> /playvinfo -> 服务端自动选档) ============
+	# ============ 央视频点播 MP4 直链(vid -> cKey -> /playvinfo -> 官网同款 fhd) ============
 	def get_ysp_mp4(self, vid):
-		"""vid -> playvinfo -> 服务端自动选档的可播 MP4 直链。
-		★用户最终口径: 「就按照官网自动选择的分辨率就可以了」。
-		  插件不再点名 fhd/shd、不再按 vh 挑最高、不再跨域名凑 1080、不再按栏目/影视剧分流。
-		  一条 defn=auto 请求交给央视频服务端, 它决定下发哪一档就直接播哪一档:
-		  给 1080 播 1080, 给 720 播 720, 都不强求; 只在服务端明确给了 <720 时走 720P 硬底线。
-		  ★这同时消除了前几轮的所有代码层随机源: 没有 fhd/shd 两条路径交替、没有兜底分支
-		    丢标记、没有 CDN 之间先到先得、没有进程状态机; 服务端给什么就是什么。
-		  ★官网 PC 端点 get_video_info 的 signature/yspsdksign 由 WASM+SO 生成, 纯 py 无法复刻,
-		    故不搬端点; 用 py 自己可复刻(cKey 8.1)的 playvinfo 链路让同一个服务端自动选档。
-		  ★auto 不被该端点接受时, 逐字回退用户最初上传的原文件骨架, 保证不黑屏、不转圈。
-		★请求参数组 / cKey 8.1 / extended_param 拼链 / 720P 底线 / library~~~ 链路全部不变。"""
+		"""vid -> playvinfo -> 官网同款 fhd(1080P) 档的可播 MP4 直链。
+		★★【彻底解决「大部分720/偶尔1080」: 官网「自动选择」的真相】
+		  用户给出的官网播放页(新闻联播 lid=10492 vid=r000089cm9s / 今日说法 lid=10031
+		  vid=k000044dsox) 与已抓 HAR 逐字对上: 官网 get_video_info 的 body 写死
+		  "defn":"fhd", 播放上报 iHD=fhd, 响应 vl.vi 唯一元素 vh=1080 / fn=...gdvz10004.mp4,
+		  fl.fi 里 fhd=id10004=1080P, 且 exem=0 / vip_info 为空 -> fhd 免费。
+		  即: 官网所谓「自动 1080P」= 播放器固定请求 fhd 档, 不是 defn=auto 让服务端挑。
+		  上一版误用 defn=auto, 把决定权交给 CDN 动态调度 -> 正是「大部分720、偶尔1080」。
+		✅ 本版: 【所有点播, 无例外】第一个请求就是 defn=fhd(官网同款), 不再按分类/flag/
+		   id 前缀分流、不再 auto、不再 shd 优先、不再有状态机。这同时消灭前几轮全部随机源:
+		  兜底真实 vid 丢标记 -> 那次 720; 双路径交替; CDN 先到先得; 进程状态机。
+		  · fhd 档某个 CDN 把 1080 降成 720 时, 同档换其余域名直到拿到 vh>=1080, 拿到即停;
+		    全部降级才用其中最高的一条(仍可播)。
+		  · fhd 是会员档/无此档时, 服务端明确拒发流 -> 立即换 shd, 不 sleep、不试满域名,
+		    影视剧会员档节目只多一次快速失败请求, 不耽误播放、不黑屏。
+		  · 保留 720P 硬底线(服务端明确给 <720 才丢弃)。
+		★官网 PC 端点 get_video_info 的 signature/yspsdksign 由 WASM+SO 生成(2^16 子集 +
+		  13248 种拼接组合均未命中), 纯 py 无法复刻, 故不搬端点; 用 py 自己 cKey 8.1
+		  可复刻的 playvinfo 链路请求同一个 fhd 档。
+		★cKey 8.1 / extended_param 拼链 / 6 次轮转 / 4 域名 failover / library~~~ 链路均不变。"""
 		import random, string, ssl, urllib.request, time, json
 		sdtfrom = '4330701'
 		_UA_BASE = ('Mozilla/5.0 (iPhone; CPU iPhone OS %s like Mac OS X) '
@@ -2568,10 +2577,13 @@ class Spider(Spider):  # 元类 默认的元类 type
 		ctx = ssl._create_unverified_context()
 		_YSF_DOMAINS = ['playvv.yangshipin.cn','playvv.ysp.cctv.cn','bkplayvv.ysp.cctv.cn','playvv6.ysp.cctv.cn']
 
-		def _once(defn, domains, timeout, ua_ver):
-			"""发一次 playvinfo。返回 (vh, url); 无有效流返回 (None, 0)。
-			   ★服务端下发几档就用它给的第一条有效流 —— 不排序、不挑最高、不跨域名凑 1080。
-			   vh 仅用于诊断与 720P 硬底线, 不参与任何档位选择。"""
+		def _once(defn, domains, timeout, ua_ver, want=0):
+			"""请求某一档。返回 (vh, url)。
+			   want=1080(仅 fhd 档): 某 CDN 降成 720 时继续同档换域名, 拿到 >=1080 即停;
+			                        全部降级则返回其中最高的一条, 保证可播。
+			   want=0(shd/sd): 命中即返回。
+			   ★服务端明确拒发流(exem 非 0/2, 或有 exem 但无任何可播 vi) -> 立刻 break 换档,
+			     不耗其余域名, 会员档节目不转圈。"""
 			guid = 'mu1ja7md_' + ''.join(random.choice(string.ascii_letters+string.digits) for _ in range(18))
 			ts = int(time.time())
 			ck = self._ysp_ckey(vid, ts, guid, sdtfrom)
@@ -2584,13 +2596,14 @@ class Spider(Spider):  # 元类 默认的元类 type
 				'defsrc':'2','encryptVer':'8.1','sdtfrom':sdtfrom,'cKey':ck
 				# 注意: 不传 dtype / channel / adjust 才能拿到 MP4 直链(dltype:1, 含fvkey)
 			}
+			best = None   # (vh, url) 跨域名最优
 			for _d in domains:
 				url = 'https://' + _d + '/playvinfo?' + urllib.parse.urlencode(params)
 				req = urllib.request.Request(url, headers=FULL_HDRS)
 				try:
 					raw = urllib.request.urlopen(req, timeout=timeout, context=ctx).read().decode('utf-8', errors='replace')
 				except Exception:
-					continue
+					continue      # 仅网络异常才换域名
 				t = raw.strip()
 				if t.startswith('('): t = t[1:]
 				if t.endswith(')'): t = t[:-1]
@@ -2600,19 +2613,14 @@ class Spider(Spider):  # 元类 默认的元类 type
 				except Exception:
 					continue
 				payload, ep, fl_map = _ysp_play_payload(jo)
-				# exem: 0=正常; 2=带有效vl的档位响应; 其它(如-12=无此档)丢弃 —— 与原文件逐字一致
+				# exem: 0=正常; 2=带有效vl的档位响应; 其它(如-12=无此档/会员)立刻换档
 				if payload.get('exem', -1) not in (0, 2):
-					_ysp_diag('playvinfo', 'defn=%s exem=%s 无有效档' % (defn, payload.get('exem')))
-					continue
+					_ysp_diag('playvinfo', 'defn=%s exem=%s 服务端拒发该档 -> 立即换档' % (defn, payload.get('exem')))
+					break
 				vi_list = (payload.get("vl") or {}).get("vi") or []
 				if not isinstance(vi_list, list): vi_list = []
-				_srv_def = ''
-				for _fi in ((payload.get('fl') or {}).get('fi') or []):
-					if isinstance(_fi, dict) and (_fi.get('sl') == 1 or _fi.get('lmt') == 1):
-						_srv_def = str(_fi.get('name') or ''); break
-				_ysp_diag('playvinfo', 'defn=%s 服务端选档=%s 档位表=%s vi=%s' % (
-					defn, _srv_def or "(未下发)", fl_map,
-					[(x.get("vh"), (x.get("fn") or "")[:26]) for x in vi_list if isinstance(x, dict)]))
+				_ysp_diag('playvinfo', 'defn=%s 档位表=%s vi=%s' % (defn, fl_map, [(x.get('vh'), (x.get('fn') or '')[:26]) for x in vi_list if isinstance(x, dict)]))
+				local_best = None
 				for vi in vi_list:
 					if not isinstance(vi, dict): continue
 					try:
@@ -2629,36 +2637,40 @@ class Spider(Spider):  # 元类 默认的元类 type
 						_fl = (fn + ' ' + str(vi.get('defn') or '') + ' ' + str(vi.get('fmt') or '')).lower()
 						if '1080' in _fl or 'fhd' in _fl or _YSP_FHD_FN_RE.search(fn or ''): _vh = 1080
 						elif '720' in _fl or 'shd' in _fl: _vh = 720
-					# 唯一的约束: 服务端明确给了低于 720 的档才丢弃(用户最初的 720P 硬底线)
-					if _vh and _vh < 720: continue
+					if _vh and _vh < 720: continue    # 720P 硬底线(用户最初要求)
 					if ep:
-						# 官网结构: url+fn+?vkey=fvkey+extended_param(一次性签名原样拼, 不能换 guid)
 						cand = (base + fn).rstrip('/') + '?vkey=' + fvkey
 						cand += ep if ep.startswith(('&','?')) else ('&' + ep)
 					else:
-						# ★原文件逐字拼法(裸结构 playvinfo)
 						cand = base + fn + '?vkey=' + fvkey + '&sdtfrom=' + sdtfrom + '&guid=' + guid
-					# ★服务端给的第一条有效流, 直接采用 —— 插件不挑档
-					return (_vh, cand)
-			return (None, 0)
+					if not want:
+						return (_vh, cand)              # shd/sd: 命中即返回
+					if local_best is None or _vh > local_best[0]:
+						local_best = (_vh, cand)
+				if local_best:
+					if best is None or local_best[0] > best[0]: best = local_best
+					if best[0] >= want:
+						return best                     # 拿到 1080, 立即停
+					continue                          # 该 CDN 降级, 同档换下一个域名
+				break                             # 有 exem 但一条可播流都没有 -> 立刻换档, 防转圈
+			return best if best else (None, 0)
 
-		# ===== ① 服务端自动选档: 一条请求, 它给什么档就播什么档 =====
-		vh, u = _once('auto', _YSF_DOMAINS[:1], 6, _UA_VERS[0])
-		if u:
-			_ysp_diag('playvinfo', '★服务端自动选档 vh=%s, 直接采用(插件未挑档)' % vh)
-			return u
-		_ysp_diag('playvinfo', 'defn=auto 无有效流 -> 回退原文件骨架')
-
-		# ===== ② 原文件逐字骨架: 6 次 attempt 轮转, 4 域名, 8s, 命中即返回(无 deadline 超时限制)
-		_DEFNS = ['shd', 'fhd', 'sd']
+		# ===== 唯一主路径: 官网同款 fhd 打头, 所有点播一视同仁 =====
+		_DEFNS = ['fhd', 'shd', 'sd']
 		for attempt in range(6):
 			defn = _DEFNS[attempt % len(_DEFNS)]
 			ua_ver = _UA_VERS[attempt % len(_UA_VERS)]
-			vh, u = _once(defn, _YSF_DOMAINS, 8, ua_ver)
+			_want = 1080 if defn == 'fhd' else 0
+			# ★fhd 档最多试前 2 个域名: 拿到 1080 即停; 两个都降成 720 就返回 720,
+			#   不为了「万一某 CDN 有 1080」把 4 个域名全耗掉, 守住 720P 节目的播放速度。
+			_domains = _YSF_DOMAINS[:2] if defn == 'fhd' else _YSF_DOMAINS
+			vh, u = _once(defn, _domains, 8, ua_ver, want=_want)
 			if u:
-				_ysp_diag('playvinfo', '可播直链 vh=%s defn=%s(骨架回退)' % (vh, defn))
+				_ysp_diag('playvinfo', '★可播直链 vh=%s defn=%s(官网同款 fhd 打头)' % (vh, defn))
 				return u
-			time.sleep(0.4 * (attempt + 1))
+			# ★fhd 会员档已由 _once 立即换档, 这里不再 sleep, 影视剧会员节目不耽误
+			if attempt >= 2:
+				time.sleep(0.3 * attempt)
 		_ysp_diag('playvinfo', '★取流失败: 6 次轮转均无有效 MP4 流, vid=%s' % vid)
 		return ''
 

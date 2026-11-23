@@ -1157,7 +1157,7 @@ def _ysp_program_once(cfg, filterValue, page, size):
 		hdr['Cookie'] = _YSP_PCOOKIE
 	ctx = ssl._create_unverified_context()
 	try:
-		r = urllib.request.urlopen(urllib.request.Request(url, data=json.dumps(body).encode(), headers=hdr, method='POST'), timeout=20, context=ctx)
+		r = urllib.request.urlopen(urllib.request.Request(url, data=json.dumps(body).encode(), headers=hdr, method='POST'), timeout=8, context=ctx)
 		rawb = r.read()
 	except Exception as e:
 		return [], 0, type(e).__name__
@@ -1167,6 +1167,9 @@ def _ysp_program_once(cfg, filterValue, page, size):
 	          (tag, page, size, filterValue, len(rawb), how, len(items), total, items[:1]))
 	return items, total, ''
 
+# 分类页结果缓存: 60s, 避免反复进出分类页重复打官网(性能修复)
+_YSP_PROG_CACHE = {}
+
 def _ysp_program(filterValue, page=1, size=24):
 	"""央视频 program 分类接口 -> (items, has_more, total)。
 	★三个页签统一走官网接口, 筛选条件经 filterValue 原样透传, 不再用静态清单裁剪。
@@ -1175,39 +1178,60 @@ def _ysp_program(filterValue, page=1, size=24):
 	  故先按 size 请求; 只要返回不足一页(含真实响应只给 1 条的逐条情形), 就按官网
 	  原样 pageSizeT=1 逐条补齐到一页。纪录片/特别节目通常单次即满, 不受影响。
 	★分页: 本页满 size 条才继续下拉, 未满即到底。"""
+	# ★★【分类页极其缓慢/加载失败 根因修复 · 本轮核心】
+	#   旧逻辑: 「不足一页就逐条补齐」会跑 3 组配置 × 24 条 = 最多 72 次串行 POST,
+	#   每次都要取 token + 算签名 + 20s 超时。官网一限流/网络一抖, 首页和分类页
+	#   就转几十秒甚至直接失败 —— 这正是用户本轮反馈的问题, 与取流清晰度无关。
+	#   ① 按 (filterValue, page, size) 做 60s 结果缓存, 反复进出分类页不再打官网;
+	#   ② 逐条补齐硬上限 8 次, 且只用【已生效】的那组配置, 不再 3 组全试;
+	#   ③ 连续 2 次空结果立即停止(限流/到底), 绝不空转; 上限仍为 size=24 条(保住节目全量);
+	#   ④ 单次请求超时 20s -> 8s, 卡住最多 8s 而不是 20s。
+	import time as _t
+	_ck = (filterValue, page, size)
+	_c = _YSP_PROG_CACHE.get(_ck)
+	if _c and _t.time() - _c['ts'] < 60 and _c['items']:
+		return list(_c['items']), _c['more'], _c['total']
 	items, total, err = [], 0, ''
+	_ok_cfg = None
 	for cfg in _YSP_API_CFG:
 		items, total, err = _ysp_program_once(cfg, filterValue, page, size)
 		if items:
+			_ok_cfg = cfg
 			_ysp_diag('cfg', '生效配置 = %s (%s)' % (cfg[0], cfg[1]))
 			break
 	if len(items) < size:
-		# ★官网 HAR 实测 pageSizeT=1 逐条滚动; 真实响应(响应-新闻.txt)也只含 1 条节目。
-		#   若 size=24 请求只回 1 条, 旧逻辑 len(items)>=size 判 has_more=False, 第一页
-		#   就只显示 1 条。现改为「不足一页就逐条补齐」, 严格复刻官网行为。
-		#   已有结果先保留(去重), 从 (page-1)*size+1 开始继续取。
+		# 上限 = size(24 条), 保住「节目显示不全」的修复; 防卡靠的是下面三重:
+		#   只用一组配置 / 连续2次空即停 / 单次8s超时, 不靠砍数量。
+		# ★若 size 请求整页为空(官网只吃 pageSizeT=1), 也用首组配置逐条补齐,
+		#   不再直接掉离线兜底 —— 这才是 HAR 里官网逐条滚动的真实行为。
+		_fill_cfg = _ok_cfg or _YSP_API_CFG[0]
 		start = (page - 1) * size + 1
 		agg = list(items)
 		seen = set(it[1] for it in items)
-		for cfg in _YSP_API_CFG:
-			for p in range(start, start + size):
-				one, _, _ = _ysp_program_once(cfg, filterValue, p, 1)
-				if not one:
-					break
-				for it in one:
-					if it[1] not in seen:
-						seen.add(it[1]); agg.append(it)
-				if len(agg) >= size:
-					break
-			if agg:
-				_ysp_diag('cfg', '生效配置 = %s (pageSizeT=1 逐条聚合)' % cfg[0])
+		calls, streak = 0, 0
+		for p in range(start, start + size):
+			if calls >= size or len(agg) >= size:
 				break
+			calls += 1
+			one, _, _ = _ysp_program_once(_fill_cfg, filterValue, p, 1)
+			if not one:
+				streak += 1
+				if streak >= 2:
+					break
+				continue
+			streak = 0
+			for it in one:
+				if it[1] not in seen:
+					seen.add(it[1]); agg.append(it)
 		items = agg
+		_ysp_diag('cfg', '生效配置 = %s (pageSizeT=1 逐条聚合) 补齐%d次 -> %d条' % (_fill_cfg[0], calls, len(items)))
 	if not items:
 		_ysp_diag('program', '所有配置均无数据 fv=%s err=%s' % (filterValue, err))
 	has_more = len(items) >= size
 	if total > 0 and total <= page * size:
 		has_more = False
+	_YSP_PROG_CACHE[_ck] = {'items': list(items), 'more': has_more,
+	                        'total': total, 'ts': _t.time()}
 	return items, has_more, total
 
 def _ysp_title_to_vid(title):
@@ -1275,65 +1299,6 @@ def _ysp_best_album(title):
 	if not best["vids"]:
 		return None
 	return best
-
-def _ysp_playinfo_vid(cid):
-	"""官方 cid -> 真实 vid(HAR 实证)。返回 vid 字符串或 None。
-	GET /voapi/omsot/album/v1/playinfo?cid=<cid>&ts=<ms>, 只带 yspappid/Referer/Origin,
-	无 yspsdkinput/yspsdksign/token/cKey —— 与 program 接口同域同身份, py 可复刻。
-	响应是 protobuf, 递归扫出第一个符合央视频 vid 格式的字符串。"""
-	import ssl
-	if not cid or not isinstance(cid, str):
-		return None
-	url = ('https://csapi.yangshipin.cn/voapi/omsot/album/v1/playinfo?cid=%s&ts=%s'
-	       % (urllib.parse.quote(cid), str(int(time.time() * 1000))))
-	hdr = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
-	                     '(KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36 Edg/157.0.0.0',
-	       'Referer': 'https://www.yangshipin.cn/', 'Origin': 'https://www.yangshipin.cn',
-	       'yspappid': '519748109', 'Accept': '*/*'}
-	try:
-		raw = urllib.request.urlopen(urllib.request.Request(url, headers=hdr),
-		                             timeout=12, context=ssl._create_unverified_context()).read()
-	except Exception:
-		return None
-	# --- protobuf wire-format 递归: 收集所有 len-delimited 字符串 ---
-	found = []
-	def _vi(b, i):
-		v = 0; sh = 0
-		while i < len(b) and sh < 70:
-			x = b[i]; i += 1; v |= (x & 0x7f) << sh
-			if not (x & 0x80): return v, i
-			sh += 7
-		return None, i
-	def _walk(b, d=0):
-		i = 0
-		while i < len(b) and d < 7:
-			key, i = _vi(b, i)
-			if key is None: break
-			wt = key & 7
-			if wt == 0:
-				_, i = _vi(b, i)
-			elif wt == 2:
-				ln, i = _vi(b, i)
-				if ln is None or i + ln > len(b): break
-				raw2 = b[i:i + ln]; i += ln
-				try:
-					txt = raw2.decode('utf-8')
-					if re.fullmatch(r'[a-z]\d{4}[a-z0-9]{5,}', txt):
-						found.append(txt)
-					if len(txt) >= 2:
-						_walk(raw2, d + 1)
-				except Exception:
-					_walk(raw2, d + 1)
-			elif wt == 5: i += 4
-			elif wt == 1: i += 8
-			else: break
-	_walk(raw)
-	for v in found:
-		# 排除 cid 本身(16位字母数字串)与栏目名
-		if v != cid:
-			_ysp_diag('detail', 'playinfo 官方映射 cid=%s -> vid=%s' % (cid, v))
-			return v
-	return None
 
 def _ysp_fetch_state(url):
 	"""请求央视频详情页, 解析并返回 __STATE_video__ JSON(或None)。"""
@@ -2230,35 +2195,29 @@ class Spider(Spider):  # 元类 默认的元类 type
 					# ★先查缓存: 同一期次后续播放直接用上次的真实 vid, 不再发详情页请求
 					_real = _YSP_CID_VID_CACHE.get(_cid)
 					if not _real:
-						# ★首选: 官网同域免签的 album/v1/playinfo(HAR 实证 cid->vid 官方映射),
-						#   比 m.yangshipin.cn 详情页里的 __STATE_video__ 稳定得多。
-						try:
-							_real = _ysp_playinfo_vid(_cid)
-						except Exception:
-							_real = None
-						if not _real:
-							# 次选: 旧详情页解析, 重试 3 次(偶发无 __STATE_video__)
-							for _attempt in range(3):
-								try:
-									_js = _ysp_fetch_state('https://m.yangshipin.cn/video?type=0&cid=%s' % _cid)
-									if _js:
-										_real = ((_js.get('payloads',{}) or {}).get('sharevideo',{}) or {}).get('vid','')
-								except Exception:
-									_real = None
-								if _real:
-									break
+						# ★解析偶发失败时重试 3 次(详情页偶发无 __STATE_video__),
+						#   绝不把 cid 当 vid 交给取流接口
+						for _attempt in range(3):
+							try:
+								_js = _ysp_fetch_state('https://m.yangshipin.cn/video?type=0&cid=%s' % _cid)
+								if _js:
+									_real = ((_js.get('payloads',{}) or {}).get('sharevideo',{}) or {}).get('vid','')
+							except Exception:
+								_real = None
+							if _real:
+								break
 						if _real:
 							_YSP_CID_VID_CACHE[_cid] = _real
 							_ysp_diag('detail', 'cid=%s -> vid=%s 已缓存' % (_cid, _real))
 						else:
-							_ysp_diag('detail', '★cid=%s 解析真实 vid 失败, 本次不取流' % _cid)
+							_ysp_diag('detail', '★cid=%s 解析真实 vid 失败(3次), 本次不取流' % _cid)
 					if _real:
 						_play_id = _real
 					else:
 						# 解析彻底失败: 不把 cid 冒充 vid(那样会拿到不可控档位), 直接放弃本次取流
 						_play_id = None
 						_cid_failed = True
-				# 用 _play_id 取官网同款 fhd 档 MP4 直链(拒发时降级 720P)
+				# 用 _play_id 取官网同款 fhd(1080P) 优先、自动降级 720P 的 MP4 直链
 				try:
 					cand = self.get_ysp_mp4(vid=_play_id) if _play_id else None
 				except Exception:
@@ -2638,127 +2597,110 @@ class Spider(Spider):  # 元类 默认的元类 type
 		iv = bytes.fromhex(At)
 		ct = self._aes_cbc_encrypt(key, iv, Xn.encode('utf-8'))
 		return '--01' + ct.hex().upper()
-	# ============ 央视频点播 MP4 直链(vid -> cKey -> /playvinfo -> 官网同款 fhd, 固定设备) ============
+	# ============ 央视频点播 MP4 直链(vid -> /playvinfo -> 服务端定档, 原样播) ============
 	def get_ysp_mp4(self, vid):
-		"""vid -> playvinfo -> 官网同款 fhd(1080P) 档的可播 MP4 直链。
-		★★【本轮 · 同一期次 1080→720→1080 的第三个随机源, 全部钉死】
-		  用户真机: 新闻联播同一期次连续播放三次, 档位在 1080/720/1080 之间跳。
-		  片源固定、vid 固定, 说明每次播放发出的请求在变。代码里确实有三处每次都变:
-		  ① guid: 旧代码每次 random 生成一个新设备号。官网 HAR 里 device guid 是固定的
-		    (mwr5lv3x_wood5lcnd1); 服务端按 guid/会话做档位调度 -> 每次被当成新设备, 档位飘。
-		    ✅ 固定为 _YSP_DEVICE_GUID(cKey 仍带当前时间戳, 防重放不失效)。
-		  ② cid->vid: 每次播放都重新请求详情页解析 ~~~cid, 偶发失败时旧代码把 cid 冒充 vid
-		    发给取流接口 -> 非法 vid 拿到的档位不可控。✅ 解析成功即缓存, 失败重试 3 次,
-		    彻底失败则放弃取流(见 playerContent), 不再用 cid 取流。
-		  ③ CDN 动态降级: fhd 档某次只给 720。上一版 2 个域名都降 720 就直接接受 -> 那次 720。
-		    ✅ fhd 阶段做 3 轮有限重试(每轮换域名顺序 + 新 cKey), 最多 6 次请求;
-		    只要任一次拿到 vh>=1080 立即返回, 6 次都 720 才接受 720(片源/端点确实只给 720)。
-		★官网 HAR 硬证据: get_video_info body 写死 "defn":"fhd", 播放上报 iHD=fhd,
-		  响应 vl.vi 唯一元素 vh=1080 / gdvz10004, fl.fi 的 fhd=id10004, exem=0 免费。
-		  「偶尔能出 1080P」反证 py 这条 playvinfo 端点的 fhd 档确实能给 1080, 只是被挡住。
-		★所有点播一视同仁: 不再按分类或播放源做任何档位分流, 也没有进程状态机。
-		★cKey 8.1 / extended_param 拼链 / 720P 硬底线 / 4 域名 failover / library~~~ 链路不变。"""
-		import random, string, ssl, urllib.request, time, json
+		"""vid -> /playvinfo -> 一条可播 MP4 直链。★照搬官网「自动选择分辨率」。
+
+		官网两张截图把规则说死了:
+		  · 新闻联播: 蓝光1080P 免费        -> 自动播 1080P
+		  · 走遍中国: 蓝光1080P 标「会员」  -> 自动播 超清720P
+		请求里的 defn=fhd 只是【能力声明】(官网 HAR 的 body 逐字同款), 不是点名要 1080:
+		服务端按片源/会员态下发「最高可用免费档」, 播放器原样播放 ——
+		不点名 720、不强求 1080、不挑档、不重试、不反证分辨率。
+
+		HAR 硬证据: get_video_info body 逐字 "defn":"fhd"; 响应 vl.vi 唯一元素就是
+		服务端下发的那一档; watch_record 上报 iHD=fhd。
+
+		★前十几轮「一会儿720一会儿1080」的根因: 代码拿 vh/gdvz10004/fl.fi 去判断
+		  「这是不是 1080」, 认不出就把整条流丢掉, 再换域名重试 / 掉进 shd 骨架 ——
+		  服务端对会员节目自动降级的 720P 本该直接播, 却被我扔了。本版全部删除。
+
+		仅两种例外(保证不黑屏, 与清晰度选择无关):
+		  ① 网络异常 -> 换下一个域名;
+		  ② 服务端明确拒发 fhd(exem 非 0/2, 真会员/无此档) -> 按原文件 shd/sd 降级。
+		其余一律: 拿到 vl.vi 第一条带 fvkey 的流, 拼好直链立即返回。"""
+		import ssl, urllib.request, time, json
 		sdtfrom = '4330701'
 		_UA_BASE = ('Mozilla/5.0 (iPhone; CPU iPhone OS %s like Mac OS X) '
 			"AppleWebKit/605.1.15 (KHTML, like Gecko) Version/%s Mobile/15E148 Safari/604.1")
-		# ★固定 UA: 旧代码按 attempt 轮换 5 个 iOS 版本, 又多一个每次都变的变量
-		_UA_VERS = [('16_0','16.0')]
 		FULL_HDRS = {
-			'User-Agent': _UA_BASE % _UA_VERS[0], 'Referer': 'https://v.yangshipin.cn/',
+			'User-Agent': _UA_BASE % ('16_0','16.0'), 'Referer': 'https://v.yangshipin.cn/',
 			'yspappid': '539073109', 'platform': '109', 'app-platform': 'm',
 			'app-version': '1.0.0', 'Accept': '*/*', 'Accept-Language': 'zh-CN,zh;q=0.9',
 			'Connection': 'keep-alive',
 		}
 		ctx = ssl._create_unverified_context()
-		_YSF_DOMAINS = ['playvv.yangshipin.cn','playvv.ysp.cctv.cn','bkplayvv.ysp.cctv.cn','playvv6.ysp.cctv.cn']
+		_YSF_DOMAINS = ['playvv.yangshipin.cn','playvv.ysp.cctv.cn',
+				'bkplayvv.ysp.cctv.cn','playvv6.ysp.cctv.cn']
 
-		def _once(defn, domains, timeout):
-			"""请求指定档位, 返回 (vh, url, rejected)。
-			  ★定稿(依据官网 HAR + 用户 playinfo 正文):
-			  · 官网 defn=fhd 响应的 vl.vi 只有 1 个元素, 它【就是 fhd 档】;
-			    请求什么档、服务端就下发什么档, 不需要再用 vh/fn 反证它是 1080。
-			  · py 端点的 vi 很可能不含 vh / defn / fl.fi(那些是官网 get_video_info 的字段),
-			    旧代码算不出 vh 就把整条流丢掉, 掉进 shd 骨架 -> 正是「一会儿720一会儿1080」。
-			  · 本版: fhd 档只要有一条带完整 fvkey 的可播流就【直接返回】, vh 仅用于诊断;
-			    只有服务端明确拒发(exem 非 0/2)才返回 rejected=True 交给骨架降级。
-			  · 720P 硬底线保留: 服务端显式给出 <720 的 vh 才丢弃该流。"""
+		def _request(defn, domain):
+			'''返回 ('OK', 直链) / 'NETERR' / 'REJECT' / 'EMPTY'。'''
 			guid = _YSP_DEVICE_GUID
 			ts = int(time.time())
 			ck = self._ysp_ckey(vid, ts, guid, sdtfrom)
 			if len(ck) < 20:
-				time.sleep(0.3); return (0, "", False)
+				time.sleep(0.3); return ('NETERR', '')
 			params = {
-				'guid':guid,'platform':sdtfrom,'vid':vid,'defn':defn,'charge':'0','defaultfmt':defn,
+				'guid':guid,'platform':sdtfrom,'vid':vid,'defn':defn,'charge':'0','defaultfmt':'auto',
 				'otype':'json','defnpayver':'1','appVer':'1.2.3','sphttps':'1','sphls':'1','spwm':'4',
 				'defsrc':'2','encryptVer':'8.1','sdtfrom':sdtfrom,'cKey':ck
-				# 不传 dtype / channel / adjust 才能拿到 MP4 直链(dltype:1, 含 fvkey)
+				# 不传 dtype / channel / adjust 才能拿到 MP4 直链(原文件口径, 已验证可播)
 			}
-			for _d in domains:
-				url = 'https://' + _d + '/playvinfo?' + urllib.parse.urlencode(params)
-				req = urllib.request.Request(url, headers=FULL_HDRS)
+			url = 'https://' + domain + '/playvinfo?' + urllib.parse.urlencode(params)
+			try:
+				raw = urllib.request.urlopen(urllib.request.Request(url, headers=FULL_HDRS),
+							timeout=8, context=ctx).read().decode('utf-8', errors='replace')
+			except Exception:
+				return ('NETERR', '')
+			t = raw.strip()
+			if t.startswith('('): t = t[1:]
+			if t.endswith(')'): t = t[:-1]
+			t = t.strip().rstrip(';').strip()
+			try:
+				jo = json.loads(t)
+			except Exception:
+				return ('NETERR', '')
+			payload, ep, fl_map = _ysp_play_payload(jo)
+			if payload.get('exem', -1) not in (0, 2):
+				return ('REJECT', '')
+			vi_list = (payload.get("vl") or {}).get("vi") or []
+			if not isinstance(vi_list, list): vi_list = []
+			for vi in vi_list:
+				if not isinstance(vi, dict): continue
 				try:
-					raw = urllib.request.urlopen(req, timeout=timeout, context=ctx).read().decode('utf-8', errors='replace')
-				except Exception:
-					continue          # 仅网络异常才换域名
-				t = raw.strip()
-				if t.startswith('('): t = t[1:]
-				if t.endswith(')'): t = t[:-1]
-				t = t.strip().rstrip(';').strip()
-				try:
-					jo = json.loads(t)
+					fn = vi['fn']; fvkey = vi['fvkey']
+					base = vi['ul']['ui'][0]['url'].rstrip('/') + '/'
 				except Exception:
 					continue
-				payload, ep, fl_map = _ysp_play_payload(jo)
-				if payload.get('exem', -1) not in (0, 2):
-					_ysp_diag('playvinfo', 'defn=%s exem=%s 服务端拒发该档 -> 降级' % (defn, payload.get('exem')))
-					return (0, "", True)
-				vi_list = (payload.get("vl") or {}).get("vi") or []
-				if not isinstance(vi_list, list): vi_list = []
-				_ysp_diag('playvinfo', 'defn=%s 档位表=%s vi=%s' % (defn, fl_map, [(x.get('vh'), (x.get('fn') or '')[:30]) for x in vi_list if isinstance(x, dict)]))
-				for vi in vi_list:
-					if not isinstance(vi, dict): continue
-					try:
-						fn = vi['fn']; fvkey = vi['fvkey']
-						base = vi['ul']['ui'][0]['url'].rstrip('/') + '/'
-					except Exception:
-						continue
-					if not fvkey: continue
-					_vh = vi.get('vh') or 0
-					if not _vh:
-						_dn = str(vi.get('defn') or '')
-						if _dn in fl_map: _vh = fl_map[_dn]
-					if not _vh:
-						_fl = (fn + ' ' + str(vi.get('defn') or '') + ' ' + str(vi.get('fmt') or '')).lower()
-						if 'gdvz10004' in fn or '1080' in _fl: _vh = 1080
-						elif 'gdvz10003' in fn or '720' in _fl: _vh = 720
-					if _vh and _vh < 720: continue    # 720P 硬底线
-					if ep:
-						cand = (base + fn).rstrip('/') + '?vkey=' + fvkey
-						cand += ep if ep.startswith(('&','?')) else ('&' + ep)
-					else:
-						cand = base + fn + '?vkey=' + fvkey + '&sdtfrom=' + sdtfrom + '&guid=' + guid
-					# ★fhd 档返回的第一条可播流直接采用, 不再靠 vh 反证 / 不再跨域名凑档
-					return (_vh, cand, False)
-				# 有 exem 但一条可播流都没有 -> 视为该档不可用, 交给骨架降级
-				return (0, "", True)
-			return (0, "", False)
+				if not fvkey: continue
+				_vh = vi.get('vh') or 0
+				if _vh and _vh < 720: continue    # 720P 硬底线: 仅服务端明确给 <720 时跳过
+				# ★只取服务端下发的第一条流, 不看 vh / 不比档 / 不换域名凑 1080
+				_ysp_diag('playvinfo', 'defn=%s 服务端下发档 vh=%s fn=%s -> 原样播放'
+					% (defn, vi.get('vh'), (fn or '')[:32]))
+				if ep:
+					cand = (base + fn).rstrip('/') + '?vkey=' + fvkey
+					cand += ep if ep.startswith(('&','?')) else ('&' + ep)
+				else:
+					cand = base + fn + '?vkey=' + fvkey + '&sdtfrom=' + sdtfrom + '&guid=' + guid
+				return ('OK', cand)
+			return ('EMPTY', '')
 
-		# ===== ① 官网同款 fhd 档: 给流即播(唯一主路径) =====
-		_vh, _u, _rejected = _once("fhd", _YSF_DOMAINS[:2], 8)
-		if _u:
-			_ysp_diag('playvinfo', '★fhd 档直链已采用 vh=%s(请求 fhd 即 fhd 档, 不再反证)' % _vh)
-			return _u
+		# ===== 主路径: 一条 defn=fhd, 服务端给什么档就播什么档 =====
+		for _d in _YSF_DOMAINS:
+			_st, _u = _request('fhd', _d)
+			if _st == 'OK':
+				return _u
+			if _st == 'NETERR':
+				continue          # 仅网络异常换域名
+			break                # REJECT / EMPTY: 交给下面保底降级
 
-		# ===== ② 仅当服务端明确拒发 fhd(会员档/无此档)才降级 shd/sd 骨架 =====
-		for attempt in range(6):
-			defn = 'shd' if attempt % 2 == 0 else 'sd'
-			_vh, u, _ = _once(defn, _YSF_DOMAINS, 8)
-			if u:
-				_ysp_diag('playvinfo', '可播直链 vh=%s defn=%s(骨架降级)' % (_vh, defn))
-				return u
-			time.sleep(0.3 * (attempt + 1))
-		_ysp_diag('playvinfo', '★取流失败: 全部轮转无有效 MP4 流, vid=%s' % vid)
+		# ===== 保底: fhd 明确不可用时, 原文件骨架 shd -> sd =====
+		for defn in ('shd', 'sd'):
+			for _d in _YSF_DOMAINS:
+				_st, _u = _request(defn, _d)
+				if _st == 'OK':
+					return _u
 		return ''
 
 
@@ -2796,7 +2738,7 @@ class Spider(Spider):  # 元类 默认的元类 type
 							continue
 					params = {
 						'guid':guid,'platform':sdtfrom,'vid':vid,'defn':defn,'charge':'0',
-						'defaultfmt':defn,'otype':'json','defnpayver':'1','appVer':'1.2.3',
+						'defaultfmt':'auto','otype':'json','defnpayver':'1','appVer':'1.2.3',
 						'sphttps':'1','sphls':'1','spwm':'4','defsrc':'2','encryptVer':'8.1',
 						'sdtfrom':sdtfrom,'cKey':ck
 					}

@@ -247,11 +247,17 @@ def _ysp_diag(tag, msg):
 # 当响应不给 vh 时, 用它把 1080P 档认出来。
 _YSP_FHD_FN_RE = re.compile(r'gdvz10004|fhd|1080', re.I)
 
-# ★★「同一期次这次1080下次720」根因之一: 旧代码每次播放都重新生成一个随机 guid。
-#   官网 HAR 里设备 guid 是固定的(mwr5lv3x_wood5lcnd1); 服务端按 guid/会话做档位调度,
-#   py 每次换设备 -> 同一 vid 被当成新会话, 档位自然飘。这里固定成同一台设备。
-#   cKey 8.1 的加密串里含 guid, 但只要求「请求里 guid 与 cKey 里一致」, 不要求随机。
-_YSP_DEVICE_GUID = 'mu1ja7md_5YMIqPWdHQ7uwqown9'
+# ★★★【最终根因 · 2026-11-23 真机取证定稿】设备号写错了, 不是随机。
+#   官网 HAR 里设备 guid 逐字是 mwr5lv3x_wood5lcnd1, 但上一版「固定 guid」时,
+#   注释写对了、值却填成了自造的 mu1ja7md_5YMIqPWdHQ7uwqown9 —— 十几轮一直没发现。
+#   用户用同一 vid / 同一 defn=fhd / 同一时刻分别发两条请求, 各开 1 次 + 刷新 2 次:
+#     A = mu1ja7md_... (py 自造)  -> 3 次全 ({"em":85,"exem":-12,...})   服务端拒发 fhd
+#     B = mwr5lv3x_... (官网真值)  -> 3 次全 ({"em":200,"exem":0,...})    服务端接受 fhd
+#   这就解释了「秒播=1080P / 缓冲明显慢=720P」: fhd 被拒 -> 掉进 6 次 shd-sd
+#   保底轮转(多请求 + sleep)才出 720, 所以慢; 被接受 -> 一次请求直接出 1080, 所以快。
+#   ★cKey 8.1 的加密串里含 guid, 改这个常量后两处取流/VIP 判定的 cKey 自动跟着变,
+#     只需改这一行, 不需动 _ysp_ckey / 请求参数 / 任何选档逻辑。
+_YSP_DEVICE_GUID = 'mwr5lv3x_wood5lcnd1'
 
 # ★★根因之二: 每次播放都要重新请求 video?type=0&cid= 把期次 cid 解析成真实 vid。
 #   该详情页偶发返回 None 或不同数据 -> 解析失败时旧代码直接把 cid 当 vid 去取流,

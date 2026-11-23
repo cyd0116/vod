@@ -77,2992 +77,7 @@
       "key": "py_zb98ok_all",
       "name": "🔥py_zb98ok_all(py)",
       "type": 3,
-      "api": "./py/py_zb98ok_all.py",
-      "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1,
-      "timeout": 30,
-      "ext": {
-        "parses": [
-          {
-            "name": "JS·虾米 (推荐)",
-            "type": 0,
-            "url": "https://jx.xmflv.com/?url=",
-            "ext": {
-              "flag": [
-                "qq",
-                "腾讯",
-                "qiyi",
-                "爱奇艺",
-                "奇艺",
-                "youku",
-                "优酷",
-                "mgtv",
-                "芒果",
-                "letv",
-                "乐视",
-                "pptv",
-                "PPTV",
-                "sohu",
-                "bilibili",
-                "哔哩哔哩",
-                "哔哩",
-                "migu",
-                "咪咕",
-                "miguvideo",
-                "cntv",
-                "cctv",
-                "央视",
-                "sports",
-                "体育",
-                "1905",
-                "1905电影网"
-              ],
-              "header": {
-                "User-Agent": "okhttp/4.1.0"
-              }
-            }
-          },
-          {
-            "name": "JS·TXNP (推荐)",
-            "type": 0,
-            "url": "https://bfq.txnp.cn/player?url=",
-            "ext": {
-              "flag": [
-                "qq",
-                "腾讯",
-                "qiyi",
-                "爱奇艺",
-                "奇艺",
-                "youku",
-                "优酷",
-                "mgtv",
-                "芒果",
-                "letv",
-                "乐视",
-                "pptv",
-                "PPTV",
-                "sohu",
-                "bilibili",
-                "哔哩哔哩",
-                "哔哩",
-                "migu",
-                "咪咕",
-                "miguvideo",
-                "cntv",
-                "cctv",
-                "央视",
-                "sports",
-                "体育",
-                "1905",
-                "1905电影网"
-              ],
-              "header": {
-                "User-Agent": "okhttp/4.1.0"
-              }
-            }
-          },
-          {
-            "name": "JS·SUPER (推荐)",
-            "type": 0,
-            "url": "https://super.playr.top/?url=",
-            "ext": {
-              "flag": [
-                "qq",
-                "腾讯",
-                "qiyi",
-                "爱奇艺",
-                "奇艺",
-                "youku",
-                "优酷",
-                "mgtv",
-                "芒果",
-                "letv",
-                "乐视",
-                "pptv",
-                "PPTV",
-                "sohu",
-                "bilibili",
-                "哔哩哔哩",
-                "哔哩",
-                "migu",
-                "咪咕",
-                "miguvideo",
-                "cntv",
-                "cctv",
-                "央视",
-                "sports",
-                "体育",
-                "1905",
-                "1905电影网"
-              ],
-              "header": {
-                "User-Agent": "okhttp/4.1.0"
-              }
-            }
-          },
-          {
-            "name": "JS·DMFLV (推荐)",
-            "type": 0,
-            "url": "https://jx.dmflv.cc/?url=",
-            "ext": {
-              "flag": [
-                "qq",
-                "腾讯",
-                "qiyi",
-                "爱奇艺",
-                "奇艺",
-                "youku",
-                "优酷",
-                "mgtv",
-                "芒果",
-                "letv",
-                "乐视",
-                "pptv",
-                "PPTV",
-                "sohu",
-                "bilibili",
-                "哔哩哔哩",
-                "哔哩",
-                "migu",
-                "咪咕",
-                "miguvideo",
-                "cntv",
-                "cctv",
-                "央视",
-                "sports",
-                "体育",
-                "1905",
-                "1905电影网"
-              ],
-              "header": {
-                "User-Agent": "okhttp/4.1.0"
-              }
-            }
-          },
-          {
-            "name": "JS·极速解析(推荐)",
-            "type": 0,
-            "url": "https://jx.2s0.cn/player/?url=",
-            "ext": {
-              "flag": [
-                "qq",
-                "腾讯",
-                "qiyi",
-                "爱奇艺",
-                "奇艺",
-                "youku",
-                "优酷",
-                "mgtv",
-                "芒果",
-                "letv",
-                "乐视",
-                "pptv",
-                "PPTV",
-                "sohu",
-                "bilibili",
-                "哔哩哔哩",
-                "哔哩",
-                "migu",
-                "咪咕",
-                "miguvideo",
-                "cntv",
-                "cctv",
-                "央视",
-                "sports",
-                "体育",
-                "1905",
-                "1905电影网"
-              ],
-              "header": {
-                "User-Agent": "okhttp/4.1.0"
-              }
-            }
-          },
-          {
-            "name": "JS·fongmi",
-            "type": 0,
-            "url": "https://json.fongmi.cc/web?url=",
-            "ext": {
-              "flag": [
-                "qq",
-                "腾讯",
-                "qiyi",
-                "爱奇艺",
-                "奇艺",
-                "youku",
-                "优酷",
-                "mgtv",
-                "芒果",
-                "letv",
-                "乐视",
-                "pptv",
-                "PPTV",
-                "sohu",
-                "bilibili",
-                "哔哩哔哩",
-                "哔哩",
-                "migu",
-                "咪咕",
-                "miguvideo",
-                "cntv",
-                "cctv",
-                "央视",
-                "sports",
-                "体育",
-                "1905",
-                "1905电影网"
-              ],
-              "header": {
-                "User-Agent": "okhttp/4.1.0"
-              }
-            }
-          },
-          {
-            "name": "JS·七哥解析",
-            "type": 0,
-            "url": "https://jx.202617.xyz/tv.php?url=",
-            "ext": {
-              "flag": [
-                "qq",
-                "腾讯",
-                "qiyi",
-                "爱奇艺",
-                "奇艺",
-                "youku",
-                "优酷",
-                "mgtv",
-                "芒果",
-                "letv",
-                "乐视",
-                "pptv",
-                "PPTV",
-                "sohu",
-                "bilibili",
-                "哔哩哔哩",
-                "哔哩",
-                "migu",
-                "咪咕",
-                "miguvideo",
-                "cntv",
-                "cctv",
-                "央视",
-                "sports",
-                "体育",
-                "1905",
-                "1905电影网"
-              ],
-              "header": {
-                "User-Agent": "okhttp/4.1.0"
-              }
-            }
-          },
-          {
-            "name": "JS·虾米2 (备用)",
-            "type": 0,
-            "url": "https://jx.xmflv.cc/?url=",
-            "ext": {
-              "flag": [
-                "qq",
-                "腾讯",
-                "qiyi",
-                "爱奇艺",
-                "奇艺",
-                "youku",
-                "优酷",
-                "mgtv",
-                "芒果",
-                "letv",
-                "乐视",
-                "pptv",
-                "PPTV",
-                "sohu",
-                "bilibili",
-                "哔哩哔哩",
-                "哔哩",
-                "migu",
-                "咪咕",
-                "miguvideo",
-                "cntv",
-                "cctv",
-                "央视",
-                "sports",
-                "体育",
-                "1905",
-                "1905电影网"
-              ],
-              "header": {
-                "User-Agent": "okhttp/4.1.0"
-              }
-            }
-          },
-          {
-            "name": "JS·咸鱼云",
-            "type": 0,
-            "url": "https://jx.xymp4.cc/?url=",
-            "ext": {
-              "flag": [
-                "qq",
-                "腾讯",
-                "qiyi",
-                "爱奇艺",
-                "奇艺",
-                "youku",
-                "优酷",
-                "mgtv",
-                "芒果",
-                "letv",
-                "乐视",
-                "pptv",
-                "PPTV",
-                "sohu",
-                "bilibili",
-                "哔哩哔哩",
-                "哔哩",
-                "migu",
-                "咪咕",
-                "miguvideo",
-                "cntv",
-                "cctv",
-                "央视",
-                "sports",
-                "体育",
-                "1905",
-                "1905电影网"
-              ],
-              "header": {
-                "User-Agent": "okhttp/4.1.0"
-              }
-            }
-          },
-          {
-            "name": "JS·爱豆",
-            "type": 0,
-            "url": "https://jx.aidouer.net/?url=",
-            "ext": {
-              "flag": [
-                "qq",
-                "腾讯",
-                "qiyi",
-                "爱奇艺",
-                "奇艺",
-                "youku",
-                "优酷",
-                "mgtv",
-                "芒果",
-                "letv",
-                "乐视",
-                "pptv",
-                "PPTV",
-                "sohu",
-                "bilibili",
-                "哔哩哔哩",
-                "哔哩",
-                "migu",
-                "咪咕",
-                "miguvideo",
-                "cntv",
-                "cctv",
-                "央视",
-                "sports",
-                "体育",
-                "1905",
-                "1905电影网"
-              ],
-              "header": {
-                "User-Agent": "okhttp/4.1.0"
-              }
-            }
-          },
-          {
-            "name": "JS·CHok",
-            "type": 0,
-            "url": "https://www.gai4.com/?url=",
-            "ext": {
-              "flag": [
-                "qq",
-                "腾讯",
-                "qiyi",
-                "爱奇艺",
-                "奇艺",
-                "youku",
-                "优酷",
-                "mgtv",
-                "芒果",
-                "letv",
-                "乐视",
-                "pptv",
-                "PPTV",
-                "sohu",
-                "bilibili",
-                "哔哩哔哩",
-                "哔哩",
-                "migu",
-                "咪咕",
-                "miguvideo",
-                "cntv",
-                "cctv",
-                "央视",
-                "sports",
-                "体育",
-                "1905",
-                "1905电影网"
-              ],
-              "header": {
-                "User-Agent": "okhttp/4.1.0"
-              }
-            }
-          },
-          {
-            "name": "JS·OK解析",
-            "type": 0,
-            "url": "https://okjx.cc/?url=",
-            "ext": {
-              "flag": [
-                "qq",
-                "腾讯",
-                "qiyi",
-                "爱奇艺",
-                "奇艺",
-                "youku",
-                "优酷",
-                "mgtv",
-                "芒果",
-                "letv",
-                "乐视",
-                "pptv",
-                "PPTV",
-                "sohu",
-                "bilibili",
-                "哔哩哔哩",
-                "哔哩",
-                "migu",
-                "咪咕",
-                "miguvideo",
-                "cntv",
-                "cctv",
-                "央视",
-                "sports",
-                "体育",
-                "1905",
-                "1905电影网"
-              ],
-              "header": {
-                "User-Agent": "okhttp/4.1.0"
-              }
-            }
-          },
-          {
-            "name": "JS·思古3",
-            "type": 0,
-            "url": "https://jsap.attakids.com/?url=",
-            "ext": {
-              "flag": [
-                "qq",
-                "腾讯",
-                "qiyi",
-                "爱奇艺",
-                "奇艺",
-                "youku",
-                "优酷",
-                "mgtv",
-                "芒果",
-                "letv",
-                "乐视",
-                "pptv",
-                "PPTV",
-                "sohu",
-                "bilibili",
-                "哔哩哔哩",
-                "哔哩",
-                "migu",
-                "咪咕",
-                "miguvideo",
-                "cntv",
-                "cctv",
-                "央视",
-                "sports",
-                "体育",
-                "1905",
-                "1905电影网"
-              ],
-              "header": {
-                "User-Agent": "okhttp/4.1.0"
-              }
-            }
-          },
-          {
-            "name": "JS·YT",
-            "type": 0,
-            "url": "https://jx.yangtu.top/?url=",
-            "ext": {
-              "flag": [
-                "qq",
-                "腾讯",
-                "qiyi",
-                "爱奇艺",
-                "奇艺",
-                "youku",
-                "优酷",
-                "mgtv",
-                "芒果",
-                "letv",
-                "乐视",
-                "pptv",
-                "PPTV",
-                "sohu",
-                "bilibili",
-                "哔哩哔哩",
-                "哔哩",
-                "migu",
-                "咪咕",
-                "miguvideo",
-                "cntv",
-                "cctv",
-                "央视",
-                "sports",
-                "体育",
-                "1905",
-                "1905电影网"
-              ],
-              "header": {
-                "User-Agent": "okhttp/4.1.0"
-              }
-            }
-          },
-          {
-            "name": "JS·789",
-            "type": 0,
-            "url": "https://jiexi.789jiexi.icu:4433/?url=",
-            "ext": {
-              "flag": [
-                "qq",
-                "腾讯",
-                "qiyi",
-                "爱奇艺",
-                "奇艺",
-                "youku",
-                "优酷",
-                "mgtv",
-                "芒果",
-                "letv",
-                "乐视",
-                "pptv",
-                "PPTV",
-                "sohu",
-                "bilibili",
-                "哔哩哔哩",
-                "哔哩",
-                "migu",
-                "咪咕",
-                "miguvideo",
-                "cntv",
-                "cctv",
-                "央视",
-                "sports",
-                "体育",
-                "1905",
-                "1905电影网"
-              ],
-              "header": {
-                "User-Agent": "okhttp/4.1.0"
-              }
-            }
-          },
-          {
-            "name": "JS·HLS",
-            "type": 0,
-            "url": "https://jx.hls.one/?url=",
-            "ext": {
-              "flag": [
-                "qq",
-                "腾讯",
-                "qiyi",
-                "爱奇艺",
-                "奇艺",
-                "youku",
-                "优酷",
-                "mgtv",
-                "芒果",
-                "letv",
-                "乐视",
-                "pptv",
-                "PPTV",
-                "sohu",
-                "bilibili",
-                "哔哩哔哩",
-                "哔哩",
-                "migu",
-                "咪咕",
-                "miguvideo",
-                "cntv",
-                "cctv",
-                "央视",
-                "sports",
-                "体育",
-                "1905",
-                "1905电影网"
-              ],
-              "header": {
-                "User-Agent": "okhttp/4.1.0"
-              }
-            }
-          },
-          {
-            "name": "JS·Play",
-            "type": 0,
-            "url": "https://jx.playerjy.com/?url=",
-            "ext": {
-              "flag": [
-                "qq",
-                "腾讯",
-                "qiyi",
-                "爱奇艺",
-                "奇艺",
-                "youku",
-                "优酷",
-                "mgtv",
-                "芒果",
-                "letv",
-                "乐视",
-                "pptv",
-                "PPTV",
-                "sohu",
-                "bilibili",
-                "哔哩哔哩",
-                "哔哩",
-                "migu",
-                "咪咕",
-                "miguvideo",
-                "cntv",
-                "cctv",
-                "央视",
-                "sports",
-                "体育",
-                "1905",
-                "1905电影网"
-              ],
-              "header": {
-                "User-Agent": "okhttp/4.1.0"
-              }
-            }
-          },
-          {
-            "name": "JS·冰豆",
-            "type": 0,
-            "url": "https://bd.jx.cn/?url=",
-            "ext": {
-              "flag": [
-                "qq",
-                "腾讯",
-                "qiyi",
-                "爱奇艺",
-                "奇艺",
-                "youku",
-                "优酷",
-                "mgtv",
-                "芒果",
-                "letv",
-                "乐视",
-                "pptv",
-                "PPTV",
-                "sohu",
-                "bilibili",
-                "哔哩哔哩",
-                "哔哩",
-                "migu",
-                "咪咕",
-                "miguvideo",
-                "cntv",
-                "cctv",
-                "央视",
-                "sports",
-                "体育",
-                "1905",
-                "1905电影网"
-              ],
-              "header": {
-                "User-Agent": "okhttp/4.1.0"
-              }
-            }
-          },
-          {
-            "name": "JS·百域",
-            "type": 0,
-            "url": "https://jx.618g.com/?url=",
-            "ext": {
-              "flag": [
-                "qq",
-                "腾讯",
-                "qiyi",
-                "爱奇艺",
-                "奇艺",
-                "youku",
-                "优酷",
-                "mgtv",
-                "芒果",
-                "letv",
-                "乐视",
-                "pptv",
-                "PPTV",
-                "sohu",
-                "bilibili",
-                "哔哩哔哩",
-                "哔哩",
-                "migu",
-                "咪咕",
-                "miguvideo",
-                "cntv",
-                "cctv",
-                "央视",
-                "sports",
-                "体育",
-                "1905",
-                "1905电影网"
-              ],
-              "header": {
-                "User-Agent": "okhttp/4.1.0"
-              }
-            }
-          },
-          {
-            "name": "JS·CK",
-            "type": 0,
-            "url": "https://www.ckplayer.vip/jiexi/?url=",
-            "ext": {
-              "flag": [
-                "qq",
-                "腾讯",
-                "qiyi",
-                "爱奇艺",
-                "奇艺",
-                "youku",
-                "优酷",
-                "mgtv",
-                "芒果",
-                "letv",
-                "乐视",
-                "pptv",
-                "PPTV",
-                "sohu",
-                "bilibili",
-                "哔哩哔哩",
-                "哔哩",
-                "migu",
-                "咪咕",
-                "miguvideo",
-                "cntv",
-                "cctv",
-                "央视",
-                "sports",
-                "体育",
-                "1905",
-                "1905电影网"
-              ],
-              "header": {
-                "User-Agent": "okhttp/4.1.0"
-              }
-            }
-          },
-          {
-            "name": "JS·ckmov",
-            "type": 0,
-            "url": "https://www.ckmov.vip/api.php?url=",
-            "ext": {
-              "flag": [
-                "qq",
-                "腾讯",
-                "qiyi",
-                "爱奇艺",
-                "奇艺",
-                "youku",
-                "优酷",
-                "mgtv",
-                "芒果",
-                "letv",
-                "乐视",
-                "pptv",
-                "PPTV",
-                "sohu",
-                "bilibili",
-                "哔哩哔哩",
-                "哔哩",
-                "migu",
-                "咪咕",
-                "miguvideo",
-                "cntv",
-                "cctv",
-                "央视",
-                "sports",
-                "体育",
-                "1905",
-                "1905电影网"
-              ],
-              "header": {
-                "User-Agent": "okhttp/4.1.0"
-              }
-            }
-          },
-          {
-            "name": "JS·H8",
-            "type": 0,
-            "url": "https://www.h8jx.com/jiexi.php?url=",
-            "ext": {
-              "flag": [
-                "qq",
-                "腾讯",
-                "qiyi",
-                "爱奇艺",
-                "奇艺",
-                "youku",
-                "优酷",
-                "mgtv",
-                "芒果",
-                "letv",
-                "乐视",
-                "pptv",
-                "PPTV",
-                "sohu",
-                "bilibili",
-                "哔哩哔哩",
-                "哔哩",
-                "migu",
-                "咪咕",
-                "miguvideo",
-                "cntv",
-                "cctv",
-                "央视",
-                "sports",
-                "体育",
-                "1905",
-                "1905电影网"
-              ],
-              "header": {
-                "User-Agent": "okhttp/4.1.0"
-              }
-            }
-          },
-          {
-            "name": "JS·通用",
-            "type": 0,
-            "url": "https://ckmov.ccyjjd.com/ckmov/?url=",
-            "ext": {
-              "flag": [
-                "qq",
-                "腾讯",
-                "qiyi",
-                "爱奇艺",
-                "奇艺",
-                "youku",
-                "优酷",
-                "mgtv",
-                "芒果",
-                "letv",
-                "乐视",
-                "pptv",
-                "PPTV",
-                "sohu",
-                "bilibili",
-                "哔哩哔哩",
-                "哔哩",
-                "migu",
-                "咪咕",
-                "miguvideo",
-                "cntv",
-                "cctv",
-                "央视",
-                "sports",
-                "体育",
-                "1905",
-                "1905电影网"
-              ],
-              "header": {
-                "User-Agent": "okhttp/4.1.0"
-              }
-            }
-          },
-          {
-            "name": "JS·MAO",
-            "type": 0,
-            "url": "https://www.mtosz.com/m3u8.php?url=",
-            "ext": {
-              "flag": [
-                "qq",
-                "腾讯",
-                "qiyi",
-                "爱奇艺",
-                "奇艺",
-                "youku",
-                "优酷",
-                "mgtv",
-                "芒果",
-                "letv",
-                "乐视",
-                "pptv",
-                "PPTV",
-                "sohu",
-                "bilibili",
-                "哔哩哔哩",
-                "哔哩",
-                "migu",
-                "咪咕",
-                "miguvideo",
-                "cntv",
-                "cctv",
-                "央视",
-                "sports",
-                "体育",
-                "1905",
-                "1905电影网"
-              ],
-              "header": {
-                "User-Agent": "okhttp/4.1.0"
-              }
-            }
-          },
-          {
-            "name": "JS·M3U8",
-            "type": 0,
-            "url": "https://jx.m3u8.tv/jiexi/?url=",
-            "ext": {
-              "flag": [
-                "qq",
-                "腾讯",
-                "qiyi",
-                "爱奇艺",
-                "奇艺",
-                "youku",
-                "优酷",
-                "mgtv",
-                "芒果",
-                "letv",
-                "乐视",
-                "pptv",
-                "PPTV",
-                "sohu",
-                "bilibili",
-                "哔哩哔哩",
-                "哔哩",
-                "migu",
-                "咪咕",
-                "miguvideo",
-                "cntv",
-                "cctv",
-                "央视",
-                "sports",
-                "体育",
-                "1905",
-                "1905电影网"
-              ],
-              "header": {
-                "User-Agent": "okhttp/4.1.0"
-              }
-            }
-          },
-          {
-            "name": "JS·诺讯",
-            "type": 0,
-            "url": "https://www.nxflv.com/?url=",
-            "ext": {
-              "flag": [
-                "qq",
-                "腾讯",
-                "qiyi",
-                "爱奇艺",
-                "奇艺",
-                "youku",
-                "优酷",
-                "mgtv",
-                "芒果",
-                "letv",
-                "乐视",
-                "pptv",
-                "PPTV",
-                "sohu",
-                "bilibili",
-                "哔哩哔哩",
-                "哔哩",
-                "migu",
-                "咪咕",
-                "miguvideo",
-                "cntv",
-                "cctv",
-                "央视",
-                "sports",
-                "体育",
-                "1905",
-                "1905电影网"
-              ],
-              "header": {
-                "User-Agent": "okhttp/4.1.0"
-              }
-            }
-          },
-          {
-            "name": "JS·PM",
-            "type": 0,
-            "url": "https://www.playm3u8.cn/jiexi.php?url=",
-            "ext": {
-              "flag": [
-                "qq",
-                "腾讯",
-                "qiyi",
-                "爱奇艺",
-                "奇艺",
-                "youku",
-                "优酷",
-                "mgtv",
-                "芒果",
-                "letv",
-                "乐视",
-                "pptv",
-                "PPTV",
-                "sohu",
-                "bilibili",
-                "哔哩哔哩",
-                "哔哩",
-                "migu",
-                "咪咕",
-                "miguvideo",
-                "cntv",
-                "cctv",
-                "央视",
-                "sports",
-                "体育",
-                "1905",
-                "1905电影网"
-              ],
-              "header": {
-                "User-Agent": "okhttp/4.1.0"
-              }
-            }
-          },
-          {
-            "name": "JS·4K",
-            "type": 0,
-            "url": "https://jx.4kdv.com/?url=",
-            "ext": {
-              "flag": [
-                "qq",
-                "腾讯",
-                "qiyi",
-                "爱奇艺",
-                "奇艺",
-                "youku",
-                "优酷",
-                "mgtv",
-                "芒果",
-                "letv",
-                "乐视",
-                "pptv",
-                "PPTV",
-                "sohu",
-                "bilibili",
-                "哔哩哔哩",
-                "哔哩",
-                "migu",
-                "咪咕",
-                "miguvideo",
-                "cntv",
-                "cctv",
-                "央视",
-                "sports",
-                "体育",
-                "1905",
-                "1905电影网"
-              ],
-              "header": {
-                "User-Agent": "okhttp/4.1.0"
-              }
-            }
-          },
-          {
-            "name": "JS·8090",
-            "type": 0,
-            "url": "https://www.8090g.cn/?url=",
-            "ext": {
-              "flag": [
-                "qq",
-                "腾讯",
-                "qiyi",
-                "爱奇艺",
-                "奇艺",
-                "youku",
-                "优酷",
-                "mgtv",
-                "芒果",
-                "letv",
-                "乐视",
-                "pptv",
-                "PPTV",
-                "sohu",
-                "bilibili",
-                "哔哩哔哩",
-                "哔哩",
-                "migu",
-                "咪咕",
-                "miguvideo",
-                "cntv",
-                "cctv",
-                "央视",
-                "sports",
-                "体育",
-                "1905",
-                "1905电影网"
-              ],
-              "header": {
-                "User-Agent": "okhttp/4.1.0"
-              }
-            }
-          },
-          {
-            "name": "JS·剖元",
-            "type": 0,
-            "url": "https://www.pouyun.com/?url=",
-            "ext": {
-              "flag": [
-                "qq",
-                "腾讯",
-                "qiyi",
-                "爱奇艺",
-                "奇艺",
-                "youku",
-                "优酷",
-                "mgtv",
-                "芒果",
-                "letv",
-                "乐视",
-                "pptv",
-                "PPTV",
-                "sohu",
-                "bilibili",
-                "哔哩哔哩",
-                "哔哩",
-                "migu",
-                "咪咕",
-                "miguvideo",
-                "cntv",
-                "cctv",
-                "央视",
-                "sports",
-                "体育",
-                "1905",
-                "1905电影网"
-              ],
-              "header": {
-                "User-Agent": "okhttp/4.1.0"
-              }
-            }
-          },
-          {
-            "name": "JS·夜幕",
-            "type": 0,
-            "url": "https://www.yemu.xyz/?url=",
-            "ext": {
-              "flag": [
-                "qq",
-                "腾讯",
-                "qiyi",
-                "爱奇艺",
-                "奇艺",
-                "youku",
-                "优酷",
-                "mgtv",
-                "芒果",
-                "letv",
-                "乐视",
-                "pptv",
-                "PPTV",
-                "sohu",
-                "bilibili",
-                "哔哩哔哩",
-                "哔哩",
-                "migu",
-                "咪咕",
-                "miguvideo",
-                "cntv",
-                "cctv",
-                "央视",
-                "sports",
-                "体育",
-                "1905",
-                "1905电影网"
-              ],
-              "header": {
-                "User-Agent": "okhttp/4.1.0"
-              }
-            }
-          },
-          {
-            "name": "JS·七七云",
-            "type": 0,
-            "url": "https://jx.77flv.cc/?url=",
-            "ext": {
-              "flag": [
-                "qq",
-                "腾讯",
-                "qiyi",
-                "爱奇艺",
-                "奇艺",
-                "youku",
-                "优酷",
-                "mgtv",
-                "芒果",
-                "letv",
-                "乐视",
-                "pptv",
-                "PPTV",
-                "sohu",
-                "bilibili",
-                "哔哩哔哩",
-                "哔哩",
-                "migu",
-                "咪咕",
-                "miguvideo",
-                "cntv",
-                "cctv",
-                "央视",
-                "sports",
-                "体育",
-                "1905",
-                "1905电影网"
-              ],
-              "header": {
-                "User-Agent": "okhttp/4.1.0"
-              }
-            }
-          },
-          {
-            "name": "JS·芒果TV1",
-            "type": 0,
-            "url": "https://video.isyour.love/player/getplayer?url=",
-            "ext": {
-              "flag": [
-                "qq",
-                "腾讯",
-                "qiyi",
-                "爱奇艺",
-                "奇艺",
-                "youku",
-                "优酷",
-                "mgtv",
-                "芒果",
-                "letv",
-                "乐视",
-                "pptv",
-                "PPTV",
-                "sohu",
-                "bilibili",
-                "哔哩哔哩",
-                "哔哩",
-                "migu",
-                "咪咕",
-                "miguvideo",
-                "cntv",
-                "cctv",
-                "央视",
-                "sports",
-                "体育",
-                "1905",
-                "1905电影网"
-              ],
-              "header": {
-                "User-Agent": "okhttp/4.1.0"
-              }
-            }
-          },
-          {
-            "name": "JS·七哥",
-            "type": 0,
-            "url": "https://jx.nnxv.cn/tv.php?url=",
-            "ext": {
-              "flag": [
-                "qq",
-                "腾讯",
-                "qiyi",
-                "爱奇艺",
-                "奇艺",
-                "youku",
-                "优酷",
-                "mgtv",
-                "芒果",
-                "letv",
-                "乐视",
-                "pptv",
-                "PPTV",
-                "sohu",
-                "bilibili",
-                "哔哩哔哩",
-                "哔哩",
-                "migu",
-                "咪咕",
-                "miguvideo",
-                "cntv",
-                "cctv",
-                "央视",
-                "sports",
-                "体育",
-                "1905",
-                "1905电影网"
-              ],
-              "header": {
-                "User-Agent": "okhttp/4.1.0"
-              }
-            }
-          },
-          {
-            "name": "JS·云析(带选集)",
-            "type": 0,
-            "url": "https://jx.yparse.com/index.php?url=",
-            "ext": {
-              "flag": [
-                "qq",
-                "腾讯",
-                "qiyi",
-                "爱奇艺",
-                "奇艺",
-                "youku",
-                "优酷",
-                "mgtv",
-                "芒果",
-                "letv",
-                "乐视",
-                "pptv",
-                "PPTV",
-                "sohu",
-                "bilibili",
-                "哔哩哔哩",
-                "哔哩",
-                "migu",
-                "咪咕",
-                "miguvideo",
-                "cntv",
-                "cctv",
-                "央视",
-                "sports",
-                "体育",
-                "1905",
-                "1905电影网"
-              ],
-              "header": {
-                "User-Agent": "okhttp/4.1.0"
-              }
-            }
-          },
-          {
-            "name": "JS·937解析",
-            "type": 0,
-            "url": "https://bfq.937auth.vip?url=",
-            "ext": {
-              "flag": [
-                "qq",
-                "腾讯",
-                "qiyi",
-                "爱奇艺",
-                "奇艺",
-                "youku",
-                "优酷",
-                "mgtv",
-                "芒果",
-                "letv",
-                "乐视",
-                "pptv",
-                "PPTV",
-                "sohu",
-                "bilibili",
-                "哔哩哔哩",
-                "哔哩",
-                "migu",
-                "咪咕",
-                "miguvideo",
-                "cntv",
-                "cctv",
-                "央视",
-                "sports",
-                "体育",
-                "1905",
-                "1905电影网"
-              ],
-              "header": {
-                "User-Agent": "okhttp/4.1.0"
-              }
-            }
-          },
-          {
-            "name": "JS·jsonplayer",
-            "type": 0,
-            "url": "https://jx.777jiexi.com/player/?url=",
-            "ext": {
-              "flag": [
-                "qq",
-                "腾讯",
-                "qiyi",
-                "爱奇艺",
-                "奇艺",
-                "youku",
-                "优酷",
-                "mgtv",
-                "芒果",
-                "letv",
-                "乐视",
-                "pptv",
-                "PPTV",
-                "sohu",
-                "bilibili",
-                "哔哩哔哩",
-                "哔哩",
-                "migu",
-                "咪咕",
-                "miguvideo",
-                "cntv",
-                "cctv",
-                "央视",
-                "sports",
-                "体育",
-                "1905",
-                "1905电影网"
-              ],
-              "header": {
-                "User-Agent": "okhttp/4.1.0"
-              }
-            }
-          },
-          {
-            "name": "JS·云解析",
-            "type": 0,
-            "url": "https://yparse.ik9.cc/index.php?url=",
-            "ext": {
-              "flag": [
-                "qq",
-                "腾讯",
-                "qiyi",
-                "爱奇艺",
-                "奇艺",
-                "youku",
-                "优酷",
-                "mgtv",
-                "芒果",
-                "letv",
-                "乐视",
-                "pptv",
-                "PPTV",
-                "sohu",
-                "bilibili",
-                "哔哩哔哩",
-                "哔哩",
-                "migu",
-                "咪咕",
-                "miguvideo",
-                "cntv",
-                "cctv",
-                "央视",
-                "sports",
-                "体育",
-                "1905",
-                "1905电影网"
-              ],
-              "header": {
-                "User-Agent": "okhttp/4.1.0"
-              }
-            }
-          }
-        ],
-        "_note": "全量显示分支：解析地址全部来自本订阅，py 不内置；官方页由壳解析池按 flag 匹配"
-      }
-    }
-  ],
-  "parses": [
-    {
-      "name": "Web聚合",
-      "type": 3,
-      "url": "Web"
-    },
-    {
-      "name": "Json聚合",
-      "type": 3,
-      "url": "Demo"
-    },
-    {
-      "name": "JS·虾米 (推荐)",
-      "type": 0,
-      "url": "https://jx.xmflv.com/?url=",
-      "ext": {
-        "flag": [
-          "qq",
-          "腾讯",
-          "qiyi",
-          "爱奇艺",
-          "奇艺",
-          "youku",
-          "优酷",
-          "mgtv",
-          "芒果",
-          "letv",
-          "乐视",
-          "pptv",
-          "PPTV",
-          "sohu",
-          "bilibili",
-          "哔哩哔哩",
-          "哔哩",
-          "migu",
-          "咪咕",
-          "miguvideo",
-          "cntv",
-          "cctv",
-          "央视",
-          "sports",
-          "体育",
-          "1905",
-          "1905电影网"
-        ],
-        "header": {
-          "User-Agent": "okhttp/4.1.0"
-        }
-      }
-    },
-    {
-      "name": "JS·TXNP (推荐)",
-      "type": 0,
-      "url": "https://bfq.txnp.cn/player?url=",
-      "ext": {
-        "flag": [
-          "qq",
-          "腾讯",
-          "qiyi",
-          "爱奇艺",
-          "奇艺",
-          "youku",
-          "优酷",
-          "mgtv",
-          "芒果",
-          "letv",
-          "乐视",
-          "pptv",
-          "PPTV",
-          "sohu",
-          "bilibili",
-          "哔哩哔哩",
-          "哔哩",
-          "migu",
-          "咪咕",
-          "miguvideo",
-          "cntv",
-          "cctv",
-          "央视",
-          "sports",
-          "体育",
-          "1905",
-          "1905电影网"
-        ],
-        "header": {
-          "User-Agent": "okhttp/4.1.0"
-        }
-      }
-    },
-    {
-      "name": "JS·SUPER (推荐)",
-      "type": 0,
-      "url": "https://super.playr.top/?url=",
-      "ext": {
-        "flag": [
-          "qq",
-          "腾讯",
-          "qiyi",
-          "爱奇艺",
-          "奇艺",
-          "youku",
-          "优酷",
-          "mgtv",
-          "芒果",
-          "letv",
-          "乐视",
-          "pptv",
-          "PPTV",
-          "sohu",
-          "bilibili",
-          "哔哩哔哩",
-          "哔哩",
-          "migu",
-          "咪咕",
-          "miguvideo",
-          "cntv",
-          "cctv",
-          "央视",
-          "sports",
-          "体育",
-          "1905",
-          "1905电影网"
-        ],
-        "header": {
-          "User-Agent": "okhttp/4.1.0"
-        }
-      }
-    },
-    {
-      "name": "JS·DMFLV (推荐)",
-      "type": 0,
-      "url": "https://jx.dmflv.cc/?url=",
-      "ext": {
-        "flag": [
-          "qq",
-          "腾讯",
-          "qiyi",
-          "爱奇艺",
-          "奇艺",
-          "youku",
-          "优酷",
-          "mgtv",
-          "芒果",
-          "letv",
-          "乐视",
-          "pptv",
-          "PPTV",
-          "sohu",
-          "bilibili",
-          "哔哩哔哩",
-          "哔哩",
-          "migu",
-          "咪咕",
-          "miguvideo",
-          "cntv",
-          "cctv",
-          "央视",
-          "sports",
-          "体育",
-          "1905",
-          "1905电影网"
-        ],
-        "header": {
-          "User-Agent": "okhttp/4.1.0"
-        }
-      }
-    },
-    {
-      "name": "JS·极速解析(推荐)",
-      "type": 0,
-      "url": "https://jx.2s0.cn/player/?url=",
-      "ext": {
-        "flag": [
-          "qq",
-          "腾讯",
-          "qiyi",
-          "爱奇艺",
-          "奇艺",
-          "youku",
-          "优酷",
-          "mgtv",
-          "芒果",
-          "letv",
-          "乐视",
-          "pptv",
-          "PPTV",
-          "sohu",
-          "bilibili",
-          "哔哩哔哩",
-          "哔哩",
-          "migu",
-          "咪咕",
-          "miguvideo",
-          "cntv",
-          "cctv",
-          "央视",
-          "sports",
-          "体育",
-          "1905",
-          "1905电影网"
-        ],
-        "header": {
-          "User-Agent": "okhttp/4.1.0"
-        }
-      }
-    },
-    {
-      "name": "JS·fongmi",
-      "type": 0,
-      "url": "https://json.fongmi.cc/web?url=",
-      "ext": {
-        "flag": [
-          "qq",
-          "腾讯",
-          "qiyi",
-          "爱奇艺",
-          "奇艺",
-          "youku",
-          "优酷",
-          "mgtv",
-          "芒果",
-          "letv",
-          "乐视",
-          "pptv",
-          "PPTV",
-          "sohu",
-          "bilibili",
-          "哔哩哔哩",
-          "哔哩",
-          "migu",
-          "咪咕",
-          "miguvideo",
-          "cntv",
-          "cctv",
-          "央视",
-          "sports",
-          "体育",
-          "1905",
-          "1905电影网"
-        ],
-        "header": {
-          "User-Agent": "okhttp/4.1.0"
-        }
-      }
-    },
-    {
-      "name": "JS·七哥解析",
-      "type": 0,
-      "url": "https://jx.202617.xyz/tv.php?url=",
-      "ext": {
-        "flag": [
-          "qq",
-          "腾讯",
-          "qiyi",
-          "爱奇艺",
-          "奇艺",
-          "youku",
-          "优酷",
-          "mgtv",
-          "芒果",
-          "letv",
-          "乐视",
-          "pptv",
-          "PPTV",
-          "sohu",
-          "bilibili",
-          "哔哩哔哩",
-          "哔哩",
-          "migu",
-          "咪咕",
-          "miguvideo",
-          "cntv",
-          "cctv",
-          "央视",
-          "sports",
-          "体育",
-          "1905",
-          "1905电影网"
-        ],
-        "header": {
-          "User-Agent": "okhttp/4.1.0"
-        }
-      }
-    },
-    {
-      "name": "JS·虾米2 (备用)",
-      "type": 0,
-      "url": "https://jx.xmflv.cc/?url=",
-      "ext": {
-        "flag": [
-          "qq",
-          "腾讯",
-          "qiyi",
-          "爱奇艺",
-          "奇艺",
-          "youku",
-          "优酷",
-          "mgtv",
-          "芒果",
-          "letv",
-          "乐视",
-          "pptv",
-          "PPTV",
-          "sohu",
-          "bilibili",
-          "哔哩哔哩",
-          "哔哩",
-          "migu",
-          "咪咕",
-          "miguvideo",
-          "cntv",
-          "cctv",
-          "央视",
-          "sports",
-          "体育",
-          "1905",
-          "1905电影网"
-        ],
-        "header": {
-          "User-Agent": "okhttp/4.1.0"
-        }
-      }
-    },
-    {
-      "name": "JS·咸鱼云",
-      "type": 0,
-      "url": "https://jx.xymp4.cc/?url=",
-      "ext": {
-        "flag": [
-          "qq",
-          "腾讯",
-          "qiyi",
-          "爱奇艺",
-          "奇艺",
-          "youku",
-          "优酷",
-          "mgtv",
-          "芒果",
-          "letv",
-          "乐视",
-          "pptv",
-          "PPTV",
-          "sohu",
-          "bilibili",
-          "哔哩哔哩",
-          "哔哩",
-          "migu",
-          "咪咕",
-          "miguvideo",
-          "cntv",
-          "cctv",
-          "央视",
-          "sports",
-          "体育",
-          "1905",
-          "1905电影网"
-        ],
-        "header": {
-          "User-Agent": "okhttp/4.1.0"
-        }
-      }
-    },
-    {
-      "name": "JS·爱豆",
-      "type": 0,
-      "url": "https://jx.aidouer.net/?url=",
-      "ext": {
-        "flag": [
-          "qq",
-          "腾讯",
-          "qiyi",
-          "爱奇艺",
-          "奇艺",
-          "youku",
-          "优酷",
-          "mgtv",
-          "芒果",
-          "letv",
-          "乐视",
-          "pptv",
-          "PPTV",
-          "sohu",
-          "bilibili",
-          "哔哩哔哩",
-          "哔哩",
-          "migu",
-          "咪咕",
-          "miguvideo",
-          "cntv",
-          "cctv",
-          "央视",
-          "sports",
-          "体育",
-          "1905",
-          "1905电影网"
-        ],
-        "header": {
-          "User-Agent": "okhttp/4.1.0"
-        }
-      }
-    },
-    {
-      "name": "JS·CHok",
-      "type": 0,
-      "url": "https://www.gai4.com/?url=",
-      "ext": {
-        "flag": [
-          "qq",
-          "腾讯",
-          "qiyi",
-          "爱奇艺",
-          "奇艺",
-          "youku",
-          "优酷",
-          "mgtv",
-          "芒果",
-          "letv",
-          "乐视",
-          "pptv",
-          "PPTV",
-          "sohu",
-          "bilibili",
-          "哔哩哔哩",
-          "哔哩",
-          "migu",
-          "咪咕",
-          "miguvideo",
-          "cntv",
-          "cctv",
-          "央视",
-          "sports",
-          "体育",
-          "1905",
-          "1905电影网"
-        ],
-        "header": {
-          "User-Agent": "okhttp/4.1.0"
-        }
-      }
-    },
-    {
-      "name": "JS·OK解析",
-      "type": 0,
-      "url": "https://okjx.cc/?url=",
-      "ext": {
-        "flag": [
-          "qq",
-          "腾讯",
-          "qiyi",
-          "爱奇艺",
-          "奇艺",
-          "youku",
-          "优酷",
-          "mgtv",
-          "芒果",
-          "letv",
-          "乐视",
-          "pptv",
-          "PPTV",
-          "sohu",
-          "bilibili",
-          "哔哩哔哩",
-          "哔哩",
-          "migu",
-          "咪咕",
-          "miguvideo",
-          "cntv",
-          "cctv",
-          "央视",
-          "sports",
-          "体育",
-          "1905",
-          "1905电影网"
-        ],
-        "header": {
-          "User-Agent": "okhttp/4.1.0"
-        }
-      }
-    },
-    {
-      "name": "JS·思古3",
-      "type": 0,
-      "url": "https://jsap.attakids.com/?url=",
-      "ext": {
-        "flag": [
-          "qq",
-          "腾讯",
-          "qiyi",
-          "爱奇艺",
-          "奇艺",
-          "youku",
-          "优酷",
-          "mgtv",
-          "芒果",
-          "letv",
-          "乐视",
-          "pptv",
-          "PPTV",
-          "sohu",
-          "bilibili",
-          "哔哩哔哩",
-          "哔哩",
-          "migu",
-          "咪咕",
-          "miguvideo",
-          "cntv",
-          "cctv",
-          "央视",
-          "sports",
-          "体育",
-          "1905",
-          "1905电影网"
-        ],
-        "header": {
-          "User-Agent": "okhttp/4.1.0"
-        }
-      }
-    },
-    {
-      "name": "JS·YT",
-      "type": 0,
-      "url": "https://jx.yangtu.top/?url=",
-      "ext": {
-        "flag": [
-          "qq",
-          "腾讯",
-          "qiyi",
-          "爱奇艺",
-          "奇艺",
-          "youku",
-          "优酷",
-          "mgtv",
-          "芒果",
-          "letv",
-          "乐视",
-          "pptv",
-          "PPTV",
-          "sohu",
-          "bilibili",
-          "哔哩哔哩",
-          "哔哩",
-          "migu",
-          "咪咕",
-          "miguvideo",
-          "cntv",
-          "cctv",
-          "央视",
-          "sports",
-          "体育",
-          "1905",
-          "1905电影网"
-        ],
-        "header": {
-          "User-Agent": "okhttp/4.1.0"
-        }
-      }
-    },
-    {
-      "name": "JS·789",
-      "type": 0,
-      "url": "https://jiexi.789jiexi.icu:4433/?url=",
-      "ext": {
-        "flag": [
-          "qq",
-          "腾讯",
-          "qiyi",
-          "爱奇艺",
-          "奇艺",
-          "youku",
-          "优酷",
-          "mgtv",
-          "芒果",
-          "letv",
-          "乐视",
-          "pptv",
-          "PPTV",
-          "sohu",
-          "bilibili",
-          "哔哩哔哩",
-          "哔哩",
-          "migu",
-          "咪咕",
-          "miguvideo",
-          "cntv",
-          "cctv",
-          "央视",
-          "sports",
-          "体育",
-          "1905",
-          "1905电影网"
-        ],
-        "header": {
-          "User-Agent": "okhttp/4.1.0"
-        }
-      }
-    },
-    {
-      "name": "JS·HLS",
-      "type": 0,
-      "url": "https://jx.hls.one/?url=",
-      "ext": {
-        "flag": [
-          "qq",
-          "腾讯",
-          "qiyi",
-          "爱奇艺",
-          "奇艺",
-          "youku",
-          "优酷",
-          "mgtv",
-          "芒果",
-          "letv",
-          "乐视",
-          "pptv",
-          "PPTV",
-          "sohu",
-          "bilibili",
-          "哔哩哔哩",
-          "哔哩",
-          "migu",
-          "咪咕",
-          "miguvideo",
-          "cntv",
-          "cctv",
-          "央视",
-          "sports",
-          "体育",
-          "1905",
-          "1905电影网"
-        ],
-        "header": {
-          "User-Agent": "okhttp/4.1.0"
-        }
-      }
-    },
-    {
-      "name": "JS·Play",
-      "type": 0,
-      "url": "https://jx.playerjy.com/?url=",
-      "ext": {
-        "flag": [
-          "qq",
-          "腾讯",
-          "qiyi",
-          "爱奇艺",
-          "奇艺",
-          "youku",
-          "优酷",
-          "mgtv",
-          "芒果",
-          "letv",
-          "乐视",
-          "pptv",
-          "PPTV",
-          "sohu",
-          "bilibili",
-          "哔哩哔哩",
-          "哔哩",
-          "migu",
-          "咪咕",
-          "miguvideo",
-          "cntv",
-          "cctv",
-          "央视",
-          "sports",
-          "体育",
-          "1905",
-          "1905电影网"
-        ],
-        "header": {
-          "User-Agent": "okhttp/4.1.0"
-        }
-      }
-    },
-    {
-      "name": "JS·冰豆",
-      "type": 0,
-      "url": "https://bd.jx.cn/?url=",
-      "ext": {
-        "flag": [
-          "qq",
-          "腾讯",
-          "qiyi",
-          "爱奇艺",
-          "奇艺",
-          "youku",
-          "优酷",
-          "mgtv",
-          "芒果",
-          "letv",
-          "乐视",
-          "pptv",
-          "PPTV",
-          "sohu",
-          "bilibili",
-          "哔哩哔哩",
-          "哔哩",
-          "migu",
-          "咪咕",
-          "miguvideo",
-          "cntv",
-          "cctv",
-          "央视",
-          "sports",
-          "体育",
-          "1905",
-          "1905电影网"
-        ],
-        "header": {
-          "User-Agent": "okhttp/4.1.0"
-        }
-      }
-    },
-    {
-      "name": "JS·百域",
-      "type": 0,
-      "url": "https://jx.618g.com/?url=",
-      "ext": {
-        "flag": [
-          "qq",
-          "腾讯",
-          "qiyi",
-          "爱奇艺",
-          "奇艺",
-          "youku",
-          "优酷",
-          "mgtv",
-          "芒果",
-          "letv",
-          "乐视",
-          "pptv",
-          "PPTV",
-          "sohu",
-          "bilibili",
-          "哔哩哔哩",
-          "哔哩",
-          "migu",
-          "咪咕",
-          "miguvideo",
-          "cntv",
-          "cctv",
-          "央视",
-          "sports",
-          "体育",
-          "1905",
-          "1905电影网"
-        ],
-        "header": {
-          "User-Agent": "okhttp/4.1.0"
-        }
-      }
-    },
-    {
-      "name": "JS·CK",
-      "type": 0,
-      "url": "https://www.ckplayer.vip/jiexi/?url=",
-      "ext": {
-        "flag": [
-          "qq",
-          "腾讯",
-          "qiyi",
-          "爱奇艺",
-          "奇艺",
-          "youku",
-          "优酷",
-          "mgtv",
-          "芒果",
-          "letv",
-          "乐视",
-          "pptv",
-          "PPTV",
-          "sohu",
-          "bilibili",
-          "哔哩哔哩",
-          "哔哩",
-          "migu",
-          "咪咕",
-          "miguvideo",
-          "cntv",
-          "cctv",
-          "央视",
-          "sports",
-          "体育",
-          "1905",
-          "1905电影网"
-        ],
-        "header": {
-          "User-Agent": "okhttp/4.1.0"
-        }
-      }
-    },
-    {
-      "name": "JS·ckmov",
-      "type": 0,
-      "url": "https://www.ckmov.vip/api.php?url=",
-      "ext": {
-        "flag": [
-          "qq",
-          "腾讯",
-          "qiyi",
-          "爱奇艺",
-          "奇艺",
-          "youku",
-          "优酷",
-          "mgtv",
-          "芒果",
-          "letv",
-          "乐视",
-          "pptv",
-          "PPTV",
-          "sohu",
-          "bilibili",
-          "哔哩哔哩",
-          "哔哩",
-          "migu",
-          "咪咕",
-          "miguvideo",
-          "cntv",
-          "cctv",
-          "央视",
-          "sports",
-          "体育",
-          "1905",
-          "1905电影网"
-        ],
-        "header": {
-          "User-Agent": "okhttp/4.1.0"
-        }
-      }
-    },
-    {
-      "name": "JS·H8",
-      "type": 0,
-      "url": "https://www.h8jx.com/jiexi.php?url=",
-      "ext": {
-        "flag": [
-          "qq",
-          "腾讯",
-          "qiyi",
-          "爱奇艺",
-          "奇艺",
-          "youku",
-          "优酷",
-          "mgtv",
-          "芒果",
-          "letv",
-          "乐视",
-          "pptv",
-          "PPTV",
-          "sohu",
-          "bilibili",
-          "哔哩哔哩",
-          "哔哩",
-          "migu",
-          "咪咕",
-          "miguvideo",
-          "cntv",
-          "cctv",
-          "央视",
-          "sports",
-          "体育",
-          "1905",
-          "1905电影网"
-        ],
-        "header": {
-          "User-Agent": "okhttp/4.1.0"
-        }
-      }
-    },
-    {
-      "name": "JS·通用",
-      "type": 0,
-      "url": "https://ckmov.ccyjjd.com/ckmov/?url=",
-      "ext": {
-        "flag": [
-          "qq",
-          "腾讯",
-          "qiyi",
-          "爱奇艺",
-          "奇艺",
-          "youku",
-          "优酷",
-          "mgtv",
-          "芒果",
-          "letv",
-          "乐视",
-          "pptv",
-          "PPTV",
-          "sohu",
-          "bilibili",
-          "哔哩哔哩",
-          "哔哩",
-          "migu",
-          "咪咕",
-          "miguvideo",
-          "cntv",
-          "cctv",
-          "央视",
-          "sports",
-          "体育",
-          "1905",
-          "1905电影网"
-        ],
-        "header": {
-          "User-Agent": "okhttp/4.1.0"
-        }
-      }
-    },
-    {
-      "name": "JS·MAO",
-      "type": 0,
-      "url": "https://www.mtosz.com/m3u8.php?url=",
-      "ext": {
-        "flag": [
-          "qq",
-          "腾讯",
-          "qiyi",
-          "爱奇艺",
-          "奇艺",
-          "youku",
-          "优酷",
-          "mgtv",
-          "芒果",
-          "letv",
-          "乐视",
-          "pptv",
-          "PPTV",
-          "sohu",
-          "bilibili",
-          "哔哩哔哩",
-          "哔哩",
-          "migu",
-          "咪咕",
-          "miguvideo",
-          "cntv",
-          "cctv",
-          "央视",
-          "sports",
-          "体育",
-          "1905",
-          "1905电影网"
-        ],
-        "header": {
-          "User-Agent": "okhttp/4.1.0"
-        }
-      }
-    },
-    {
-      "name": "JS·M3U8",
-      "type": 0,
-      "url": "https://jx.m3u8.tv/jiexi/?url=",
-      "ext": {
-        "flag": [
-          "qq",
-          "腾讯",
-          "qiyi",
-          "爱奇艺",
-          "奇艺",
-          "youku",
-          "优酷",
-          "mgtv",
-          "芒果",
-          "letv",
-          "乐视",
-          "pptv",
-          "PPTV",
-          "sohu",
-          "bilibili",
-          "哔哩哔哩",
-          "哔哩",
-          "migu",
-          "咪咕",
-          "miguvideo",
-          "cntv",
-          "cctv",
-          "央视",
-          "sports",
-          "体育",
-          "1905",
-          "1905电影网"
-        ],
-        "header": {
-          "User-Agent": "okhttp/4.1.0"
-        }
-      }
-    },
-    {
-      "name": "JS·诺讯",
-      "type": 0,
-      "url": "https://www.nxflv.com/?url=",
-      "ext": {
-        "flag": [
-          "qq",
-          "腾讯",
-          "qiyi",
-          "爱奇艺",
-          "奇艺",
-          "youku",
-          "优酷",
-          "mgtv",
-          "芒果",
-          "letv",
-          "乐视",
-          "pptv",
-          "PPTV",
-          "sohu",
-          "bilibili",
-          "哔哩哔哩",
-          "哔哩",
-          "migu",
-          "咪咕",
-          "miguvideo",
-          "cntv",
-          "cctv",
-          "央视",
-          "sports",
-          "体育",
-          "1905",
-          "1905电影网"
-        ],
-        "header": {
-          "User-Agent": "okhttp/4.1.0"
-        }
-      }
-    },
-    {
-      "name": "JS·PM",
-      "type": 0,
-      "url": "https://www.playm3u8.cn/jiexi.php?url=",
-      "ext": {
-        "flag": [
-          "qq",
-          "腾讯",
-          "qiyi",
-          "爱奇艺",
-          "奇艺",
-          "youku",
-          "优酷",
-          "mgtv",
-          "芒果",
-          "letv",
-          "乐视",
-          "pptv",
-          "PPTV",
-          "sohu",
-          "bilibili",
-          "哔哩哔哩",
-          "哔哩",
-          "migu",
-          "咪咕",
-          "miguvideo",
-          "cntv",
-          "cctv",
-          "央视",
-          "sports",
-          "体育",
-          "1905",
-          "1905电影网"
-        ],
-        "header": {
-          "User-Agent": "okhttp/4.1.0"
-        }
-      }
-    },
-    {
-      "name": "JS·4K",
-      "type": 0,
-      "url": "https://jx.4kdv.com/?url=",
-      "ext": {
-        "flag": [
-          "qq",
-          "腾讯",
-          "qiyi",
-          "爱奇艺",
-          "奇艺",
-          "youku",
-          "优酷",
-          "mgtv",
-          "芒果",
-          "letv",
-          "乐视",
-          "pptv",
-          "PPTV",
-          "sohu",
-          "bilibili",
-          "哔哩哔哩",
-          "哔哩",
-          "migu",
-          "咪咕",
-          "miguvideo",
-          "cntv",
-          "cctv",
-          "央视",
-          "sports",
-          "体育",
-          "1905",
-          "1905电影网"
-        ],
-        "header": {
-          "User-Agent": "okhttp/4.1.0"
-        }
-      }
-    },
-    {
-      "name": "JS·8090",
-      "type": 0,
-      "url": "https://www.8090g.cn/?url=",
-      "ext": {
-        "flag": [
-          "qq",
-          "腾讯",
-          "qiyi",
-          "爱奇艺",
-          "奇艺",
-          "youku",
-          "优酷",
-          "mgtv",
-          "芒果",
-          "letv",
-          "乐视",
-          "pptv",
-          "PPTV",
-          "sohu",
-          "bilibili",
-          "哔哩哔哩",
-          "哔哩",
-          "migu",
-          "咪咕",
-          "miguvideo",
-          "cntv",
-          "cctv",
-          "央视",
-          "sports",
-          "体育",
-          "1905",
-          "1905电影网"
-        ],
-        "header": {
-          "User-Agent": "okhttp/4.1.0"
-        }
-      }
-    },
-    {
-      "name": "JS·剖元",
-      "type": 0,
-      "url": "https://www.pouyun.com/?url=",
-      "ext": {
-        "flag": [
-          "qq",
-          "腾讯",
-          "qiyi",
-          "爱奇艺",
-          "奇艺",
-          "youku",
-          "优酷",
-          "mgtv",
-          "芒果",
-          "letv",
-          "乐视",
-          "pptv",
-          "PPTV",
-          "sohu",
-          "bilibili",
-          "哔哩哔哩",
-          "哔哩",
-          "migu",
-          "咪咕",
-          "miguvideo",
-          "cntv",
-          "cctv",
-          "央视",
-          "sports",
-          "体育",
-          "1905",
-          "1905电影网"
-        ],
-        "header": {
-          "User-Agent": "okhttp/4.1.0"
-        }
-      }
-    },
-    {
-      "name": "JS·夜幕",
-      "type": 0,
-      "url": "https://www.yemu.xyz/?url=",
-      "ext": {
-        "flag": [
-          "qq",
-          "腾讯",
-          "qiyi",
-          "爱奇艺",
-          "奇艺",
-          "youku",
-          "优酷",
-          "mgtv",
-          "芒果",
-          "letv",
-          "乐视",
-          "pptv",
-          "PPTV",
-          "sohu",
-          "bilibili",
-          "哔哩哔哩",
-          "哔哩",
-          "migu",
-          "咪咕",
-          "miguvideo",
-          "cntv",
-          "cctv",
-          "央视",
-          "sports",
-          "体育",
-          "1905",
-          "1905电影网"
-        ],
-        "header": {
-          "User-Agent": "okhttp/4.1.0"
-        }
-      }
-    },
-    {
-      "name": "JS·七七云",
-      "type": 0,
-      "url": "https://jx.77flv.cc/?url=",
-      "ext": {
-        "flag": [
-          "qq",
-          "腾讯",
-          "qiyi",
-          "爱奇艺",
-          "奇艺",
-          "youku",
-          "优酷",
-          "mgtv",
-          "芒果",
-          "letv",
-          "乐视",
-          "pptv",
-          "PPTV",
-          "sohu",
-          "bilibili",
-          "哔哩哔哩",
-          "哔哩",
-          "migu",
-          "咪咕",
-          "miguvideo",
-          "cntv",
-          "cctv",
-          "央视",
-          "sports",
-          "体育",
-          "1905",
-          "1905电影网"
-        ],
-        "header": {
-          "User-Agent": "okhttp/4.1.0"
-        }
-      }
-    },
-    {
-      "name": "JS·芒果TV1",
-      "type": 0,
-      "url": "https://video.isyour.love/player/getplayer?url=",
-      "ext": {
-        "flag": [
-          "qq",
-          "腾讯",
-          "qiyi",
-          "爱奇艺",
-          "奇艺",
-          "youku",
-          "优酷",
-          "mgtv",
-          "芒果",
-          "letv",
-          "乐视",
-          "pptv",
-          "PPTV",
-          "sohu",
-          "bilibili",
-          "哔哩哔哩",
-          "哔哩",
-          "migu",
-          "咪咕",
-          "miguvideo",
-          "cntv",
-          "cctv",
-          "央视",
-          "sports",
-          "体育",
-          "1905",
-          "1905电影网"
-        ],
-        "header": {
-          "User-Agent": "okhttp/4.1.0"
-        }
-      }
-    },
-    {
-      "name": "JS·七哥",
-      "type": 0,
-      "url": "https://jx.nnxv.cn/tv.php?url=",
-      "ext": {
-        "flag": [
-          "qq",
-          "腾讯",
-          "qiyi",
-          "爱奇艺",
-          "奇艺",
-          "youku",
-          "优酷",
-          "mgtv",
-          "芒果",
-          "letv",
-          "乐视",
-          "pptv",
-          "PPTV",
-          "sohu",
-          "bilibili",
-          "哔哩哔哩",
-          "哔哩",
-          "migu",
-          "咪咕",
-          "miguvideo",
-          "cntv",
-          "cctv",
-          "央视",
-          "sports",
-          "体育",
-          "1905",
-          "1905电影网"
-        ],
-        "header": {
-          "User-Agent": "okhttp/4.1.0"
-        }
-      }
-    },
-    {
-      "name": "JS·云析(带选集)",
-      "type": 0,
-      "url": "https://jx.yparse.com/index.php?url=",
-      "ext": {
-        "flag": [
-          "qq",
-          "腾讯",
-          "qiyi",
-          "爱奇艺",
-          "奇艺",
-          "youku",
-          "优酷",
-          "mgtv",
-          "芒果",
-          "letv",
-          "乐视",
-          "pptv",
-          "PPTV",
-          "sohu",
-          "bilibili",
-          "哔哩哔哩",
-          "哔哩",
-          "migu",
-          "咪咕",
-          "miguvideo",
-          "cntv",
-          "cctv",
-          "央视",
-          "sports",
-          "体育",
-          "1905",
-          "1905电影网"
-        ],
-        "header": {
-          "User-Agent": "okhttp/4.1.0"
-        }
-      }
-    },
-    {
-      "name": "JS·937解析",
-      "type": 0,
-      "url": "https://bfq.937auth.vip?url=",
-      "ext": {
-        "flag": [
-          "qq",
-          "腾讯",
-          "qiyi",
-          "爱奇艺",
-          "奇艺",
-          "youku",
-          "优酷",
-          "mgtv",
-          "芒果",
-          "letv",
-          "乐视",
-          "pptv",
-          "PPTV",
-          "sohu",
-          "bilibili",
-          "哔哩哔哩",
-          "哔哩",
-          "migu",
-          "咪咕",
-          "miguvideo",
-          "cntv",
-          "cctv",
-          "央视",
-          "sports",
-          "体育",
-          "1905",
-          "1905电影网"
-        ],
-        "header": {
-          "User-Agent": "okhttp/4.1.0"
-        }
-      }
-    },
-    {
-      "name": "JS·jsonplayer",
-      "type": 0,
-      "url": "https://jx.777jiexi.com/player/?url=",
-      "ext": {
-        "flag": [
-          "qq",
-          "腾讯",
-          "qiyi",
-          "爱奇艺",
-          "奇艺",
-          "youku",
-          "优酷",
-          "mgtv",
-          "芒果",
-          "letv",
-          "乐视",
-          "pptv",
-          "PPTV",
-          "sohu",
-          "bilibili",
-          "哔哩哔哩",
-          "哔哩",
-          "migu",
-          "咪咕",
-          "miguvideo",
-          "cntv",
-          "cctv",
-          "央视",
-          "sports",
-          "体育",
-          "1905",
-          "1905电影网"
-        ],
-        "header": {
-          "User-Agent": "okhttp/4.1.0"
-        }
-      }
-    },
-    {
-      "name": "JS·云解析",
-      "type": 0,
-      "url": "https://yparse.ik9.cc/index.php?url=",
-      "ext": {
-        "flag": [
-          "qq",
-          "腾讯",
-          "qiyi",
-          "爱奇艺",
-          "奇艺",
-          "youku",
-          "优酷",
-          "mgtv",
-          "芒果",
-          "letv",
-          "乐视",
-          "pptv",
-          "PPTV",
-          "sohu",
-          "bilibili",
-          "哔哩哔哩",
-          "哔哩",
-          "migu",
-          "咪咕",
-          "miguvideo",
-          "cntv",
-          "cctv",
-          "央视",
-          "sports",
-          "体育",
-          "1905",
-          "1905电影网"
-        ],
-        "header": {
-          "User-Agent": "okhttp/4.1.0"
-        }
-      }
+      "api": "./py/py_zb98ok_all.py"
     },
 { "key": "py_央视节目", "name": "🔥央视节目(py)","type": 3,"api": "https://raw.githubusercontent.com/cyd0116/vod/refs/heads/main/py/央视节目.py"},
 { "key": "py_央视节目_取数版", "name": "🔥央视节目_取数版(py)","type": 3,"api": "https://raw.githubusercontent.com/cyd0116/vod/refs/heads/main/py/央视节目_取数版.py"},
@@ -3225,7 +240,18 @@
           "bilibili",
           "哔哩哔哩",
           "哔哩",
-		  "migu","咪咕","miguvideo","cntv","cctv","央视","sports","体育"
+          "iqiyi",
+          "migu",
+          "咪咕",
+          "miguvideo",
+          "cntv",
+          "cctv",
+          "央视",
+          "sports",
+          "体育",
+          "腾讯国语",
+          "腾讯原声",
+          "国语回放"
         ],
         "header": {
           "User-Agent": "okhttp/4.1.0"
@@ -3255,7 +281,18 @@
           "bilibili",
           "哔哩哔哩",
           "哔哩",
-		  "migu","咪咕","miguvideo","cntv","cctv","央视","sports","体育"
+          "iqiyi",
+          "migu",
+          "咪咕",
+          "miguvideo",
+          "cntv",
+          "cctv",
+          "央视",
+          "sports",
+          "体育",
+          "腾讯国语",
+          "腾讯原声",
+          "国语回放"
         ],
         "header": {
           "User-Agent": "okhttp/4.1.0"
@@ -3285,7 +322,18 @@
           "bilibili",
           "哔哩哔哩",
           "哔哩",
-		  "migu","咪咕","miguvideo","cntv","cctv","央视","sports","体育"
+          "iqiyi",
+          "migu",
+          "咪咕",
+          "miguvideo",
+          "cntv",
+          "cctv",
+          "央视",
+          "sports",
+          "体育",
+          "腾讯国语",
+          "腾讯原声",
+          "国语回放"
         ],
         "header": {
           "User-Agent": "okhttp/4.1.0"
@@ -3315,7 +363,18 @@
           "bilibili",
           "哔哩哔哩",
           "哔哩",
-		  "migu","咪咕","miguvideo","cntv","cctv","央视","sports","体育"
+          "iqiyi",
+          "migu",
+          "咪咕",
+          "miguvideo",
+          "cntv",
+          "cctv",
+          "央视",
+          "sports",
+          "体育",
+          "腾讯国语",
+          "腾讯原声",
+          "国语回放"
         ]
       }
     },
@@ -3342,8 +401,1823 @@
           "bilibili",
           "哔哩哔哩",
           "哔哩",
-		  "migu","咪咕","miguvideo","cntv","cctv","央视","sports","体育"
+          "iqiyi",
+          "migu",
+          "咪咕",
+          "miguvideo",
+          "cntv",
+          "cctv",
+          "央视",
+          "sports",
+          "体育",
+          "腾讯国语",
+          "腾讯原声",
+          "国语回放"
         ]
+      }
+    },
+    {
+      "name": "虾米·2",
+      "type": 0,
+      "url": "https://jx.xmflv.com/?url=",
+      "ext": {
+        "flag": [
+          "qq",
+          "腾讯",
+          "qiyi",
+          "爱奇艺",
+          "奇艺",
+          "youku",
+          "优酷",
+          "mgtv",
+          "芒果",
+          "letv",
+          "乐视",
+          "pptv",
+          "PPTV",
+          "sohu",
+          "bilibili",
+          "哔哩哔哩",
+          "哔哩",
+          "iqiyi",
+          "migu",
+          "咪咕",
+          "miguvideo",
+          "cntv",
+          "cctv",
+          "央视",
+          "sports",
+          "体育",
+          "腾讯国语",
+          "腾讯原声",
+          "国语回放"
+        ],
+        "header": {
+          "User-Agent": "okhttp/4.1.0"
+        }
+      }
+    },
+    {
+      "name": "TXNP",
+      "type": 0,
+      "url": "https://bfq.txnp.cn/player?url=",
+      "ext": {
+        "flag": [
+          "qq",
+          "腾讯",
+          "qiyi",
+          "爱奇艺",
+          "奇艺",
+          "youku",
+          "优酷",
+          "mgtv",
+          "芒果",
+          "letv",
+          "乐视",
+          "pptv",
+          "PPTV",
+          "sohu",
+          "bilibili",
+          "哔哩哔哩",
+          "哔哩",
+          "iqiyi",
+          "migu",
+          "咪咕",
+          "miguvideo",
+          "cntv",
+          "cctv",
+          "央视",
+          "sports",
+          "体育",
+          "腾讯国语",
+          "腾讯原声",
+          "国语回放"
+        ],
+        "header": {
+          "User-Agent": "okhttp/4.1.0"
+        }
+      }
+    },
+    {
+      "name": "SUPER",
+      "type": 0,
+      "url": "https://super.playr.top/?url=",
+      "ext": {
+        "flag": [
+          "qq",
+          "腾讯",
+          "qiyi",
+          "爱奇艺",
+          "奇艺",
+          "youku",
+          "优酷",
+          "mgtv",
+          "芒果",
+          "letv",
+          "乐视",
+          "pptv",
+          "PPTV",
+          "sohu",
+          "bilibili",
+          "哔哩哔哩",
+          "哔哩",
+          "iqiyi",
+          "migu",
+          "咪咕",
+          "miguvideo",
+          "cntv",
+          "cctv",
+          "央视",
+          "sports",
+          "体育",
+          "腾讯国语",
+          "腾讯原声",
+          "国语回放"
+        ],
+        "header": {
+          "User-Agent": "okhttp/4.1.0"
+        }
+      }
+    },
+    {
+      "name": "DMFLV",
+      "type": 0,
+      "url": "https://jx.dmflv.cc/?url=",
+      "ext": {
+        "flag": [
+          "qq",
+          "腾讯",
+          "qiyi",
+          "爱奇艺",
+          "奇艺",
+          "youku",
+          "优酷",
+          "mgtv",
+          "芒果",
+          "letv",
+          "乐视",
+          "pptv",
+          "PPTV",
+          "sohu",
+          "bilibili",
+          "哔哩哔哩",
+          "哔哩",
+          "iqiyi",
+          "migu",
+          "咪咕",
+          "miguvideo",
+          "cntv",
+          "cctv",
+          "央视",
+          "sports",
+          "体育",
+          "腾讯国语",
+          "腾讯原声",
+          "国语回放"
+        ],
+        "header": {
+          "User-Agent": "okhttp/4.1.0"
+        }
+      }
+    },
+    {
+      "name": "M1907",
+      "type": 0,
+      "url": "https://video.isyour.love/html/html2/jiexi/m1907.html?m1907jx=",
+      "ext": {
+        "flag": [
+          "qq",
+          "腾讯",
+          "qiyi",
+          "爱奇艺",
+          "奇艺",
+          "youku",
+          "优酷",
+          "mgtv",
+          "芒果",
+          "letv",
+          "乐视",
+          "pptv",
+          "PPTV",
+          "sohu",
+          "bilibili",
+          "哔哩哔哩",
+          "哔哩",
+          "iqiyi",
+          "migu",
+          "咪咕",
+          "miguvideo",
+          "cntv",
+          "cctv",
+          "央视",
+          "sports",
+          "体育",
+          "腾讯国语",
+          "腾讯原声",
+          "国语回放"
+        ],
+        "header": {
+          "User-Agent": "okhttp/4.1.0"
+        }
+      }
+    },
+    {
+      "name": "极速解析",
+      "type": 0,
+      "url": "https://jx.2s0.cn/player/?url=",
+      "ext": {
+        "flag": [
+          "qq",
+          "腾讯",
+          "qiyi",
+          "爱奇艺",
+          "奇艺",
+          "youku",
+          "优酷",
+          "mgtv",
+          "芒果",
+          "letv",
+          "乐视",
+          "pptv",
+          "PPTV",
+          "sohu",
+          "bilibili",
+          "哔哩哔哩",
+          "哔哩",
+          "iqiyi",
+          "migu",
+          "咪咕",
+          "miguvideo",
+          "cntv",
+          "cctv",
+          "央视",
+          "sports",
+          "体育",
+          "腾讯国语",
+          "腾讯原声",
+          "国语回放"
+        ],
+        "header": {
+          "User-Agent": "okhttp/4.1.0"
+        }
+      }
+    },
+    {
+      "name": "fongmi",
+      "type": 0,
+      "url": "https://json.fongmi.cc/web?url=",
+      "ext": {
+        "flag": [
+          "qq",
+          "腾讯",
+          "qiyi",
+          "爱奇艺",
+          "奇艺",
+          "youku",
+          "优酷",
+          "mgtv",
+          "芒果",
+          "letv",
+          "乐视",
+          "pptv",
+          "PPTV",
+          "sohu",
+          "bilibili",
+          "哔哩哔哩",
+          "哔哩",
+          "iqiyi",
+          "migu",
+          "咪咕",
+          "miguvideo",
+          "cntv",
+          "cctv",
+          "央视",
+          "sports",
+          "体育",
+          "腾讯国语",
+          "腾讯原声",
+          "国语回放"
+        ],
+        "header": {
+          "User-Agent": "okhttp/4.1.0"
+        }
+      }
+    },
+    {
+      "name": "七哥解析",
+      "type": 0,
+      "url": "https://jx.202617.xyz/tv.php?url=",
+      "ext": {
+        "flag": [
+          "qq",
+          "腾讯",
+          "qiyi",
+          "爱奇艺",
+          "奇艺",
+          "youku",
+          "优酷",
+          "mgtv",
+          "芒果",
+          "letv",
+          "乐视",
+          "pptv",
+          "PPTV",
+          "sohu",
+          "bilibili",
+          "哔哩哔哩",
+          "哔哩",
+          "iqiyi",
+          "migu",
+          "咪咕",
+          "miguvideo",
+          "cntv",
+          "cctv",
+          "央视",
+          "sports",
+          "体育",
+          "腾讯国语",
+          "腾讯原声",
+          "国语回放"
+        ],
+        "header": {
+          "User-Agent": "okhttp/4.1.0"
+        }
+      }
+    },
+    {
+      "name": "虾米2",
+      "type": 0,
+      "url": "https://jx.xmflv.cc/?url=",
+      "ext": {
+        "flag": [
+          "qq",
+          "腾讯",
+          "qiyi",
+          "爱奇艺",
+          "奇艺",
+          "youku",
+          "优酷",
+          "mgtv",
+          "芒果",
+          "letv",
+          "乐视",
+          "pptv",
+          "PPTV",
+          "sohu",
+          "bilibili",
+          "哔哩哔哩",
+          "哔哩",
+          "iqiyi",
+          "migu",
+          "咪咕",
+          "miguvideo",
+          "cntv",
+          "cctv",
+          "央视",
+          "sports",
+          "体育",
+          "腾讯国语",
+          "腾讯原声",
+          "国语回放"
+        ],
+        "header": {
+          "User-Agent": "okhttp/4.1.0"
+        }
+      }
+    },
+    {
+      "name": "纯净解析",
+      "type": 0,
+      "url": "https://im1907.top/?jx=",
+      "ext": {
+        "flag": [
+          "qq",
+          "腾讯",
+          "qiyi",
+          "爱奇艺",
+          "奇艺",
+          "youku",
+          "优酷",
+          "mgtv",
+          "芒果",
+          "letv",
+          "乐视",
+          "pptv",
+          "PPTV",
+          "sohu",
+          "bilibili",
+          "哔哩哔哩",
+          "哔哩",
+          "iqiyi",
+          "migu",
+          "咪咕",
+          "miguvideo",
+          "cntv",
+          "cctv",
+          "央视",
+          "sports",
+          "体育",
+          "腾讯国语",
+          "腾讯原声",
+          "国语回放"
+        ],
+        "header": {
+          "User-Agent": "okhttp/4.1.0"
+        }
+      }
+    },
+    {
+      "name": "爱豆",
+      "type": 0,
+      "url": "https://jx.aidouer.net/?url=",
+      "ext": {
+        "flag": [
+          "qq",
+          "腾讯",
+          "qiyi",
+          "爱奇艺",
+          "奇艺",
+          "youku",
+          "优酷",
+          "mgtv",
+          "芒果",
+          "letv",
+          "乐视",
+          "pptv",
+          "PPTV",
+          "sohu",
+          "bilibili",
+          "哔哩哔哩",
+          "哔哩",
+          "iqiyi",
+          "migu",
+          "咪咕",
+          "miguvideo",
+          "cntv",
+          "cctv",
+          "央视",
+          "sports",
+          "体育",
+          "腾讯国语",
+          "腾讯原声",
+          "国语回放"
+        ],
+        "header": {
+          "User-Agent": "okhttp/4.1.0"
+        }
+      }
+    },
+    {
+      "name": "CHok",
+      "type": 0,
+      "url": "https://www.gai4.com/?url=",
+      "ext": {
+        "flag": [
+          "qq",
+          "腾讯",
+          "qiyi",
+          "爱奇艺",
+          "奇艺",
+          "youku",
+          "优酷",
+          "mgtv",
+          "芒果",
+          "letv",
+          "乐视",
+          "pptv",
+          "PPTV",
+          "sohu",
+          "bilibili",
+          "哔哩哔哩",
+          "哔哩",
+          "iqiyi",
+          "migu",
+          "咪咕",
+          "miguvideo",
+          "cntv",
+          "cctv",
+          "央视",
+          "sports",
+          "体育",
+          "腾讯国语",
+          "腾讯原声",
+          "国语回放"
+        ],
+        "header": {
+          "User-Agent": "okhttp/4.1.0"
+        }
+      }
+    },
+    {
+      "name": "OK解析",
+      "type": 0,
+      "url": "https://okjx.cc/?url=",
+      "ext": {
+        "flag": [
+          "qq",
+          "腾讯",
+          "qiyi",
+          "爱奇艺",
+          "奇艺",
+          "youku",
+          "优酷",
+          "mgtv",
+          "芒果",
+          "letv",
+          "乐视",
+          "pptv",
+          "PPTV",
+          "sohu",
+          "bilibili",
+          "哔哩哔哩",
+          "哔哩",
+          "iqiyi",
+          "migu",
+          "咪咕",
+          "miguvideo",
+          "cntv",
+          "cctv",
+          "央视",
+          "sports",
+          "体育",
+          "腾讯国语",
+          "腾讯原声",
+          "国语回放"
+        ],
+        "header": {
+          "User-Agent": "okhttp/4.1.0"
+        }
+      }
+    },
+    {
+      "name": "思古3",
+      "type": 0,
+      "url": "https://jsap.attakids.com/?url=",
+      "ext": {
+        "flag": [
+          "qq",
+          "腾讯",
+          "qiyi",
+          "爱奇艺",
+          "奇艺",
+          "youku",
+          "优酷",
+          "mgtv",
+          "芒果",
+          "letv",
+          "乐视",
+          "pptv",
+          "PPTV",
+          "sohu",
+          "bilibili",
+          "哔哩哔哩",
+          "哔哩",
+          "iqiyi",
+          "migu",
+          "咪咕",
+          "miguvideo",
+          "cntv",
+          "cctv",
+          "央视",
+          "sports",
+          "体育",
+          "腾讯国语",
+          "腾讯原声",
+          "国语回放"
+        ],
+        "header": {
+          "User-Agent": "okhttp/4.1.0"
+        }
+      }
+    },
+    {
+      "name": "YT",
+      "type": 0,
+      "url": "https://jx.yangtu.top/?url=",
+      "ext": {
+        "flag": [
+          "qq",
+          "腾讯",
+          "qiyi",
+          "爱奇艺",
+          "奇艺",
+          "youku",
+          "优酷",
+          "mgtv",
+          "芒果",
+          "letv",
+          "乐视",
+          "pptv",
+          "PPTV",
+          "sohu",
+          "bilibili",
+          "哔哩哔哩",
+          "哔哩",
+          "iqiyi",
+          "migu",
+          "咪咕",
+          "miguvideo",
+          "cntv",
+          "cctv",
+          "央视",
+          "sports",
+          "体育",
+          "腾讯国语",
+          "腾讯原声",
+          "国语回放"
+        ],
+        "header": {
+          "User-Agent": "okhttp/4.1.0"
+        }
+      }
+    },
+    {
+      "name": "789",
+      "type": 0,
+      "url": "https://jiexi.789jiexi.icu:4433/?url=",
+      "ext": {
+        "flag": [
+          "qq",
+          "腾讯",
+          "qiyi",
+          "爱奇艺",
+          "奇艺",
+          "youku",
+          "优酷",
+          "mgtv",
+          "芒果",
+          "letv",
+          "乐视",
+          "pptv",
+          "PPTV",
+          "sohu",
+          "bilibili",
+          "哔哩哔哩",
+          "哔哩",
+          "iqiyi",
+          "migu",
+          "咪咕",
+          "miguvideo",
+          "cntv",
+          "cctv",
+          "央视",
+          "sports",
+          "体育",
+          "腾讯国语",
+          "腾讯原声",
+          "国语回放"
+        ],
+        "header": {
+          "User-Agent": "okhttp/4.1.0"
+        }
+      }
+    },
+    {
+      "name": "Play",
+      "type": 0,
+      "url": "https://jx.playerjy.com/?url=",
+      "ext": {
+        "flag": [
+          "qq",
+          "腾讯",
+          "qiyi",
+          "爱奇艺",
+          "奇艺",
+          "youku",
+          "优酷",
+          "mgtv",
+          "芒果",
+          "letv",
+          "乐视",
+          "pptv",
+          "PPTV",
+          "sohu",
+          "bilibili",
+          "哔哩哔哩",
+          "哔哩",
+          "iqiyi",
+          "migu",
+          "咪咕",
+          "miguvideo",
+          "cntv",
+          "cctv",
+          "央视",
+          "sports",
+          "体育",
+          "腾讯国语",
+          "腾讯原声",
+          "国语回放"
+        ],
+        "header": {
+          "User-Agent": "okhttp/4.1.0"
+        }
+      }
+    },
+    {
+      "name": "冰豆",
+      "type": 0,
+      "url": "https://bd.jx.cn/?url=",
+      "ext": {
+        "flag": [
+          "qq",
+          "腾讯",
+          "qiyi",
+          "爱奇艺",
+          "奇艺",
+          "youku",
+          "优酷",
+          "mgtv",
+          "芒果",
+          "letv",
+          "乐视",
+          "pptv",
+          "PPTV",
+          "sohu",
+          "bilibili",
+          "哔哩哔哩",
+          "哔哩",
+          "iqiyi",
+          "migu",
+          "咪咕",
+          "miguvideo",
+          "cntv",
+          "cctv",
+          "央视",
+          "sports",
+          "体育",
+          "腾讯国语",
+          "腾讯原声",
+          "国语回放"
+        ],
+        "header": {
+          "User-Agent": "okhttp/4.1.0"
+        }
+      }
+    },
+    {
+      "name": "百域",
+      "type": 0,
+      "url": "https://jx.618g.com/?url=",
+      "ext": {
+        "flag": [
+          "qq",
+          "腾讯",
+          "qiyi",
+          "爱奇艺",
+          "奇艺",
+          "youku",
+          "优酷",
+          "mgtv",
+          "芒果",
+          "letv",
+          "乐视",
+          "pptv",
+          "PPTV",
+          "sohu",
+          "bilibili",
+          "哔哩哔哩",
+          "哔哩",
+          "iqiyi",
+          "migu",
+          "咪咕",
+          "miguvideo",
+          "cntv",
+          "cctv",
+          "央视",
+          "sports",
+          "体育",
+          "腾讯国语",
+          "腾讯原声",
+          "国语回放"
+        ],
+        "header": {
+          "User-Agent": "okhttp/4.1.0"
+        }
+      }
+    },
+    {
+      "name": "CK",
+      "type": 0,
+      "url": "https://www.ckplayer.vip/jiexi/?url=",
+      "ext": {
+        "flag": [
+          "qq",
+          "腾讯",
+          "qiyi",
+          "爱奇艺",
+          "奇艺",
+          "youku",
+          "优酷",
+          "mgtv",
+          "芒果",
+          "letv",
+          "乐视",
+          "pptv",
+          "PPTV",
+          "sohu",
+          "bilibili",
+          "哔哩哔哩",
+          "哔哩",
+          "iqiyi",
+          "migu",
+          "咪咕",
+          "miguvideo",
+          "cntv",
+          "cctv",
+          "央视",
+          "sports",
+          "体育",
+          "腾讯国语",
+          "腾讯原声",
+          "国语回放"
+        ],
+        "header": {
+          "User-Agent": "okhttp/4.1.0"
+        }
+      }
+    },
+    {
+      "name": "ckmov",
+      "type": 0,
+      "url": "https://www.ckmov.vip/api.php?url=",
+      "ext": {
+        "flag": [
+          "qq",
+          "腾讯",
+          "qiyi",
+          "爱奇艺",
+          "奇艺",
+          "youku",
+          "优酷",
+          "mgtv",
+          "芒果",
+          "letv",
+          "乐视",
+          "pptv",
+          "PPTV",
+          "sohu",
+          "bilibili",
+          "哔哩哔哩",
+          "哔哩",
+          "iqiyi",
+          "migu",
+          "咪咕",
+          "miguvideo",
+          "cntv",
+          "cctv",
+          "央视",
+          "sports",
+          "体育",
+          "腾讯国语",
+          "腾讯原声",
+          "国语回放"
+        ],
+        "header": {
+          "User-Agent": "okhttp/4.1.0"
+        }
+      }
+    },
+    {
+      "name": "H8",
+      "type": 0,
+      "url": "https://www.h8jx.com/jiexi.php?url=",
+      "ext": {
+        "flag": [
+          "qq",
+          "腾讯",
+          "qiyi",
+          "爱奇艺",
+          "奇艺",
+          "youku",
+          "优酷",
+          "mgtv",
+          "芒果",
+          "letv",
+          "乐视",
+          "pptv",
+          "PPTV",
+          "sohu",
+          "bilibili",
+          "哔哩哔哩",
+          "哔哩",
+          "iqiyi",
+          "migu",
+          "咪咕",
+          "miguvideo",
+          "cntv",
+          "cctv",
+          "央视",
+          "sports",
+          "体育",
+          "腾讯国语",
+          "腾讯原声",
+          "国语回放"
+        ],
+        "header": {
+          "User-Agent": "okhttp/4.1.0"
+        }
+      }
+    },
+    {
+      "name": "通用",
+      "type": 0,
+      "url": "https://ckmov.ccyjjd.com/ckmov/?url=",
+      "ext": {
+        "flag": [
+          "qq",
+          "腾讯",
+          "qiyi",
+          "爱奇艺",
+          "奇艺",
+          "youku",
+          "优酷",
+          "mgtv",
+          "芒果",
+          "letv",
+          "乐视",
+          "pptv",
+          "PPTV",
+          "sohu",
+          "bilibili",
+          "哔哩哔哩",
+          "哔哩",
+          "iqiyi",
+          "migu",
+          "咪咕",
+          "miguvideo",
+          "cntv",
+          "cctv",
+          "央视",
+          "sports",
+          "体育",
+          "腾讯国语",
+          "腾讯原声",
+          "国语回放"
+        ],
+        "header": {
+          "User-Agent": "okhttp/4.1.0"
+        }
+      }
+    },
+    {
+      "name": "MAO",
+      "type": 0,
+      "url": "https://www.mtosz.com/m3u8.php?url=",
+      "ext": {
+        "flag": [
+          "qq",
+          "腾讯",
+          "qiyi",
+          "爱奇艺",
+          "奇艺",
+          "youku",
+          "优酷",
+          "mgtv",
+          "芒果",
+          "letv",
+          "乐视",
+          "pptv",
+          "PPTV",
+          "sohu",
+          "bilibili",
+          "哔哩哔哩",
+          "哔哩",
+          "iqiyi",
+          "migu",
+          "咪咕",
+          "miguvideo",
+          "cntv",
+          "cctv",
+          "央视",
+          "sports",
+          "体育",
+          "腾讯国语",
+          "腾讯原声",
+          "国语回放"
+        ],
+        "header": {
+          "User-Agent": "okhttp/4.1.0"
+        }
+      }
+    },
+    {
+      "name": "诺讯",
+      "type": 0,
+      "url": "https://www.nxflv.com/?url=",
+      "ext": {
+        "flag": [
+          "qq",
+          "腾讯",
+          "qiyi",
+          "爱奇艺",
+          "奇艺",
+          "youku",
+          "优酷",
+          "mgtv",
+          "芒果",
+          "letv",
+          "乐视",
+          "pptv",
+          "PPTV",
+          "sohu",
+          "bilibili",
+          "哔哩哔哩",
+          "哔哩",
+          "iqiyi",
+          "migu",
+          "咪咕",
+          "miguvideo",
+          "cntv",
+          "cctv",
+          "央视",
+          "sports",
+          "体育",
+          "腾讯国语",
+          "腾讯原声",
+          "国语回放"
+        ],
+        "header": {
+          "User-Agent": "okhttp/4.1.0"
+        }
+      }
+    },
+    {
+      "name": "PM",
+      "type": 0,
+      "url": "https://www.playm3u8.cn/jiexi.php?url=",
+      "ext": {
+        "flag": [
+          "qq",
+          "腾讯",
+          "qiyi",
+          "爱奇艺",
+          "奇艺",
+          "youku",
+          "优酷",
+          "mgtv",
+          "芒果",
+          "letv",
+          "乐视",
+          "pptv",
+          "PPTV",
+          "sohu",
+          "bilibili",
+          "哔哩哔哩",
+          "哔哩",
+          "iqiyi",
+          "migu",
+          "咪咕",
+          "miguvideo",
+          "cntv",
+          "cctv",
+          "央视",
+          "sports",
+          "体育",
+          "腾讯国语",
+          "腾讯原声",
+          "国语回放"
+        ],
+        "header": {
+          "User-Agent": "okhttp/4.1.0"
+        }
+      }
+    },
+    {
+      "name": "4K",
+      "type": 0,
+      "url": "https://jx.4kdv.com/?url=",
+      "ext": {
+        "flag": [
+          "qq",
+          "腾讯",
+          "qiyi",
+          "爱奇艺",
+          "奇艺",
+          "youku",
+          "优酷",
+          "mgtv",
+          "芒果",
+          "letv",
+          "乐视",
+          "pptv",
+          "PPTV",
+          "sohu",
+          "bilibili",
+          "哔哩哔哩",
+          "哔哩",
+          "iqiyi",
+          "migu",
+          "咪咕",
+          "miguvideo",
+          "cntv",
+          "cctv",
+          "央视",
+          "sports",
+          "体育",
+          "腾讯国语",
+          "腾讯原声",
+          "国语回放"
+        ],
+        "header": {
+          "User-Agent": "okhttp/4.1.0"
+        }
+      }
+    },
+    {
+      "name": "8090",
+      "type": 0,
+      "url": "https://www.8090g.cn/?url=",
+      "ext": {
+        "flag": [
+          "qq",
+          "腾讯",
+          "qiyi",
+          "爱奇艺",
+          "奇艺",
+          "youku",
+          "优酷",
+          "mgtv",
+          "芒果",
+          "letv",
+          "乐视",
+          "pptv",
+          "PPTV",
+          "sohu",
+          "bilibili",
+          "哔哩哔哩",
+          "哔哩",
+          "iqiyi",
+          "migu",
+          "咪咕",
+          "miguvideo",
+          "cntv",
+          "cctv",
+          "央视",
+          "sports",
+          "体育",
+          "腾讯国语",
+          "腾讯原声",
+          "国语回放"
+        ],
+        "header": {
+          "User-Agent": "okhttp/4.1.0"
+        }
+      }
+    },
+    {
+      "name": "剖元",
+      "type": 0,
+      "url": "https://www.pouyun.com/?url=",
+      "ext": {
+        "flag": [
+          "qq",
+          "腾讯",
+          "qiyi",
+          "爱奇艺",
+          "奇艺",
+          "youku",
+          "优酷",
+          "mgtv",
+          "芒果",
+          "letv",
+          "乐视",
+          "pptv",
+          "PPTV",
+          "sohu",
+          "bilibili",
+          "哔哩哔哩",
+          "哔哩",
+          "iqiyi",
+          "migu",
+          "咪咕",
+          "miguvideo",
+          "cntv",
+          "cctv",
+          "央视",
+          "sports",
+          "体育",
+          "腾讯国语",
+          "腾讯原声",
+          "国语回放"
+        ],
+        "header": {
+          "User-Agent": "okhttp/4.1.0"
+        }
+      }
+    },
+    {
+      "name": "夜幕",
+      "type": 0,
+      "url": "https://www.yemu.xyz/?url=",
+      "ext": {
+        "flag": [
+          "qq",
+          "腾讯",
+          "qiyi",
+          "爱奇艺",
+          "奇艺",
+          "youku",
+          "优酷",
+          "mgtv",
+          "芒果",
+          "letv",
+          "乐视",
+          "pptv",
+          "PPTV",
+          "sohu",
+          "bilibili",
+          "哔哩哔哩",
+          "哔哩",
+          "iqiyi",
+          "migu",
+          "咪咕",
+          "miguvideo",
+          "cntv",
+          "cctv",
+          "央视",
+          "sports",
+          "体育",
+          "腾讯国语",
+          "腾讯原声",
+          "国语回放"
+        ],
+        "header": {
+          "User-Agent": "okhttp/4.1.0"
+        }
+      }
+    },
+    {
+      "name": "芒果TV1",
+      "type": 0,
+      "url": "https://video.isyour.love/player/getplayer?url=",
+      "ext": {
+        "flag": [
+          "qq",
+          "腾讯",
+          "qiyi",
+          "爱奇艺",
+          "奇艺",
+          "youku",
+          "优酷",
+          "mgtv",
+          "芒果",
+          "letv",
+          "乐视",
+          "pptv",
+          "PPTV",
+          "sohu",
+          "bilibili",
+          "哔哩哔哩",
+          "哔哩",
+          "iqiyi",
+          "migu",
+          "咪咕",
+          "miguvideo",
+          "cntv",
+          "cctv",
+          "央视",
+          "sports",
+          "体育",
+          "腾讯国语",
+          "腾讯原声",
+          "国语回放"
+        ],
+        "header": {
+          "User-Agent": "okhttp/4.1.0"
+        }
+      }
+    },
+    {
+      "name": "七哥",
+      "type": 0,
+      "url": "https://jx.nnxv.cn/tv.php?url=",
+      "ext": {
+        "flag": [
+          "qq",
+          "腾讯",
+          "qiyi",
+          "爱奇艺",
+          "奇艺",
+          "youku",
+          "优酷",
+          "mgtv",
+          "芒果",
+          "letv",
+          "乐视",
+          "pptv",
+          "PPTV",
+          "sohu",
+          "bilibili",
+          "哔哩哔哩",
+          "哔哩",
+          "iqiyi",
+          "migu",
+          "咪咕",
+          "miguvideo",
+          "cntv",
+          "cctv",
+          "央视",
+          "sports",
+          "体育",
+          "腾讯国语",
+          "腾讯原声",
+          "国语回放"
+        ],
+        "header": {
+          "User-Agent": "okhttp/4.1.0"
+        }
+      }
+    },
+    {
+      "name": "云析(带选集)",
+      "type": 0,
+      "url": "https://jx.yparse.com/index.php?url=",
+      "ext": {
+        "flag": [
+          "qq",
+          "腾讯",
+          "qiyi",
+          "爱奇艺",
+          "奇艺",
+          "youku",
+          "优酷",
+          "mgtv",
+          "芒果",
+          "letv",
+          "乐视",
+          "pptv",
+          "PPTV",
+          "sohu",
+          "bilibili",
+          "哔哩哔哩",
+          "哔哩",
+          "iqiyi",
+          "migu",
+          "咪咕",
+          "miguvideo",
+          "cntv",
+          "cctv",
+          "央视",
+          "sports",
+          "体育",
+          "腾讯国语",
+          "腾讯原声",
+          "国语回放"
+        ],
+        "header": {
+          "User-Agent": "okhttp/4.1.0"
+        }
+      }
+    },
+    {
+      "name": "937解析",
+      "type": 0,
+      "url": "https://bfq.937auth.vip?url=",
+      "ext": {
+        "flag": [
+          "qq",
+          "腾讯",
+          "qiyi",
+          "爱奇艺",
+          "奇艺",
+          "youku",
+          "优酷",
+          "mgtv",
+          "芒果",
+          "letv",
+          "乐视",
+          "pptv",
+          "PPTV",
+          "sohu",
+          "bilibili",
+          "哔哩哔哩",
+          "哔哩",
+          "iqiyi",
+          "migu",
+          "咪咕",
+          "miguvideo",
+          "cntv",
+          "cctv",
+          "央视",
+          "sports",
+          "体育",
+          "腾讯国语",
+          "腾讯原声",
+          "国语回放"
+        ],
+        "header": {
+          "User-Agent": "okhttp/4.1.0"
+        }
+      }
+    },
+    {
+      "name": "jsonplayer",
+      "type": 0,
+      "url": "https://jx.777jiexi.com/player/?url=",
+      "ext": {
+        "flag": [
+          "qq",
+          "腾讯",
+          "qiyi",
+          "爱奇艺",
+          "奇艺",
+          "youku",
+          "优酷",
+          "mgtv",
+          "芒果",
+          "letv",
+          "乐视",
+          "pptv",
+          "PPTV",
+          "sohu",
+          "bilibili",
+          "哔哩哔哩",
+          "哔哩",
+          "iqiyi",
+          "migu",
+          "咪咕",
+          "miguvideo",
+          "cntv",
+          "cctv",
+          "央视",
+          "sports",
+          "体育",
+          "腾讯国语",
+          "腾讯原声",
+          "国语回放"
+        ],
+        "header": {
+          "User-Agent": "okhttp/4.1.0"
+        }
+      }
+    },
+    {
+      "name": "HTTP·优酷视频",
+      "type": 0,
+      "url": "http://117.24.7.9:8811/bbyk.php/?url=",
+      "ext": {
+        "flag": [
+          "qq",
+          "腾讯",
+          "qiyi",
+          "爱奇艺",
+          "奇艺",
+          "youku",
+          "优酷",
+          "mgtv",
+          "芒果",
+          "letv",
+          "乐视",
+          "pptv",
+          "PPTV",
+          "sohu",
+          "bilibili",
+          "哔哩哔哩",
+          "哔哩",
+          "iqiyi",
+          "migu",
+          "咪咕",
+          "miguvideo",
+          "cntv",
+          "cctv",
+          "央视",
+          "sports",
+          "体育",
+          "腾讯国语",
+          "腾讯原声",
+          "国语回放"
+        ],
+        "header": {
+          "User-Agent": "okhttp/4.1.0"
+        }
+      }
+    },
+    {
+      "name": "HTTP·爱奇艺",
+      "type": 0,
+      "url": "http://117.24.7.9:8811/bbiqy.php/?url=",
+      "ext": {
+        "flag": [
+          "qq",
+          "腾讯",
+          "qiyi",
+          "爱奇艺",
+          "奇艺",
+          "youku",
+          "优酷",
+          "mgtv",
+          "芒果",
+          "letv",
+          "乐视",
+          "pptv",
+          "PPTV",
+          "sohu",
+          "bilibili",
+          "哔哩哔哩",
+          "哔哩",
+          "iqiyi",
+          "migu",
+          "咪咕",
+          "miguvideo",
+          "cntv",
+          "cctv",
+          "央视",
+          "sports",
+          "体育",
+          "腾讯国语",
+          "腾讯原声",
+          "国语回放"
+        ],
+        "header": {
+          "User-Agent": "okhttp/4.1.0"
+        }
+      }
+    },
+    {
+      "name": "HTTP·芒果视频",
+      "type": 0,
+      "url": "http://117.24.7.9:8811/mg.php?url=",
+      "ext": {
+        "flag": [
+          "qq",
+          "腾讯",
+          "qiyi",
+          "爱奇艺",
+          "奇艺",
+          "youku",
+          "优酷",
+          "mgtv",
+          "芒果",
+          "letv",
+          "乐视",
+          "pptv",
+          "PPTV",
+          "sohu",
+          "bilibili",
+          "哔哩哔哩",
+          "哔哩",
+          "iqiyi",
+          "migu",
+          "咪咕",
+          "miguvideo",
+          "cntv",
+          "cctv",
+          "央视",
+          "sports",
+          "体育",
+          "腾讯国语",
+          "腾讯原声",
+          "国语回放"
+        ],
+        "header": {
+          "User-Agent": "okhttp/4.1.0"
+        }
+      }
+    },
+    {
+      "name": "HTTP·腾讯视频",
+      "type": 0,
+      "url": "http://117.24.7.9:8811/bbqq.php/?url=",
+      "ext": {
+        "flag": [
+          "qq",
+          "腾讯",
+          "qiyi",
+          "爱奇艺",
+          "奇艺",
+          "youku",
+          "优酷",
+          "mgtv",
+          "芒果",
+          "letv",
+          "乐视",
+          "pptv",
+          "PPTV",
+          "sohu",
+          "bilibili",
+          "哔哩哔哩",
+          "哔哩",
+          "iqiyi",
+          "migu",
+          "咪咕",
+          "miguvideo",
+          "cntv",
+          "cctv",
+          "央视",
+          "sports",
+          "体育",
+          "腾讯国语",
+          "腾讯原声",
+          "国语回放"
+        ],
+        "header": {
+          "User-Agent": "okhttp/4.1.0"
+        }
+      }
+    },
+    {
+      "name": "HTTP·PP视频",
+      "type": 0,
+      "url": "http://117.24.7.9:8811/bbjuli.php?url=",
+      "ext": {
+        "flag": [
+          "qq",
+          "腾讯",
+          "qiyi",
+          "爱奇艺",
+          "奇艺",
+          "youku",
+          "优酷",
+          "mgtv",
+          "芒果",
+          "letv",
+          "乐视",
+          "pptv",
+          "PPTV",
+          "sohu",
+          "bilibili",
+          "哔哩哔哩",
+          "哔哩",
+          "iqiyi",
+          "migu",
+          "咪咕",
+          "miguvideo",
+          "cntv",
+          "cctv",
+          "央视",
+          "sports",
+          "体育",
+          "腾讯国语",
+          "腾讯原声",
+          "国语回放"
+        ],
+        "header": {
+          "User-Agent": "okhttp/4.1.0"
+        }
+      }
+    },
+    {
+      "name": "HTTP·搜狐视频",
+      "type": 0,
+      "url": "http://117.24.7.9:8811/bt.php?url=",
+      "ext": {
+        "flag": [
+          "qq",
+          "腾讯",
+          "qiyi",
+          "爱奇艺",
+          "奇艺",
+          "youku",
+          "优酷",
+          "mgtv",
+          "芒果",
+          "letv",
+          "乐视",
+          "pptv",
+          "PPTV",
+          "sohu",
+          "bilibili",
+          "哔哩哔哩",
+          "哔哩",
+          "iqiyi",
+          "migu",
+          "咪咕",
+          "miguvideo",
+          "cntv",
+          "cctv",
+          "央视",
+          "sports",
+          "体育",
+          "腾讯国语",
+          "腾讯原声",
+          "国语回放"
+        ],
+        "header": {
+          "User-Agent": "okhttp/4.1.0"
+        }
+      }
+    },
+    {
+      "name": "HTTP·爱奇艺VIP",
+      "type": 0,
+      "url": "http://117.24.7.9:8811/ys/viqiyi1.php?token=e0a00333191d1ddabe47e0545100da84&v=",
+      "ext": {
+        "flag": [
+          "qq",
+          "腾讯",
+          "qiyi",
+          "爱奇艺",
+          "奇艺",
+          "youku",
+          "优酷",
+          "mgtv",
+          "芒果",
+          "letv",
+          "乐视",
+          "pptv",
+          "PPTV",
+          "sohu",
+          "bilibili",
+          "哔哩哔哩",
+          "哔哩",
+          "iqiyi",
+          "migu",
+          "咪咕",
+          "miguvideo",
+          "cntv",
+          "cctv",
+          "央视",
+          "sports",
+          "体育",
+          "腾讯国语",
+          "腾讯原声",
+          "国语回放"
+        ],
+        "header": {
+          "User-Agent": "okhttp/4.1.0"
+        }
+      }
+    },
+    {
+      "name": "HTTP·万播VIP",
+      "type": 0,
+      "url": "http://117.24.7.9:8811/bofangqi/xinluan/?url=",
+      "ext": {
+        "flag": [
+          "qq",
+          "腾讯",
+          "qiyi",
+          "爱奇艺",
+          "奇艺",
+          "youku",
+          "优酷",
+          "mgtv",
+          "芒果",
+          "letv",
+          "乐视",
+          "pptv",
+          "PPTV",
+          "sohu",
+          "bilibili",
+          "哔哩哔哩",
+          "哔哩",
+          "iqiyi",
+          "migu",
+          "咪咕",
+          "miguvideo",
+          "cntv",
+          "cctv",
+          "央视",
+          "sports",
+          "体育",
+          "腾讯国语",
+          "腾讯原声",
+          "国语回放"
+        ],
+        "header": {
+          "User-Agent": "okhttp/4.1.0"
+        }
+      }
+    },
+    {
+      "name": "HTTP·万播SVIP",
+      "type": 0,
+      "url": "http://117.24.7.9:8866/mayi/?url=",
+      "ext": {
+        "flag": [
+          "qq",
+          "腾讯",
+          "qiyi",
+          "爱奇艺",
+          "奇艺",
+          "youku",
+          "优酷",
+          "mgtv",
+          "芒果",
+          "letv",
+          "乐视",
+          "pptv",
+          "PPTV",
+          "sohu",
+          "bilibili",
+          "哔哩哔哩",
+          "哔哩",
+          "iqiyi",
+          "migu",
+          "咪咕",
+          "miguvideo",
+          "cntv",
+          "cctv",
+          "央视",
+          "sports",
+          "体育",
+          "腾讯国语",
+          "腾讯原声",
+          "国语回放"
+        ],
+        "header": {
+          "User-Agent": "okhttp/4.1.0"
+        }
       }
     }
   ],

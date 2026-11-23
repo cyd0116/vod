@@ -19,7 +19,10 @@
 #   其余与原版逐字一致：官方页仍极简交壳(parse=1，零 msg)，由壳拿
 #   订阅里 parses[] 的解析接口去解；国语回放仍直连 1080P；
 #   集锦/精华/十佳仍排除（那不是比赛）；首页推荐仍与分类完全一致。
-#   ★ 解析地址【不内置在 py 里】，全部来自订阅 json 的 parses[]。
+#   ★ xx.user.js 的 51 个接口地址已全部纳入订阅顶层 parses 段。
+#   ★ 解析地址【不内置在 py 里】，也不塞进 site 的 ext。
+#     全部放在订阅 json 的【顶层 parses 独立段】——与已验证可调用的
+#     解密 json 写法一致；由壳解析池读取，py 对官方页只极简交壳。
 #     配套文件：zb98_subscribe_full.json
 # ======================================================================
 import sys
@@ -1233,14 +1236,25 @@ def _clean_shell(page, hd, prefix=""):
     out = {"parse": 1, "url": page, "header": hd}
     if prefix:
         out = {"parse": 0, "url": prefix + page, "header": hd}
+
+    # ★★ 修「播了 15 秒官网贴片广告、底部没有解析名字」：
+    #   壳解析池按 ext.flag 匹配播放源。以前这段被关在
+    #   「if not OFFICIAL_CLEAN」里，而 OFFICIAL_CLEAN 必须开(为零 msg)，
+    #   于是 flag 从来没回传过 → 壳退化成网页嗅探，直接抓到广告流。
+    #   现在精简模式下也补 flag；★ 只加 flag，绝不加
+    #   msg / jx / playUrl / format（那几个会重现 ⚠ 播放地址解析失败页）。
+    # ★★ 只对「官方页」回传 flag。国语回放(微博直连)走的是 parse=0
+    #    独立 return，本就不过这里；万一它取不到流落到交壳兜底，下面这层
+    #    _is_official 判断也保证绝不会给它挂解析 flag —— 直连就是直连。
+    if OFFICIAL_ADD_FLAG and not prefix and _is_official(page):
+        fl = _official_flag(page)
+        if fl:
+            out["flag"] = fl
+
     if not OFFICIAL_CLEAN:
         # 仅供排障：打开会重现 ⚠ 错误页，默认不启用
         out.update({"playUrl": "", "jx": 1 if not prefix else 0,
                     "format": "", "msg": "已交 OK影视 壳子解析"})
-        if OFFICIAL_ADD_FLAG and not prefix:
-            fl = _official_flag(page)
-            if fl:
-                out["flag"] = fl
     return out
 
 
@@ -2263,7 +2277,8 @@ class Spider(Spider):
                      "  丢弃：全场精华 / 全场集锦 / 精彩十佳球 等",
                      "★★ 本文件 = 全量显示分支：国语回放筛选 关闭 / "
                         "近三天 关闭 → 显示全部比赛（含腾讯/爱奇艺/优酷/咪咕）",
-                     "  ★ 官方页由壳用订阅 parses[] 解析；py 不内置解析地址",
+                     "  ★ 官方页由壳读【顶层 parses 独立段】解析；"
+                        "py 不内置、site.ext 也不塞 parses",
                      "★ NBA 近三天过滤: " +
                         ("开启 ✅ (%d 天含当天，分类只留最新，pagecount=1)"
                          % NBA_RECENT_DAYS if NBA_RECENT_ON else "关闭"),
@@ -2296,7 +2311,10 @@ class Spider(Spider):
                      "首页分类: homeContent 零网络请求 / 无 __init__", "",
                      "【微博取流配置】",
                      "WB_COOKIE: " + ("已填 ✅" if WB_COOKIE else "未填 ❌"),
-                     "", "【解析来源 = 你填在 OK影视 的订阅列表】",
+                     "", "【解析来源 = 订阅 json 的顶层 parses 独立段】",
+                     "  ★ 壳解析池读顶层 parses；site.ext 里不放 parses",
+                     "  ★ xx.user.js 的 51 个接口地址已全部纳入（同址合并 7 条）",
+                     "  ★ 国语回放/明文直链 = parse=0 直连，绝不挂解析 flag",
                      "init(ext) 订阅地址: %d 个" % len(_G["ext_subs"] or []),
                      "SUBSCRIBE_URLS: %d 个" % len(SUBSCRIBE_URLS or []),
                      "配置内发现订阅: %d 个" % len(_G["sub_urls"] or []),

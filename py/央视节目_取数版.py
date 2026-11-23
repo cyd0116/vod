@@ -9,10 +9,10 @@
 """
 
 #coding=utf-8
-# ★★★ 临时【取数版】: 与 央视节目.py 逐字相同, 仅多两处 —— 顶层 _ysp_dump() 和
-#     _once() 里读到 raw 后的一行调用。把壳子实时发出的 playvinfo 请求(含当场 cKey/
-#     guid/请求头)与服务端原始响应写入 ysp_playvinfo_dump.txt。播放逻辑零改动。
-#     用法: 临时替换进壳子 -> 播一集《新闻联播》-> 把 txt 发我 -> 换回正式版。
+# ★★★ 临时【取数版 v3】: 与 央视节目.py 逐字相同, 仅多顶层 _ysp_dump()/BOOT 信标
+#     和 _once() 读到 raw 后的一行调用。文件(/data/local/tmp 优先) + HTTP 双通道。
+#     用法: 电脑先跑 接收端.py 或 接收端.ps1 -> 临时替换进壳子并【重启】-> 控制台立刻
+#           打印 BOOT -> 播《新闻联播》2~3 次 -> 把 ysp_dump.txt 发我 -> 换回正式版。
 #!/usr/bin/python
 import sys
 sys.path.append('..') 
@@ -218,9 +218,14 @@ _YSP_TABS = ("电视栏目", "纪录片", "特别节目")  # homeContent 输出�
 # YSP_DEBUG=1, 即把 program / playvinfo 的原始结构摘要打到日志, 凭一次日志即可精确定位。
 _YSP_DEBUG = False
 _YSP_DIAG = []
-# ★★★【临时取数版专用】把壳子【实时】发出的 playvinfo 请求(含当场生成的 cKey/guid)
-#   与服务端原始响应逐条落盘。★不改任何播放逻辑: 只在读到 raw 后追加一行记录。
-#   取完数据请把壳子换回 央视节目.py(正式版), 本文件可删。
+# ★★★【临时取数版专用·v3】把壳子【实时】playvinfo 请求(含当场 cKey/guid)与原始
+#   响应送出。播放逻辑零改动, 只在读到 raw 后追加一行调用。
+#   v3 相对 v2 两点:
+#    1) 加 /data/local/tmp/ —— Android root 下它一定可写, 且 MT管理器/adb 都能直接看到,
+#       避开 __file__ 未定义 / cwd=/ 只读 / 分区存储拦 /sdcard 这三个静默失败点。
+#    2) 模块加载即发一条 BOOT 信标: 换上并重启, 电脑接收端【立刻】打印一条,
+#       不用等播放就能确认「取数版到底有没有被壳子加载」。
+#   POST 全在后台线程, 不阻塞启动、不改缓冲快慢。
 def _ysp_dump(url, raw, hdrs):
 	import os, time
 	try:
@@ -228,7 +233,11 @@ def _ysp_dump(url, raw, hdrs):
 		       % (time.strftime('%Y-%m-%d %H:%M:%S'), url, dict(hdrs or {}), raw))
 	except Exception:
 		return ''
-	cands = ['/sdcard/ysp_playvinfo_dump.txt', '/sdcard/Download/ysp_playvinfo_dump.txt']
+	# ---- A) 文件写入(多路径; 任何一条失败都不影响 B) ----
+	cands = ['/data/local/tmp/ysp_playvinfo_dump.txt',
+	         '/sdcard/ysp_playvinfo_dump.txt', '/sdcard/Download/ysp_playvinfo_dump.txt',
+	         '/storage/emulated/0/Download/ysp_playvinfo_dump.txt',
+	         '/mnt/sdcard/ysp_playvinfo_dump.txt']
 	try:
 		cands.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), 'ysp_playvinfo_dump.txt'))
 	except Exception:
@@ -238,14 +247,64 @@ def _ysp_dump(url, raw, hdrs):
 	except Exception:
 		pass
 	cands.append('ysp_playvinfo_dump.txt')
+	written = ''
 	for p in cands:
 		try:
 			with open(p, 'a', encoding='utf-8') as f:
 				f.write(rec)
-			return p
+			written = p
+			break
 		except Exception:
 			continue
-	return ''
+	# ---- B) HTTP 回传宿主机接收端(后台线程, 不阻塞) ----
+	def _post_all(text):
+		import urllib.request
+		data = text.encode('utf-8', 'replace')
+		hosts = []
+		try:
+			for line in open('/proc/net/route'):
+				ps = line.split()
+				if len(ps) > 2 and ps[1] == '00000000' and ps[2] != '00000000':
+					g = ps[2]
+					hosts.append('.'.join(str(int(g[i:i+2], 16)) for i in (6, 4, 2, 0)))
+					break
+		except Exception:
+			pass
+		hosts += ['10.0.2.2', '127.0.0.1', '10.0.3.2']
+		seen = set()
+		for h in hosts:
+			if h in seen: continue
+			seen.add(h)
+			try:
+				req = urllib.request.Request('http://%s:8000/dump' % h, data=data,
+					method='POST',
+					headers={'Content-Type': 'text/plain; charset=utf-8'})
+				urllib.request.urlopen(req, timeout=1.5).read()
+				return h
+			except Exception:
+				continue
+		return ''
+	try:
+		import threading
+		threading.Thread(target=_post_all, args=(rec,), daemon=True).start()
+	except Exception:
+		try: _post_all(rec)
+		except Exception: pass
+	return written
+
+# ★加载即报平安: 只要接收端打印了这一条, 就证明取数版真的被壳子执行了
+def _ysp_boot_marker():
+	import os
+	info = ['取数版 v3 已加载(BOOT 信标)']
+	try: info.append('__file__ = %r' % (__file__,))
+	except Exception: info.append('__file__ = 未定义(壳子 exec 加载, 常见)')
+	try: info.append('cwd = %r' % os.getcwd())
+	except Exception: info.append('cwd = 不可用')
+	try:
+		_ysp_dump('BOOT', '\n'.join(info), {'marker': 'BOOT'})
+	except Exception:
+		pass
+_ysp_boot_marker()
 
 def _ysp_diag(tag, msg):
 	line = '[YSP:%s] %s' % (tag, str(msg)[:1200])

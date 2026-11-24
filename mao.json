@@ -72,8 +72,8 @@
 
 //PY 
 { "key": "py_98直播", "name": "🔥98直播(py)","type": 3,"api": "https://raw.githubusercontent.com/cyd0116/vod/refs/heads/main/py/98直播.py","playerType": 1, "timeout": 120},
+//{ "key": "py_98直播(仅直连)", "name": "🔥98直播(仅直连)(py)","type": 3,"api": "https://raw.githubusercontent.com/cyd0116/vod/refs/heads/main/py/98直播(仅直连).py","playerType": 1, "timeout": 120},
 { "key": "py_央视节目", "name": "🔥央视节目(py)","type": 3,"api": "https://raw.githubusercontent.com/cyd0116/vod/refs/heads/main/py/央视节目.py"},
-{ "key": "py_1905电影", "name": "🔥1905电影(py)","type": 3,"api": "https://raw.githubusercontent.com/cyd0116/vod/refs/heads/main/py/1905电影.py"},
 	
 //采集
 {"key":"量子","name":"🐝量子(🏀NBA回看)","type": 1,"api": "https://cj.lziapi.com/api.php/provide/vod/from/lzm3u8", "searchable":0, "quickSearch":0,"changeable": 1,"categories": ["篮球","记录片", "足球", "动作片", "喜剧片", "科幻片", "恐怖片", "大陆综艺" ] },

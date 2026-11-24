@@ -1255,6 +1255,71 @@ def _recent_ok(title, now=None):
     return False
 
 
+# ======================================================================
+# ★ 播放页「视频源分组」按比赛日期分叉排序：
+#   距今 < OLD_SORT_AFTER_DAYS 天（默认 0/1 天：当天、昨天）
+#       → 顺序【不变】：国语回放 → 腾讯国语 → 腾讯原声（原有 ratio 排序）
+#   距今 >= OLD_SORT_AFTER_DAYS 天（默认 >= 2 天：前天及更早）
+#       → 顺序改为：腾讯国语 → 腾讯原声 → 国语回放
+#   ★★ 这个阈值【只管播放页分组顺序】，与 NBA_RECENT_DAYS（分类页/更新推荐
+#      的「近三天显示」过滤）互相独立：两个数字各管一件事，改这个不动分类。
+#   ★ 只重排分组，不删任何线路；其余分组（爱奇艺/优酷/咪咕…）保持原相对顺序。
+#   ★ 日期解析不出来时【保守不改】，避免误判。
+# ======================================================================
+OLD_SORT_ON = True
+OLD_SORT_AFTER_DAYS = 2            # 距今 >= 2 天算「二天之前」；改 3 即回到上一版口径
+OLD_SORT_ORDER = ["腾讯国语", "腾讯原声", "国语回放"]
+
+
+def _game_days(title, now=None):
+    """比赛距今天的天数；解析不出日期返回 None（保守不改排序）。"""
+    d0 = now or _TODAY_OVERRIDE or date.today()
+    s = str(title or "")
+    cand = []
+    has_year = False
+    for m in re.finditer(r'(20\d{2})\s*年\s*(\d{1,2})\s*月\s*(\d{1,2})\s*日', s):
+        has_year = True
+        cand.append((int(m.group(1)), int(m.group(2)), int(m.group(3))))
+    for m in re.finditer(r'(?<!\d)(20\d{2})/(\d{1,2})/(\d{1,2})(?!\d)', s):
+        has_year = True
+        cand.append((int(m.group(1)), int(m.group(2)), int(m.group(3))))
+    for m in re.finditer(r'(?<!\d)(20\d{2})-(\d{1,2})-(\d{1,2})(?!\d)', s):
+        has_year = True
+        cand.append((int(m.group(1)), int(m.group(2)), int(m.group(3))))
+    # ★ 已有带年份的完整日期时，不再用「11月20日」这类无年份正则二次解析：
+    #   否则「2026年11月30日」会被补出一个「2025年11月30日」候选(359天前)，
+    #   把未来的比赛误判成老比赛。
+    if not has_year:
+        for m in re.finditer(r'(?<!\d)(\d{1,2})\s*月\s*(\d{1,2})\s*日', s):
+            mo, dd = int(m.group(1)), int(m.group(2))
+            for yy in (d0.year - 1, d0.year, d0.year + 1):
+                cand.append((yy, mo, dd))
+        for m in re.finditer(r'(?<!\d)(\d{1,2})/(\d{1,2})(?!\d)', s):
+            mo, dd = int(m.group(1)), int(m.group(2))
+            for yy in (d0.year - 1, d0.year, d0.year + 1):
+                cand.append((yy, mo, dd))
+    if not cand:
+        return None
+    best = None
+    for yy, mo, dd in cand:
+        try:
+            delta = (d0 - date(yy, mo, dd)).days
+        except Exception:
+            continue
+        if delta < 0 or delta > 366:
+            continue
+        if best is None or delta < best:
+            best = delta
+    return best
+
+
+def _old_group_rank(g):
+    s = str(g or "")
+    for i, kw in enumerate(OLD_SORT_ORDER):
+        if kw in s:
+            return i
+    return len(OLD_SORT_ORDER)
+
 def _clean_shell(page, hd, prefix=""):
     """★★ 极简交壳返回：只留标准三件套，绝不写 msg。
     壳会把 playerContent 的 msg 当「播放失败原因」弹出 ⚠ 页并中断解析，
@@ -2312,6 +2377,17 @@ class Spider(Spider):
         if vid in ('diag', 'hint', 'today_hint', 'err'):
             lines = ["98直播吧 · 源自检（静态·不发网络请求）",
                      "版本: " + self.VERSION, "",
+                     "★ 播放页分组排序: " +
+                        ((("距今>=%d天 → 腾讯国语/腾讯原声/国语回放；"
+                           "距今<%d天 顺序不变(国语回放优先)") %
+                          (OLD_SORT_AFTER_DAYS, OLD_SORT_AFTER_DAYS))
+                         if OLD_SORT_ON else "全部按原顺序"),
+                     "  ★ 只管播放页顺序；分类/推荐显示仍按 NBA_RECENT_DAYS=%d"
+                     % NBA_RECENT_DAYS,
+                     "  日期解析不出 → 保守不改；其余分组保持原相对顺序",
+                     "★ 卡片标题: " +
+                        ("精简v2：name/备注 都是短名，完整原名只在详情页"
+                         if SHORT_TITLE else "完整原名"),
                      "一级分类: %d 个（%s）" %
                         (len(_VISIBLE_CATS),
                          " / ".join(n for _k, n, _p in _VISIBLE_CATS)),
@@ -2523,14 +2599,27 @@ class Spider(Spider):
             def ratio(lst):
                 return sum(1 for _n, u in lst if _is_weibo(u)) / float(len(lst) or 1)
             ordered = sorted(eps.items(), key=lambda kv: -ratio(kv[1]))
+            # ★ 仅「距今 >= OLD_SORT_AFTER_DAYS 天」改分组顺序；更近/无日期不动
+            _days = _game_days(title)
+            _is_old = (OLD_SORT_ON and _days is not None and
+                       _days >= OLD_SORT_AFTER_DAYS)
+            if _is_old:
+                ordered = sorted(ordered,
+                                 key=lambda kv: _old_group_rank(kv[0]))
             shows, urls = [], []
             for g, lst in ordered:
                 shows.append(g)
                 urls.append("#".join("%s$%s" % (n, _enc(u)) for n, u in lst))
             wb_n = sum(1 for v in eps.values() for _n, u in v if _is_weibo(u))
-            desc = ("【本场分节】%d 个线路 / %d 集（微博 %d 集）。第一组为微博线路，"
-                    "自动选 1080P 直连；腾讯等官方页需登录鉴权，请优先用第一组。"
-                    % (len(eps), sum(len(v) for v in eps.values()), wb_n))
+            _head = ("【本场分节】%d 个线路 / %d 集（微博 %d 集）。"
+                     % (len(eps), sum(len(v) for v in eps.values()), wb_n))
+            desc = _head + (
+                (("【距今>=%d天的比赛】线路已按 腾讯国语 → 腾讯原声 → "
+                   "国语回放 排序，优先走官方页解析。" %
+                   OLD_SORT_AFTER_DAYS)
+                 if _is_old else
+                 "第一组为微博线路，自动选 1080P 直连；"
+                 "腾讯等官方页需登录鉴权，请优先用第一组。"))
             play_from = "$$$".join(shows)
             play_url = "$$$".join(urls)
         else:

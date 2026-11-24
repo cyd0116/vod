@@ -429,7 +429,8 @@ _G = {"home": None, "learned": False, "cat_url": {},
       "nba_rev": 0,        # ★ NBA 分类页成功刷新次数（每次 +1）
       "home_rev": -1,      # ★ 「更新推荐」上次同步到的分类版本号
       "home_sync": False,   # ★ 推荐页调用中：栏目页抓到即停，少发请求
-      "home_nba": None}     # ★ 「更新推荐」上次返回快照（仅供自检显示）
+      "home_nba": None,     # ★ 「更新推荐」上次返回快照（仅供自检显示）
+      "title_full": {}}     # ★ href -> 完整原名（详情页/搜索用，短名不丢信息）
 
 
 # ======================================================================
@@ -600,6 +601,42 @@ def _title_guoyu_hint(t):
     if _GUOYU_OFF.search(s):
         return False
     return None
+
+
+# ======================================================================
+# ★ 卡片标题精简：壳的预览卡片只显示 2 行，98 原标题太长一眼看不全。
+#   短名 = 日期 + 对阵（如「11月24日 湖人vs勇士」），两行即可看全；
+#   完整原名移到 vod_remarks（备注）和详情页标题 / 正文，信息不丢。
+#   ★ 短名【必须保留日期】：近三天过滤 _recent_ok 读的是 vod_name。
+#   ★ 完整原名进 remarks 后，标题兜底与搜索要同时看 name + remarks。
+# ======================================================================
+SHORT_TITLE = True          # 关掉 = 恢复原来的完整标题
+
+_SHORT_DATE = re.compile(
+    r"20\d{2}年\d{1,2}月\d{1,2}日|\d{1,2}月\d{1,2}日|"
+    r"20\d{2}[-/]\d{1,2}[-/]\d{1,2}|\d{1,2}[-/]\d{1,2}")
+_SHORT_VS = re.compile(
+    r"([\u4e00-\u9fa5A-Za-z0-9]{1,10})\s*(?:vs|VS|Vs|vS|对阵)\s*"
+    r"([\u4e00-\u9fa5A-Za-z0-9]{1,10})")
+
+
+def _short_title(t):
+    """把 98 的长标题压成「日期 + 对阵」；抽不到就退化为前半截，绝不空。"""
+    s = str(t or "").strip()
+    if not SHORT_TITLE or not s:
+        return s
+    d = _SHORT_DATE.search(s)
+    v = _SHORT_VS.search(s)
+    date = d.group(0) if d else ""
+    game = (v.group(1) + "vs" + v.group(2)) if v else ""
+    if date and game:
+        return (date + " " + game)[:26]
+    if game:
+        return game[:26]
+    if date:
+        rest = s.replace(date, "", 1).strip(" ·-_[]【】")
+        return (date + " " + rest)[:22].strip() or date
+    return s[:22].strip() or s
 
 
 # ======================================================================
@@ -1963,9 +2000,10 @@ class Spider(Spider):
                 continue
             seen.add(href)
             dm = re.search(r"\d{1,2}月\d{1,2}日|20\d{2}年\d{1,2}月\d{1,2}日", t)
-            out.append({"vod_id": _enc(href), "vod_name": t,
-                        "vod_pic": "",
-                        "vod_remarks": ((dm.group(0) + " · 录像") if dm else "录像")})
+            # ★ 卡片短名(日期+对阵，2 行看全)；完整原名放备注 + 缓存给详情页
+            _G.setdefault("title_full", {})[href] = t
+            out.append({"vod_id": _enc(href), "vod_name": _short_title(t),
+                        "vod_pic": "", "vod_remarks": t})
         return out
 
     def _guoyu_check(self, href):
@@ -2077,7 +2115,8 @@ class Spider(Spider):
                 st["fail"] += 1
             else:
                 st["skip"] += 1
-            hint = _title_guoyu_hint(it.get("vod_name", ""))
+            hint = _title_guoyu_hint(it.get("vod_name", "") + " " +
+                                     it.get("vod_remarks", ""))
             if hint is False:
                 st["title_drop"] += 1
                 st["detail"].append("❌ 抓不到但标题是官方页  " +
@@ -2085,7 +2124,7 @@ class Spider(Spider):
                 continue
             it = dict(it)
             it["vod_remarks"] = (str(it.get("vod_remarks", "")) +
-                                 " · 未校验")[:40]
+                                 " · 未校验")[:110]
             st["detail"].append("⚠ 抓不到/超时，保守保留  " + it["vod_name"][:26])
             out.append(it)
         _G["guoyu_stat"] = st
@@ -2289,6 +2328,9 @@ class Spider(Spider):
                         ("开启 ✅" if DROP_HIGHLIGHTS else "关闭(保留集锦)"),
                      "  保留：全场录像回放 / 第X节录像 / 全场回放",
                      "  丢弃：全场精华 / 全场集锦 / 精彩十佳球 等",
+                     "★ 卡片标题: " +
+                        ("精简(日期+对阵，2行看全；完整原名在备注/详情页)"
+                         if SHORT_TITLE else "完整原名"),
                      "★★ 本文件 = 全量显示分支：国语回放筛选 关闭 / "
                         "近三天 关闭 → 显示全部比赛（含腾讯/爱奇艺/优酷/咪咕）",
                      "  ★ 官方页由壳读【顶层 parses 独立段】解析；"
@@ -2484,7 +2526,9 @@ class Spider(Spider):
         except Exception:
             pass
         mt = re.search(r"<title[^>]*>([\s\S]{1,200}?)</title>", html or "", re.I)
-        title = _clean(mt.group(1)) if mt else url
+        _full = ((_G.get("title_full") or {}).get(url) or
+                 (_G.get("title_full") or {}).get(_dec(vid)))
+        title = _full or (_clean(mt.group(1)) if mt else url)
 
         eps = self._episodes(html, final or url) if html else {}
         if eps:
@@ -2519,7 +2563,9 @@ class Spider(Spider):
             "vod_id": vid, "vod_name": title, "vod_pic": "",
             "type_name": "体育", "vod_year": "", "vod_area": "",
             "vod_remarks": "98直播吧 · 外链资源", "vod_actor": "",
-            "vod_director": "", "vod_content": desc,
+            "vod_director": "",
+            "vod_content": (("完整比赛名：" + _full + "\n\n") if _full
+                            else "") + desc,
             "vod_play_from": play_from, "vod_play_url": play_url}]}
 
     # ------------------------------------------------------------------
@@ -2530,7 +2576,8 @@ class Spider(Spider):
             if kw:
                 html, final = self._home()
                 videos = [x for x in self._items(html, final)
-                          if kw in x['vod_name']][:40]
+                          if kw in x['vod_name'] or
+                          kw in x.get('vod_remarks', '')][:40]
         except Exception:
             videos = []
         result = {'list': videos}

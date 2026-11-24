@@ -188,6 +188,10 @@ PARSE_AS_SNIFF = False
 OFFICIAL_SNIFF_PREFIX = ""   # 留空 = 走壳解析池；填 "video://" 走 B
 OFFICIAL_PAGE_HINT = False
 OFFICIAL_ADD_FLAG = True     # 回传 flag=qq/iqiyi…，帮壳匹配解析项 ext.flag
+# ★★ jx=1 = 让壳真正【调用解析池】的开关。关掉时 parse=1 只走壳自带
+#    WebView 嗅探网页 → 抓到官网贴片广告、底部不会出现解析名字。
+#    与 msg 无关：msg 才是 ⚠ 错误页的元凶，永远不补。
+OFFICIAL_JX = True
 
 # ======================================================================
 # ★★ v7.5 官方视频（腾讯国语/腾讯原声等）：还原真实官方页后交壳
@@ -1237,24 +1241,34 @@ def _clean_shell(page, hd, prefix=""):
     if prefix:
         out = {"parse": 0, "url": prefix + page, "header": hd}
 
-    # ★★ 修「播了 15 秒官网贴片广告、底部没有解析名字」：
-    #   壳解析池按 ext.flag 匹配播放源。以前这段被关在
-    #   「if not OFFICIAL_CLEAN」里，而 OFFICIAL_CLEAN 必须开(为零 msg)，
-    #   于是 flag 从来没回传过 → 壳退化成网页嗅探，直接抓到广告流。
-    #   现在精简模式下也补 flag；★ 只加 flag，绝不加
-    #   msg / jx / playUrl / format（那几个会重现 ⚠ 播放地址解析失败页）。
+    # ★★★ 真机「点腾讯国语没有解析名字、没播正片」的真正修复：
+    #   TVBox/OK影视 里 parse=1 + jx=0(或缺 jx) = 用自身 WebView 嗅探网页，
+    #   抓到的第一个流就是官网 15 秒贴片广告（图1）；
+    #   jx=1 才是【调用解析池】的开关，会列出「超级解析 / Web聚合 / 云…」
+    #   那排名字并自动解析出正片（图2）。
+    #
+    #   v7.2 当时为了消掉 ⚠ 错误页，把 msg 和 jx 一起删了 —— 元凶其实
+    #   只有 msg（壳把 msg 当「播放失败原因」弹出并中断解析）。删掉 jx
+    #   等于把解析池开关也关了，所以后面十几轮怎么改订阅、怎么补 flag
+    #   都没用：壳压根没进解析池，只是嗅探网页。
+    #
+    #   ★ 现在补回 jx=1，【绝不补 msg / playUrl / format】。
+    #   ★ 只给官方页补；国语回放等直连走独立 return，永远不碰这里。
     # ★★ 只对「官方页」回传 flag。国语回放(微博直连)走的是 parse=0
     #    独立 return，本就不过这里；万一它取不到流落到交壳兜底，下面这层
     #    _is_official 判断也保证绝不会给它挂解析 flag —— 直连就是直连。
-    if OFFICIAL_ADD_FLAG and not prefix and _is_official(page):
-        fl = _official_flag(page)
-        if fl:
-            out["flag"] = fl
+    if not prefix and _is_official(page):
+        if OFFICIAL_ADD_FLAG:
+            fl = _official_flag(page)
+            if fl:
+                out["flag"] = fl
+        if OFFICIAL_JX:
+            out["jx"] = 1
 
     if not OFFICIAL_CLEAN:
         # 仅供排障：打开会重现 ⚠ 错误页，默认不启用
-        out.update({"playUrl": "", "jx": 1 if not prefix else 0,
-                    "format": "", "msg": "已交 OK影视 壳子解析"})
+        out.update({"playUrl": "", "format": "",
+                    "msg": "已交 OK影视 壳子解析"})
     return out
 
 
@@ -2351,6 +2365,11 @@ class Spider(Spider):
                      "★★ OFFICIAL_CLEAN: " +
                         ("开【交壳零msg·修掉⚠错误页】" if OFFICIAL_CLEAN
                          else "关(会重现⚠页,不建议)"),
+                     "★★ OFFICIAL_JX: " +
+                        ("开【parse=1 + jx=1 真正调用壳解析池】" if OFFICIAL_JX
+                         else "关(只嗅探网页→会抓到官网贴片广告)"),
+                     "  注: msg 才是 ⚠ 错误页元凶，永远不补；"
+                        "国语回放直连不挂 jx/flag",
                      "OFFICIAL_ADD_FLAG: " +
                         ("开(仅非精简模式生效)" if OFFICIAL_ADD_FLAG
                          else "关"),

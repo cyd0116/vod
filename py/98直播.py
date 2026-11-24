@@ -10,6 +10,21 @@
 
 #coding=utf-8
 #!/usr/bin/python
+# ======================================================================
+# ★★ 本文件 = 【全量显示分支】（与 zb98ok.py 并行，不是升级版本）
+#   差异只有两处开关：
+#     NBA_ONLY_GUOYU = False   → 不做「国语回放」筛选，腾讯/爱奇艺/优酷/
+#                                咪咕等官方页比赛全部显示
+#     NBA_RECENT_ON  = False   → 不做「近三天」限制，全部日期都显示
+#   其余与原版逐字一致：官方页仍极简交壳(parse=1，零 msg)，由壳拿
+#   订阅里 parses[] 的解析接口去解；国语回放仍直连 1080P；
+#   集锦/精华/十佳仍排除（那不是比赛）；首页推荐仍与分类完全一致。
+#   ★ xx.user.js 的 51 个接口地址已全部纳入订阅顶层 parses 段。
+#   ★ 解析地址【不内置在 py 里】，也不塞进 site 的 ext。
+#     全部放在订阅 json 的【顶层 parses 独立段】——与已验证可调用的
+#     解密 json 写法一致；由壳解析池读取，py 对官方页只极简交壳。
+#     配套文件：zb98_subscribe_full.json
+# ======================================================================
 import sys
 import os
 sys.path.append('..')
@@ -173,6 +188,10 @@ PARSE_AS_SNIFF = False
 OFFICIAL_SNIFF_PREFIX = ""   # 留空 = 走壳解析池；填 "video://" 走 B
 OFFICIAL_PAGE_HINT = False
 OFFICIAL_ADD_FLAG = True     # 回传 flag=qq/iqiyi…，帮壳匹配解析项 ext.flag
+# ★★ jx=1 = 让壳真正【调用解析池】的开关。关掉时 parse=1 只走壳自带
+#    WebView 嗅探网页 → 抓到官网贴片广告、底部不会出现解析名字。
+#    与 msg 无关：msg 才是 ⚠ 错误页的元凶，永远不补。
+OFFICIAL_JX = True
 
 # ======================================================================
 # ★★ v7.5 官方视频（腾讯国语/腾讯原声等）：还原真实官方页后交壳
@@ -224,12 +243,26 @@ BASES = ["https://m.98zb.com", "https://m.98zhibo.com",
 SHOW_CATS = ["nba", "zuqiu", "cba", "zonghe"]
 _FALLBACK_TID = "zuqiu"       # 旧缓存请求 today / 未知 tid → 回落足球录像
 
-NBA_ONLY_GUOYU = True
+# ======================================================================
+# ★★ 国语回放校验（2026-11-23 修「昨天有效今天失效」）
+#   旧版有个 9 秒整体上限，一到就 break，剩下没校验完的条目被【静默
+#   放行】——连「未校验」标注都没有。源站一旦响应变慢，腾讯原声/国语
+#   卡就整批混进来，看起来像筛选功能突然失效。另外 alt=False 只试一个
+#   域名、抓不到还把 None 缓存住，一次网络抖动整场都放行。
+#
+#   现在：① 不提前 break，每条都尽量拿到判定；② 备用域名重试；
+#   ③ 抓不到不缓存（下次刷新会重试）；④ 实在抓不到也不无条件放行，
+#   按标题兜底把「明确只有腾讯/爱奇艺/优酷/咪咕」的卡剔掉，其余保留
+#   并标「未校验」；⑤ 全程统计写进源自检，真机一眼能看出是哪一类。
+# ======================================================================
+NBA_ONLY_GUOYU = False      # ★ 全量显示分支：删除国语回放筛选
 GUOYU_ONLY_CATS = {"nba"}     # 想让别的分类也过滤，加 zuqiu / cba / zonghe
-GUOYU_CHECK_LIMIT = 60        # 每页最多校验条数（其余保留，避免拖慢）
+GUOYU_CHECK_LIMIT = 60        # 每页最多校验条数
 GUOYU_WORKERS = 12            # 并发抓详情页数
-GUOYU_TIMEOUT = 3             # 单条详情超时（秒）
-GUOYU_TOTAL_TIMEOUT = 9       # 整体上限；超时未校验的一律保留，不拖住分类页
+GUOYU_TIMEOUT = 4             # 单条详情超时（秒），3→4 给慢响应留余量
+GUOYU_RETRY = 1               # 失败后换备用域再试 1 次
+GUOYU_TOTAL_TIMEOUT = 20      # 硬保护（仅防极端卡死）；正常近三天场次一批就跑完
+GUOYU_ALT = True              # ★ 允许换 BASES 备用域名，主域被拦也能抓到
 
 # ======================================================================
 # ★★ NBA 分类只看「近三天（含当天）」的比赛
@@ -241,7 +274,7 @@ GUOYU_TOTAL_TIMEOUT = 9       # 整体上限；超时未校验的一律保留，
 #     条目偏少，把 NBA_RECENT_KEEP_NODATE 改成 True 即可。
 #   · 生效时 NBA 分类 pagecount=1：近三天都在第一页，壳不翻页 → 最快。
 # ======================================================================
-NBA_RECENT_ON = True
+NBA_RECENT_ON = False       # ★ 全量显示分支：不做近三天限制，显示全部日期
 RECENT_ONLY_CATS = {"nba"}    # 只作用于 NBA；想给足球也加就加 "zuqiu"
 NBA_RECENT_DAYS = 3           # 含当天：今天 / 昨天 / 前天
 NBA_RECENT_KEEP_NODATE = False
@@ -389,7 +422,8 @@ _G = {"home": None, "learned": False, "cat_url": {},
       "shell_turn": {},      # 非官方页：0→先壳 / 1→下轮试订阅parses
       "official_turn": {},   # 兼容保留
       "official_trace": [],  # ★ 上一次官方线路「还原真实官方页」的链路日志
-      "guoyu_cache": {},    # ★ 详情页是否有「国语回放」分组的缓存
+      "guoyu_cache": {},    # ★ 详情页是否有「国语回放」分组（只缓存 True/False）
+      "guoyu_stat": {},     # ★ 本轮校验统计 + 逐条判定，源自检可见
       "nba_page": None,     # ★ 已抓到的 NBA 栏目页（首页推荐复用，零重复请求）
       "nba_final": None,    # ★ NBA 分类页【最终列表】→ 推荐页逐条复用，完全一致
       "nba_rev": 0,        # ★ NBA 分类页成功刷新次数（每次 +1）
@@ -542,6 +576,30 @@ def _fetch(url, ref=None, timeout=5, alt=True, extra_headers=None):
 def _clean(t):
     t = _text(t)
     return re.sub(r"\s*[-_|]\s*98直播吧.*$", "", t).strip()[:90]
+
+
+# ★ 国语回放判据：正面词只认「国语回放 / 中文解说 / 微博」这类完整写法，
+#   不认光秃秃的「国语」——否则「腾讯国语」会被误判成有国语回放。
+_GUOYU_POS = re.compile(
+    r"国语\s*回放|\[\s*国语(?:回放)?\s*\]|【\s*国语(?:回放)?\s*】|"
+    r"中文解说|国语解说|微博回放|微博", re.I)
+_GUOYU_OFF = re.compile(
+    r"腾讯|原声|爱奇艺|优酷|咪咕|migu|iqiyi|youku|mgtv|芒果", re.I)
+# 98 的「国语回放」分组固定指向微博正文（weibo.com/uid/mid），
+# 分组文案怎么改这个特征都在；分享链接 service.weibo.com 不匹配。
+_WB_POST_RE = re.compile(
+    r"https?://(?:m\.)?weibo\.(?:com|cn)/\d+/[A-Za-z0-9]+"
+    r"|https?://m\.weibo\.cn/(?:status|detail)/", re.I)
+
+
+def _title_guoyu_hint(t):
+    """抓不到详情页时的标题兜底：True=明确有 / False=明确只有官方页 / None=看不出。"""
+    s = str(t or "")
+    if _GUOYU_POS.search(s):
+        return True
+    if _GUOYU_OFF.search(s):
+        return False
+    return None
 
 
 # ======================================================================
@@ -1155,6 +1213,9 @@ def _recent_ok(title, now=None):
     # 2026/11/20
     for m in re.finditer(r'(?<!\d)(20\d{2})/(\d{1,2})/(\d{1,2})(?!\d)', s):
         cand.append((int(m.group(1)), int(m.group(2)), int(m.group(3))))
+    # 2026-11-23（带年份三段式横线；不会误认「112-108」这类两段比分）
+    for m in re.finditer(r'(?<!\d)(20\d{2})-(\d{1,2})-(\d{1,2})(?!\d)', s):
+        cand.append((int(m.group(1)), int(m.group(2)), int(m.group(3))))
     # 11/20（斜杠；横线留给比分，不认）
     for m in re.finditer(r'(?<!\d)(\d{1,2})/(\d{1,2})(?!\d)', s):
         mo, dd = int(m.group(1)), int(m.group(2))
@@ -1179,14 +1240,35 @@ def _clean_shell(page, hd, prefix=""):
     out = {"parse": 1, "url": page, "header": hd}
     if prefix:
         out = {"parse": 0, "url": prefix + page, "header": hd}
-    if not OFFICIAL_CLEAN:
-        # 仅供排障：打开会重现 ⚠ 错误页，默认不启用
-        out.update({"playUrl": "", "jx": 1 if not prefix else 0,
-                    "format": "", "msg": "已交 OK影视 壳子解析"})
-        if OFFICIAL_ADD_FLAG and not prefix:
+
+    # ★★★ 真机「点腾讯国语没有解析名字、没播正片」的真正修复：
+    #   TVBox/OK影视 里 parse=1 + jx=0(或缺 jx) = 用自身 WebView 嗅探网页，
+    #   抓到的第一个流就是官网 15 秒贴片广告（图1）；
+    #   jx=1 才是【调用解析池】的开关，会列出「超级解析 / Web聚合 / 云…」
+    #   那排名字并自动解析出正片（图2）。
+    #
+    #   v7.2 当时为了消掉 ⚠ 错误页，把 msg 和 jx 一起删了 —— 元凶其实
+    #   只有 msg（壳把 msg 当「播放失败原因」弹出并中断解析）。删掉 jx
+    #   等于把解析池开关也关了，所以后面十几轮怎么改订阅、怎么补 flag
+    #   都没用：壳压根没进解析池，只是嗅探网页。
+    #
+    #   ★ 现在补回 jx=1，【绝不补 msg / playUrl / format】。
+    #   ★ 只给官方页补；国语回放等直连走独立 return，永远不碰这里。
+    # ★★ 只对「官方页」回传 flag。国语回放(微博直连)走的是 parse=0
+    #    独立 return，本就不过这里；万一它取不到流落到交壳兜底，下面这层
+    #    _is_official 判断也保证绝不会给它挂解析 flag —— 直连就是直连。
+    if not prefix and _is_official(page):
+        if OFFICIAL_ADD_FLAG:
             fl = _official_flag(page)
             if fl:
                 out["flag"] = fl
+        if OFFICIAL_JX:
+            out["jx"] = 1
+
+    if not OFFICIAL_CLEAN:
+        # 仅供排障：打开会重现 ⚠ 错误页，默认不启用
+        out.update({"playUrl": "", "format": "",
+                    "msg": "已交 OK影视 壳子解析"})
     return out
 
 
@@ -1888,38 +1970,63 @@ class Spider(Spider):
 
     def _guoyu_check(self, href):
         """★ 抓比赛详情页，判断有没有【国语回放】分组（微博组，py 能直取
-        1080P）。腾讯国语/腾讯原声不算。返回 True / False / None(抓不到)。"""
+        1080P）。腾讯国语/腾讯原声不算。返回 True / False / None(抓不到)。
+
+        三层判据，抗源站改分组文案：
+          ① 微博正文链接（最本质特征，分组改名也认得）
+          ② 链接文本里的「国语回放 / 中文解说 / 微博回放」
+          ③ 纯文本 [分组名]
+        """
         ck = _G.setdefault("guoyu_cache", {})
         if href in ck:
             return ck[href]
-        try:
-            h, f = _fetch(href, ref=SITE + "/", timeout=GUOYU_TIMEOUT, alt=False)
-        except Exception:
-            h, f = "", ""
+        h, f = "", ""
+        for attempt in range(max(GUOYU_RETRY, 0) + 1):
+            try:
+                # ★ 第一次就允许换备用域；失败再重试一次
+                h, f = _fetch(href, ref=SITE + "/", timeout=GUOYU_TIMEOUT,
+                              alt=(GUOYU_ALT or attempt > 0))
+                if h:
+                    break
+            except Exception:
+                h, f = "", ""
         if not h:
-            ck[href] = None
+            # ★★ 不缓存 None：一次网络抖动不会把这个进程里该场永久放行，
+            #     下次分类刷新会重新抓。
             return None
         ok = False
-        for _u, inner in _links(h, f or href):
-            t = _clean(inner)
-            if not t or "腾讯" in t or "原声" in t:
-                continue
-            if re.search(r"国语\s*回放|[\[【]\s*国语(?:回放)?\s*[\]】]", t):
+        links = _links(h, f or href)
+        # ① 微博正文链接
+        for u, _inner in links:
+            if _WB_POST_RE.search(u):
                 ok = True
                 break
+        # ② 链接文本分组名（不再因为同一行出现「腾讯」就整条跳过）
         if not ok:
-            # 有的详情页把分组写成纯文本而非 <a> 文本
-            for m in re.finditer(r"[\[【]\s*([^\]】]{1,12})[\]】]", h):
-                g = m.group(1)
-                if "国语" in g and "腾讯" not in g and "原声" not in g:
+            for _u, inner in links:
+                t = _clean(inner)
+                if t and _GUOYU_POS.search(t) and not _GUOYU_OFF.search(t):
                     ok = True
                     break
-        ck[href] = ok
+        # ③ 纯文本 [分组名]
+        if not ok:
+            for mm in re.finditer(r"[\[【]\s*([^\]】]{1,12})[\]】]", h):
+                g = mm.group(1)
+                if (_GUOYU_POS.search(g) and "腾讯" not in g and
+                        "原声" not in g):
+                    ok = True
+                    break
+        ck[href] = ok          # 只缓存 True / False
         return ok
 
     def _filter_guoyu(self, items):
-        """★ 只保留「有国语回放」的比赛。抓不到的保守保留并标「未校验」，
-        避免一次网络抖动把整页比赛误杀。校验只在分类页发生，结果缓存。"""
+        """★ 只保留「有国语回放」的比赛。
+
+        ★★ 旧版 9 秒一到就 break，剩下条目被静默放行（连标注都没有），
+        源站一慢腾讯卡就整批混进来 —— 这就是「昨天有效今天失效」的根因。
+        现在：每条都尽量拿到判定；实在拿不到也不无条件放行，按标题兜底
+        把明确只有官方页的卡剔掉，其余保留并标「未校验」，全程留统计。
+        """
         todo = items[:GUOYU_CHECK_LIMIT]
         res, lock = {}, threading.Lock()
 
@@ -1936,8 +2043,6 @@ class Spider(Spider):
 
         t0 = time.time()
         for i in range(0, len(todo), GUOYU_WORKERS):
-            if time.time() - t0 > GUOYU_TOTAL_TIMEOUT:
-                break               # 剩下的不校验，直接保留
             batch = todo[i:i + GUOYU_WORKERS]
             ts = [threading.Thread(target=work, args=(it,), daemon=True)
                   for it in batch]
@@ -1947,18 +2052,43 @@ class Spider(Spider):
                 except Exception:
                     pass
             for t in ts:
-                t.join(GUOYU_TIMEOUT + 1)
+                t.join(GUOYU_TIMEOUT * (max(GUOYU_RETRY, 0) + 1) + 1)
+            # 极端卡死才停；停下来也不会静默放行，下面按标题兜底
+            if time.time() - t0 > GUOYU_TOTAL_TIMEOUT:
+                break
+
         out = []
+        st = {"total": len(items), "hit": 0, "no": 0,
+              "fail": 0, "skip": 0, "title_drop": 0, "detail": []}
         for it in items:
             href = _dec(it.get("vod_id", ""))
             v = res.get(href) if href in res else "skip"
-            if v is False:          # 明确没有国语回放 → 丢掉（点了也播不了）
+            if v is True:
+                st["hit"] += 1
+                st["detail"].append("✅ 有国语回放  " + it["vod_name"][:30])
+                out.append(it)
                 continue
-            if v is None:           # 没抓到 → 保留，标注
-                it = dict(it)
-                it["vod_remarks"] = (str(it.get("vod_remarks", "")) +
-                                     " · 未校验")[:40]
+            if v is False:
+                st["no"] += 1
+                st["detail"].append("❌ 明确无国语回放  " + it["vod_name"][:28])
+                continue
+            # ★ None / "skip" / 异常：不再无条件保留
+            if v is None:
+                st["fail"] += 1
+            else:
+                st["skip"] += 1
+            hint = _title_guoyu_hint(it.get("vod_name", ""))
+            if hint is False:
+                st["title_drop"] += 1
+                st["detail"].append("❌ 抓不到但标题是官方页  " +
+                                    it["vod_name"][:26])
+                continue
+            it = dict(it)
+            it["vod_remarks"] = (str(it.get("vod_remarks", "")) +
+                                 " · 未校验")[:40]
+            st["detail"].append("⚠ 抓不到/超时，保守保留  " + it["vod_name"][:26])
             out.append(it)
+        _G["guoyu_stat"] = st
         return out
 
     def _live(self, html, base):
@@ -2159,6 +2289,10 @@ class Spider(Spider):
                         ("开启 ✅" if DROP_HIGHLIGHTS else "关闭(保留集锦)"),
                      "  保留：全场录像回放 / 第X节录像 / 全场回放",
                      "  丢弃：全场精华 / 全场集锦 / 精彩十佳球 等",
+                     "★★ 本文件 = 全量显示分支：国语回放筛选 关闭 / "
+                        "近三天 关闭 → 显示全部比赛（含腾讯/爱奇艺/优酷/咪咕）",
+                     "  ★ 官方页由壳读【顶层 parses 独立段】解析；"
+                        "py 不内置、site.ext 也不塞 parses",
                      "★ NBA 近三天过滤: " +
                         ("开启 ✅ (%d 天含当天，分类只留最新，pagecount=1)"
                          % NBA_RECENT_DAYS if NBA_RECENT_ON else "关闭"),
@@ -2191,7 +2325,10 @@ class Spider(Spider):
                      "首页分类: homeContent 零网络请求 / 无 __init__", "",
                      "【微博取流配置】",
                      "WB_COOKIE: " + ("已填 ✅" if WB_COOKIE else "未填 ❌"),
-                     "", "【解析来源 = 你填在 OK影视 的订阅列表】",
+                     "", "【解析来源 = 订阅 json 的顶层 parses 独立段】",
+                     "  ★ 壳解析池读顶层 parses；site.ext 里不放 parses",
+                     "  ★ xx.user.js 的 51 个接口地址已全部纳入（同址合并 7 条）",
+                     "  ★ 国语回放/明文直链 = parse=0 直连，绝不挂解析 flag",
                      "init(ext) 订阅地址: %d 个" % len(_G["ext_subs"] or []),
                      "SUBSCRIBE_URLS: %d 个" % len(SUBSCRIBE_URLS or []),
                      "配置内发现订阅: %d 个" % len(_G["sub_urls"] or []),
@@ -2228,6 +2365,11 @@ class Spider(Spider):
                      "★★ OFFICIAL_CLEAN: " +
                         ("开【交壳零msg·修掉⚠错误页】" if OFFICIAL_CLEAN
                          else "关(会重现⚠页,不建议)"),
+                     "★★ OFFICIAL_JX: " +
+                        ("开【parse=1 + jx=1 真正调用壳解析池】" if OFFICIAL_JX
+                         else "关(只嗅探网页→会抓到官网贴片广告)"),
+                     "  注: msg 才是 ⚠ 错误页元凶，永远不补；"
+                        "国语回放直连不挂 jx/flag",
                      "OFFICIAL_ADD_FLAG: " +
                         ("开(仅非精简模式生效)" if OFFICIAL_ADD_FLAG
                          else "关"),
@@ -2256,6 +2398,28 @@ class Spider(Spider):
                      "第 %s 轮 / 下次起点编号 %s" %
                         (_G["parse_round"], _G["parse_cursor"]),
                      ""]
+            # ★★ 国语回放筛选统计：真机看这里就知道「失效」是哪一类
+            _gs = _G.get("guoyu_stat") or {}
+            if _gs:
+                lines += [
+                    "", "★★【国语回放筛选 · 本轮校验统计】",
+                    "  共 %d 场 / ✅命中 %d / ❌明确无 %d / ⚠抓不到 %d / "
+                    "⏳超时 %d / 标题兜底剔除 %d" %
+                    (_gs.get("total", 0), _gs.get("hit", 0),
+                     _gs.get("no", 0), _gs.get("fail", 0),
+                     _gs.get("skip", 0), _gs.get("title_drop", 0)),
+                    "  开关: NBA_ONLY_GUOYU=%s / 备用域=%s / 重试=%d / "
+                    "单条%ds / 硬上限%ds" %
+                    (NBA_ONLY_GUOYU, GUOYU_ALT, GUOYU_RETRY,
+                     GUOYU_TIMEOUT, GUOYU_TOTAL_TIMEOUT),
+                    "  ★ 抓不到≠放行：明确只有腾讯/爱奇艺/优酷/咪咕的标题会被剔除",
+                    "  ★ 失败不缓存：下次分类刷新会重抓，一次抖动不会永久放行",
+                    "  【逐条判定（末 12 条）】"]
+                lines += ["  " + x for x in
+                          (_gs.get("detail") or ["（暂无）"])[-12:]]
+            else:
+                lines += ["", "★★【国语回放筛选】本轮尚未触发",
+                          "  （进一次 NBA录像 分类，再回来点本页即可看到统计）"]
             try:
                 # ★ 只读「播放兜底时已缓存」的结果，绝不在这里联网拉订阅，
                 #   保证诊断页 / 首页 / 分类始终是零网络，不会拖慢加载。
@@ -2282,32 +2446,25 @@ class Spider(Spider):
                       "  若是 m.98zb.com 中转页，壳必然报「播放地址解析失败」。"]
             lines += ["", "【上一次真实取流日志】（点一节录像后再回来）"]
             lines += ["  " + x for x in (_G["wb_log"] or ["（暂无）"])[-14:]]
-            lines += ["", "【★ 重启后没分类的真因：api 写法】",
-                      '"api": "./py/98直播.py"  ← 相对路径 + 中文文件名，',
-                      "重启后基准目录变化 / URI 编码丢失 → 壳找不到 py。",
-                      "改成绝对路径 + 纯英文文件名（key 也用 ASCII）：",
-                      '  "key": "zb98_py",',
-                      '  "api": "/sdcard/TV/py/zb98ok.py"   ← 按实际目录改',
-                      "央视节目.py 同理：中文名改 cctv.py + 绝对路径。",
-                      "", "【★ py 已不内置任何解析】",
-                      "解析全部来自订阅：改订阅里的 ext.parses 即可换解析，",
-                      "不用改 py。若上面显示 0 条，请检查订阅 ext 是否传入。",
-                      "", "【★ v7.5 官方视频（腾讯国语/腾讯原声等）】",
-                      "官方页不能直连 → py 不试直连、不取流、不探测、",
-                      "不重试、不拼解析地址。识别后第一动作就是极简交壳。",
-                      "★ 若 98 给的是中转页：先从 iframe/JS/?url=/302 抠出",
-                      "真实 v.qq.com 等官方页再交壳（否则壳报解析失败）。",
-                      "顺序完全由壳执行：先【超级解析】，失败后自动走",
-                      "【https 解析】。一次点击搞定，不用再点一下。",
-                      "交壳只留 parse/url/header，零 msg（壳会把 msg 当",
-                      "播放失败原因弹 ⚠ 页并中断解析）。",
+            lines += ["", "【★ 配置与排障（按真机验证结果更新）】",
+                      "订阅填本机文件路径；api = ./py/98直播.py",
+                      "  （中文名 + 相对路径在本版已验证可用，勿凭通用经验改动）",
+                      "★ 源消失/没分类时先查：订阅是否被自动更新覆盖、",
+                      "  存储权限、JSON 合法性、壳缓存；先看源名字在不在，",
+                      "  再判断是配置问题还是代码问题。",
+                      "", "【★ 解析只在订阅【顶层 parses 独立段】】",
+                      "py 已不内置任何解析，site.ext 里也不放 parses；换解析改订阅。",
+                      "", "【★ 官方视频（腾讯国语/腾讯原声等）】",
+                      "官方页不能直连 → py 不试直连、不取流、不探测、不重试。",
+                      "★ 98 若给中转页：先从 iframe/JS/?url=/302 抠出真实",
+                      "  v.qq.com 等官方页再交壳（否则壳报解析失败）。",
+                      "★ 交壳字段 parse=1 + jx=1 + flag + url + header，零 msg：",
+                      "  jx=1 是调用解析池的开关（缺了只会嗅探网页、抓到贴片广告）；",
+                      "  msg 会被壳当播放失败原因弹 ⚠ 页并中断解析，永不补。",
+                      "顺序由壳执行：先【超级解析】，失败后自动走【https 解析】。",
                       "", "【★ 其余线路（微博国语回放等）】",
-                      "① py 直取 1080P 直链 parse=0",
-                      "② 取不到 → 先交壳解析",
-                      "③ 同一集再点 → 订阅 ext.parses 全量；没命中回 ②",
-                      "", "【★ 解析配置】",
-                      "官方视频的 https 解析由壳从订阅顶层 parses 读取，",
-                      "py 不参与；本源 ext.parses 仅用于其它线路兜底。",
+                      "py 直取 1080P 直链 parse=0；直连绝不挂 jx / flag。",
+                      "取不到流 → 交壳兜底（仍不带 jx/flag），不依赖 ext.parses。",
                       "", "清一次壳缓存 → 重启 OK影视"]
             return {'list': [{
                 "vod_id": "diag", "vod_name": "源自检 · 点开看诊断结果",

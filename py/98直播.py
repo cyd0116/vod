@@ -627,7 +627,7 @@ def _short_title(t):
         return s
     d = _SHORT_DATE.search(s)
     v = _SHORT_VS.search(s)
-    date = d.group(0) if d else ""
+    date = re.sub(r"^20\d{2}年", "", d.group(0)) if d else ""
     game = (v.group(1) + "vs" + v.group(2)) if v else ""
     if date and game:
         return (date + " " + game)[:26]
@@ -2000,10 +2000,14 @@ class Spider(Spider):
                 continue
             seen.add(href)
             dm = re.search(r"\d{1,2}月\d{1,2}日|20\d{2}年\d{1,2}月\d{1,2}日", t)
-            # ★ 卡片短名(日期+对阵，2 行看全)；完整原名放备注 + 缓存给详情页
+            # ★★ 卡片上【所有可能被壳渲染的字段都放短名】：
+            #   上一版把完整原名塞进 vod_remarks，壳把它折成两行截断，
+            #   看起来像「改动没生效」。现在 name/remarks 一律短名，
+            #   完整原名只留在 _G["title_full"] 缓存 → 详情页标题/正文。
             _G.setdefault("title_full", {})[href] = t
-            out.append({"vod_id": _enc(href), "vod_name": _short_title(t),
-                        "vod_pic": "", "vod_remarks": t})
+            _sh = _short_title(t)
+            out.append({"vod_id": _enc(href), "vod_name": _sh,
+                        "vod_pic": "", "vod_remarks": _sh})
         return out
 
     def _guoyu_check(self, href):
@@ -2115,8 +2119,14 @@ class Spider(Spider):
                 st["fail"] += 1
             else:
                 st["skip"] += 1
-            hint = _title_guoyu_hint(it.get("vod_name", "") + " " +
-                                     it.get("vod_remarks", ""))
+            try:
+                _full4hint = (_G.get("title_full") or {}).get(
+                    _dec(str(it.get("vod_id", ""))), "")
+            except Exception:
+                _full4hint = ""
+            hint = _title_guoyu_hint(
+                _full4hint or (it.get("vod_name", "") + " " +
+                               it.get("vod_remarks", "")))
             if hint is False:
                 st["title_drop"] += 1
                 st["detail"].append("❌ 抓不到但标题是官方页  " +
@@ -2124,7 +2134,7 @@ class Spider(Spider):
                 continue
             it = dict(it)
             it["vod_remarks"] = (str(it.get("vod_remarks", "")) +
-                                 " · 未校验")[:110]
+                                 " · 未校验")[:40]
             st["detail"].append("⚠ 抓不到/超时，保守保留  " + it["vod_name"][:26])
             out.append(it)
         _G["guoyu_stat"] = st
@@ -2329,7 +2339,7 @@ class Spider(Spider):
                      "  保留：全场录像回放 / 第X节录像 / 全场回放",
                      "  丢弃：全场精华 / 全场集锦 / 精彩十佳球 等",
                      "★ 卡片标题: " +
-                        ("精简(日期+对阵，2行看全；完整原名在备注/详情页)"
+                        ("精简v2：name/备注 都是短名，完整原名只在详情页"
                          if SHORT_TITLE else "完整原名"),
                      "★★ 本文件 = 全量显示分支：国语回放筛选 关闭 / "
                         "近三天 关闭 → 显示全部比赛（含腾讯/爱奇艺/优酷/咪咕）",
@@ -2575,9 +2585,11 @@ class Spider(Spider):
             kw = str(key or "").strip()
             if kw:
                 html, final = self._home()
-                videos = [x for x in self._items(html, final)
+                _items_all = self._items(html, final)
+                _fulls = _G.get("title_full") or {}
+                videos = [x for x in _items_all
                           if kw in x['vod_name'] or
-                          kw in x.get('vod_remarks', '')][:40]
+                          kw in _fulls.get(_dec(x['vod_id']), '')][:40]
         except Exception:
             videos = []
         result = {'list': videos}

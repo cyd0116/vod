@@ -277,7 +277,7 @@ _TODAY_OVERRIDE = None        # 仅回归测试注入用；设备端永远是 No
 #   nba_final 并把 nba_rev +1；推荐页【每次都以 nba_final 为准】，
 #   不再拿自己那份旧快照短路返回，所以分类一更新、首页下次打开就是新的。
 #   home_rev 记录首页同步到的版本号，源自检里可看到是否落后。
-#   冷启动没缓存时才自己算一遍，且用 _G["home_sync"] 让栏目页「抓到即停」
+#   冷启动没缓存时才自己算一遍，且与分类页【完全同口径】(不再抓到即停)
 #   （不为了挑条目最多去盲试全部兜底路径），把请求数压到最低。
 #   断网/分类页失败 → 不增加版本号、保留上一次结果，首页不会被清空；
 #   homeContent 的 4 个分类完全不受影响。
@@ -1943,14 +1943,14 @@ class Spider(Spider):
                     if HOME_NBA_CACHE_ONLY:
                         items = []
                     else:
-                        # ★ 走分类页同一套口径；home_sync 让栏目页抓到即停
-                        _G["home_sync"] = True
-                        try:
-                            r = self.categoryContent("nba", 1, False, {})
-                            items = list(r.get("list") or [])
-                        finally:
-                            _G["home_sync"] = False
-                        # 分类页刚算完，nba_final 可能已是最新，再对齐一次
+                        # ★★ 与分类页走【完全相同】的一套逻辑，不再设 home_sync。
+                        #    旧版为了省一次请求让首页「抓到即停」，只试第一个
+                        #    栏目候选；分类页会试全部候选取条目最多的那份。
+                        #    站点中途更新时两页就拿到不同栏目页 → 真机上出现
+                        #    「推荐页 1 场 11/25、分类页 3 场 11/25」。
+                        r = self.categoryContent("nba", 1, False, {})
+                        items = list(r.get("list") or [])
+                        # categoryContent 成功时会写 nba_final；再对齐一次
                         if _G.get("nba_final") is not None:
                             items = list(_G["nba_final"])
                 else:
@@ -2264,9 +2264,9 @@ class Spider(Spider):
                     best_html, best_final, best_url, best_n = h2, (f2 or cu), cu, n2
                 if n2 >= 12:        # 够多就不再试后面的，省时间
                     break
-                # ★ 推荐页调用：抓到就停，别为了「挑条目最多」盲试兜底路径
-                if _G.get("home_sync") and n2 > 0:
-                    break
+                # ★★ 不再为「推荐页」提前停：首页与分类页必须试用同一批
+                #    候选 URL、取同一份「条目最多」的栏目页，差一次 break
+                #    就会让两页内容不一致。
             url = u0 or ""
             if best_html:
                 html, final = best_html, best_final
@@ -2423,6 +2423,7 @@ class Spider(Spider):
                          _G.get("home_rev", -1) >= _G.get("nba_rev", 0)
                          else "⏳ 回首页即自动同步"),
                      "  ★ 分类更新后首页会跟着变（每次以分类最终列表为准）",
+                     "  ★ 首页/分类试用同一批栏目候选、取同一份页面(无抓到即停)",
                      "  分类页最终列表缓存: %d 条 / 已缓存推荐: %d 条" %
                         (len(_G["nba_final"] or [])
                          if _G["nba_final"] is not None else 0,

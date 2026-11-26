@@ -19,11 +19,9 @@
 #   其余与原版逐字一致：官方页仍极简交壳(parse=1，零 msg)，由壳拿
 #   订阅里 parses[] 的解析接口去解；国语回放仍直连 1080P；
 #   集锦/精华/十佳仍排除（那不是比赛）；首页推荐仍与分类完全一致。
-#   ★ xx.user.js 的 51 个接口地址已全部纳入订阅顶层 parses 段。
-#   ★ 解析地址【不内置在 py 里】，也不塞进 site 的 ext。
-#     全部放在订阅 json 的【顶层 parses 独立段】——与已验证可调用的
-#     解密 json 写法一致；由壳解析池读取，py 对官方页只极简交壳。
-#     配套文件：zb98_subscribe_full.json
+#   ★ 解析项由订阅 json 的【顶层 parses 独立段】统一提供，py 不内置、
+#     不塞进 site 的 ext；换解析只改订阅，不用改 py。
+#     官方页由壳解析池处理，py 只极简交壳。
 # ======================================================================
 import sys
 import os
@@ -43,6 +41,17 @@ import urllib.request
 import urllib.parse
 import threading
 from datetime import date, timedelta
+
+# ======================================================================
+# 播放与解析分工
+#   * 官方页（腾讯国语 / 腾讯原声 / 爱奇艺 / 优酷 / 咪咕等）：
+#     py 只做「还原真实官方页 + 极简交壳」parse=1 + jx=1 + flag，零 msg；
+#     解析项全部由订阅顶层 parses 段提供，py 不内置、不探测、不抢跑。
+#   * 国语回放：py 直取 1080P，parse=0 直连，不挂 flag / jx。
+#   * CCTV国语：py 内取央视 2000 档超清，parse=0 直连，不进解析池。
+#   * localProxy：保持壳基类的空实现 [200, "video/MP2T", ""]。
+# ======================================================================
+
 
 # ======================================================================
 # 骨架 100% 对齐「央视节目.py」（用户实测可播放的文件）：
@@ -384,6 +393,142 @@ _OFFICIAL_GROUP = re.compile(
     re.I)
 
 # ======================================================================
+# ★★ CCTV国语：央视网页面 → py 内取「超清」2000 档 → parse=0 直连
+#   依据（用户真机 HAR，2026-11-26「央视国语-响应.txt」）：
+#     sports.cctv.com/.../VIDE*.shtml
+#       → vdn.apps.cntv.cn/api/getHttpVideoInfo.do?pid=<32位hex>  (200/23.6KB)
+#       → dh5ws01.v.cntv.cn/asp/h5e/hls/main/.../<pid>/main.m3u8?maxbr=2048
+#       → 四档 2000 / 1200 / 850 / 450 .m3u8
+#   埋点 bit=2048000 ↔ 2000 档 = 播放器菜单【超清】；bit=1228800 ↔ 1200 = 高清。
+#   ★ 固定给 2000.m3u8（不播自适应 main.m3u8），这就是「自动选超清」。
+#   ★ 镜像域名 dh5wx.cntv.kfcbest.com 同路径可用（HAR 四档均 200）。
+#   ★ Referer 必须 https://sports.cctv.com/（HAR 全部请求一致）。
+#   ★ 全程不需要解析池 / 不需要 jx / 不需要 flag，与「国语回放」同形态。
+# ======================================================================
+CCTV_DIRECT_ON = True
+CCTV_SUPER_BR = "2000"          # 超清档；改成 1200 即高清，850 标清，450 流畅
+CCTV_HOST_RE = re.compile(
+    r'(?:sports\.cctv|tv\.cctv|news\.cctv|v\.cctv|cctv|cntv|'
+    r'vdn\.apps\.cntv|dh5ws01\.v\.cntv|dh5wx\.cntv)\.(?:com|cn)', re.I)
+CCTV_PID_RE = re.compile(r'(?<![a-f0-9])([a-f0-9]{32})(?![a-f0-9])', re.I)
+CCTV_API = "https://vdn.apps.cntv.cn/api/getHttpVideoInfo.do?pid="
+CCTV_CDNS = ["https://dh5ws01.v.cntv.cn",
+             "https://dh5wx.cntv.kfcbest.com"]
+CCTV_REF = "https://sports.cctv.com/"
+_CCTV_GROUP = re.compile(r'cctv|央视|cntv', re.I)
+
+
+def _is_cctv(u):
+    """是否央视/央视网域名（央视国语线路、页面、API 都算）。"""
+    s = str(u or "")
+    if not s.startswith("http"):
+        return False
+    try:
+        host = urllib.parse.urlsplit(s).hostname or ""
+    except Exception:
+        return False
+    return bool(CCTV_HOST_RE.search(host))
+
+
+def _cctv_pid(page, html=""):
+    """抠央视视频 pid：URL ?pid= → 页面内嵌 32 位 hex（videoCenterId/guid）。"""
+    m = re.search(r'[?&]pid=([a-f0-9]{32})', str(page), re.I)
+    if m:
+        return m.group(1)
+    for src in (html, page):
+        for m in CCTV_PID_RE.finditer(str(src or "")):
+            return m.group(1)
+    return ""
+
+
+def _cctv_hls_list(src):
+    """从 API 响应 / 页面 / URL 文本里抠出所有 m3u8 地址（还原反斜杠与斜杠转义）。"""
+    t = _unesc(str(src or ""))
+    out = []
+    for u in re.findall(r'https?://[^\s"\'<>\\)，；]+', t):
+        if '.m3u8' in u.lower():
+            out.append(u.rstrip('\\",;'))
+    return out
+
+
+def _cctv_super_url(main_url):
+    """main.m3u8 → 2000.m3u8（超清）。
+    https://HOST/asp/h5e/hls/main/0303000a/3/default/<pid>/main.m3u8?...
+      → https://HOST/asp/h5e/hls/2000/0303000a/3/default/<pid>/2000.m3u8
+    """
+    s = str(main_url or "")
+    # ★ HAR 实证：2000/1200/850/450 档清单都不带 ?maxbr=/contentid= 参数，
+    #   只有自适应 main.m3u8 带；转档时整段去掉，否则央视 CDN 会 403。
+    s = s.split('?', 1)[0]
+    s = re.sub(r'(/asp/h5e/hls/)main(/)',
+               r'\g<1>' + CCTV_SUPER_BR + r'\2', s, count=1)
+    s = s.replace('main.m3u8', CCTV_SUPER_BR + '.m3u8')
+    return s
+
+
+def _cctv_resolve(page, timeout=5):
+    """CCTV国语 → 超清直链。返回 (url 或 None, 日志列表)。
+    四级：API/页面抠 main → 转 2000 档 → 拼 CDN 直链 → 校验 #EXTM3U。
+    只要有 pid 就一定给得出候选（路径由 HAR 实证），不会返回空导致黑屏。"""
+    log = []
+    pid = _cctv_pid(page)
+    html = ""
+    if not pid:
+        try:
+            h, f = _fetch(page, ref=CCTV_REF, timeout=timeout)
+            html = h or ""
+        except Exception:
+            html = ""
+        pid = _cctv_pid(page, html)
+    if pid:
+        log.append("pid=" + pid)
+    info = ""
+    if pid:
+        try:
+            h, f = _fetch(CCTV_API + pid, ref=CCTV_REF, timeout=timeout)
+            info = h or ""
+        except Exception:
+            info = ""
+    mains = []
+    for src in (info, html, page):
+        mains += _cctv_hls_list(src)
+    seen, uniq = set(), []
+    for u in mains:
+        if u not in seen:
+            seen.add(u); uniq.append(u)
+    main = next((u for u in uniq if '/main/' in u and 'main.m3u8' in u),
+                uniq[0] if uniq else "")
+    if main:
+        log.append("主清单 " + main[:120])
+    cands = []
+    if main:
+        cands.append(_cctv_super_url(main))
+    if pid:
+        for cdn in CCTV_CDNS:
+            cands.append("%s/asp/h5e/hls/%s/0303000a/3/default/%s/%s.m3u8" %
+                         (cdn, CCTV_SUPER_BR, pid, CCTV_SUPER_BR))
+    # 去重
+    cands = list(dict.fromkeys(cands))
+    for u in cands:
+        try:
+            h, f = _fetch(u, ref=CCTV_REF, timeout=timeout)
+        except Exception:
+            h = ""
+        if h and ('#EXTM3U' in h[:300] or '#EXTINF' in h[:600]):
+            log.append("★ 超清(" + CCTV_SUPER_BR + ")直链 " + u[:120])
+            return u, log
+    # 校验不到也返回候选（让播放器去判，绝不返回空 url 造成黑屏）；
+    # 优先 2000 档，其次自适应主清单。
+    if cands:
+        log.append("未校验通过，仍交超清候选（播放器判定）")
+        return cands[0], log
+    if main:
+        log.append("回退自适应主清单")
+        return main, log
+    log.append("央视 pid/主清单均未取到")
+    return None, log
+
+# ======================================================================
 # ★ 二级/三级目录过滤：排除「十佳 / 集锦 / 精华」等非完整比赛条目
 #   二级 = 分类列表里的比赛卡片（_items）
 #   三级 = 详情页里的分节选集（_episodes）
@@ -583,7 +728,10 @@ def _clean(t):
 #   不认光秃秃的「国语」——否则「腾讯国语」会被误判成有国语回放。
 _GUOYU_POS = re.compile(
     r"国语\s*回放|\[\s*国语(?:回放)?\s*\]|【\s*国语(?:回放)?\s*】|"
-    r"中文解说|国语解说|微博回放|微博", re.I)
+    r"中文解说|国语解说|微博回放|微博|"
+    r"CCTV\s*国语|央视\s*国语|cctv|cntv|央视网|央视体育", re.I)
+# ★ CCTV国语 也是 py 能直连的线路，不能再算「明确只有官方页」。
+#   原正则里的「央视|CCTV」已移除，否则含央视的分组会被误杀。
 _GUOYU_OFF = re.compile(
     r"腾讯|原声|爱奇艺|优酷|咪咕|migu|iqiyi|youku|mgtv|芒果", re.I)
 # 98 的「国语回放」分组固定指向微博正文（weibo.com/uid/mid），
@@ -1283,7 +1431,8 @@ def _recent_ok(title, now=None):
 # ======================================================================
 OLD_SORT_ON = True
 OLD_SORT_AFTER_DAYS = 2            # 距今 >= 2 天算「二天之前」；改 3 即回到上一版口径
-OLD_SORT_ORDER = ["腾讯国语", "腾讯原声", "国语回放"]
+OLD_SORT_ORDER = ["腾讯国语", "腾讯原声", "国语回放", "CCTV国语"]
+# ★ CCTV国语 紧跟「国语回放」（用户口径）；近三天与老比赛都如此。
 
 
 def _game_days(title, now=None):
@@ -1335,6 +1484,8 @@ def _old_group_rank(g):
     for i, kw in enumerate(OLD_SORT_ORDER):
         if kw in s:
             return i
+    if _CCTV_GROUP.search(s):      # 央视/央视国语/CCTV 别名 → 排在国语回放后
+        return OLD_SORT_ORDER.index("国语回放") + 1
     return len(OLD_SORT_ORDER)
 
 def _clean_shell(page, hd, prefix=""):
@@ -2105,9 +2256,9 @@ class Spider(Spider):
             return None
         ok = False
         links = _links(h, f or href)
-        # ① 微博正文链接
+        # ① 可直连线路：微博正文（国语回放）或 央视网页面（CCTV国语）
         for u, _inner in links:
-            if _WB_POST_RE.search(u):
+            if _WB_POST_RE.search(u) or _is_cctv(u):
                 ok = True
                 break
         # ② 链接文本分组名（不再因为同一行出现「腾讯」就整条跳过）
@@ -2129,7 +2280,7 @@ class Spider(Spider):
         return ok
 
     def _filter_guoyu(self, items):
-        """★ 只保留「有国语回放」的比赛。
+        """★ 只保留「有国语回放 或 有 CCTV国语」的比赛（两者都能 parse=0 直连）。
 
         ★★ 旧版 9 秒一到就 break，剩下条目被静默放行（连标注都没有），
         源站一慢腾讯卡就整批混进来 —— 这就是「昨天有效今天失效」的根因。
@@ -2174,12 +2325,12 @@ class Spider(Spider):
             v = res.get(href) if href in res else "skip"
             if v is True:
                 st["hit"] += 1
-                st["detail"].append("✅ 有国语回放  " + it["vod_name"][:30])
+                st["detail"].append("✅ 有可直连线路(国语回放/CCTV国语)  " + it["vod_name"][:24])
                 out.append(it)
                 continue
             if v is False:
                 st["no"] += 1
-                st["detail"].append("❌ 明确无国语回放  " + it["vod_name"][:28])
+                st["detail"].append("❌ 明确无可直连线路  " + it["vod_name"][:24])
                 continue
             # ★ None / "skip" / 异常：不再无条件保留
             if v is None:
@@ -2455,7 +2606,7 @@ class Spider(Spider):
                      "WB_COOKIE: " + ("已填 ✅" if WB_COOKIE else "未填 ❌"),
                      "", "【解析来源 = 订阅 json 的顶层 parses 独立段】",
                      "  ★ 壳解析池读顶层 parses；site.ext 里不放 parses",
-                     "  ★ xx.user.js 的 51 个接口地址已全部纳入（同址合并 7 条）",
+                     "  ★ 解析项数量由订阅顶层 parses 段决定（py 不内置）",
                      "  ★ 国语回放/明文直链 = parse=0 直连，绝不挂解析 flag",
                      "init(ext) 订阅地址: %d 个" % len(_G["ext_subs"] or []),
                      "SUBSCRIBE_URLS: %d 个" % len(SUBSCRIBE_URLS or []),
@@ -2530,7 +2681,7 @@ class Spider(Spider):
             _gs = _G.get("guoyu_stat") or {}
             if _gs:
                 lines += [
-                    "", "★★【国语回放筛选 · 本轮校验统计】",
+                    "", "★★【可直连线路筛选(国语回放 / CCTV国语) · 本轮校验统计】",
                     "  共 %d 场 / ✅命中 %d / ❌明确无 %d / ⚠抓不到 %d / "
                     "⏳超时 %d / 标题兜底剔除 %d" %
                     (_gs.get("total", 0), _gs.get("hit", 0),
@@ -2621,6 +2772,14 @@ class Spider(Spider):
             def ratio(lst):
                 return sum(1 for _n, u in lst if _is_weibo(u)) / float(len(lst) or 1)
             ordered = sorted(eps.items(), key=lambda kv: -ratio(kv[1]))
+            # ★ CCTV国语 紧跟「国语回放」（近三天口径），其余分组相对顺序不变
+            _ci = next((i for i, (g, _l) in enumerate(ordered)
+                        if _CCTV_GROUP.search(str(g))), None)
+            if _ci is not None:
+                _item = ordered.pop(_ci)
+                _gi = next((i for i, (g, _l) in enumerate(ordered)
+                            if "国语回放" in str(g)), None)
+                ordered.insert((_gi + 1) if _gi is not None else 0, _item)
             # ★ 仅「距今 >= OLD_SORT_AFTER_DAYS 天」改分组顺序；更近/无日期不动
             _days = _game_days(title)
             _is_old = (OLD_SORT_ON and _days is not None and
@@ -2642,7 +2801,8 @@ class Spider(Spider):
                    OLD_SORT_AFTER_DAYS)
                  if _is_old else
                  "第一组为微博线路，自动选 1080P 直连；"
-                 "腾讯等官方页需登录鉴权，请优先用第一组。"))
+                 "CCTV国语 自动选央视【超清】2000 档直连；"
+                 "腾讯等官方页由订阅顶层 parses 解析。"))
             play_from = "$$$".join(shows)
             play_url = "$$$".join(urls)
         else:
@@ -2702,6 +2862,29 @@ class Spider(Spider):
             target = _dec(raw)
             if not target.startswith("http"):
                 target = _abs(target, SITE + "/")
+
+            # ★★ CCTV国语（央视网）：py 内取【超清】2000 档 → parse=0 直连。
+            #    不进解析池、不挂 flag/jx，与「国语回放」逐字段同形态。
+            #    判定必须放在 _is_official 之前：_OFFICIAL_HOSTS 含 cctv，
+            #    否则央视页会被当成官方页交壳解析。
+            if CCTV_DIRECT_ON and (_is_cctv(target) or
+                                   _CCTV_GROUP.search(str(flag or ""))):
+                _hd = {'User-Agent': _UA, 'Referer': CCTV_REF}
+                _best, _lg = _cctv_resolve(target)
+                _G["cctv_log"] = _lg
+                if _best:
+                    _G["official_trace"] = [
+                        "CCTV国语: " + str(target)[:150],
+                        "★ 最终: parse=0 直连央视超清(" + CCTV_SUPER_BR +
+                        "档) " + str(_best)[:150]] + ["  " + x for x in _lg[-4:]]
+                    return {"parse": 0, "playUrl": "", "url": _best,
+                            "jx": 0, "header": _hd,
+                            "format": "application/x-mpegURL"}
+                # 连 pid 都抠不到：极简交壳（parse=1 + jx=1 + flag=cctv）。
+                #   绝不把央视网页当媒体给 parse=0 —— 那会静默黑屏 00:00。
+                _G["official_trace"] = ["CCTV国语取流失败，回退壳解析"] + _lg[-4:]
+                return {"parse": 1, "playUrl": "", "url": target,
+                        "jx": 1, "flag": "cctv", "header": _hd}
 
             # ★★ 官方视频（腾讯国语/腾讯原声等）：第一动作就是极简交壳。
             #    官方页不能直连，不试 _stream_ok、不取流、不拼解析地址。

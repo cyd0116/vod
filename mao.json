@@ -69,7 +69,6 @@
 
 //PY 
 { "key": "py_98直播", "name": "🔥98直播(py)","type": 3,"api": "https://raw.githubusercontent.com/cyd0116/vod/refs/heads/main/py/98直播.py","playerType": 1, "timeout": 120},
-{ "key": "py_zb98", "name": "🔥zb98(py)","type": 3,"api": "https://raw.githubusercontent.com/cyd0116/vod/refs/heads/main/py/zb98.py","playerType": 1, "timeout": 120},
 //{ "key": "py_98直播(仅直连)", "name": "🔥98直播(仅直连)(py)","type": 3,"api": "https://raw.githubusercontent.com/cyd0116/vod/refs/heads/main/py/98直播(仅直连).py","playerType": 1, "timeout": 120},
 { "key": "py_央视节目", "name": "🔥央视节目(py)","type": 3,"api": "https://raw.githubusercontent.com/cyd0116/vod/refs/heads/main/py/央视节目.py"},
 	
@@ -200,8 +199,8 @@
   "parses": [
 { "name": "Web聚合", "type": 3, "url": "Web" }, 
 { "name": "Json聚合", "type": 3, "url": "Demo" }, 
-{ "name": "TXNP", "type": 0, "url": "https://art.txnp.cn/?url=", "ext": { "flag": [ "qq", "腾讯", "qiyi", "爱奇艺", "奇艺", "youku", "优酷", "mgtv", "芒果", "letv", "乐视", "pptv", "PPTV", "sohu", "bilibili", "哔哩哔哩", "哔哩", "iqiyi", "migu", "咪咕", "miguvideo", "cntv", "cctv", "央视", "sports", "体育", "腾讯国语", "腾讯原声", "国语回放" ], "header": { "User-Agent": "okhttp/4.1.0" } } }
-//{ "name": "TXNP(备用)", "type": 0, "url": "https://bfq.txnp.cn/player?url=", "ext": { "flag": [ "qq", "腾讯", "qiyi", "爱奇艺", "奇艺", "youku", "优酷", "mgtv", "芒果", "letv", "乐视", "pptv", "PPTV", "sohu", "bilibili", "哔哩哔哩", "哔哩", "iqiyi", "migu", "咪咕", "miguvideo", "cntv", "cctv", "央视", "sports", "体育", "腾讯国语", "腾讯原声", "国语回放" ], "header": { "User-Agent": "okhttp/4.1.0" } } }
+{ "name": "TXNP", "type": 0, "url": "https://art.txnp.cn/?url=", "ext": { "flag": [ "qq", "腾讯", "qiyi", "爱奇艺", "奇艺", "youku", "优酷", "mgtv", "芒果", "letv", "乐视", "pptv", "PPTV", "sohu", "bilibili", "哔哩哔哩", "哔哩", "iqiyi", "migu", "咪咕", "miguvideo", "cntv", "cctv", "央视", "m1905","sports", "体育", "腾讯国语", "腾讯原声", "国语回放" ], "header": { "User-Agent": "okhttp/4.1.0" } } }
+//{ "name": "TXNP(备用)", "type": 0, "url": "https://bfq.txnp.cn/player?url=", "ext": { "flag": [ "qq", "腾讯", "qiyi", "爱奇艺", "奇艺", "youku", "优酷", "mgtv", "芒果", "letv", "乐视", "pptv", "PPTV", "sohu", "bilibili", "哔哩哔哩", "哔哩", "iqiyi", "migu", "咪咕", "miguvideo", "cntv", "cctv", "央视", "sports", "体育", "腾讯国语", "腾讯原声", "国语回放" ], "header": { "User-Agent": "okhttp/4.1.0" } } },
 //{ "name": "虾米", "type": 0, "url": "https://jx.hls.one/?url=", "ext": { "flag": [ "qq", "腾讯", "qiyi", "爱奇艺", "奇艺", "youku", "优酷", "mgtv", "芒果", "letv", "乐视", "pptv", "PPTV", "sohu", "bilibili", "哔哩哔哩", "哔哩", "iqiyi", "migu", "咪咕", "miguvideo", "cntv", "cctv", "央视", "sports", "体育", "腾讯国语", "腾讯原声", "国语回放" ], "header": { "User-Agent": "okhttp/4.1.0" } } }, 
 //{ "name": "云", "type": 0, "url": "https://yparse.ik9.cc/index.php?url=", "ext": { "flag": [ "qq", "腾讯", "qiyi", "爱奇艺", "奇艺", "youku", "优酷", "mgtv", "芒果", "letv", "乐视", "pptv", "PPTV", "sohu", "bilibili", "哔哩哔哩", "哔哩", "iqiyi", "migu", "咪咕", "miguvideo", "cntv", "cctv", "央视", "sports", "体育", "腾讯国语", "腾讯原声", "国语回放" ], "header": { "User-Agent": "okhttp/4.1.0" } } }, 
 //{ "name": "m3u8TV", "type": 0, "url": "https://jx.m3u8.tv/jiexi/?url=", "ext": { "flag": [ "qq", "腾讯", "qiyi", "爱奇艺", "奇艺", "youku", "优酷", "mgtv", "芒果", "letv", "乐视", "pptv", "PPTV", "sohu", "bilibili", "哔哩哔哩", "哔哩", "iqiyi", "migu", "咪咕", "miguvideo", "cntv", "cctv", "央视", "sports", "体育", "腾讯国语", "腾讯原声", "国语回放" ], "header": { "User-Agent": "okhttp/4.1.0" } } }, 

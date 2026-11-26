@@ -266,11 +266,11 @@ _FALLBACK_TID = "zuqiu"       # 旧缓存请求 today / 未知 tid → 回落足
 # ======================================================================
 NBA_ONLY_GUOYU = False      # ★ 全量显示分支：删除国语回放筛选
 GUOYU_ONLY_CATS = {"nba"}     # 想让别的分类也过滤，加 zuqiu / cba / zonghe
-GUOYU_CHECK_LIMIT = 60        # 每页最多校验条数
-GUOYU_WORKERS = 12            # 并发抓详情页数
-GUOYU_TIMEOUT = 4             # 单条详情超时（秒），3→4 给慢响应留余量
-GUOYU_RETRY = 1               # 失败后换备用域再试 1 次
-GUOYU_TOTAL_TIMEOUT = 20      # 硬保护（仅防极端卡死）；正常近三天场次一批就跑完
+GUOYU_CHECK_LIMIT = 30        # 每页最多校验条数（启动/分类提速）
+GUOYU_WORKERS = 8             # 并发抓详情页数
+GUOYU_TIMEOUT = 2             # 单条详情超时（秒）：分类最多等 8 秒，不再拖垮壳
+GUOYU_RETRY = 0               # 不重试：一次抓不到按标题兜底，避免整批翻倍等待
+GUOYU_TOTAL_TIMEOUT = 8       # 硬保护：点一次分类最多 8 秒
 GUOYU_ALT = True              # ★ 允许换 BASES 备用域名，主域被拦也能抓到
 
 # ======================================================================
@@ -314,7 +314,22 @@ _TODAY_OVERRIDE = None        # 仅回归测试注入用；设备端永远是 No
 HOME_SHOW_NBA = True
 HOME_NBA_SYNC_CAT = True      # ★ 默认：与 NBA 分类页完全一致（含国语回放校验）
 HOME_NBA_LIMIT = 0            # 0 = 不裁剪，完全跟随分类页；>0 才截断
-HOME_NBA_CACHE_ONLY = False   # True=绝不抓网，只复用已缓存的分类结果
+HOME_NBA_CACHE_ONLY = True    # ★ 首页主线程绝不【同步】抓网（防壳失去响应）
+#   ★ 修「最近几版壳加载极慢/失去响应」：旧值 False 会让首页冷启动同步跑完整
+#     categoryContent（首页+4 栏目候选+筛选版 30 个详情页），站点不通时主线程
+#     阻塞 12~57 秒（筛选版理论最坏 387 秒）。现已收紧为后台预热 + 短等待。
+
+# ★★ 「启动即有推荐」+「加载尽量快」：唯一能同时满足两者的做法。
+#    init / homeContent（壳启动必调）起【1 个 daemon 后台线程】跑完整
+#    categoryContent("nba", 1)，结果由它写入 _G["nba_final"]，
+#    与分类页同一套取数逻辑 → 「推荐页 1 场 / 分类页 3 场」不会重演。
+#    homeVideoContent 主线程最多等 HOME_WARM_WAIT 秒：拿到就显示最终列表；
+#    没拿到就用同一份栏目页缓存【纯内存】出卡片（零网络），启动即有。
+#    后台算完写 nba_final，壳下次刷新/再进首页自动收敛为最终结果。
+#    ★ 主线程硬上限 0.8 秒，站点全不通也不会拖垮壳；不写文件、不起服务、
+#      无需额外进程，daemon 随壳进程结束。
+HOME_WARM_ON = True            # False = 回到「启动空推荐、点分类才有」的排障行为
+HOME_WARM_WAIT = 0.8           # 主线程最多等待秒数；站点极慢可调 1.2，仍远低于旧版
 
 # 下面两个是旧轻量模式的兼容变量；SYNC_CAT=True 时由分类页的
 # NBA_RECENT_ON / NBA_ONLY_GUOYU 决定，这里不生效，保留避免旧配置报错。
@@ -406,7 +421,8 @@ _OFFICIAL_GROUP = re.compile(
 #   ★ 全程不需要解析池 / 不需要 jx / 不需要 flag，与「国语回放」同形态。
 # ======================================================================
 CCTV_DIRECT_ON = True
-CCTV_SUPER_BR = "2000"          # 超清档；改成 1200 即高清，850 标清，450 流畅
+CCTV_SUPER_BR = "2000"          # 超清(1080P)档；1200=高清720P，850 标清，450 流畅
+#   ★ 真机若「黑屏有声音」是 2000 档编码/加密与壳解码器不兼容，改 "1200" 可验证
 CCTV_HOST_RE = re.compile(
     r'(?:sports\.cctv|tv\.cctv|news\.cctv|v\.cctv|cctv|cntv|'
     r'vdn\.apps\.cntv|dh5ws01\.v\.cntv|dh5wx\.cntv)\.(?:com|cn)', re.I)
@@ -452,30 +468,87 @@ def _cctv_hls_list(src):
 
 
 def _cctv_super_url(main_url):
-    """main.m3u8 → 2000.m3u8（超清）。
-    https://HOST/asp/h5e/hls/main/0303000a/3/default/<pid>/main.m3u8?...
-      → https://HOST/asp/h5e/hls/2000/0303000a/3/default/<pid>/2000.m3u8
+    """任意档位/自适应清单 → 超清 CCTV_SUPER_BR 档【单档】清单。
+
+    ★ 修「没自动选超清、播的是高清720P」：旧版只把 main.m3u8 替换成
+      2000.m3u8，若 API 先给出 1200.m3u8（央视 API 常把低码率放前面），
+      函数原样返回 1200 → 播放器就播 720P。现在两种形态都统一转档。
+    覆盖：
+      .../hls/main/.../<pid>/main.m3u8?maxbr=2048
+      .../hls/1200/.../<pid>/1200.m3u8
+    ★ 去掉 ? 参数：央视 CDN 对带参档位清单会 403（HAR 实证）。
     """
-    s = str(main_url or "")
-    # ★ HAR 实证：2000/1200/850/450 档清单都不带 ?maxbr=/contentid= 参数，
-    #   只有自适应 main.m3u8 带；转档时整段去掉，否则央视 CDN 会 403。
-    s = s.split('?', 1)[0]
-    s = re.sub(r'(/asp/h5e/hls/)main(/)',
-               r'\g<1>' + CCTV_SUPER_BR + r'\2', s, count=1)
-    s = s.replace('main.m3u8', CCTV_SUPER_BR + '.m3u8')
+    s = str(main_url or "").split('?', 1)[0]
+    s = re.sub(r'(/asp/h5e/hls/)(?:main|\d{3,4})/',
+               r'\g<1>' + CCTV_SUPER_BR + r'/', s, count=1)
+    s = re.sub(r'(?:/|^)(?:main|\d{3,4})\.m3u8$',
+               '/' + CCTV_SUPER_BR + '.m3u8', s, count=1)
     return s
 
 
-def _cctv_resolve(page, timeout=5):
-    """CCTV国语 → 超清直链。返回 (url 或 None, 日志列表)。
-    四级：API/页面抠 main → 转 2000 档 → 拼 CDN 直链 → 校验 #EXTM3U。
-    只要有 pid 就一定给得出候选（路径由 HAR 实证），不会返回空导致黑屏。"""
+def _cctv_pick_super(mains, timeout=2):
+    """从 API/页面抠出的 m3u8 列表里挑【真正的 2000 档单档清单】。
+    ① API 已直给 /2000/ 直链 → 直接用（HAR 实证最可信）
+    ② 否则读自适应 main.m3u8 的 #EXT-X-STREAM-INF，挑 2000 那档子清单；
+       不把多码率主清单交给播放器，否则它会按带宽自己降到 1200(720P)
+    ③ 再否则把任意档位统一转成 2000
+    返回 (url, log)。全程最多 1 次额外请求。
+    """
+    log = []
+    uniq = list(dict.fromkeys([u for u in mains if u]))
+    for u in uniq:
+        if re.search(r'/hls/%s/' % CCTV_SUPER_BR, u) or \
+           re.search(r'/%s\.m3u8' % CCTV_SUPER_BR, u, re.I):
+            log.append("★ API 直给超清单 " + u[:120])
+            return u, log
+    main = next((u for u in uniq if '/main/' in u and 'main.m3u8' in u),
+                uniq[0] if uniq else "")
+    if not main:
+        return "", log
+    h = ""
+    try:
+        h, _f = _fetch(main, ref=CCTV_REF, timeout=timeout, alt=False)
+    except Exception:
+        h = ""
+    if h and '#EXT-X-STREAM-INF' in h:
+        lines = [x.strip() for x in h.splitlines() if x.strip()]
+        best_score, best_line = -1, ""
+        for i, ln in enumerate(lines):
+            if not ln.startswith('#EXT-X-STREAM-INF'):
+                continue
+            mb = re.search(r'BANDWIDTH=(\d+)', ln)
+            bw = int(mb.group(1)) if mb else 0
+            nxt = lines[i + 1] if i + 1 < len(lines) else ""
+            if not nxt or nxt.startswith('#'):
+                continue
+            score = bw + (10 ** 9 if CCTV_SUPER_BR in nxt else 0)
+            if score > best_score:
+                best_score, best_line = score, nxt
+        if best_line:
+            sub = (best_line if best_line.startswith('http')
+                   else urllib.parse.urljoin(main, best_line))
+            sub = _cctv_super_url(sub)   # 幂等：统一档位目录+文件名（子档名含 2000 但目录仍是 /main/，必须转）
+            log.append("★ 主清单→超清子档 " + sub[:120])
+            return sub, log
+    u = _cctv_super_url(main)
+    log.append("统一转超清档 " + u[:120])
+    return u, log
+
+
+def _cctv_resolve(page, timeout=2):
+    """CCTV国语 → 超清 2000 档单档直链。返回 (url 或 None, 日志)。
+
+    ★ 修「缓冲很慢」：旧版播放前串行抓 页面 + API + 3 个 CDN 候选逐个校验
+      （每个 timeout=5），最坏 ~25 秒才返回 url，用户感知就是一直缓冲。
+      现在最多 页面 + API + 1 次主清单 = 3 次 × 2 秒，且不再试镜像 CDN。
+    ★ 找不到清单时用 HAR 实证路径兜底 1 条，绝不返回央视网页给 parse=0。
+    """
     log = []
     pid = _cctv_pid(page)
     html = ""
     if not pid:
         try:
-            h, f = _fetch(page, ref=CCTV_REF, timeout=timeout)
+            h, _f = _fetch(page, ref=CCTV_REF, timeout=timeout, alt=False)
             html = h or ""
         except Exception:
             html = ""
@@ -485,46 +558,24 @@ def _cctv_resolve(page, timeout=5):
     info = ""
     if pid:
         try:
-            h, f = _fetch(CCTV_API + pid, ref=CCTV_REF, timeout=timeout)
+            h, _f = _fetch(CCTV_API + pid, ref=CCTV_REF,
+                          timeout=timeout, alt=False)
             info = h or ""
         except Exception:
             info = ""
     mains = []
     for src in (info, html, page):
         mains += _cctv_hls_list(src)
-    seen, uniq = set(), []
-    for u in mains:
-        if u not in seen:
-            seen.add(u); uniq.append(u)
-    main = next((u for u in uniq if '/main/' in u and 'main.m3u8' in u),
-                uniq[0] if uniq else "")
-    if main:
-        log.append("主清单 " + main[:120])
-    cands = []
-    if main:
-        cands.append(_cctv_super_url(main))
+    best, lg = _cctv_pick_super(mains, timeout=timeout)
+    log += lg
+    if best:
+        log.append("★ 最终交壳超清单 " + best[:120])
+        return best, log
     if pid:
-        for cdn in CCTV_CDNS:
-            cands.append("%s/asp/h5e/hls/%s/0303000a/3/default/%s/%s.m3u8" %
-                         (cdn, CCTV_SUPER_BR, pid, CCTV_SUPER_BR))
-    # 去重
-    cands = list(dict.fromkeys(cands))
-    for u in cands:
-        try:
-            h, f = _fetch(u, ref=CCTV_REF, timeout=timeout)
-        except Exception:
-            h = ""
-        if h and ('#EXTM3U' in h[:300] or '#EXTINF' in h[:600]):
-            log.append("★ 超清(" + CCTV_SUPER_BR + ")直链 " + u[:120])
-            return u, log
-    # 校验不到也返回候选（让播放器去判，绝不返回空 url 造成黑屏）；
-    # 优先 2000 档，其次自适应主清单。
-    if cands:
-        log.append("未校验通过，仍交超清候选（播放器判定）")
-        return cands[0], log
-    if main:
-        log.append("回退自适应主清单")
-        return main, log
+        u = "%s/asp/h5e/hls/%s/0303000a/3/default/%s/%s.m3u8" % (
+            CCTV_CDNS[0], CCTV_SUPER_BR, pid, CCTV_SUPER_BR)
+        log.append("API 无清单，用 HAR 实证路径 " + u[:120])
+        return u, log
     log.append("央视 pid/主清单均未取到")
     return None, log
 
@@ -575,7 +626,51 @@ _G = {"home": None, "learned": False, "cat_url": {},
       "home_rev": -1,      # ★ 「更新推荐」上次同步到的分类版本号
       "home_sync": False,   # ★ 推荐页调用中：栏目页抓到即停，少发请求
       "home_nba": None,     # ★ 「更新推荐」上次返回快照（仅供自检显示）
-      "title_full": {}}     # ★ href -> 完整原名（详情页/搜索用，短名不丢信息）
+      "title_full": {},     # ★ href -> 完整原名（详情页/搜索用，短名不丢信息）
+      "warm_started": False}  # ★ 后台预热线程已启动（整个进程只 1 个）
+
+
+# 预热完成事件放模块级（不放 _G，_G 保持全可序列化）；daemon 线程只启一次。
+_WARM_LOCK = threading.Lock()
+_WARM_EVT = threading.Event()
+
+
+def _start_warm(spider):
+    """壳启动即异步预热「更新推荐」：只起 1 个 daemon 线程跑完整
+    categoryContent("nba", 1)，结果由它写入 _G["nba_final"]。
+
+    ★ 为什么能同时满足「启动即有」+「加载快」：
+      · 所有网络都在后台线程，主线程（壳 UI）零阻塞；
+      · homeVideoContent 最多等 HOME_WARM_WAIT 秒，站点不通也立即返回；
+      · 与分类页共用同一套逻辑，nba_final 是唯一真相，一致性不破；
+      · 不写任何本地文件、不起服务、无需额外进程，随壳进程生命周期结束。
+    ★ 幂等：init 与 homeContent 都会调，锁保证只启 1 次。
+    """
+    if not HOME_WARM_ON or _G.get("warm_started"):
+        return
+    with _WARM_LOCK:
+        if _G.get("warm_started"):
+            return
+        _G["warm_started"] = True
+
+        def _run():
+            try:
+                spider.categoryContent("nba", 1, False, {})
+            except Exception:
+                pass
+            finally:
+                try:
+                    _WARM_EVT.set()
+                except Exception:
+                    pass
+
+        try:
+            t = threading.Thread(target=_run, name="zb98-warm", daemon=True)
+            t.start()
+        except Exception:
+            # 极少数壳禁用后台线程：退回「启动空、点分类即有」，绝不卡主线程
+            _G["warm_started"] = False
+            _WARM_EVT.set()
 
 
 # ======================================================================
@@ -680,7 +775,7 @@ def _fetch(url, ref=None, timeout=5, alt=True, extra_headers=None):
     cands = [url]
     if alt and _is98(url):
         sp = urllib.parse.urlsplit(url)
-        for b in BASES[1:3]:
+        for b in BASES[1:2]:
             bh = urllib.parse.urlsplit(b)
             if bh.netloc and bh.netloc != sp.netloc:
                 cands.append(urllib.parse.urlunsplit(
@@ -1431,8 +1526,9 @@ def _recent_ok(title, now=None):
 # ======================================================================
 OLD_SORT_ON = True
 OLD_SORT_AFTER_DAYS = 2            # 距今 >= 2 天算「二天之前」；改 3 即回到上一版口径
-OLD_SORT_ORDER = ["腾讯国语", "腾讯原声", "国语回放", "CCTV国语"]
-# ★ CCTV国语 紧跟「国语回放」（用户口径）；近三天与老比赛都如此。
+OLD_SORT_ORDER = ["CCTV国语", "腾讯国语", "腾讯原声", "国语回放"]
+# ★ 距今 >= OLD_SORT_AFTER_DAYS 天的比赛：CCTV国语 排第 1 位（用户口径）。
+#   距今 0/1 天的近比赛不受影响，仍是 国语回放 → CCTV国语 → 腾讯国语 → 腾讯原声。
 
 
 def _game_days(title, now=None):
@@ -1484,8 +1580,8 @@ def _old_group_rank(g):
     for i, kw in enumerate(OLD_SORT_ORDER):
         if kw in s:
             return i
-    if _CCTV_GROUP.search(s):      # 央视/央视国语/CCTV 别名 → 排在国语回放后
-        return OLD_SORT_ORDER.index("国语回放") + 1
+    if _CCTV_GROUP.search(s):      # 央视/央视国语/CCTV 别名 → 老比赛同样第 1 位
+        return 0
     return len(OLD_SORT_ORDER)
 
 def _clean_shell(page, hd, prefix=""):
@@ -1992,6 +2088,7 @@ class Spider(Spider):
         return "98直播吧"
 
     def init(self, extend=""):
+        _start_warm(self)   # ★ 壳启动即异步预热推荐（后台线程，主线程零网络）
         # ★ 直接读「订阅列表里给本源配置的 ext」：这是壳唯一保证会传给
         #   py 的通道，纯内存、零联网、零文件扫描，绝不会拖慢首页加载。
         #   支持 ext 里放：{"parses":[...]} / 整段订阅文本 /
@@ -2078,6 +2175,7 @@ class Spider(Spider):
     # ------------------------------------------------------------------
     def homeContent(self, filter):
         """★ 纯静态、零网络；一级分类只输出 SHOW_CATS 白名单里的。"""
+        _start_warm(self)   # 双保险：壳必调本方法，保证预热一定启动（幂等）
         result = {}
         classes = []
         for k, n, _p in _VISIBLE_CATS:
@@ -2099,7 +2197,8 @@ class Spider(Spider):
         唯一真相】，不用自己那份旧快照短路返回，所以点一次分类刷新，
         再回首页就是新列表；同步版本号记在 home_rev，源自检可查。
         读缓存是纯内存、零网络请求，不会拖慢首页。
-        冷启动没缓存时才自己算一遍；断网/分类失败不清空已有结果。
+        ★ 冷启动：后台线程预热，主线程最多等 HOME_WARM_WAIT 秒即出推荐；
+          断网/分类失败不清空已有结果。
         """
         if not HOME_SHOW_NBA:
             return {'list': []}
@@ -2108,17 +2207,36 @@ class Spider(Spider):
             if HOME_NBA_SYNC_CAT:
                 final = _G.get("nba_final")
                 if final is None:
-                    if HOME_NBA_CACHE_ONLY:
+                    if HOME_WARM_ON:
+                        # ★★ 启动即有推荐 + 不卡：init/homeContent 已起后台线程
+                        #    跑完整 categoryContent（与分类页同一套逻辑），主线程
+                        #    在这里【最多等 HOME_WARM_WAIT 秒】，绝不 12~57 秒阻塞。
+                        _start_warm(self)
+                        if HOME_WARM_WAIT > 0:
+                            try:
+                                _WARM_EVT.wait(HOME_WARM_WAIT)
+                            except Exception:
+                                pass
+                        final = _G.get("nba_final")
+                        if final is not None:
+                            items = list(final)      # 后台已算完：最终一致结果
+                        else:
+                            # 后台还没算完（仅直连版详情页校验较慢）：用同一份
+                            # 栏目页缓存【纯内存】出卡片，零网络、零等待 → 启动
+                            # 即有。后台写 nba_final 后，壳刷新自动收敛为最终列表。
+                            _pg = _G.get("nba_page")
+                            if _pg:
+                                _h, _b, _u = _pg
+                                try:
+                                    items = self._items(_h, _b)[:120]
+                                except Exception:
+                                    items = []
+                    elif HOME_NBA_CACHE_ONLY:
                         items = []
                     else:
-                        # ★★ 与分类页走【完全相同】的一套逻辑，不再设 home_sync。
-                        #    旧版为了省一次请求让首页「抓到即停」，只试第一个
-                        #    栏目候选；分类页会试全部候选取条目最多的那份。
-                        #    站点中途更新时两页就拿到不同栏目页 → 真机上出现
-                        #    「推荐页 1 场 11/25、分类页 3 场 11/25」。
+                        # 关掉预热时的应急通道：同步跑（可能慢，仅排障用）
                         r = self.categoryContent("nba", 1, False, {})
                         items = list(r.get("list") or [])
-                        # categoryContent 成功时会写 nba_final；再对齐一次
                         if _G.get("nba_final") is not None:
                             items = list(_G["nba_final"])
                 else:
@@ -2157,7 +2275,7 @@ class Spider(Spider):
     def _home(self):
         if _G["home"] is not None:
             return _G["home"]
-        h, f = _fetch(SITE + "/", timeout=4)
+        h, f = _fetch(SITE + "/", timeout=2, alt=False)
         _G["home"] = (h, f)
         return _G["home"]
 
@@ -2423,8 +2541,8 @@ class Spider(Spider):
                 if cu not in cands:
                     cands.append(cu)
             best_html, best_final, best_url, best_n = "", "", "", -1
-            for cu in cands[:4]:
-                h2, f2 = _fetch(cu, ref=final or SITE + "/", timeout=5)
+            for cu in cands[:2]:
+                h2, f2 = _fetch(cu, ref=final or SITE + "/", timeout=3, alt=False)
                 if not h2:
                     continue
                 n2 = len(self._items(h2, f2 or cu))
@@ -2796,8 +2914,8 @@ class Spider(Spider):
             _head = ("【本场分节】%d 个线路 / %d 集（微博 %d 集）。"
                      % (len(eps), sum(len(v) for v in eps.values()), wb_n))
             desc = _head + (
-                (("【距今>=%d天的比赛】线路已按 腾讯国语 → 腾讯原声 → "
-                   "国语回放 排序，优先走官方页解析。" %
+                (("【距今>=%d天的比赛】线路已按 CCTV国语 → 腾讯国语 → "
+                   "腾讯原声 → 国语回放 排序，优先央视超清直连。" %
                    OLD_SORT_AFTER_DAYS)
                  if _is_old else
                  "第一组为微博线路，自动选 1080P 直连；"
@@ -2869,7 +2987,8 @@ class Spider(Spider):
             #    否则央视页会被当成官方页交壳解析。
             if CCTV_DIRECT_ON and (_is_cctv(target) or
                                    _CCTV_GROUP.search(str(flag or ""))):
-                _hd = {'User-Agent': _UA, 'Referer': CCTV_REF}
+                _hd = {'User-Agent': _UA, 'Referer': CCTV_REF,
+                       'Accept': '*/*'}
                 _best, _lg = _cctv_resolve(target)
                 _G["cctv_log"] = _lg
                 if _best:
@@ -2877,9 +2996,10 @@ class Spider(Spider):
                         "CCTV国语: " + str(target)[:150],
                         "★ 最终: parse=0 直连央视超清(" + CCTV_SUPER_BR +
                         "档) " + str(_best)[:150]] + ["  " + x for x in _lg[-4:]]
+                    # ★ 去掉 format：壳按 .m3u8 自判，错误的 MIME 会让部分壳
+                    #   用错解码路径（真机「黑屏、但有声音」的放大器之一）。
                     return {"parse": 0, "playUrl": "", "url": _best,
-                            "jx": 0, "header": _hd,
-                            "format": "application/x-mpegURL"}
+                            "jx": 0, "header": _hd}
                 # 连 pid 都抠不到：极简交壳（parse=1 + jx=1 + flag=cctv）。
                 #   绝不把央视网页当媒体给 parse=0 —— 那会静默黑屏 00:00。
                 _G["official_trace"] = ["CCTV国语取流失败，回退壳解析"] + _lg[-4:]

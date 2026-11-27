@@ -101,7 +101,7 @@ WB_COOKIE = ""
 # 3) ★ 自动轮流尝试「全部」解析地址：
 #    PARSE_PROBE_ALL = True → 一次兜底里并行请求订阅列表中的全部解析
 #      （每条 2 秒超时），一条都不漏；再按「本轮起点」的环形顺序挑第一个
-#      返回有效直链的。逐条结果写进源自检。
+#      返回有效直链的。逐条结果留在内存。
 #    PARSE_INDEX = -1 → 起点自动轮换：每次兜底换下一条打头，同一播放页
 #      重试会跳过上次那条；等价于多轮把所有解析轮流试一遍。
 #    PARSE_INDEX >= 0 → 锁定起点编号（探测仍会尝试全部）。
@@ -207,14 +207,14 @@ BASES = ["https://m.98zb.com", "https://m.98zhibo.com",
 
 # ======================================================================
 # ★ 一级分类白名单：只列在这里的才会在 OK影视 顶部分类栏显示。
-#   用户要求去掉：红框里的分类 + 直播 + 源自检 → 默认只留「完整比赛录像」入口。
+#   用户要求去掉：红框里的分类 + 直播 → 默认只留录像入口。
 #   想加回某个，把它的 key 追加进 SHOW_CATS 即可，其余代码不用动。
-#   全部 17 个 key 对照：
+#   全部 16 个 key 对照：
 #     today 今日视频 | live 直播 | nba NBA录像 | zuqiu 足球录像
 #     cba CBA录像 | zonghe 综合录像 | nbajj NBA集锦 | zuqiujj 足球集锦
 #     cbajj CBA集锦 | nbaqx 篮球球星 | zuqiuqx 足球球星
 #     nba2 NBA | zuqiu2 足球 | cba2 CBA | zonghe2 综合
-#     mobile 手机版 | diag 源自检
+#     mobile 手机版
 # ======================================================================
 # ★★ 分类层三处调整（只在分类页生效；播放链路仍是 v7.5 原样，版本号不变）
 #   ① 不显示「今日视频」：已从 SHOW_CATS 移除。
@@ -238,7 +238,7 @@ _FALLBACK_TID = "zuqiu"       # 旧缓存请求 today / 未知 tid → 回落足
 #   现在：① 不提前 break，每条都尽量拿到判定；② 备用域名重试；
 #   ③ 抓不到不缓存（下次刷新会重试）；④ 实在抓不到也不无条件放行，
 #   按标题兜底把「明确只有腾讯/爱奇艺/优酷/咪咕」的卡剔掉，其余保留
-#   并标「未校验」；⑤ 全程统计写进源自检，真机一眼能看出是哪一类。
+#   并标「未校验」；⑤ 全程统计留在内存备查。
 # ======================================================================
 NBA_ONLY_GUOYU = True
 GUOYU_ONLY_CATS = {"nba"}     # 想让别的分类也过滤，加 zuqiu / cba / zonghe
@@ -276,7 +276,7 @@ _TODAY_OVERRIDE = None        # 仅回归测试注入用；设备端永远是 No
 #   ★★ 分类刷新后首页必须跟着更新：分类页每次成功刷新都会覆盖
 #   nba_final 并把 nba_rev +1；推荐页【每次都以 nba_final 为准】，
 #   不再拿自己那份旧快照短路返回，所以分类一更新、首页下次打开就是新的。
-#   home_rev 记录首页同步到的版本号，源自检里可看到是否落后。
+#   home_rev 记录首页同步到的版本号。
 #   冷启动没缓存时才自己算一遍，且与分类页【完全同口径】(不再抓到即停)
 #   （不为了挑条目最多去盲试全部兜底路径），把请求数压到最低。
 #   断网/分类页失败 → 不增加版本号、保留上一次结果，首页不会被清空；
@@ -330,7 +330,6 @@ _CATS = [
     ("cba2",     "CBA",      "/cba/"),
     ("zonghe2",  "综合",     "/zonghe/"),
     ("mobile",   "手机版",   "/"),
-    ("diag",     "源自检",   ""),
 ]
 _CAT_NAME = dict((k, n) for k, n, _p in _CATS)
 _VISIBLE_CATS = [c for c in _CATS if c[0] in set(SHOW_CATS)]
@@ -434,7 +433,38 @@ CCTV_CDNS = ["https://dh5ws01.v.cntv.cn",       # h5e 域名，保留供日志/�
 CCTV_REF = "https://sports.cctv.com/"
 _CCTV_GROUP = re.compile(r'cctv|央视|cntv', re.I)
 # ★ 同一场录像 pid 全程不变；页面/API 请求偶发失败时复用，避免直链缺 pid→404
-_CCTV_PID_CACHE = {"pid": ""}
+_CCTV_PID_CACHE = {"pid": "", "pool": []}
+
+
+def _cctv_prefetch_pid(u):
+    """★ 在 detailContent 阶段预取央视页面里的 pid，并把它写回播放链接。
+
+    真机一直 480P 的关键链路：央视页面 URL 形如 .../VIDE9l5hdiKSWxiRBMUgzQsa261125.shtml
+    （VIDE id 不是 32 位 hex），py 必须再请求一次页面 HTML 才能抠到 guid(pid)；
+    这次请求被 UA / gzip / 超时 / 403 任意一环打断 → pid 为空 → 拼出缺 pid 的
+    404 直链 → 壳回退解析网页 → 自适应主清单按带宽选 450 档 = 480x270。
+    ★ 现在把这次请求提前到用户点开详情页时（那时本就在等网络），把 pid 以
+      ?pid= 参数写进 play_url 链接里；playerContent 收到后直接从 URL 抠 pid，
+      【播放时零额外网络请求】，成功率不再受那一环影响。
+    """
+    pid = _cctv_pid(u)
+    src = "链接自带"
+    if not pid:
+        try:
+            ph, _ = _fetch(u, ref=CCTV_REF, timeout=4, alt=False)
+            pid = _cctv_pid(u, ph or "")
+            src = "预取页面HTML" if pid else ""
+        except Exception:
+            pid = ""
+    if not pid and _CCTV_PID_CACHE.get("pool"):
+        pid = _CCTV_PID_CACHE["pool"][0]
+        src = "详情页hex池"
+    if not pid:
+        return u, "", ""
+    _CCTV_PID_CACHE["pid"] = pid
+    if "pid=" not in u:
+        u = u + ("&" if "?" in u else "?") + "pid=" + pid
+    return u, pid, src
 
 
 def _is_cctv(u):
@@ -673,6 +703,9 @@ def _cctv_resolve(page, timeout=5):
     elif _CCTV_PID_CACHE.get("pid"):
         pid = _CCTV_PID_CACHE["pid"]
         log.append("pid 复用上次缓存 " + pid)
+    if not pid and _CCTV_PID_CACHE.get("pool"):
+        pid = _CCTV_PID_CACHE["pool"][0]
+        log.append("pid 取自详情页 cctv 上下文 hex 池 " + pid)
     log.append("pid=" + (pid or "未抠到"))
     info = ""
     try:
@@ -753,7 +786,7 @@ _G = {"home": None, "learned": False, "cat_url": {},
       "official_turn": {},   # 兼容保留
       "official_trace": [],  # ★ 上一次官方线路「还原真实官方页」的链路日志
       "guoyu_cache": {},    # ★ 详情页是否有「国语回放」分组（只缓存 True/False）
-      "guoyu_stat": {},     # ★ 本轮校验统计 + 逐条判定，源自检可见
+      "guoyu_stat": {},     # ★ 本轮校验统计 + 逐条判定
       "nba_page": None,     # ★ 已抓到的 NBA 栏目页（首页推荐复用，零重复请求）
       "nba_final": None,    # ★ NBA 分类页【最终列表】→ 推荐页逐条复用，完全一致
       "nba_rev": 0,        # ★ NBA 分类页成功刷新次数（每次 +1）
@@ -1505,7 +1538,7 @@ def _resolve_official(target, headers):
       · 或直接 302 到官方页
     只抓 <a> 时抽不到 → 把 98 中转页交壳 → 壳不认域名 → 「播放地址解析失败」。
     这里依次尝试：target 自身 → query 内嵌 → fetch 后 final url → 整页 HTML。
-    全程把链路写进 _G['official_trace']，供「源自检」零网络回显。
+    全程把链路写进 _G['official_trace']，留内存备查。
     """
     tr = _G.setdefault("official_trace", [])
     tr.clear()
@@ -2147,7 +2180,7 @@ def _weibo_pick(body):
 
 
 def _weibo_resolve(url):
-    """返回 (最优直链, 清晰度分)。日志写 _G['wb_log'] 供源自检。"""
+    """返回 (最优直链, 清晰度分)。日志写 _G['wb_log'] 留内存备查。"""
     log = _G["wb_log"]
     log[:] = []
     mid, bid = _weibo_ids(url)
@@ -2237,7 +2270,7 @@ def _weibo_resolve(url):
 # ======================================================================
 class Spider(Spider):
 
-    VERSION = "98直播吧 v7.5（还原真实官方页·修解析失败）"
+    VERSION = "98直播吧 v7.7（CCTV超清直连·pid预取）"
 
     def getName(self):
         return "98直播吧"
@@ -2350,7 +2383,7 @@ class Spider(Spider):
         ★★ 分类更新 → 首页跟着更新：分类页每次成功刷新都会覆盖
         _G["nba_final"] 并把 nba_rev +1。本方法【每次都以 nba_final 为
         唯一真相】，不用自己那份旧快照短路返回，所以点一次分类刷新，
-        再回首页就是新列表；同步版本号记在 home_rev，源自检可查。
+        再回首页就是新列表；同步版本号记在 home_rev。
         读缓存是纯内存、零网络请求，不会拖慢首页。
         ★ 冷启动：后台线程预热，主线程最多等 HOME_WARM_WAIT 秒即出推荐；
           断网/分类失败不清空已有结果。
@@ -2446,7 +2479,7 @@ class Spider(Spider):
             if not nt or len(nt) > 12:
                 continue
             for k, name, _p in _CATS:
-                if k in ("today", "live", "diag") or k in _G["cat_url"]:
+                if k in ("today", "live") or k in _G["cat_url"]:
                     continue
                 nn = _norm(name)
                 # 「足球录像」/「足球录像回放」/「NBA录像回放」都能命中；
@@ -2660,11 +2693,6 @@ class Spider(Spider):
             pg = int(pg or 1)
             tid = str(tid)
             result['page'] = pg
-            if tid == 'diag':
-                return {'list': [{"vod_id": "diag",
-                                  "vod_name": "源自检 · 点开看配置与取流日志",
-                                  "vod_pic": "", "vod_remarks": "排障用"}],
-                        'page': 1, 'pagecount': 1, 'limit': 1, 'total': 1}
             # ★ 「今日视频」已不显示；旧缓存仍请求 today / 未知 tid 时
             #   回落到足球录像，既不会白屏，也不会把隐藏内容偷偷显示回来。
             if tid not in set(SHOW_CATS):
@@ -2815,214 +2843,6 @@ class Spider(Spider):
                else str(array)) if array else ""
         if not vid:
             return {'list': []}
-        if vid in ('diag', 'hint', 'today_hint', 'err'):
-            lines = ["98直播吧 · 源自检（静态·不发网络请求）",
-                     "版本: " + self.VERSION, "",
-                     "★ 播放页分组排序: " +
-                        ((("距今>=%d天 → 腾讯国语/腾讯原声/国语回放；"
-                           "距今<%d天 顺序不变(国语回放优先)") %
-                          (OLD_SORT_AFTER_DAYS, OLD_SORT_AFTER_DAYS))
-                         if OLD_SORT_ON else "全部按原顺序"),
-                     "  ★ 只管播放页顺序；分类/推荐显示仍按 NBA_RECENT_DAYS=%d"
-                     % NBA_RECENT_DAYS,
-                     "  日期解析不出 → 保守不改；其余分组保持原相对顺序",
-                     "★ 卡片标题: " +
-                        ("精简v2：name/备注 都是短名，完整原名只在详情页"
-                         if SHORT_TITLE else "完整原名"),
-                     "一级分类: %d 个（%s）" %
-                        (len(_VISIBLE_CATS),
-                         " / ".join(n for _k, n, _p in _VISIBLE_CATS)),
-                     "已隐藏: %d 个（红框分类 + 直播 + 源自检）；" %
-                        (len(_CATS) - len(_VISIBLE_CATS)),
-                     "  想加回：改文件顶部 SHOW_CATS 列表即可",
-                     "  源自检诊断页仍保留（旧缓存点进去可用），只是不在分类栏",
-                     "二级/三级目录过滤集锦·精华·十佳: " +
-                        ("开启 ✅" if DROP_HIGHLIGHTS else "关闭(保留集锦)"),
-                     "  保留：全场录像回放 / 第X节录像 / 全场回放",
-                     "  丢弃：全场精华 / 全场集锦 / 精彩十佳球 等",
-                     "★ NBA 近三天过滤: " +
-                        ("开启 ✅ (%d 天含当天，分类只留最新，pagecount=1)"
-                         % NBA_RECENT_DAYS if NBA_RECENT_ON else "关闭"),
-                     "  无日期条目: " +
-                        ("保守保留" if NBA_RECENT_KEEP_NODATE else "不保留"),
-                     "  只作用于: " + ", ".join(sorted(RECENT_ONLY_CATS)),
-                     "  条目少了 → 国语回放校验只需抓几条详情，分类页变快",
-                     "★ 预览页「更新推荐」: " +
-                        (("与 NBA录像 分类完全一致 ✅ (近三天+国语回放校验)" if
-                          HOME_NBA_SYNC_CAT else "旧轻量模式(会混腾讯卡)")
-                         if HOME_SHOW_NBA else "关闭(空列表)"),
-                     "  ★ 不再混入腾讯原声/腾讯国语（口径与分类页相同）",
-                     "  纯缓存零网络: " +
-                        ("开(只在点过分类后显示)" if HOME_NBA_CACHE_ONLY
-                         else "关(冷启动自己算一遍)") +
-                        " / 条数上限: " +
-                        ("跟随分类页" if not HOME_NBA_LIMIT
-                         else str(HOME_NBA_LIMIT)),
-                     "  ★ 分类刷新次数: %d / 首页已同步到第 %d 次 %s" %
-                        (_G.get("nba_rev", 0), _G.get("home_rev", -1),
-                         "✅ 已同步" if
-                         _G.get("home_rev", -1) >= _G.get("nba_rev", 0)
-                         else "⏳ 回首页即自动同步"),
-                     "  ★ 分类更新后首页会跟着变（每次以分类最终列表为准）",
-                     "  ★ 首页/分类试用同一批栏目候选、取同一份页面(无抓到即停)",
-                     "  分类页最终列表缓存: %d 条 / 已缓存推荐: %d 条" %
-                        (len(_G["nba_final"] or [])
-                         if _G["nba_final"] is not None else 0,
-                         len(_G["home_nba"] or [])
-                         if _G["home_nba"] is not None else 0),
-                     "首页分类: homeContent 零网络请求 / 无 __init__", "",
-                     "【微博取流配置】",
-                     "WB_COOKIE: " + ("已填 ✅" if WB_COOKIE else "未填 ❌"),
-                     "", "【解析来源 = 订阅 json 的顶层 parses 独立段】",
-                     "  ★ 壳解析池读顶层 parses；site.ext 里不放 parses",
-                     "  ★ 解析项数量由订阅顶层 parses 段决定（py 不内置）",
-                     "  ★ 国语回放/明文直链 = parse=0 直连，绝不挂解析 flag",
-                     "init(ext) 订阅地址: %d 个" % len(_G["ext_subs"] or []),
-                     "SUBSCRIBE_URLS: %d 个" % len(SUBSCRIBE_URLS or []),
-                     "配置内发现订阅: %d 个" % len(_G["sub_urls"] or []),
-                     "PARSES_FILE: " + (PARSES_FILE or "未指定(不做本地扫描)"),
-                     "PARSES_INLINE: %d 条（py 已不内置，留空=只用订阅）"
-                        % len(PARSES_INLINE or []),
-                     "订阅拉取: " + (_G["sub_note"] or "（尚未触发）"),
-                     "",
-                     "PARSE_INDEX: %s（<0 为起点自动轮换）" % PARSE_INDEX,
-                     "PARSE_PROBE: " + ("开" if PARSE_PROBE else "关(只交解析地址)"),
-                     "PARSE_PROBE_ALL: " + ("开(并行尝试全部)" if PARSE_PROBE_ALL
-                                            else "关(命中即停)"),
-                     "PARSE_PROBE_TIMEOUT: %ss / 并发 %s" %
-                        (PARSE_PROBE_TIMEOUT, PARSE_PROBE_WORKERS),
-                     "PARSE_AS_SNIFF: " + ("开(交壳嗅探)" if PARSE_AS_SNIFF
-                                            else "关(直连解析地址)"),
-                     "★★ 兜底顺序: py直取 → 壳子自带解析 → (同一集重试)" +
-                        "订阅ext.parses全量 → 回壳",
-                     "  注: parse=1 一次性返回，壳失败无回调；" +
-                        "「先壳再parses」靠再点同一集实现",
-                     "SHELL_FIRST: " + ("开(一律先交壳自带解析)"
-                                        if SHELL_FIRST else "关(先试订阅parses)"),
-                     "PARSE_ON_RETRY: " + ("开(重试才试订阅parses)"
-                                           if PARSE_ON_RETRY else "关(永远只用壳)"),
-                     "★★ 官方视频: py 零动作，直接极简交壳",
-                     "   顺序由壳负责：超级解析 → 失败自动走 https 解析",
-                     "   不试直连 / 不取流 / 不探测 / 不用再点一下",
-                     "★★ OFFICIAL_AUTO_HTTPS: " +
-                        ("开(兼容回退,py抢先探测,不推荐)" if OFFICIAL_AUTO_HTTPS
-                         else "关【默认·顺序完全交给壳】"),
-                     "OFFICIAL_HTTPS_ONLY: " +
-                        ("开" if OFFICIAL_HTTPS_ONLY else "关") +
-                        " (仅兼容回退时生效)",
-                     "★★ OFFICIAL_CLEAN: " +
-                        ("开【交壳零msg·修掉⚠错误页】" if OFFICIAL_CLEAN
-                         else "关(会重现⚠页,不建议)"),
-                     "★★ OFFICIAL_JX: " +
-                        ("开【parse=1 + jx=1 真正调用壳解析池】" if OFFICIAL_JX
-                         else "关(只嗅探网页→会抓到官网贴片广告)"),
-                     "  注: msg 才是 ⚠ 错误页元凶，永远不补；"
-                        "国语回放直连不挂 jx/flag",
-                     "OFFICIAL_ADD_FLAG: " +
-                        ("开(仅非精简模式生效)" if OFFICIAL_ADD_FLAG
-                         else "关"),
-                     "OFFICIAL_SNIFF_PREFIX: " +
-                        (repr(OFFICIAL_SNIFF_PREFIX) + " (X5 嗅探备选)"
-                         if OFFICIAL_SNIFF_PREFIX else "留空(走壳解析池)"),
-                     "OFFICIAL_PAGE_HINT: " +
-                        ("开(附侧栏手选提示)" if OFFICIAL_PAGE_HINT
-                         else "关(msg 极简)"),
-                     "★ 默认兜底: " + ("OK影视 壳子内置解析(parse=1+jx=1)"
-                                      if SHELL_PARSE_FALLBACK else "可读文字提示"),
-                     "PARSE_DEAD_USE_SHELL: " + ("开(全不可达交壳解析)"
-                                                 if PARSE_DEAD_USE_SHELL
-                                                 else "关(全不可达给明确提示)"),
-                     "PARSE_ADDR_FALLBACK: " + ("开(无直链时轮换解析地址)"
-                                                if PARSE_ADDR_FALLBACK
-                                                else "关(无直链直接交壳)"),
-                     "壳子解析兜底: " + ("开启" if SHELL_PARSE_FALLBACK else "关闭"),
-                     "本集下一轮: " + ("订阅parses全量"
-                                     if any(v == 1 for v in
-                                            (_G["shell_turn"] or {}).values())
-                                     else "壳子自带解析"),
-                     "上次解析可达性: " + ("全部不可达 ⚠ 已自动交壳解析"
-                                        if _G["parse_dead"] else "正常/尚未触发"),
-                     "本次兜底使用: " + (_G["parse_used"] or "（尚未触发）"),
-                     "第 %s 轮 / 下次起点编号 %s" %
-                        (_G["parse_round"], _G["parse_cursor"]),
-                     ""]
-            # ★★ 国语回放筛选统计：真机看这里就知道「失效」是哪一类
-            _gs = _G.get("guoyu_stat") or {}
-            if _gs:
-                lines += [
-                    "", "★★【可直连线路筛选(国语回放 / CCTV国语) · 本轮校验统计】",
-                    "  共 %d 场 / ✅命中 %d / ❌明确无 %d / ⚠抓不到 %d / "
-                    "⏳超时 %d / 标题兜底剔除 %d" %
-                    (_gs.get("total", 0), _gs.get("hit", 0),
-                     _gs.get("no", 0), _gs.get("fail", 0),
-                     _gs.get("skip", 0), _gs.get("title_drop", 0)),
-                    "  开关: NBA_ONLY_GUOYU=%s / 备用域=%s / 重试=%d / "
-                    "单条%ds / 硬上限%ds" %
-                    (NBA_ONLY_GUOYU, GUOYU_ALT, GUOYU_RETRY,
-                     GUOYU_TIMEOUT, GUOYU_TOTAL_TIMEOUT),
-                    "  ★ 抓不到≠放行：明确只有腾讯/爱奇艺/优酷/咪咕的标题会被剔除",
-                    "  ★ 失败不缓存：下次分类刷新会重抓，一次抖动不会永久放行",
-                    "  【逐条判定（末 12 条）】"]
-                lines += ["  " + x for x in
-                          (_gs.get("detail") or ["（暂无）"])[-12:]]
-            else:
-                lines += ["", "★★【国语回放筛选】本轮尚未触发",
-                          "  （进一次 NBA录像 分类，再回来点本页即可看到统计）"]
-            try:
-                # ★ 只读「播放兜底时已缓存」的结果，绝不在这里联网拉订阅，
-                #   保证诊断页 / 首页 / 分类始终是零网络，不会拖慢加载。
-                _ps = _G["parses"] or []
-                _note = (_G["parses_note"] or
-                         "尚未触发：点一节录像让播放兜底读一次订阅即可")
-                lines.append("★ 已缓存可用解析: %d 条（%s）" % (len(_ps), _note))
-                for _i, (_n, _u) in enumerate(_ps[:16]):
-                    lines.append("  [%d] %s → %s" % (_i, _n, _u[:76]))
-                lines.append("  锁定某条：把 PARSE_INDEX 改成对应编号；"
-                             "默认 -1 起点自动轮换，重试会换下一条。")
-            except Exception as _e:
-                lines.append("读取 parses 异常: " + str(_e)[:70])
-            if _G["parse_probe_log"]:
-                lines.append("上一次「全部解析尝试」逐条结果:")
-                for _lg in _G["parse_probe_log"][-16:]:
-                    lines.append("  " + _lg)
-            lines += ["", "【★★ 上一次官方视频交壳链路】"
-                      "（点一节「腾讯国语/腾讯原声」后再回来）"]
-            _tr = _G.get("official_trace") or []
-            lines += ["  " + x for x in (_tr or ["（暂无，去点一节官方线路）"])[-12:]]
-            lines += ["  判定：最后一行的「最终交壳」必须是 v.qq.com / "
-                      "iqiyi.com 等官方域名；",
-                      "  若是 m.98zb.com 中转页，壳必然报「播放地址解析失败」。"]
-            lines += ["", "【上一次真实取流日志】（点一节录像后再回来）"]
-            lines += ["  " + x for x in (_G["wb_log"] or ["（暂无）"])[-14:]]
-            lines += ["", "【★ 配置与排障（按真机验证结果更新）】",
-                      "订阅填本机文件路径；api = ./py/98直播.py",
-                      "  （中文名 + 相对路径在本版已验证可用，勿凭通用经验改动）",
-                      "★ 源消失/没分类时先查：订阅是否被自动更新覆盖、",
-                      "  存储权限、JSON 合法性、壳缓存；先看源名字在不在，",
-                      "  再判断是配置问题还是代码问题。",
-                      "", "【★ 解析只在订阅【顶层 parses 独立段】】",
-                      "py 已不内置任何解析，site.ext 里也不放 parses；换解析改订阅。",
-                      "", "【★ 官方视频（腾讯国语/腾讯原声等）】",
-                      "官方页不能直连 → py 不试直连、不取流、不探测、不重试。",
-                      "★ 98 若给中转页：先从 iframe/JS/?url=/302 抠出真实",
-                      "  v.qq.com 等官方页再交壳（否则壳报解析失败）。",
-                      "★ 交壳字段 parse=1 + jx=1 + flag + url + header，零 msg：",
-                      "  jx=1 是调用解析池的开关（缺了只会嗅探网页、抓到贴片广告）；",
-                      "  msg 会被壳当播放失败原因弹 ⚠ 页并中断解析，永不补。",
-                      "顺序由壳执行：先【超级解析】，失败后自动走【https 解析】。",
-                      "", "【★ 其余线路（微博国语回放等）】",
-                      "py 直取 1080P 直链 parse=0；直连绝不挂 jx / flag。",
-                      "取不到流 → 交壳兜底（仍不带 jx/flag），不依赖 ext.parses。",
-                      "", "清一次壳缓存 → 重启 OK影视"]
-            return {'list': [{
-                "vod_id": "diag", "vod_name": "源自检 · 点开看诊断结果",
-                "vod_pic": "", "type_name": "诊断", "vod_year": "",
-                "vod_area": "", "vod_remarks": "网络 / 分类 / 播放解析",
-                "vod_actor": "", "vod_director": "",
-                "vod_content": "\n".join(lines),
-                "vod_play_from": "98直播吧",
-                "vod_play_url": "回到首页$" + _enc(SITE + "/")}]}
-
         url = _dec(vid)
         if not url.startswith("http"):
             url = _abs(url, SITE + "/")
@@ -3047,9 +2867,29 @@ class Spider(Spider):
             if _is_old:
                 ordered = sorted(ordered,
                                  key=lambda kv: _old_group_rank(kv[0]))
+            # ★ 98 详情页 HTML 里若内嵌了央视 guid，先存进零额外请求的兜底池。
+            #   优先「cctv/cntv/guid 上下文附近」的 hex，避免把微博mid等无关
+            #   32位hex 当成 pid；其次才是全页其余 hex。
+            try:
+                _near = list(dict.fromkeys(
+                    m.group(1) for m in re.finditer(
+                        r'(?:cctv|cntv|guid|videoCenterId|pid)[^>]{0,160}?'
+                        r'(?<![a-f0-9])([a-f0-9]{32})(?![a-f0-9])',
+                        html or "", re.I)))
+                _rest = [m.group(1) for m in CCTV_PID_RE.finditer(html or "")]
+                _CCTV_PID_CACHE["pool"] = list(dict.fromkeys(_near + _rest))[:8]
+            except Exception:
+                pass
             shows, urls = [], []
             for g, lst in ordered:
                 shows.append(g)
+                if _CCTV_GROUP.search(str(g)):
+                    # ★ 预取 pid 并写进链接：播放时不再需要请求央视页面
+                    _nl = []
+                    for n, u in lst:
+                        u2, p, _s = _cctv_prefetch_pid(u)
+                        _nl.append((n, u2))
+                    lst = _nl
                 urls.append("#".join("%s$%s" % (n, _enc(u)) for n, u in lst))
             wb_n = sum(1 for v in eps.values() for _n, u in v if _is_weibo(u))
             _head = ("【本场分节】%d 个线路 / %d 集（微博 %d 集）。"
@@ -3122,7 +2962,6 @@ class Spider(Spider):
             target = _dec(raw)
             if not target.startswith("http"):
                 target = _abs(target, SITE + "/")
-
             # ★★ CCTV国语（央视网）：py 内取【超清】2000 档 → parse=0 直连。
             #    不进解析池、不挂 flag/jx，与「国语回放」逐字段同形态。
             #    判定必须放在 _is_official 之前：_OFFICIAL_HOSTS 含 cctv，

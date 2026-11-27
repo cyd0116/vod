@@ -457,7 +457,38 @@ CCTV_CDNS = ["https://dh5ws01.v.cntv.cn",       # h5e 域名，保留供日志/�
 CCTV_REF = "https://sports.cctv.com/"
 _CCTV_GROUP = re.compile(r'cctv|央视|cntv', re.I)
 # ★ 同一场录像 pid 全程不变；页面/API 请求偶发失败时复用，避免直链缺 pid→404
-_CCTV_PID_CACHE = {"pid": ""}
+_CCTV_PID_CACHE = {"pid": "", "pool": []}
+
+
+def _cctv_prefetch_pid(u):
+    """★ 在 detailContent 阶段预取央视页面里的 pid，并把它写回播放链接。
+
+    真机一直 480P 的关键链路：央视页面 URL 形如 .../VIDE9l5hdiKSWxiRBMUgzQsa261125.shtml
+    （VIDE id 不是 32 位 hex），py 必须再请求一次页面 HTML 才能抠到 guid(pid)；
+    这次请求被 UA / gzip / 超时 / 403 任意一环打断 → pid 为空 → 拼出缺 pid 的
+    404 直链 → 壳回退解析网页 → 自适应主清单按带宽选 450 档 = 480x270。
+    ★ 现在把这次请求提前到用户点开详情页时（那时本就在等网络），把 pid 以
+      ?pid= 参数写进 play_url 链接里；playerContent 收到后直接从 URL 抠 pid，
+      【播放时零额外网络请求】，成功率不再受那一环影响。
+    """
+    pid = _cctv_pid(u)
+    src = "链接自带"
+    if not pid:
+        try:
+            ph, _ = _fetch(u, ref=CCTV_REF, timeout=4, alt=False)
+            pid = _cctv_pid(u, ph or "")
+            src = "预取页面HTML" if pid else ""
+        except Exception:
+            pid = ""
+    if not pid and _CCTV_PID_CACHE.get("pool"):
+        pid = _CCTV_PID_CACHE["pool"][0]
+        src = "详情页hex池"
+    if not pid:
+        return u, "", ""
+    _CCTV_PID_CACHE["pid"] = pid
+    if "pid=" not in u:
+        u = u + ("&" if "?" in u else "?") + "pid=" + pid
+    return u, pid, src
 
 
 def _is_cctv(u):
@@ -696,6 +727,9 @@ def _cctv_resolve(page, timeout=5):
     elif _CCTV_PID_CACHE.get("pid"):
         pid = _CCTV_PID_CACHE["pid"]
         log.append("pid 复用上次缓存 " + pid)
+    if not pid and _CCTV_PID_CACHE.get("pool"):
+        pid = _CCTV_PID_CACHE["pool"][0]
+        log.append("pid 取自详情页 cctv 上下文 hex 池 " + pid)
     log.append("pid=" + (pid or "未抠到"))
     info = ""
     try:
@@ -2260,7 +2294,7 @@ def _weibo_resolve(url):
 # ======================================================================
 class Spider(Spider):
 
-    VERSION = "98直播吧 v7.5（还原真实官方页·修解析失败）"
+    VERSION = "98直播吧 v7.6（CCTV超清直连·播放自证）"
 
     def getName(self):
         return "98直播吧"
@@ -2841,6 +2875,32 @@ class Spider(Spider):
         if vid in ('diag', 'hint', 'today_hint', 'err'):
             lines = ["98直播吧 · 源自检（静态·不发网络请求）",
                      "版本: " + self.VERSION, "",
+                     "★★【最近一次播放 · 运行时真实记录】",
+                     "  （点一次任意线路后回来刷新本页即可看到）"]
+            _lp = _G.get("last_play")
+            if not _lp:
+                lines.append("  尚未播放过：先去点一次「CCTV国语」，再回来看这里。")
+            else:
+                for _k, _label in [("version","运行版本"),("flag","壳传 flag"),
+                                   ("id_raw","壳传 id(原样)"),("id_dec","解码后 id"),
+                                   ("is_cctv_host","命中央视域名"),
+                                   ("cctv_flag_hit","flag含cctv"),
+                                   ("cctv_on","CCTV直连开关"),
+                                   ("pid_from_url","链接自带 pid"),
+                                   ("pid_cached","缓存 pid"),
+                                   ("branch","实际走的分支"),
+                                   ("pid_used","最终用的 pid"),
+                                   ("final_url","最终交给壳的 url"),
+                                   ("parse","parse 值")]:
+                    lines.append("  %-14s %s" % (_label+":", _lp.get(_k, "")))
+                for _x in (_lp.get("cctv_log") or []):
+                    lines.append("     · " + str(_x))
+                _bad = not str(_lp.get("pid_used") or "").strip()
+                lines.append("  ★ 判定: " + (
+                    "❌ 本次没拿到 pid → 最终直链无效 → 壳会回退解析网页 → 480P"
+                    if _bad else
+                    "✅ 已交 2000 超清单档；若仍 480P，说明壳跑的不是本版 py 或壳自行降档"))
+            lines += ["",
                      "一级分类: %d 个（%s）" %
                         (len(_VISIBLE_CATS),
                          " / ".join(n for _k, n, _p in _VISIBLE_CATS)),
@@ -3074,9 +3134,29 @@ class Spider(Spider):
             if _is_old:
                 ordered = sorted(ordered,
                                  key=lambda kv: _old_group_rank(kv[0]))
+            # ★ 98 详情页 HTML 里若内嵌了央视 guid，先存进零额外请求的兜底池。
+            #   优先「cctv/cntv/guid 上下文附近」的 hex，避免把微博mid等无关
+            #   32位hex 当成 pid；其次才是全页其余 hex。
+            try:
+                _near = list(dict.fromkeys(
+                    m.group(1) for m in re.finditer(
+                        r'(?:cctv|cntv|guid|videoCenterId|pid)[^>]{0,160}?'
+                        r'(?<![a-f0-9])([a-f0-9]{32})(?![a-f0-9])',
+                        html or "", re.I)))
+                _rest = [m.group(1) for m in CCTV_PID_RE.finditer(html or "")]
+                _CCTV_PID_CACHE["pool"] = list(dict.fromkeys(_near + _rest))[:8]
+            except Exception:
+                pass
             shows, urls = [], []
             for g, lst in ordered:
                 shows.append(g)
+                if _CCTV_GROUP.search(str(g)):
+                    # ★ 预取 pid 并写进链接：播放时不再需要请求央视页面
+                    _nl = []
+                    for n, u in lst:
+                        u2, p, _s = _cctv_prefetch_pid(u)
+                        _nl.append((n, u2))
+                    lst = _nl
                 urls.append("#".join("%s$%s" % (n, _enc(u)) for n, u in lst))
             wb_n = sum(1 for v in eps.values() for _n, u in v if _is_weibo(u))
             _head = ("【本场分节】%d 个线路 / %d 集（微博 %d 集）。"
@@ -3149,6 +3229,20 @@ class Spider(Spider):
             target = _dec(raw)
             if not target.startswith("http"):
                 target = _abs(target, SITE + "/")
+            # ★★ 运行时自证：点一次播放就能在「源自检」里看到壳到底传了什么、
+            #    命中哪个分支、pid 从哪来、最终 url 是什么。不再靠猜、不再返工。
+            _G["last_play"] = {
+                "version": self.VERSION,
+                "flag": str(flag or ""),
+                "id_raw": str(id or "")[:160],
+                "id_dec": str(target)[:200],
+                "is_cctv_host": bool(_is_cctv(target)),
+                "cctv_flag_hit": bool(_CCTV_GROUP.search(str(flag or ""))),
+                "cctv_on": bool(CCTV_DIRECT_ON),
+                "pid_from_url": _cctv_pid(target),
+                "pid_cached": _CCTV_PID_CACHE.get("pid", ""),
+                "branch": "", "pid_used": "", "final_url": "", "parse": "",
+            }
 
             # ★★ CCTV国语（央视网）：py 内取【超清】2000 档 → parse=0 直连。
             #    不进解析池、不挂 flag/jx，与「国语回放」逐字段同形态。
@@ -3164,6 +3258,13 @@ class Spider(Spider):
                 #   _cctv_resolve 现在恒定返回 lxdns 超清单档，不再返回 None。
                 _best, _lg = _cctv_resolve(target)
                 _G["cctv_log"] = _lg
+                _lp = _G.get("last_play") or {}
+                _lp.update({"branch": "CCTV超清直连",
+                            "pid_used": _cctv_pid(target) or
+                                        _CCTV_PID_CACHE.get("pid", ""),
+                            "final_url": str(_best), "parse": 0,
+                            "cctv_log": list(_lg[-6:])})
+                _G["last_play"] = _lp
                 _G["official_trace"] = [
                     "CCTV国语: " + str(target)[:150],
                     "★ 最终: parse=0 直连央视超清(" + CCTV_SUPER_BR +

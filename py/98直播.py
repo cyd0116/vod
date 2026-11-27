@@ -415,15 +415,18 @@ _OFFICIAL_GROUP = re.compile(
 #       → dh5ws01.v.cntv.cn/asp/h5e/hls/main/.../<pid>/main.m3u8?maxbr=2048
 #       → 四档 2000 / 1200 / 850 / 450 .m3u8
 #   埋点 bit=2048000 ↔ 2000 档 = 播放器菜单【超清】；bit=1228800 ↔ 1200 = 高清。
-#   ★ 固定给 2000.m3u8（不播自适应 main.m3u8），这就是「自动选超清」。
-#   ★ 档位清单与主清单【同目录】，只换文件名；且必须 GET 校验通过才交，
-#     否则 404 会造成「完全不能播」（上一轮臆造 /hls/2000/ 的教训）。
+#   ★ 自动选 1080P：按 HAR 实证生成 /hls/2000/.../2000.m3u8 单档直链，
+#     2000 档优先、命中即停；主清单只作模板，绝不交给播放器。
+#   ★ 档位清单与主清单【不同目录】：/hls/<档位>/ 与 <档位>.m3u8 一起换，
+#     且必须 GET 校验是单档清单才交（否则 404 / 自动降 480P）。
+#   ★ 四档高→低 2000/1200/850/450，HAR 实证；埋点 bit=2048000 ↔ 2000 超清。
 #   ★ 镜像域名 dh5wx.cntv.kfcbest.com 同路径可用（HAR 四档均 200）。
 #   ★ Referer 必须 https://sports.cctv.com/（HAR 全部请求一致）。
 #   ★ 全程不需要解析池 / 不需要 jx / 不需要 flag，与「国语回放」同形态。
 # ======================================================================
 CCTV_DIRECT_ON = True
 CCTV_SUPER_BR = "2000"          # 超清(1080P)档；1200=高清720P，850 标清，450 流畅
+CCTV_BR_LIST = ["2000", "1200", "850", "450"]   # ★ HAR 实证四档，高→低；2000 命中即停
 #   ★ 真机若「黑屏有声音」是 2000 档编码/加密与壳解码器不兼容，改 "1200" 可验证
 CCTV_HOST_RE = re.compile(
     r'(?:sports\.cctv|tv\.cctv|news\.cctv|v\.cctv|cctv|cntv|'
@@ -469,103 +472,101 @@ def _cctv_hls_list(src):
     return out
 
 
-def _cctv_super_url(u):
-    """【同目录】把清单文件名强制成 2000.m3u8；绝不改目录。
+def _cctv_br_url(u, br):
+    """任意央视 m3u8 → 指定档位的【HAR 实证路径】。
 
-    ★ 上一轮「完全不能播」的根因：臆造了 /hls/2000/ 档位目录，把本来
-      能播的 URL 改成不存在的路径 → 404。HAR 实证是：自适应主清单
-      .../hls/main/.../<pid>/main.m3u8?maxbr=2048 返回的 #EXT-X-STREAM-INF
-      子档(2000/1200/850/450.m3u8)与主清单【同目录】，只换文件名即可。
-      .../main/.../main.m3u8?maxbr=2048 → .../main/.../2000.m3u8
-      .../1200/.../1200.m3u8          → .../1200/.../2000.m3u8
-    已是 2000.m3u8 时幂等（仅去掉 ? 参数，央视对带参档位清单会 403）。
+    ★★ 480P 根因（本轮修正）：档位清单与主清单【不同目录】。
+      HAR 2001 条请求逐条核对，四档真实地址是：
+        /asp/h5e/hls/main/0303000a/3/default/<pid>/main.m3u8?maxbr=2048  ← 主清单
+        /asp/h5e/hls/2000/0303000a/3/default/<pid>/2000.m3u8              ← 超清1080P
+        /asp/h5e/hls/1200/.../1200.m3u8                                    ← 高清720P
+        /asp/h5e/hls/850/.../850.m3u8                                       ← 标清
+        /asp/h5e/hls/450/.../450.m3u8                                       ← 流畅480P
+      即【档位目录 /hls/<br>/ 与文件名 <br>.m3u8 必须一起换】。
+      上一版只换文件名（同目录）→ /hls/main/.../2000.m3u8 不存在 → 404，
+      校验全挂后旧保底把【主清单】交出去，播放器自己选了 450 档 → 480P。
+    ★ 幂等：已是该档时原样返回；顺带去掉 ? 参数（带参档位清单会 403）。
     """
     s = str(u or "").split('?', 1)[0]
-    if not s:
+    if '/asp/h5e/hls/' not in s:
         return ""
-    return re.sub(r'(?:/|^)(?:main|\d{3,4})\.m3u8$',
-                  '/' + CCTV_SUPER_BR + '.m3u8', s, count=1)
+    s = re.sub(r'(/asp/h5e/hls/)(?:main|\d{3,4})/',
+               r'\g<1>' + str(br) + '/', s, count=1)
+    s = re.sub(r'(?:/|^)(?:main|\d{3,4})\.m3u8$',
+               '/' + str(br) + '.m3u8', s, count=1)
+    return s
 
 
 def _cctv_ok(u, timeout=3):
-    """★ 硬约束：只有 GET 回来确实是 m3u8 文本，才允许交给播放器。
-    杜绝 404 / HTML 错误页造成「完全不能播」。"""
+    """硬约束：只认【单档媒体清单】，多码率主清单一律拒绝。
+
+    ★★ 480P 根因之二：主清单也含 #EXTM3U，旧版 _cctv_ok 把它当可播交出，
+      播放器拿到 #EXT-X-STREAM-INF 后按带宽自己选了 450 档 → 480P。
+      现在头部出现 #EXT-X-STREAM-INF 就判 False，绝不外泄主清单。
+    ★ 参照「央视节目.py」get_ysp_mp4 的方法论：壳播放器不加载网页、
+      不执行官网 JS，具体档位直链必须由 py 自己生成并校验后再交。
+    """
     if not u:
         return False
     try:
         h, _f = _fetch(u, ref=CCTV_REF, timeout=timeout, alt=False)
     except Exception:
         return False
-    return bool(h) and ('#EXTM3U' in h[:400] or '#EXTINF' in h[:900])
+    if not h:
+        return False
+    head = h[:2000]
+    if '#EXT-X-STREAM-INF' in head:
+        return False
+    return ('#EXTM3U' in head and
+            ('#EXTINF' in h[:8000] or '#EXT-X-TARGETDURATION' in head))
 
 
 def _cctv_pick_super(mains, timeout=5, check_timeout=3):
-    """按可信度逐级挑【可播】的超清 2000 单档清单，每级都先校验。
-    ① API 直给 2000.m3u8 → 原样（不改目录）校验通过即交
-    ② 读自适应主清单 #EXT-X-STREAM-INF → urljoin 原样取 2000 子档（同目录）
-    ③ 主清单同级目录强制 2000 文件名
-    ④ 保底：API 原文里第一条真正可播的（可能 1200 高清），能播优先
-    全失败返回 ""，由 _cctv_resolve 交壳，绝不吐 404。
+    """按 HAR 实证四档【高→低】生成具体档位直链，逐个 GET 校验，命中即停。
+
+    ★ 不信任 API 给的低档（旧版把 API 的 1200 原样交出 → 720P）；
+      一律以候选为模板重新生成 2000 档，2000 挂了才依次降 1200 / 850 / 450。
+    ★ 主清单只作模板，绝不外泄（_cctv_ok 拒绝 #EXT-X-STREAM-INF）。
+    ★ 双 CDN（dh5ws01 / dh5wx）同路径，保留不同 host 的模板。
+    ★ 最多 6 次校验，正常第 1 次（2000@主CDN）即命中，不会拖慢起播。
     """
     log = []
-    uniq = list(dict.fromkeys([u for u in mains if u]))
-    # ① API 直给超清单
+    uniq = [u for u in dict.fromkeys(mains) if u and '/asp/h5e/hls/' in u]
+    if not uniq:
+        log.append("无央视 hls 候选")
+        return "", log
+    tmpls, seen = [], set()
     for u in uniq:
-        if re.search(r'/%s\.m3u8' % CCTV_SUPER_BR, u, re.I) and _cctv_ok(u, check_timeout):
-            log.append("★ API 直给超清单(已校验) " + u[:120])
-            return u, log
-    # ②③ 主清单优先，其余候选随后（最多 3 个，控制播放前耗时）
-    masters = [u for u in uniq if '/main/' in u and 'main.m3u8' in u]
-    ordered = masters + [u for u in uniq if u not in masters]
-    for main in ordered[:3]:
-        h = ""
-        try:
-            h, _f = _fetch(main, ref=CCTV_REF, timeout=timeout, alt=False)
-        except Exception:
-            h = ""
-        if h and '#EXT-X-STREAM-INF' in h:
-            lines = [x.strip() for x in h.splitlines() if x.strip()]
-            best_score, best_line = -1, ""
-            for i, ln in enumerate(lines):
-                if not ln.startswith('#EXT-X-STREAM-INF'):
-                    continue
-                mb = re.search(r'BANDWIDTH=(\d+)', ln)
-                bw = int(mb.group(1)) if mb else 0
-                nxt = lines[i + 1] if i + 1 < len(lines) else ""
-                if not nxt or nxt.startswith('#'):
-                    continue
-                score = bw + (10 ** 9 if CCTV_SUPER_BR in nxt else 0)
-                if score > best_score:
-                    best_score, best_line = score, nxt
-            if best_line:
-                sub = (best_line if best_line.startswith('http')
-                       else urllib.parse.urljoin(main, best_line))
-                if _cctv_ok(sub, check_timeout):
-                    log.append("★ 主清单→同目录超清子档(已校验) " + sub[:120])
-                    return sub, log
-                log.append("主清单子档校验未过 " + sub[:100])
-        cand = _cctv_super_url(main)
-        if cand and cand != main and _cctv_ok(cand, check_timeout):
-            log.append("★ 同目录转超清单(已校验) " + cand[:120])
-            return cand, log
-    # ④ 保底：能播优先于 1080P
-    for u in uniq[:3]:
+        k = _cctv_br_url(u, "X")     # 归一化掉档位差异，用于模板去重
+        if k in seen:
+            continue
+        seen.add(k)
+        tmpls.append(u)
+    cands = []
+    for br in CCTV_BR_LIST:
+        for t in tmpls:
+            c = _cctv_br_url(t, br)
+            if c and c not in [x[1] for x in cands]:
+                cands.append((br, c))
+    log.append("档位候选(高→低) " + ", ".join(
+        "%s@%s" % (br, c.split('/')[2]) for br, c in cands[:6]))
+    for br, u in cands[:6]:
         if _cctv_ok(u, check_timeout):
-            log.append("⚠ 无 2000 档，退回可播原地址(可能高清) " + u[:120])
+            log.append("★ 命中 %s 档(已校验·单档) " % br + u[:110])
             return u, log
-    log.append("所有候选均未产出可播 m3u8")
+        log.append("%s 档校验未过 %s" % (br, u.split('/')[-1]))
+    log.append("各档均未产出可播单档清单（主清单已拒绝，不会自动降 480P）")
     return "", log
 
 
 def _cctv_resolve(page, timeout=5):
-    """CCTV国语 → 【校验通过】的超清 2000 单档直链。返回 (url 或 None, 日志)。
+    """CCTV国语 → 【校验通过】的最高档单清单直链。返回 (url 或 None, 日志)。
 
-    ★ 修「完全不能播」：候选一律 GET 校验，不交 404；档位与主清单同目录，
-      不再臆造 /hls/2000/。
-    ★ 修「缓冲很慢」：页面(仅缺 pid 时) + API + 主清单 + 1 次子档校验，
-      API/主清单 5 秒、校验 2 秒；不再串行试镜像 CDN 的多个臆造路径。
-    ★ 修「播 720P」：从主清单明确挑 2000 子档，不把 API 先给的 1200 原样交出。
-    ★ 全失败返回 None → playerContent 极简交壳，绝不把央视网页当媒体给 parse=0。
+    ★ 修「480P」：按 HAR 路径生成 /hls/2000/.../2000.m3u8，2000 优先；
+      主清单绝不出门，播放器无从自己降档。
+    ★ 修「缓冲很慢」：页面(仅缺 pid 时) + API + 最多 6 次档位校验，
+      正常 1 次；不串行试镜像 CDN 的多个臆造路径。
+    ★ 全失败返回 None → playerContent 极简交壳，不吐 404 / 不黑屏。
     """
     log = []
     pid = _cctv_pid(page)
@@ -590,11 +591,11 @@ def _cctv_resolve(page, timeout=5):
     mains = []
     for src in (info, html, page):
         mains += _cctv_hls_list(src)
-    # pid 已知但 API 没给 main 清单 → 用 HAR 实证的【main 路径】兜底，
-    # 而不是上一轮臆造的 /hls/2000/ 路径。
-    if pid and not any('/main/' in u for u in mains):
-        mains.append("%s/asp/h5e/hls/main/0303000a/3/default/%s/main.m3u8?maxbr=2048"
-                     % (CCTV_CDNS[0], pid))
+    # pid 已知但 API 没给 hls 清单 → 用 HAR 实证的 main 路径作模板（双 CDN）
+    if pid and not any('/asp/h5e/hls/' in u for u in mains):
+        for cdn in CCTV_CDNS:
+            mains.append("%s/asp/h5e/hls/main/0303000a/3/default/%s/main.m3u8?maxbr=2048"
+                         % (cdn, pid))
     best, lg = _cctv_pick_super(mains, timeout=timeout)
     log += lg
     if best:
@@ -1538,26 +1539,49 @@ def _recent_ok(title, now=None):
 
 
 # ======================================================================
-# ★ 播放页「视频源分组」按比赛日期分叉排序：
-#   距今 < OLD_SORT_AFTER_DAYS 天（默认 0/1 天：当天、昨天）
-#       → 顺序【不变】：国语回放 → 腾讯国语 → 腾讯原声（原有 ratio 排序）
-#   距今 >= OLD_SORT_AFTER_DAYS 天（默认 >= 2 天：前天及更早）
-#       → 顺序改为：腾讯国语 → 腾讯原声 → 国语回放
-#   ★★ 这个阈值【只管播放页分组顺序】，与 NBA_RECENT_DAYS（分类页/更新推荐
-#      的「近三天显示」过滤）互相独立：两个数字各管一件事，改这个不动分类。
+# ★ 播放页「视频源分组」按比赛日期分叉排序（两套互斥，用户口径）：
+#   最近三天（含当天）距今 0/1/2 天
+#       → 国语回放 → CCTV国语 → 腾讯国语 → 腾讯原声
+#   三天以前（含当天/第3天）距今 >= 3 天
+#       → CCTV国语 → 腾讯国语 → 腾讯原声 → 国语回放
+#   ★ 分界只由 OLD_SORT_AFTER_DAYS 一个数字决定；日期解析不出按近比赛处理。
+#   ★ 这个阈值【只管播放页分组顺序】，与 NBA_RECENT_DAYS（分类页/更新推荐
+#      的「近三天显示」过滤）互相独立：两个数字各管一件事。
 #   ★ 只重排分组，不删任何线路；其余分组（爱奇艺/优酷/咪咕…）保持原相对顺序。
-#   ★ 日期解析不出来时【保守不改】，避免误判。
 # ======================================================================
 OLD_SORT_ON = True
-OLD_SORT_AFTER_DAYS = 2            # 距今 >= 2 天算「二天之前」；改 3 即回到上一版口径
+OLD_SORT_AFTER_DAYS = 3
 OLD_SORT_ORDER = ["CCTV国语", "腾讯国语", "腾讯原声", "国语回放"]
-# ★ 距今 >= OLD_SORT_AFTER_DAYS 天的比赛：CCTV国语 排第 1 位（用户口径）。
-#   距今 0/1 天的近比赛不受影响，仍是 国语回放 → CCTV国语 → 腾讯国语 → 腾讯原声。
+NEAR_SORT_ORDER = ["国语回放", "CCTV国语", "腾讯国语", "腾讯原声"]
+
+
+def _reorder_groups(items, names):
+    """稳定地把 names 里的分组按序提到前面；名单外保持原相对顺序。
+    央视别名（央视国语/CCTV…）归到「CCTV国语」那一位。"""
+    n = len(names)
+    ci = names.index("CCTV国语") if "CCTV国语" in names else n
+
+    def key(g):
+        s = str(g or "")
+        for i, kw in enumerate(names):
+            if kw in s:
+                return i
+        if ci < n and _CCTV_GROUP.search(s):
+            return ci
+        return n
+    return sorted(list(items), key=lambda kv: key(kv[0]))
 
 
 def _game_days(title, now=None):
     """比赛距今天的天数；解析不出日期返回 None（保守不改排序）。
-    与 _recent_ok 用同一套日期格式，跨年跨月自动试三年。"""
+
+    与 _recent_ok 用同一套日期格式（中文月日 / 带年份 / 斜杠 / 横线），
+    缺年份时试 去年/今年/明年，跨年跨月都能对上。
+    ★ 已有带年份的完整日期时，不再用「11月20日」这类无年份正则二次解析：
+      否则「2026年11月30日」会被补出一个「2025年11月30日」候选(359天前)，
+      把未来的比赛误判成老比赛。
+    ★ 未来日期一律跳过，不会被当成老比赛。
+    """
     d0 = now or _TODAY_OVERRIDE or date.today()
     s = str(title or "")
     cand = []
@@ -1571,9 +1595,6 @@ def _game_days(title, now=None):
     for m in re.finditer(r'(?<!\d)(20\d{2})-(\d{1,2})-(\d{1,2})(?!\d)', s):
         has_year = True
         cand.append((int(m.group(1)), int(m.group(2)), int(m.group(3))))
-    # ★ 已有带年份的完整日期时，不再用「11月20日」这类无年份正则二次解析：
-    #   否则「2026年11月30日」会被补出一个「2025年11月30日」候选(359天前)，
-    #   把未来的比赛误判成老比赛。
     if not has_year:
         for m in re.finditer(r'(?<!\d)(\d{1,2})\s*月\s*(\d{1,2})\s*日', s):
             mo, dd = int(m.group(1)), int(m.group(2))
@@ -1588,10 +1609,11 @@ def _game_days(title, now=None):
     best = None
     for yy, mo, dd in cand:
         try:
-            delta = (d0 - date(yy, mo, dd)).days
-        except Exception:
+            d = date(yy, mo, dd)
+        except ValueError:
             continue
-        if delta < 0 or delta > 366:      # 未来日期 / 一年以上的旧候选，跳过
+        delta = (d0 - d).days
+        if delta < 0:                 # 未来日期不误判成老比赛
             continue
         if best is None or delta < best:
             best = delta
@@ -2911,23 +2933,13 @@ class Spider(Spider):
 
         eps = self._episodes(html, final or url) if html else {}
         if eps:
-            def ratio(lst):
-                return sum(1 for _n, u in lst if _is_weibo(u)) / float(len(lst) or 1)
-            ordered = sorted(eps.items(), key=lambda kv: -ratio(kv[1]))
-            # ★ CCTV国语 紧跟「国语回放」（近三天口径），其余分组相对顺序不变
-            _ci = next((i for i, (g, _l) in enumerate(ordered)
-                        if _CCTV_GROUP.search(str(g))), None)
-            if _ci is not None:
-                _item = ordered.pop(_ci)
-                _gi = next((i for i, (g, _l) in enumerate(ordered)
-                            if "国语回放" in str(g)), None)
-                ordered.insert((_gi + 1) if _gi is not None else 0, _item)
-            # ★ 仅「距今 >= OLD_SORT_AFTER_DAYS 天」改分组顺序；更近/无日期不动
+            # ★ 默认「最近三天」显式顺序（稳定排序，名单外保持原相对顺序）
+            ordered = _reorder_groups(eps.items(), NEAR_SORT_ORDER)
+            # ★ 距今 >= OLD_SORT_AFTER_DAYS 天 → 换成「三天以前」顺序
             _days = _game_days(title)
             _is_old = (OLD_SORT_ON and _days is not None and
                        _days >= OLD_SORT_AFTER_DAYS)
             if _is_old:
-                # sorted 是稳定排序：名单外的分组保持原有相对顺序，全排最后
                 ordered = sorted(ordered,
                                  key=lambda kv: _old_group_rank(kv[0]))
             shows, urls = [], []
@@ -2938,13 +2950,14 @@ class Spider(Spider):
             _head = ("【本场分节】%d 个线路 / %d 集（微博 %d 集）。"
                      % (len(eps), sum(len(v) for v in eps.values()), wb_n))
             desc = _head + (
-                (("【距今>=%d天的比赛】线路已按 CCTV国语 → 腾讯国语 → "
-                   "腾讯原声 → 国语回放 排序，优先央视超清直连。" %
+                (("【三天以前(含当天)/距今>=%d天】CCTV国语 → 腾讯国语 → "
+                   "腾讯原声 → 国语回放，优先央视 1080P 直连。" %
                    OLD_SORT_AFTER_DAYS)
                  if _is_old else
-                 "第一组为微博线路，自动选 1080P 直连；"
-                 "CCTV国语 自动选央视【超清】2000 档直连；"
-                 "腾讯等官方页由订阅顶层 parses 解析。"))
+                 ("【最近%d天含当天】国语回放 → CCTV国语 → 腾讯国语 → 腾讯原声；"
+                  "国语回放 1080P 直连；CCTV国语 自动选最高档 1080P；"
+                  "腾讯等官方页由订阅顶层 parses 解析。" %
+                  OLD_SORT_AFTER_DAYS)))
             play_from = "$$$".join(shows)
             play_url = "$$$".join(urls)
         else:

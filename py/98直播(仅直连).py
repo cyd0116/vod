@@ -433,6 +433,8 @@ CCTV_CDNS = ["https://dh5ws01.v.cntv.cn",       # h5e 域名，保留供日志/�
              "https://dh5wx.cntv.kfcbest.com"]
 CCTV_REF = "https://sports.cctv.com/"
 _CCTV_GROUP = re.compile(r'cctv|央视|cntv', re.I)
+# ★ 同一场录像 pid 全程不变；页面/API 请求偶发失败时复用，避免直链缺 pid→404
+_CCTV_PID_CACHE = {"pid": ""}
 
 
 def _is_cctv(u):
@@ -633,22 +635,25 @@ def _cctv_to_lxdns(u):
 
 
 def _cctv_resolve(page, timeout=5):
-    """CCTV国语 → 【>=720P】lxdns 未加密单档直链。返回 (url 或 None, 日志)。
+    """CCTV国语 → 【无条件】返回 lxdns 未加密超清 2000 单档直链。
 
-    ★★ 图29 定案：hls.cntv.lxdns.com 背后是阿里云 OSS。
-      /asp/h5e/hls/2000/.../2000.m3u8 → NoSuchKey（key 不存在）
-      /asp/hls/2000/.../2000.m3u8     → 真机可播「超清 2000」
-      官网 h5e 主清单的子档路径是 /asp/h5e/hls/<br>/，直接 urljoin 到
-      lxdns 域名会全部 404 → 2000/1200 校验双双失败 → 旧版逐档降到
-      450（480x270 / 4KB/s）。图27 的 480P 就是这么来的。
-    ★ 修法：拿到 pid 后【直接按 OSS 真实 key 规则构造】lxdns 档位直链
-      （/asp/hls/<br>/<中间>/<br>.m3u8），2000→1200 校验，命中即交。
-      主清单只作兜底，且其子档一律先规范化去 h5e 再校验。
-    ★ 花屏根因独立：h5e 域名走腾讯云 VOD 私有加密（DRM），交出去的
-      URL 强制为 lxdns 域名、路径不含 h5e，壳裸解不再绿屏。
-    ★ 硬约束：只认 >= CCTV_MIN_HEIGHT(720) 的档；主清单绝不交给播放器；
-      全失败极简交壳，【绝不交 450/850 低清】。
-    ★ 正常路径：页面 + API + 1 次 2000 档校验 = 3 请求，命中即停。
+    ★★ 真机一直 480P 的真正根因（本次定案）：
+      旧版把「GET 校验通过」当作交出 2000 档的前置条件。但 py 的
+      UA / Accept-Encoding:gzip / 超时 / DNS 与浏览器不同，2000、1200
+      的校验在真机上双双失败 → 函数返回 None → playerContent 走
+      parse=1 + jx=1 + flag=cctv【交壳】→ 壳解析央视网页拿到自适应
+      主清单 → 按带宽自己选 450 档 = 480x270。交壳就是 480P 的制造者。
+      此前 mock 让校验通过，测试自洽全绿，是真机口径漏洞。
+    ★ 图29 用户真机实证：
+        /asp/h5e/hls/2000/.../2000.m3u8 → 阿里云 OSS NoSuchKey
+        /asp/hls/2000/.../2000.m3u8     → 「能播」（超清单档）
+      B 已被真机验证，py 无需、也不该再校验一次。
+    ★ 现在：抠到 pid 就【直接构造并交 B】，零阻断校验、零交壳。
+      校验只写日志；即使失败也照样交 B —— 成功率与网络/UA/超时解耦。
+    ★ base 从 API 的 hls_url 抠（一次请求，失败不阻断）；抠不到用
+      HAR 实证默认值。全程最多 2 个请求，且不等其结果即可返回。
+    ★ 返回的 URL 恒为 lxdns 域名、路径不含 h5e、是单档而非主清单：
+      花屏(私有加密流) 与 480P(自适应主清单) 在结构上都不可能出现。
     """
     log = []
     pid = _cctv_pid(page)
@@ -660,89 +665,53 @@ def _cctv_resolve(page, timeout=5):
         except Exception:
             html = ""
         pid = _cctv_pid(page, html)
+    # ★ 页面请求偶发失败（UA/超时/DNS）时复用上次成功的 pid。
+    #   同一场录像 pid 全程不变，缓存命中即不必再依赖这一次网络请求，
+    #   避免构造出缺 pid 段的 404 直链 —— 这是「提高成功率」的最后一环。
     if pid:
-        log.append("pid=" + pid)
-    info = _cctv_api_info(pid, timeout)
+        _CCTV_PID_CACHE["pid"] = pid
+    elif _CCTV_PID_CACHE.get("pid"):
+        pid = _CCTV_PID_CACHE["pid"]
+        log.append("pid 复用上次缓存 " + pid)
+    log.append("pid=" + (pid or "未抠到"))
+    info = ""
+    try:
+        info = _cctv_api_info(pid, timeout)
+    except Exception:
+        info = ""
     if info:
         log.append("API 响应 %d 字节" % len(info))
-
-    # ★★ 首选：按图29 实证的 OSS key 规则直接构造 lxdns 未加密超清单档
-    base = _cctv_lxdns_base(info, html, page, pid)
-    if base:
-        log.append("lxdns 档位基路径 " + base)
-        for br in ("2000", "1200"):
-            cand = _cctv_lxdns_direct(base, br)
-            if not cand:
-                continue
-            # 档位请求偶发失败（HAR 里 1200 有 status=0）→ 重试 1 次，不降档
-            ok = (_cctv_ok(cand, CCTV_SUB_TIMEOUT) or
-                  _cctv_ok(cand, CCTV_SUB_TIMEOUT))
-            if ok:
-                log.append("★ lxdns %s 超清单档(单档·已校验) " % br + cand[:110])
-                return cand, log
-            log.append("lxdns %s 档两次校验未过（不降档）" % br)
-
-    # 兜底：解析主清单，但子档一律规范化到 lxdns 未加密路径
-    masters = []
-    for src in (info, html, page):
-        masters += _cctv_hls_list(src)
-    if pid and not any(_cctv_master_rank(u) < 90 for u in masters):
-        masters.append("%s/asp/hls/main/%s/main.m3u8?maxbr=2048"
-                       % (CCTV_HLS_HOST, base or pid))
-    uniq = list(dict.fromkeys([u for u in masters if u]))
-    uniq.sort(key=_cctv_master_rank)
-    log.append("主清单候选(优先级) " + ", ".join(
-        "%d:%s" % (_cctv_master_rank(u),
-                   u.split('/')[2] if '://' in u and len(u.split('/')) > 2 else u[:16])
-        for u in uniq[:4]))
-    for main in uniq[:6]:
-        r = _cctv_master_rank(main)
-        if r >= 90:
-            continue
-        if r >= 2 and not CCTV_ALLOW_H5E:
-            log.append("跳过加密变体(rank=%d) %s" % (r, main.split('/')[2]))
-            continue
-        try:
-            h, _f = _fetch(main, ref=CCTV_REF, timeout=timeout, alt=False)
-        except Exception:
-            h = ""
-        if not h:
-            log.append("主清单取不到 " + main[:95])
-            continue
-        if '#EXT-X-STREAM-INF' not in h:
-            log.append("候选非自适应主清单，保守跳过 " + main[:90])
-            continue
-        vs_all = _cctv_variants(main, h)
-        log.append("主清单全部档位 " + ", ".join(
-            "%d/%dp→%s" % (bw, hh, u.split('/')[-1]) for bw, hh, u in vs_all))
-        vs = [x for x in vs_all if x[1] >= CCTV_MIN_HEIGHT]
-        if not vs:
-            log.append("★ 该变体最高档 < %dP，拒绝交低清 " % CCTV_MIN_HEIGHT
-                       + main[:85])
-            continue
-        for bw, hh, sub in vs[:2]:          # 只试最高的两档（2000 / 1200）
-            cands = []
-            norm = _cctv_to_lxdns(sub)      # ★ 去 h5e + 换 lxdns 域名
-            if norm:
-                cands.append(norm)
-            if sub not in cands:
-                cands.append(sub)
-            hit = ""
-            for cand in cands:
-                if not CCTV_ALLOW_H5E and ('/h5e/' in cand or 'dh5w' in cand):
-                    continue                # 绝不交私有加密流（花屏根因）
-                if (_cctv_ok(cand, CCTV_SUB_TIMEOUT) or
-                        _cctv_ok(cand, CCTV_SUB_TIMEOUT)):
-                    hit = cand
-                    break
-            if hit:
-                log.append("★ 选 %d/%dp 单档(已校验·lxdns规范化) " % (bw, hh)
-                           + hit[:110])
-                return hit, log
-            log.append("★ %d/%dp 两次校验未过/超时（不降档）" % (bw, hh))
-    log.append("所有未加密变体均无 >=%dP 可播档 → 极简交壳；"
-               "py 绝不交 450/850 低清" % CCTV_MIN_HEIGHT)
-    return None, log
+    base = ""
+    try:
+        base = _cctv_lxdns_base(info, html, page, pid)
+    except Exception:
+        base = ""
+    if not base:
+        base = "0303000a/3/default/%s" % (pid or "")
+        log.append("base 用 HAR 默认中间路径 " + base)
+    else:
+        log.append("lxdns 档位基路径(API) " + base)
+    best = ""
+    try:
+        best = _cctv_lxdns_direct(base, CCTV_SUPER_BR)
+    except Exception:
+        best = ""
+    if not best:
+        best = ("%s/asp/hls/%s/0303000a/3/default/%s/%s.m3u8"
+                % (CCTV_HLS_HOST, CCTV_SUPER_BR, pid or "", CCTV_SUPER_BR))
+    # ★ 校验仅记日志，绝不阻断（真机 UA/gzip/超时与浏览器不同，必偶发失败）
+    ok = False
+    try:
+        ok = _cctv_ok(best, CCTV_SUB_TIMEOUT)
+    except Exception:
+        ok = False
+    log.append("★ 交 lxdns 超清 %s 单档 %s %s"
+               % (CCTV_SUPER_BR,
+                  "（GET 校验通过）" if ok else
+                  "（校验未通过仍交 B：图29 已实证可播，不因校验交壳）",
+                  best[:110]))
+    log.append("★ 不交壳 / 不交主清单 / 不交 450·850：结构上杜绝 480P")
+    return best, log
 
 # ======================================================================
 # ★ 二级/三级目录过滤：排除「十佳 / 集锦 / 精华」等非完整比赛条目
@@ -3163,24 +3132,18 @@ class Spider(Spider):
                 _hd = {'User-Agent': _UA, 'Referer': CCTV_REF,
                        'Origin': 'https://sports.cctv.com',
                        'Accept': '*/*'}
+                # ★★ 无条件 parse=0 直连：删掉「取流失败→交壳」分支。
+                #   交壳就是 480P 的制造者（壳拿自适应主清单按带宽选 450）。
+                #   _cctv_resolve 现在恒定返回 lxdns 超清单档，不再返回 None。
                 _best, _lg = _cctv_resolve(target)
                 _G["cctv_log"] = _lg
-                if _best:
-                    _G["official_trace"] = [
-                        "CCTV国语: " + str(target)[:150],
-                        "★ 最终: parse=0 直连央视超清(" + CCTV_SUPER_BR +
-                        "档) " + str(_best)[:150]] + ["  " + x for x in _lg[-4:]]
-                    # ★ 恢复 format：回到真机「能播」那一版的字段形态。
-                    #   上一轮去掉它是基于推测，与「完全不能播」叠加成新变量，
-                    #   先回到已验证基线，解码问题等能播后再单独收敛。
-                    return {"parse": 0, "playUrl": "", "url": _best,
-                            "jx": 0, "header": _hd,
-                            "format": "application/x-mpegURL"}
-                # 连 pid 都抠不到：极简交壳（parse=1 + jx=1 + flag=cctv）。
-                #   绝不把央视网页当媒体给 parse=0 —— 那会静默黑屏 00:00。
-                _G["official_trace"] = ["CCTV国语取流失败，回退壳解析"] + _lg[-4:]
-                return {"parse": 1, "playUrl": "", "url": target,
-                        "jx": 1, "flag": "cctv", "header": _hd}
+                _G["official_trace"] = [
+                    "CCTV国语: " + str(target)[:150],
+                    "★ 最终: parse=0 直连央视超清(" + CCTV_SUPER_BR +
+                    "档) " + str(_best)[:150]] + ["  " + x for x in _lg[-4:]]
+                return {"parse": 0, "playUrl": "", "url": _best,
+                        "jx": 0, "header": _hd,
+                        "format": "application/x-mpegURL"}
 
             # ★★ 官方视频（腾讯国语/腾讯原声等）：第一动作就是极简交壳。
             #    官方页不能直连，不试 _stream_ok、不取流、不拼解析地址。

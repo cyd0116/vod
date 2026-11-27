@@ -399,14 +399,12 @@ _OFFICIAL_GROUP = re.compile(
 #        推断全部作废。B 形态完全正确，py 无条件锁定交出即可。
 #      官网菜单「超清」在此源上即 1280x720（2000 档 BANDWIDTH=2048000），
 #      源本身没有 1080P；这一条不是代码能改的。
-#   ★★ 花屏根因：HAR 里 /h5e/ 走腾讯云 VOD 私有加密
-#      （wss://signal.qvb.qcloud.com + conf.qvb 435B 二进制配置 +
-#       HTML5_VOD_DRM_PLAYER + jsencrypt.js，.key/license 均 0 条），
-#      官网 JS 用 SDK 解密 TS，壳裸解 → 绿色马赛克花屏（音频轨独立故有声）。
-#      API 的 hls_url = /asp/hls/ 普通未加密流，优先用它；h5e 降为兜底。
-#   ★ 主清单绝不交给播放器（否则按带宽选 450 档 → 480P）；
-#      子档 URL 一律由主清单给出，urljoin 后 GET 校验是单档才交。
-
+#   ★★ 误判更正（v8.0）：此前把 /h5e/ 判为加密流、认定壳无法解码，是错的。
+#      HAR 里 conf.qvb(435B) + wss signal + tracker-flash/htbt 是腾讯云
+#      XP2P / HLS 加速组件，不是视频解密；标准 AES key / license 请求 0 条，
+#      2000 单清单 14459B 与用户回传纯文本同尺寸（无 EXT-X-KEY），
+#      ts 为 Content-Type: video/mp2t、ACAO *、status 200 的明文 MP2T。
+#      ⇒ 主动避开官网唯一在用的这条 CDN，是十几轮反复的根因。
 #   ★ 镜像域名 dh5wx.cntv.kfcbest.com 同路径可用（HAR 四档均 200）。
 #   ★ Referer 必须 https://sports.cctv.com/（HAR 全部请求一致）。
 #   ★ 全程不需要解析池 / 不需要 jx / 不需要 flag，与「国语回放」同形态。
@@ -414,13 +412,18 @@ _OFFICIAL_GROUP = re.compile(
 CCTV_SUPER_BR = "2000"          # 官网菜单「超清」档名（仅日志用，不拼路径）
 CCTV_DIRECT_ON = True
 CCTV_MIN_HEIGHT = 720           # ★ 硬下限：低于 720P 的档位一律不交（防 480x270）
-CCTV_ALLOW_H5E = False          # ★ 默认不碰 /h5e/ 私有加密流（绿屏花屏根因）
+CCTV_ALLOW_H5E = True           # ★ 官网实际播的就是 /asp/h5e/（HAR 111+ 次）
 CCTV_SUB_TIMEOUT = 5            # ★ 档位清单 14KB，3 秒易误判超时导致误降档
-#   ★★ 图29 实证：lxdns = 阿里云 OSS，档位 key 是 /asp/hls/<br>/.../<br>.m3u8
-#      带 /asp/h5e/hls/ 的路径返回 NoSuchKey → 2000/1200 全挂 → 降到 450(480P)。
-#      现在直接按真实 key 构造 2000 单档，不再依赖主清单里 h5e 风格的子档路径。
-#   ★ 若设备解码器仍花屏：改 False 即退回「极简交壳」，是唯一确定的无花屏状态
-CCTV_HLS_HOST = "https://hls.cntv.lxdns.com"   # hls_cdn_info.cdn_vip：普通未加密 HLS
+#   ★ 旧「图29 阿里云 OSS key / 避开 h5e」结论已作废（v8.0）：那是在
+#      备用 CDN 上拼档位目录，与官网实证链路无关，不再作为依据。
+#   ★ CCTV_DIRECT_ON = False 仍可整体退回极简交壳，保留作排障开关。
+# ★★ v8.0 定案（80MB HAR 逐条核过）：
+#   官网 2001 条请求里 API 给的备用 CDN 出现【0 次】——它只是给
+#   给旧 Flash 播放器的备用 CDN，上面只有低码率转码（真机 480x270）。
+#   官网真正播的 2000 档在下面两个 host：94 个 ts 平均 2,580,286 B、
+#   Content-Type video/mp2t、ACAO *、status 200，埋点 bit=2048000 持续 25min。
+CCTV_HLS_HOST = "https://dh5ws01.v.cntv.cn"
+CCTV_HLS_HOST_BAK = "https://dh5wx.cntv.kfcbest.com"
 CCTV_API_FULL = ("https://vdn.apps.cntv.cn/api/getHttpVideoInfo.do?pid=%s"
                  "&client=flash&im=0&tsp=%s&vn=2049&vc=%s&uid=%s&wlan=")
 CCTV_API_VC = "02AA4192D588176DFE3490ED4AD7B605"   # HAR 实证参数（服务端不校验时可用）
@@ -511,23 +514,20 @@ def _cctv_master_rank(u):
       manifest.hls_h5e_url    /asp/h5e/hls/...  ← 官网 133 条请求全走它
       manifest.hls_enc_url    /asp/enc/hls/...
       manifest.hls_audio_url  /asp/hlsaudio/...  ← 纯音频，排除
-    ★★ 花屏根因：/h5e/ 是腾讯云 VOD 私有加密流。HAR 里有
-      wss://signal.qvb.qcloud.com + conf.qvb.qcloud.com/vod/h5 435B 二进制配置
-      + HTML5_VOD_DRM_PLAYER + jsencrypt.js，且 .key / license 请求均为 0 条
-      → 不是标准 AES-128，是官网 JS 用 SDK 解密 TS。壳播放器拿到裸 TS
-      直接解码就是【绿色马赛克花屏】，而音频轨独立所以「有声音」。
-    ★ 因此默认优先走未加密的普通 /asp/hls/，/h5e/ 降为兜底。
+    ★ v8.0 更正：qvb 的 conf/signal/tracker-flash 是腾讯云 XP2P 加速组件，
+      不是视频解密；标准 AES key 0 条、ts 为明文 video/mp2t。
+      ★ 本函数自 v7.9 起已不参与播放决策，仅保留作响应分类参考。
     """
     s = str(u or "")
     low = s.lower()
     if 'audio' in low or 'mp3' in low:
         return 90                                  # 纯音频，排除
     if '/asp/hls/' in low and '/h5e/' not in low and '/enc' not in low:
-        return 0                                   # 普通未加密，首选
+        return 0                                   # 备用 CDN（官网不用）
     if '/enc2/' in low:
         return 1
     if '/h5e/' in low:
-        return 2                                   # 私有加密，降为兜底
+        return 2                                   # 官网在用变体
     if '/enc/' in low:
         return 3
     return 4
@@ -619,8 +619,13 @@ def _cctv_lxdns_base(info, html, page, pid):
     ★ 不硬编码：不同比赛的中间段可能变，一律以服务端给出的 hls_url 为准；
       抠不到才用 HAR 实证的默认值。
     """
+    # ★ v8.0：优先「官网在用的」hls_h5e_url，其次任意 h5e，最后才是 lxdns。
+    #   之前按 API 字段顺序先撞上 hls_url(lxdns)，把 base 带去了备用 CDN。
+    pool=[]
     for src in (info, html, page):
-        for u in _cctv_hls_list(src):
+        pool.extend(_cctv_hls_list(src))
+    pool.sort(key=lambda u: (0 if '/h5e/' in u else (1 if '/asp/' in u else 2), u))
+    for u in pool:
             m = re.search(r'/asp/(?:h5e/|enc2/|enc/)?hls/(?:main|hls)/(.+?)/main\.m3u8',
                           _unesc(str(u)), re.I)
             if m and (not pid or pid in m.group(1)):
@@ -629,63 +634,36 @@ def _cctv_lxdns_base(info, html, page, pid):
 
 
 def _cctv_lxdns_direct(base, br):
-    """按【图29 实证的 OSS key 规则】构造 lxdns 未加密单档直链。
+    """按【官网 HAR 实证】构造 2000 档单清单直链。
 
-      A  https://hls.cntv.lxdns.com/asp/h5e/hls/2000/.../2000.m3u8
-         → 阿里云 OSS NoSuchKey，<Key>asp/h5e/hls/2000/.../2000.m3u8</Key>
-      B  https://hls.cntv.lxdns.com/asp/hls/2000/.../2000.m3u8
-         → 真机可播（超清 2000 档）
-    即 lxdns 域名下档位 key 是 /asp/hls/<br>/<中间>/<br>.m3u8，不带 h5e。
-    官网 h5e 主清单给出的子档路径挂到 lxdns 会全部 404，这正是此前
-    2000/1200 校验失败 → 旧版降到 450 档（480x270）的根因。
+      https://dh5ws01.v.cntv.cn/asp/h5e/hls/2000/<base>/2000.m3u8
+      https://dh5wx.cntv.kfcbest.com/asp/h5e/hls/2000/<base>/2000.m3u8
+    两条在 HAR 里均 status=200 / size=14459 / application/x-mpegurl；
+    其下 94 个 ts 平均 2,580,286 B（1200 档仅 1,603,495 B），
+    即官网菜单「超清」= 高码率 1280x720。★ 不再挂到 lxdns 备用 CDN。
     """
     if not base:
         return ""
-    return ("%s/asp/hls/%s/%s/%s.m3u8"
+    return ("%s/asp/h5e/hls/%s/%s/%s.m3u8"
             % (CCTV_HLS_HOST, br, base.strip('/'), br))
 
 
-def _cctv_to_lxdns(u):
-    """把任意档位 URL 规范化到 lxdns 未加密 OSS 路径（去 h5e/enc 前缀 + 换域名）。"""
-    s = str(u or "")
-    if not s.startswith("http"):
-        return ""
-    try:
-        p = urllib.parse.urlsplit(s)
-    except Exception:
-        return ""
-    path = p.path
-    for bad in ("/asp/h5e/hls/", "/asp/enc2/hls/", "/asp/enc/hls/",
-                "/asp/h5e/", "/asp/enc2/", "/asp/enc/"):
-        if bad in path:
-            path = path.replace(bad, "/asp/hls/")
-            break
-    if "/asp/hls/" not in path:
-        return ""
-    host = CCTV_HLS_HOST.split("://", 1)[-1]
-    return urllib.parse.urlunsplit(("https", host, path, "", ""))
-
-
 def _cctv_resolve(page, timeout=5):
-    """CCTV国语 → 【无条件】返回 lxdns 未加密超清 2000 单档直链。
+    """CCTV国语 → 无条件返回【官网 HAR 实证的 2000 档】单清单直链。
 
-    ★★ 真机一直 480P 的真正根因（本次定案）：
-      旧版把「GET 校验通过」当作交出 2000 档的前置条件。但 py 的
-      UA / Accept-Encoding:gzip / 超时 / DNS 与浏览器不同，2000、1200
-      的校验在真机上双双失败 → 函数返回 None → playerContent 走
-      parse=1 + jx=1 + flag=cctv【交壳】→ 壳解析央视网页拿到自适应
-      主清单 → 按带宽自己选 450 档 = 480x270。交壳就是 480P 的制造者。
-      此前 mock 让校验通过，测试自洽全绿，是真机口径漏洞。
-    ★ 图29 用户真机实证：
-        /asp/h5e/hls/2000/.../2000.m3u8 → 阿里云 OSS NoSuchKey
-        /asp/hls/2000/.../2000.m3u8     → 「能播」（超清单档）
-      B 已被真机验证，py 无需、也不该再校验一次。
-    ★ 现在：拿到响应按真实内容判定，主清单必须解析成最高档单档再交；
-      网络取不到才维持 B，绝不交壳、绝不交主清单。
-    ★ base 从 API 的 hls_url 抠（一次请求，失败不阻断）；抠不到用
-      HAR 实证默认值。全程最多 2 个请求，且不等其结果即可返回。
-    ★ 返回的 URL 恒为 lxdns 域名、路径不含 h5e、是单档而非主清单：
-      花屏(私有加密流) 与 480P(自适应主清单) 在结构上都不可能出现。
+    ★★ 十几轮反复的根因（v8.0 定案，80MB HAR 逐条核过）：
+      官网 2001 条请求里备用 CDN 出现 0 次；官网真正播的是
+        https://dh5ws01.v.cntv.cn/asp/h5e/hls/2000/<base>/2000.m3u8
+      该清单 14459B（与用户回传纯文本同尺寸、556 片 / 5554.20s），
+      其下 94 个 ts 平均 2,580,286 B（1200 档仅 1,603,495 B），
+      Content-Type video/mp2t、ACAO *、status 200，埋点 bit=2048000。
+      ★ 同一份清单文本挂到备用 CDN 时，ts 是低码率转码 → 480x270；
+        目录名都叫 2000，内容却不同。之前一直在备用 CDN 上调档位。
+    ★ base 优先从 API 的 hls_h5e_url 抠（官网在用的那条），失败用
+      HAR 实证默认中间路径；API 请求失败不阻断返回。
+    ★ 不 GET 校验、不试 manifest 变体、不交主清单、不交壳：
+      播放链路唯一确定性来源就是这条经实证的 URL。
+    ★ 请求头由 playerContent 按 HAR 里 ts 的真实请求头逐字段复刻。
     """
     log = []
     pid = _cctv_pid(page)
@@ -725,32 +703,28 @@ def _cctv_resolve(page, timeout=5):
         base = "0303000a/3/default/%s" % (pid or "")
         log.append("base 用 HAR 默认中间路径 " + base)
     else:
-        log.append("lxdns 档位基路径(API) " + base)
+        log.append("官网 h5e 档位基路径(API) " + base)
     best = ""
     try:
         best = _cctv_lxdns_direct(base, CCTV_SUPER_BR)
     except Exception:
         best = ""
     if not best:
-        best = ("%s/asp/hls/%s/0303000a/3/default/%s/%s.m3u8"
+        best = ("%s/asp/h5e/hls/%s/0303000a/3/default/%s/%s.m3u8"
                 % (CCTV_HLS_HOST, CCTV_SUPER_BR, pid or "", CCTV_SUPER_BR))
-    # ★★ v7.9 定案（用户 2026-11-27 提供 B 的真实响应正文「纯文本.txt」）：
-    #   B = https://hls.cntv.lxdns.com/asp/hls/2000/<mid>/2000.m3u8 的正文是
-    #   【真·单档媒体清单】，14459 字节：
+    # ★★ v8.0 更正（用户 2026-11-27 回传的 14459B 纯文本）：
+    #   两个 CDN 的 2000 单清单【是同一份文本】（HAR size 同为 14459B）：
     #     · #EXTM3U / VERSION:3 / TARGETDURATION:10 / PLAYLIST-TYPE:VOD
     #     · 556 个 #EXTINF（0.ts ~ 555.ts，末片 4.2s）→ 总 5554.20s
     #       == API "totalLength":"5554.20" → 完整正片，不是预告/片段
     #     · #EXT-X-STREAM-INF = 0 → 不是主清单，不存在「播放器按带宽选 450」
-    #     · #EXT-X-KEY = 0 → 未加密（图27 不花屏与此一致）
-    #   ⇒ 上一版「防主清单 / 遍历 manifest 变体」的前提被证伪。更关键的是：
-    #     它会在 B 的 GET 被 UA / gzip / 超时 / DNS 拦下时，继续试 enc2 / enc
-    #     变体并把【别的单档】直接交出去 —— 那是真机仍 270P 的最后一处
-    #     代码不确定性，也是「成功率」真正该修的地方。
-    #   ★ 现在：B 是唯一经实证可达、形态正确、未加密、完整正片的地址，
-    #     【无条件锁定交出】：不做 GET 校验、不试任何变体、不交主清单、不交壳。
-    #     播放链路零网络请求，成功率与 UA / gzip / DNS / 超时彻底解耦。
-    #   ★ 若锁定 B 后播放器仍显示 270P，则分辨率来自 ts 流本身的编码或壳
-    #     解码层，py 侧已无可改项 —— 不再往这条链路里加任何逻辑。
+    #     · #EXT-X-KEY = 0 → 标准明文 HLS
+    #   ⇒ 清单文本不携带分辨率，档位在 ts 的码率里（HAR 实证 2000 档
+    #      2.58MB/片 vs 1200 档 1.60MB/片）。选哪个 CDN 才是选档位，
+    #      与清单里的目录名无关 —— 这是此前十几轮的判断错误。
+    #   ★ 现在交【官网实证的那条 CDN】，清单形态已验证、未加密、完整正片。
+    #     不做 GET 校验、不试任何变体、不交主清单、不交壳，
+    #     成功率与 UA / gzip / DNS / 超时彻底解耦。
     log.append("★ B 已实证：单档媒体清单 556片 / 无STREAM-INF / 无KEY / 完整5554.20s")
     log.append("★ 无条件锁定 B：不校验 / 不试变体 / 不交主清单 / 不交壳")
     return best, log
@@ -2279,7 +2253,7 @@ def _weibo_resolve(url):
 # ======================================================================
 class Spider(Spider):
 
-    VERSION = "98直播吧 v7.9（CCTV锁定实证单档）"
+    VERSION = "98直播吧 v8.0（CCTV对齐官网h5e超清档）"
 
     def getName(self):
         return "98直播吧"
@@ -2977,21 +2951,33 @@ class Spider(Spider):
             #    否则央视页会被当成官方页交壳解析。
             if CCTV_DIRECT_ON and (_is_cctv(target) or
                                    _CCTV_GROUP.search(str(flag or ""))):
-                _hd = {'User-Agent': _UA, 'Referer': CCTV_REF,
-                       'Origin': 'https://sports.cctv.com',
-                       'Accept': '*/*'}
+                # ★ v8.0：按 HAR 里 2000 档 ts 的真实请求头逐字段复刻，
+                #   不再用 py 通用 _UA（CDN 可能按 UA/Origin 分流转码）。
+                _hd = {
+                    'User-Agent': ('Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
+                                   'AppleWebKit/537.36 (KHTML, like Gecko) '
+                                   'Chrome/158.0.0.0 Safari/537.36 Edg/158.0.0.0'),
+                    'Accept': '*/*',
+                    'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6',
+                    'Cache-Control': 'no-cache',
+                    'Pragma': 'no-cache',
+                    'Origin': 'https://sports.cctv.com',
+                    'Referer': CCTV_REF,
+                    'Connection': 'keep-alive'}
+
                 # ★★ 无条件 parse=0 直连：删掉「取流失败→交壳」分支。
                 #   交壳就是 480P 的制造者（壳拿自适应主清单按带宽选 450）。
-                #   _cctv_resolve 现在恒定返回 lxdns 超清单档，不再返回 None。
+                #   _cctv_resolve 恒定返回官网 h5e 2000 档，不再返回 None。
                 _best, _lg = _cctv_resolve(target)
                 _G["cctv_log"] = _lg
                 _G["official_trace"] = [
                     "CCTV国语: " + str(target)[:150],
                     "★ 最终: parse=0 直连央视超清(" + CCTV_SUPER_BR +
                     "档) " + str(_best)[:150]] + ["  " + x for x in _lg[-4:]]
+                # ★ 去掉 format：官网 CDN 自带 Content-Type: application/x-mpegurl
+                #   （主清单 604B / 单清单 14459B 均如此），壳自判即可。
                 return {"parse": 0, "playUrl": "", "url": _best,
-                        "jx": 0, "header": _hd,
-                        "format": "application/x-mpegURL"}
+                        "jx": 0, "header": _hd}
 
             # ★★ 官方视频（腾讯国语/腾讯原声等）：第一动作就是极简交壳。
             #    官方页不能直连，不试 _stream_ok、不取流、不拼解析地址。

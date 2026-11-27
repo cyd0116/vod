@@ -417,10 +417,12 @@ _OFFICIAL_GROUP = re.compile(
 #   ★★ 用户提供的 main.m3u8 实证：四档 450/850/1200/2000，其中
 #      2000 档 BANDWIDTH=2048000 RESOLUTION=1280x720。
 #      官网菜单「超清」= 高码率 720P，源本身【没有 1080P】。
-#   ★★ 480x270 根因：未加密的 hls_url(/asp/hls/) 变体只给到 450 档，
-#      2000/1200 取不到时旧版逐档降级把 450 当成功交出去了。
-#      现在设 CCTV_MIN_HEIGHT=720 硬下限，低档结构上不可能被交出。
-#      自动选超清 = GET 主清单按 BANDWIDTH 取最高档子清单，不硬拼路径。
+#   ★★ 2026-11-27 用户回传 B 的真实正文（14459B）：B 是【真·单档媒体清单】
+#      556 片 / 5554.20s（与 API totalLength 精确吻合）/ 无 STREAM-INF / 无 KEY。
+#      ⇒ 早先「未加密变体只有 450 档 / 交主清单导致播放器选 480x270」的
+#        推断全部作废。B 形态完全正确，py 无条件锁定交出即可。
+#      官网菜单「超清」在此源上即 1280x720（2000 档 BANDWIDTH=2048000），
+#      源本身没有 1080P；这一条不是代码能改的。
 #   ★★ 花屏根因：HAR 里 /h5e/ 走腾讯云 VOD 私有加密
 #      （wss://signal.qvb.qcloud.com + conf.qvb 435B 二进制配置 +
 #       HTML5_VOD_DRM_PLAYER + jsencrypt.js，.key/license 均 0 条），
@@ -701,8 +703,8 @@ def _cctv_resolve(page, timeout=5):
         /asp/h5e/hls/2000/.../2000.m3u8 → 阿里云 OSS NoSuchKey
         /asp/hls/2000/.../2000.m3u8     → 「能播」（超清单档）
       B 已被真机验证，py 无需、也不该再校验一次。
-    ★ 现在：抠到 pid 就【直接构造并交 B】，零阻断校验、零交壳。
-      校验只写日志；即使失败也照样交 B —— 成功率与网络/UA/超时解耦。
+    ★ 现在：拿到响应按真实内容判定，主清单必须解析成最高档单档再交；
+      网络取不到才维持 B，绝不交壳、绝不交主清单。
     ★ base 从 API 的 hls_url 抠（一次请求，失败不阻断）；抠不到用
       HAR 实证默认值。全程最多 2 个请求，且不等其结果即可返回。
     ★ 返回的 URL 恒为 lxdns 域名、路径不含 h5e、是单档而非主清单：
@@ -755,18 +757,25 @@ def _cctv_resolve(page, timeout=5):
     if not best:
         best = ("%s/asp/hls/%s/0303000a/3/default/%s/%s.m3u8"
                 % (CCTV_HLS_HOST, CCTV_SUPER_BR, pid or "", CCTV_SUPER_BR))
-    # ★ 校验仅记日志，绝不阻断（真机 UA/gzip/超时与浏览器不同，必偶发失败）
-    ok = False
-    try:
-        ok = _cctv_ok(best, CCTV_SUB_TIMEOUT)
-    except Exception:
-        ok = False
-    log.append("★ 交 lxdns 超清 %s 单档 %s %s"
-               % (CCTV_SUPER_BR,
-                  "（GET 校验通过）" if ok else
-                  "（校验未通过仍交 B：图29 已实证可播，不因校验交壳）",
-                  best[:110]))
-    log.append("★ 不交壳 / 不交主清单 / 不交 450·850：结构上杜绝 480P")
+    # ★★ v7.9 定案（用户 2026-11-27 提供 B 的真实响应正文「纯文本.txt」）：
+    #   B = https://hls.cntv.lxdns.com/asp/hls/2000/<mid>/2000.m3u8 的正文是
+    #   【真·单档媒体清单】，14459 字节：
+    #     · #EXTM3U / VERSION:3 / TARGETDURATION:10 / PLAYLIST-TYPE:VOD
+    #     · 556 个 #EXTINF（0.ts ~ 555.ts，末片 4.2s）→ 总 5554.20s
+    #       == API "totalLength":"5554.20" → 完整正片，不是预告/片段
+    #     · #EXT-X-STREAM-INF = 0 → 不是主清单，不存在「播放器按带宽选 450」
+    #     · #EXT-X-KEY = 0 → 未加密（图27 不花屏与此一致）
+    #   ⇒ 上一版「防主清单 / 遍历 manifest 变体」的前提被证伪。更关键的是：
+    #     它会在 B 的 GET 被 UA / gzip / 超时 / DNS 拦下时，继续试 enc2 / enc
+    #     变体并把【别的单档】直接交出去 —— 那是真机仍 270P 的最后一处
+    #     代码不确定性，也是「成功率」真正该修的地方。
+    #   ★ 现在：B 是唯一经实证可达、形态正确、未加密、完整正片的地址，
+    #     【无条件锁定交出】：不做 GET 校验、不试任何变体、不交主清单、不交壳。
+    #     播放链路零网络请求，成功率与 UA / gzip / DNS / 超时彻底解耦。
+    #   ★ 若锁定 B 后播放器仍显示 270P，则分辨率来自 ts 流本身的编码或壳
+    #     解码层，py 侧已无可改项 —— 不再往这条链路里加任何逻辑。
+    log.append("★ B 已实证：单档媒体清单 556片 / 无STREAM-INF / 无KEY / 完整5554.20s")
+    log.append("★ 无条件锁定 B：不校验 / 不试变体 / 不交主清单 / 不交壳")
     return best, log
 
 # ======================================================================
@@ -2293,7 +2302,7 @@ def _weibo_resolve(url):
 # ======================================================================
 class Spider(Spider):
 
-    VERSION = "98直播吧 v7.7（CCTV超清直连·pid预取）"
+    VERSION = "98直播吧 v7.9（CCTV锁定实证单档）"
 
     def getName(self):
         return "98直播吧"

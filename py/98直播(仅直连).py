@@ -392,6 +392,8 @@ _OFFICIAL_GROUP = re.compile(
 #       → 四档 2000 / 1200 / 850 / 450 .m3u8
 #   埋点 bit=2048000 ↔ 2000 档 = 播放器菜单【超清】；bit=1228800 ↔ 1200 = 高清。
 #   ★ 固定给 2000.m3u8（不播自适应 main.m3u8），这就是「自动选超清」。
+#   ★ 档位清单与主清单【同目录】，只换文件名；且必须 GET 校验通过才交，
+#     否则 404 会造成「完全不能播」（上一轮臆造 /hls/2000/ 的教训）。
 #   ★ 镜像域名 dh5wx.cntv.kfcbest.com 同路径可用（HAR 四档均 200）。
 #   ★ Referer 必须 https://sports.cctv.com/（HAR 全部请求一致）。
 #   ★ 全程不需要解析池 / 不需要 jx / 不需要 flag，与「国语回放」同形态。
@@ -443,81 +445,103 @@ def _cctv_hls_list(src):
     return out
 
 
-def _cctv_super_url(main_url):
-    """任意档位/自适应清单 → 超清 CCTV_SUPER_BR 档【单档】清单。
+def _cctv_super_url(u):
+    """【同目录】把清单文件名强制成 2000.m3u8；绝不改目录。
 
-    ★ 修「没自动选超清、播的是高清720P」：旧版只把 main.m3u8 替换成
-      2000.m3u8，若 API 先给出 1200.m3u8（央视 API 常把低码率放前面），
-      函数原样返回 1200 → 播放器就播 720P。现在两种形态都统一转档。
-    覆盖：
-      .../hls/main/.../<pid>/main.m3u8?maxbr=2048
-      .../hls/1200/.../<pid>/1200.m3u8
-    ★ 去掉 ? 参数：央视 CDN 对带参档位清单会 403（HAR 实证）。
+    ★ 上一轮「完全不能播」的根因：臆造了 /hls/2000/ 档位目录，把本来
+      能播的 URL 改成不存在的路径 → 404。HAR 实证是：自适应主清单
+      .../hls/main/.../<pid>/main.m3u8?maxbr=2048 返回的 #EXT-X-STREAM-INF
+      子档(2000/1200/850/450.m3u8)与主清单【同目录】，只换文件名即可。
+      .../main/.../main.m3u8?maxbr=2048 → .../main/.../2000.m3u8
+      .../1200/.../1200.m3u8          → .../1200/.../2000.m3u8
+    已是 2000.m3u8 时幂等（仅去掉 ? 参数，央视对带参档位清单会 403）。
     """
-    s = str(main_url or "").split('?', 1)[0]
-    s = re.sub(r'(/asp/h5e/hls/)(?:main|\d{3,4})/',
-               r'\g<1>' + CCTV_SUPER_BR + r'/', s, count=1)
-    s = re.sub(r'(?:/|^)(?:main|\d{3,4})\.m3u8$',
-               '/' + CCTV_SUPER_BR + '.m3u8', s, count=1)
-    return s
+    s = str(u or "").split('?', 1)[0]
+    if not s:
+        return ""
+    return re.sub(r'(?:/|^)(?:main|\d{3,4})\.m3u8$',
+                  '/' + CCTV_SUPER_BR + '.m3u8', s, count=1)
 
 
-def _cctv_pick_super(mains, timeout=2):
-    """从 API/页面抠出的 m3u8 列表里挑【真正的 2000 档单档清单】。
-    ① API 已直给 /2000/ 直链 → 直接用（HAR 实证最可信）
-    ② 否则读自适应 main.m3u8 的 #EXT-X-STREAM-INF，挑 2000 那档子清单；
-       不把多码率主清单交给播放器，否则它会按带宽自己降到 1200(720P)
-    ③ 再否则把任意档位统一转成 2000
-    返回 (url, log)。全程最多 1 次额外请求。
+def _cctv_ok(u, timeout=3):
+    """★ 硬约束：只有 GET 回来确实是 m3u8 文本，才允许交给播放器。
+    杜绝 404 / HTML 错误页造成「完全不能播」。"""
+    if not u:
+        return False
+    try:
+        h, _f = _fetch(u, ref=CCTV_REF, timeout=timeout, alt=False)
+    except Exception:
+        return False
+    return bool(h) and ('#EXTM3U' in h[:400] or '#EXTINF' in h[:900])
+
+
+def _cctv_pick_super(mains, timeout=5, check_timeout=3):
+    """按可信度逐级挑【可播】的超清 2000 单档清单，每级都先校验。
+    ① API 直给 2000.m3u8 → 原样（不改目录）校验通过即交
+    ② 读自适应主清单 #EXT-X-STREAM-INF → urljoin 原样取 2000 子档（同目录）
+    ③ 主清单同级目录强制 2000 文件名
+    ④ 保底：API 原文里第一条真正可播的（可能 1200 高清），能播优先
+    全失败返回 ""，由 _cctv_resolve 交壳，绝不吐 404。
     """
     log = []
     uniq = list(dict.fromkeys([u for u in mains if u]))
+    # ① API 直给超清单
     for u in uniq:
-        if re.search(r'/hls/%s/' % CCTV_SUPER_BR, u) or \
-           re.search(r'/%s\.m3u8' % CCTV_SUPER_BR, u, re.I):
-            log.append("★ API 直给超清单 " + u[:120])
+        if re.search(r'/%s\.m3u8' % CCTV_SUPER_BR, u, re.I) and _cctv_ok(u, check_timeout):
+            log.append("★ API 直给超清单(已校验) " + u[:120])
             return u, log
-    main = next((u for u in uniq if '/main/' in u and 'main.m3u8' in u),
-                uniq[0] if uniq else "")
-    if not main:
-        return "", log
-    h = ""
-    try:
-        h, _f = _fetch(main, ref=CCTV_REF, timeout=timeout, alt=False)
-    except Exception:
+    # ②③ 主清单优先，其余候选随后（最多 3 个，控制播放前耗时）
+    masters = [u for u in uniq if '/main/' in u and 'main.m3u8' in u]
+    ordered = masters + [u for u in uniq if u not in masters]
+    for main in ordered[:3]:
         h = ""
-    if h and '#EXT-X-STREAM-INF' in h:
-        lines = [x.strip() for x in h.splitlines() if x.strip()]
-        best_score, best_line = -1, ""
-        for i, ln in enumerate(lines):
-            if not ln.startswith('#EXT-X-STREAM-INF'):
-                continue
-            mb = re.search(r'BANDWIDTH=(\d+)', ln)
-            bw = int(mb.group(1)) if mb else 0
-            nxt = lines[i + 1] if i + 1 < len(lines) else ""
-            if not nxt or nxt.startswith('#'):
-                continue
-            score = bw + (10 ** 9 if CCTV_SUPER_BR in nxt else 0)
-            if score > best_score:
-                best_score, best_line = score, nxt
-        if best_line:
-            sub = (best_line if best_line.startswith('http')
-                   else urllib.parse.urljoin(main, best_line))
-            sub = _cctv_super_url(sub)   # 幂等：统一档位目录+文件名（子档名含 2000 但目录仍是 /main/，必须转）
-            log.append("★ 主清单→超清子档 " + sub[:120])
-            return sub, log
-    u = _cctv_super_url(main)
-    log.append("统一转超清档 " + u[:120])
-    return u, log
+        try:
+            h, _f = _fetch(main, ref=CCTV_REF, timeout=timeout, alt=False)
+        except Exception:
+            h = ""
+        if h and '#EXT-X-STREAM-INF' in h:
+            lines = [x.strip() for x in h.splitlines() if x.strip()]
+            best_score, best_line = -1, ""
+            for i, ln in enumerate(lines):
+                if not ln.startswith('#EXT-X-STREAM-INF'):
+                    continue
+                mb = re.search(r'BANDWIDTH=(\d+)', ln)
+                bw = int(mb.group(1)) if mb else 0
+                nxt = lines[i + 1] if i + 1 < len(lines) else ""
+                if not nxt or nxt.startswith('#'):
+                    continue
+                score = bw + (10 ** 9 if CCTV_SUPER_BR in nxt else 0)
+                if score > best_score:
+                    best_score, best_line = score, nxt
+            if best_line:
+                sub = (best_line if best_line.startswith('http')
+                       else urllib.parse.urljoin(main, best_line))
+                if _cctv_ok(sub, check_timeout):
+                    log.append("★ 主清单→同目录超清子档(已校验) " + sub[:120])
+                    return sub, log
+                log.append("主清单子档校验未过 " + sub[:100])
+        cand = _cctv_super_url(main)
+        if cand and cand != main and _cctv_ok(cand, check_timeout):
+            log.append("★ 同目录转超清单(已校验) " + cand[:120])
+            return cand, log
+    # ④ 保底：能播优先于 1080P
+    for u in uniq[:3]:
+        if _cctv_ok(u, check_timeout):
+            log.append("⚠ 无 2000 档，退回可播原地址(可能高清) " + u[:120])
+            return u, log
+    log.append("所有候选均未产出可播 m3u8")
+    return "", log
 
 
-def _cctv_resolve(page, timeout=2):
-    """CCTV国语 → 超清 2000 档单档直链。返回 (url 或 None, 日志)。
+def _cctv_resolve(page, timeout=5):
+    """CCTV国语 → 【校验通过】的超清 2000 单档直链。返回 (url 或 None, 日志)。
 
-    ★ 修「缓冲很慢」：旧版播放前串行抓 页面 + API + 3 个 CDN 候选逐个校验
-      （每个 timeout=5），最坏 ~25 秒才返回 url，用户感知就是一直缓冲。
-      现在最多 页面 + API + 1 次主清单 = 3 次 × 2 秒，且不再试镜像 CDN。
-    ★ 找不到清单时用 HAR 实证路径兜底 1 条，绝不返回央视网页给 parse=0。
+    ★ 修「完全不能播」：候选一律 GET 校验，不交 404；档位与主清单同目录，
+      不再臆造 /hls/2000/。
+    ★ 修「缓冲很慢」：页面(仅缺 pid 时) + API + 主清单 + 1 次子档校验，
+      API/主清单 5 秒、校验 2 秒；不再串行试镜像 CDN 的多个臆造路径。
+    ★ 修「播 720P」：从主清单明确挑 2000 子档，不把 API 先给的 1200 原样交出。
+    ★ 全失败返回 None → playerContent 极简交壳，绝不把央视网页当媒体给 parse=0。
     """
     log = []
     pid = _cctv_pid(page)
@@ -542,17 +566,17 @@ def _cctv_resolve(page, timeout=2):
     mains = []
     for src in (info, html, page):
         mains += _cctv_hls_list(src)
+    # pid 已知但 API 没给 main 清单 → 用 HAR 实证的【main 路径】兜底，
+    # 而不是上一轮臆造的 /hls/2000/ 路径。
+    if pid and not any('/main/' in u for u in mains):
+        mains.append("%s/asp/h5e/hls/main/0303000a/3/default/%s/main.m3u8?maxbr=2048"
+                     % (CCTV_CDNS[0], pid))
     best, lg = _cctv_pick_super(mains, timeout=timeout)
     log += lg
     if best:
-        log.append("★ 最终交壳超清单 " + best[:120])
+        log.append("★ 最终交壳(已校验) " + best[:120])
         return best, log
-    if pid:
-        u = "%s/asp/h5e/hls/%s/0303000a/3/default/%s/%s.m3u8" % (
-            CCTV_CDNS[0], CCTV_SUPER_BR, pid, CCTV_SUPER_BR)
-        log.append("API 无清单，用 HAR 实证路径 " + u[:120])
-        return u, log
-    log.append("央视 pid/主清单均未取到")
+    log.append("央视 pid/清单均未取到可播地址")
     return None, log
 
 # ======================================================================
@@ -2965,10 +2989,12 @@ class Spider(Spider):
                         "CCTV国语: " + str(target)[:150],
                         "★ 最终: parse=0 直连央视超清(" + CCTV_SUPER_BR +
                         "档) " + str(_best)[:150]] + ["  " + x for x in _lg[-4:]]
-                    # ★ 去掉 format：壳按 .m3u8 自判，错误的 MIME 会让部分壳
-                    #   用错解码路径（真机「黑屏、但有声音」的放大器之一）。
+                    # ★ 恢复 format：回到真机「能播」那一版的字段形态。
+                    #   上一轮去掉它是基于推测，与「完全不能播」叠加成新变量，
+                    #   先回到已验证基线，解码问题等能播后再单独收敛。
                     return {"parse": 0, "playUrl": "", "url": _best,
-                            "jx": 0, "header": _hd}
+                            "jx": 0, "header": _hd,
+                            "format": "application/x-mpegURL"}
                 # 连 pid 都抠不到：极简交壳（parse=1 + jx=1 + flag=cctv）。
                 #   绝不把央视网页当媒体给 parse=0 —— 那会静默黑屏 00:00。
                 _G["official_trace"] = ["CCTV国语取流失败，回退壳解析"] + _lg[-4:]
